@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const points = [
+  { t: 'Publicaciones listas para salir', b: 'Sara escribe el texto, elige la imagen y arma el calendario con la marca de tu clínica. Tú solo apruebas.' },
+  { t: 'El post termina en una cita', b: 'Quien comenta o escribe por una publicación, Sara lo atiende y lo agenda. Sin que el interés se enfríe.' },
+  { t: 'Sabes qué funcionó', b: 'Cada mes, en español claro: qué publicación trajo más consultas y cuánto facturaste. Sin planillas.' },
+];
+
+const flow = [
+  { src: '/img/post-1.jpg', step: '1 · Sara publica', body: 'Una publicación de tu clínica sale en Instagram.' },
+  { src: '/img/post-2.jpg', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
+  { src: '/img/post-3.jpg', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
+];
+---
+
+<Layout
+  title="Instagram — Sara también lleva tu Instagram"
+  description="Sara crea las publicaciones de tu clínica y atiende a quien responde, hasta agendar. Del post a la cita cobrada, todo en un mismo lugar."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Marketing"
+      title="Sara también lleva tu <em class='text-pine-dark'>Instagram.</em>"
+      lead="Crea las publicaciones de tu clínica y atiende a quien responde, hasta agendar. Tu marketing y tu agenda, por fin conectados."
+      image="/img/instagram.jpg"
+      imageAlt="Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir."
+      imageW={1200}
+      imageH={1242}
+    />
+
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-24">
+        <div class="grid gap-6 md:grid-cols-3">
+          {
+            points.map((p) => (
+              <div class="rounded-2xl border border-line bg-cream p-8">
+                <h3 class="text-xl font-semibold">{p.t}</h3>
+                <p class="mt-2 text-salvia">{p.b}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-16">
+          <p class="text-sm font-semibold uppercase tracking-wide text-pine-dark">Del post a la cita, paso a paso</p>
+          <div class="mt-6 grid gap-6 sm:grid-cols-3">
+            {
+              flow.map((p) => (
+                <div>
+                  <div class="overflow-hidden rounded-2xl border border-line bg-white shadow-[0_20px_50px_-30px_rgba(20,38,31,0.5)]">
+                    <img src={p.src} alt={p.step} loading="lazy" decoding="async" class="w-full" />
+                  </div>
+                  <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
+                  <p class="text-salvia">{p.body}</p>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>

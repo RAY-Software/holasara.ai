@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const steps = [
+  { t: 'Un clic y listo', b: 'Autorizas tu cuenta de Google y Sara empieza a leer y escribir en el calendario que ya usas. No migras nada, no cambias de herramienta.' },
+  { t: 'Ve tu disponibilidad real', b: 'Agenda solo en los espacios libres, bloquea al instante y todo aparece en el calendario de tu equipo. Sin dobles reservas.' },
+  { t: 'Tus datos clínicos no pasan por aquí', b: 'No se almacena historia clínica ni información médica de tus pacientes. Eso queda donde está hoy.' },
+];
+---
+
+<Layout
+  title="Implementación — Conecta tu Google Calendar y ya está"
+  description="Autorizas tu Google Calendar y Sara empieza a agendar en tus espacios libres, sin dobles reservas. No migras nada y tus datos clínicos no pasan por aquí."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Implementación"
+      title="Conecta tu Google Calendar y <em class='text-pine-dark'>ya está.</em>"
+      lead="Sin migraciones ni herramientas nuevas. Sara trabaja sobre el calendario que ya usas y respeta tu disponibilidad real."
+      image="/img/implementacion.jpg"
+      imageAlt="Sara sincronizada con Google Calendar, agendando solo en los espacios libres del consultorio."
+      imageW={1200}
+      imageH={1186}
+    />
+
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-24">
+        <div class="grid gap-6 md:grid-cols-3">
+          {
+            steps.map((s, i) => (
+              <div class="rounded-2xl border border-line bg-cream p-8">
+                <span class="font-accent text-2xl italic text-pine-dark">{`0${i + 1}`}</span>
+                <h3 class="mt-3 text-xl font-semibold">{s.t}</h3>
+                <p class="mt-2 text-salvia">{s.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>

@@ -5,15 +5,52 @@ import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 interface Props {
   title?: string;
   description?: string;
+  schema?: unknown; // JSON-LD extra por página (opcional)
 }
 
 const {
   title = 'Sara — La recepción que nunca cierra',
   description =
     'Sara es la secretaria con IA de tu clínica: atiende WhatsApp e Instagram las 24 horas, agenda, cobra el anticipo y baja las ausencias. Más pacientes, más facturación, todo automático.',
+  schema,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const siteUrl = (Astro.site?.toString() ?? 'https://holasara.ai/').replace(/\/$/, '');
+
+const baseSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'Sara',
+      url: `${siteUrl}/`,
+      logo: `${siteUrl}/brand/sara-mark-512.png`,
+      description:
+        'La secretaria con IA para clínicas: atiende WhatsApp e Instagram las 24 horas, agenda y cobra el anticipo.',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      name: 'Sara',
+      url: `${siteUrl}/`,
+      inLanguage: 'es',
+      publisher: { '@id': `${siteUrl}/#organization` },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Sara',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      description:
+        'Recepción con IA para clínicas de estética y salud. Atiende, agenda, cobra el anticipo y baja las ausencias en WhatsApp e Instagram.',
+      publisher: { '@id': `${siteUrl}/#organization` },
+    },
+  ],
+};
+
+const schemas = schema ? [baseSchema, schema] : [baseSchema];
 ---
 
 <!doctype html>
@@ -46,7 +83,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Sara" />
     <meta property="og:locale" content="es_LA" />
+    <meta property="og:image" content={new URL('/og-image.jpg', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Sara — La recepción que nunca cierra" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={new URL('/og-image.jpg', Astro.site)} />
+
+    <!-- Schema.org / JSON-LD -->
+    {schemas.map((s) => <script type="application/ld+json" is:inline set:html={JSON.stringify(s)} />)}
   </head>
   <body class="min-h-screen antialiased">
     <slot />

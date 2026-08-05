@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const items = [
+  { t: 'Anticipo o consulta cobrada al reservar', b: 'El que paga, viene. Es el filtro de ausencias más efectivo que existe.' },
+  { t: 'Recordatorios y confirmación automáticos', b: 'Sin que nadie de recepción levante el teléfono.' },
+  { t: 'Lista de espera activa', b: 'Se cancela una cita y Sara la vuelve a ofrecer al instante.' },
+  { t: 'Reactivación de pacientes inactivos', b: 'Los que no vuelven hace meses, contactados uno por uno.' },
+  { t: 'Seguimiento post-tratamiento', b: 'Controles y retoques agendados en el momento justo, sin que los persigas.' },
+];
+---
+
+<Layout
+  title="Agenda — La agenda que se llena sola"
+  description="Anticipo al reservar, recordatorios y confirmación automáticos, lista de espera activa y reactivación de pacientes. La agenda de tu clínica se llena y se cuida sola."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Agenda"
+      title="La agenda que se llena <em class='text-pine-dark'>sola.</em>"
+      lead="Sara no solo agenda: cobra por adelantado, recuerda, confirma, reofrece los huecos que se liberan y trae de vuelta a los que dejaron de venir."
+      image="/img/agenda.jpg"
+      imageAlt="Vista de la agenda semanal: citas con anticipo pagado, confirmadas, recordatorios enviados y huecos revendidos desde la lista de espera."
+      imageW={1200}
+      imageH={1186}
+    />
+
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Cinco formas de que no te quede un hueco&nbsp;vacío.
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {
+            items.map((d) => (
+              <div class="flex flex-col rounded-2xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold">{d.t}</h3>
+                <p class="mt-2 text-salvia">{d.b}</p>
+              </div>
+            ))
+          }
+          <div class="flex items-center rounded-2xl border border-pine/25 bg-mint/[0.08] p-7">
+            <p class="font-accent text-xl italic text-pine-dark">El que paga, viene.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const does = [
+  { t: 'Responde en el momento', b: 'En WhatsApp e Instagram, de día o de madrugada. El primer contacto no espera al día siguiente.' },
+  { t: 'Informa de verdad', b: 'Tratamientos, precios y disponibilidad real. Contesta como lo haría tu mejor recepcionista.' },
+  { t: 'Agenda y cobra', b: 'Reserva la cita y cobra la consulta o el anticipo en la misma conversación.' },
+  { t: 'Recuerda y confirma', b: 'Envía recordatorios y confirma la asistencia sin que nadie levante el teléfono.' },
+  { t: 'Reactiva pacientes', b: 'Contacta uno por uno a los que no vuelven hace meses y los trae de nuevo.' },
+];
+---
+
+<Layout
+  title="Conoce a Sara — La secretaria con IA de tu clínica"
+  description="Sara atiende WhatsApp e Instagram las 24 horas, informa precios y disponibilidad real, agenda la cita y cobra el anticipo. Sin sumar una persona más a recepción."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Conoce a Sara"
+      title="Atiende, agenda y cobra. <em class='text-pine-dark'>Sin sumar a nadie a recepción.</em>"
+      lead="Sara es la secretaria con IA de tu clínica. Trabaja de noche, los fines de semana y en los picos, con tus pacientes y con tu equipo."
+      image="/img/chat-whatsapp.jpg"
+      imageAlt="Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo."
+      imageW={945}
+      imageH={2045}
+    />
+
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Todo lo que resuelve una recepción, sin&nbsp;recepción.
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {
+            does.map((d) => (
+              <div class="rounded-2xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold">{d.t}</h3>
+                <p class="mt-2 text-salvia">{d.b}</p>
+              </div>
+            ))
+          }
+          <div class="flex items-center rounded-2xl border border-pine/25 bg-mint/[0.08] p-7">
+            <p class="font-accent text-xl italic text-pine-dark">La clínica que responde primero se queda con el paciente.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-b border-line">
+      <div class="mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[1.15fr_0.85fr] md:items-center">
+        <div class="flex justify-center md:justify-start">
+          <img
+            src="/img/operador.jpg"
+            width="1200"
+            height="1087"
+            alt="Sara reprograma todas las citas del martes y avisa a cada paciente por WhatsApp."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-2xl border border-line shadow-[0_20px_50px_-24px_rgba(20,38,31,0.45)]"
+          />
+        </div>
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Spotlight</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            Además de vender, Sara es tu&nbsp;secretaria.
+          </h2>
+          <div class="mt-8 flex flex-col gap-3">
+            {
+              ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'].map((q) => (
+                <div class="rounded-xl border border-line bg-paper px-4 py-3 font-accent text-lg italic text-pine-dark">{q}</div>
+              ))
+            }
+          </div>
+          <p class="mt-6 text-salvia">Le hablas como a tu equipo. Gestiona la agenda entera y notifica a cada paciente. Las 24 horas.</p>
+        </div>
+      </div>
+    </section>
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>

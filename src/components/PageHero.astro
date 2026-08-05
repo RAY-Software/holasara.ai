@@ -1,0 +1,54 @@
+---
+import { whatsappLink } from '../lib/whatsapp';
+
+interface Props {
+  eyebrow: string;
+  title: string; // puede contener <em> y &nbsp;
+  lead: string;
+  image?: string;
+  imageAlt?: string;
+  imageW?: number;
+  imageH?: number;
+}
+const { eyebrow, title, lead, image, imageAlt = '', imageW, imageH } = Astro.props;
+---
+
+<section class="border-b border-line">
+  <div class={`mx-auto max-w-6xl px-5 pb-20 pt-14 ${image ? 'grid gap-14 md:grid-cols-[1.05fr_0.95fr] md:items-center' : ''}`}>
+    <div>
+      <a href="/" class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+        <span aria-hidden="true">←</span> Volver al inicio
+      </a>
+      <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+        <span class="dot h-2 w-2"></span>{eyebrow}
+      </p>
+      <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl" set:html={title} />
+      <p class="mt-6 max-w-xl text-lg text-salvia">{lead}</p>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <a
+          href={whatsappLink()}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+        >
+          Habla con Sara
+        </a>
+      </div>
+    </div>
+
+    {
+      image && (
+        <div class="flex justify-center md:justify-end">
+          <img
+            src={image}
+            width={imageW}
+            height={imageH}
+            alt={imageAlt}
+            class="w-full max-w-lg rounded-3xl border border-line shadow-[0_20px_50px_-24px_rgba(20,38,31,0.45)]"
+            fetchpriority="high"
+          />
+        </div>
+      )
+    }
+  </div>
+</section>

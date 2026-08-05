@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const methods = [
+  { t: 'Anticipo en línea al reservar', b: 'Compromete la cita y adelanta el flujo de caja. Baja la ausencia desde el primer mes.' },
+  { t: 'Consulta cobrada por adelantado', b: 'El paciente paga cuando agenda, no cuando llega. Tu hora deja de ser gratis.' },
+  { t: 'Gift cards', b: 'Tu paciente le regala un tratamiento a alguien que no te conoce. Cobras hoy y ganas un paciente nuevo que no te costó publicidad.' },
+];
+---
+
+<Layout
+  title="Cobros — Cobra antes de atender"
+  description="Tres formas de que entre dinero sin que nadie lo persiga: anticipo en línea al reservar, consulta cobrada por adelantado y gift cards."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Cobros"
+      title="Cobra <em class='text-pine-dark'>antes</em> de atender."
+      lead="Tres formas de que entre dinero sin que nadie lo persiga. El anticipo baja las ausencias y adelanta la caja desde el primer mes."
+      image="/img/cobros.jpg"
+      imageAlt="Panel de cobros: anticipos, consultas y gift cards cobrados por Sara, todos sin recepción."
+      imageW={1200}
+      imageH={1186}
+    />
+
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-24">
+        <div class="grid gap-6 md:grid-cols-3">
+          {
+            methods.map((m, i) => (
+              <div class="rounded-2xl border border-line bg-cream p-8">
+                <span class="font-accent text-2xl italic text-pine-dark">{`0${i + 1}`}</span>
+                <h3 class="mt-3 text-xl font-semibold">{m.t}</h3>
+                <p class="mt-2 text-salvia">{m.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>
