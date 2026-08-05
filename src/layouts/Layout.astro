@@ -59,16 +59,20 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Google Analytics (gtag.js) -->
-    <script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-NRN8H0WR62"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'G-NRN8H0WR62');
-    </script>
+    <!-- Google Analytics (gtag.js) — solo en producción -->
+    {
+      import.meta.env.PROD && (
+        <Fragment>
+          <script async is:inline src="https://www.googletagmanager.com/gtag/js?id=G-NRN8H0WR62" />
+          <script is:inline>
+            {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-NRN8H0WR62');`}
+          </script>
+        </Fragment>
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
