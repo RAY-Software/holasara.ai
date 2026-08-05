@@ -1,0 +1,70 @@
+@import "tailwindcss";
+@import "@fontsource-variable/fraunces";
+@import "@fontsource-variable/inter";
+
+/* ---- Sara · paleta Salvia ---- */
+@theme {
+  --color-cream: #f3f0e7;
+  --color-paper: #fcfbf7;
+  --color-ink: #14261f;
+  --color-ink-70: #3a4a42;
+  --color-pine: #1f7a5c;
+  --color-pine-dark: #1a6349;
+  --color-mint: #2fb985;
+  --color-salvia: #5e6b62;
+  --color-line: #e4dece;
+  --color-line-dark: #223029;
+
+  --font-serif: "Fraunces Variable", ui-serif, "New York", Georgia, serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fraunces looks best a touch softer in weight for display */
+.font-serif {
+  font-optical-sizing: auto;
+}
+
+/* pulsing "en línea" dot */
+.dot {
+  display: inline-block;
+  border-radius: 9999px;
+  background: var(--color-mint);
+  animation: sara-pulse 2.6s ease-out infinite;
+}
+@keyframes sara-pulse {
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-mint) 55%, transparent); }
+  70%  { box-shadow: 0 0 0 0.7em color-mix(in srgb, var(--color-mint) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-mint) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot { animation: none; }
+}
+
+/* reveal on scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}

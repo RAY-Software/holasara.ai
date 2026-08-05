@@ -1,0 +1,43 @@
+---
+import Wordmark from './Wordmark.astro';
+import { whatsappLink } from '../lib/whatsapp';
+
+const nav = [
+  { href: '#costo', label: 'El costo' },
+  { href: '#sara', label: 'Conocé a Sara' },
+  { href: '#agenda', label: 'Agenda' },
+  { href: '#cobros', label: 'Cobros' },
+  { href: '#caso', label: 'Caso real' },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-line/70 bg-cream/85 backdrop-blur-md">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
+    <a href="/" class="flex items-center" aria-label="Sara — inicio">
+      <Wordmark class="text-2xl" />
+    </a>
+
+    <nav class="hidden items-center gap-7 md:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            class="text-sm font-medium text-salvia transition-colors hover:text-ink"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a
+      href={whatsappLink()}
+      target="_blank"
+      rel="noopener"
+      class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
+    >
+      <span class="dot h-2 w-2"></span>
+      Hablá con Sara
+    </a>
+  </div>
+</header>
