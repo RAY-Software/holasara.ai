@@ -72,13 +72,15 @@ const posts = [
 
       <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-20 md:grid-cols-[1.05fr_0.95fr] md:py-24">
         <div>
-          <p class="mb-6 flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">
+          <p class="mb-6 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
             <span class="dot h-2 w-2"></span>
             La secretaria con IA de tu clínica
           </p>
-          <h1 class="font-serif text-5xl font-black leading-[1.02] tracking-tight text-balance md:text-7xl">
-            Más pacientes.<br />Más facturación.<br />
-            <em class="text-pine-dark">Todo automático, las 24 horas.</em>
+          <h1 class="font-serif font-black leading-[1.05] tracking-tight text-[clamp(1.85rem,6.6vw,3.75rem)]">
+            <span class="block whitespace-nowrap">Más pacientes.</span>
+            <span class="block whitespace-nowrap">Más facturación.</span>
+            <span class="block whitespace-nowrap text-pine-dark">Todo automático,</span>
+            <span class="block whitespace-nowrap text-pine-dark">las 24 horas.</span>
           </h1>
           <p class="mt-7 max-w-xl text-lg text-salvia">
             Sara atiende WhatsApp e Instagram, agenda, cobra el anticipo y baja las ausencias.
@@ -124,51 +126,44 @@ const posts = [
       </div>
     </section>
 
-    <!-- ══════════ EL COSTO ══════════ -->
-    <section id="costo" class="border-t border-line bg-ink text-cream">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-mint">El costo</p>
+    <!-- ══════════ VIDEO ══════════ -->
+    <section id="video" class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-5xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">En acción</p>
         <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
-          La cuenta que ninguna clínica hace.
+          Mira a Sara en 60 segundos.
         </h2>
-        <p class="mt-5 max-w-2xl text-lg text-cream/60">
-          Es dinero que ya pagaste para atraer. Un ejemplo con una clínica de medicina estética
-          de tamaño medio. Los números se reemplazan por los tuyos.
+
+        <div class="group relative mt-10 aspect-video overflow-hidden rounded-3xl border border-line bg-ink shadow-[0_30px_60px_-30px_rgba(20,38,31,0.6)]">
+          <div
+            class="absolute inset-0"
+            style="background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--color-pine) 45%, transparent), transparent 60%);"
+            aria-hidden="true"
+          >
+          </div>
+          <div class="absolute inset-0 flex flex-col items-center justify-center gap-5">
+            <span class="grid h-20 w-20 place-items-center rounded-full bg-mint shadow-lg transition-transform duration-300 group-hover:scale-110">
+              <svg width="26" height="30" viewBox="0 0 26 30" fill="none" aria-hidden="true">
+                <path d="M25 13.27a2 2 0 0 1 0 3.46L3 29.32A2 2 0 0 1 0 27.6V2.4A2 2 0 0 1 3 .68l22 12.6Z" fill="#14261F" />
+              </svg>
+            </span>
+            <p class="font-serif text-xl font-bold text-cream">Video demo</p>
+          </div>
+          <span class="absolute left-4 top-4 rounded-full border border-cream/25 bg-ink/60 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cream/70 backdrop-blur">
+            Placeholder · 16:9
+          </span>
+        </div>
+        <p class="mt-4 text-sm text-salvia">
+          Aquí va el video demo (YouTube/Vimeo). Carga liviana: se muestra la portada y el video se
+          carga recién al hacer clic.
         </p>
-
-        <div class="mt-14 grid gap-6 md:grid-cols-2">
-          <div class="rounded-2xl border border-cream/10 bg-cream/[0.03] p-8">
-            <p class="text-sm font-semibold uppercase tracking-wide text-cream/50">Consultas fuera de horario</p>
-            <p class="mt-4 text-cream/80">
-              <b class="tabular-nums">120</b> consultas/mes fuera de horario ×
-              <b class="tabular-nums">35%</b> que habría agendado ×
-              <b class="tabular-nums">US$180</b> ticket promedio
-            </p>
-            <p class="mt-6 font-serif text-4xl font-black text-mint tabular-nums">US$7.560<span class="text-lg font-medium text-cream/50">/mes</span></p>
-          </div>
-
-          <div class="rounded-2xl border border-cream/10 bg-cream/[0.03] p-8">
-            <p class="text-sm font-semibold uppercase tracking-wide text-cream/50">Citas que terminan en ausencia</p>
-            <p class="mt-4 text-cream/80">
-              <b class="tabular-nums">200</b> citas/mes ×
-              <b class="tabular-nums">25%</b> que termina en ausencia ×
-              <b class="tabular-nums">US$180</b> ticket promedio
-            </p>
-            <p class="mt-6 font-serif text-4xl font-black text-mint tabular-nums">US$9.000<span class="text-lg font-medium text-cream/50">/mes</span></p>
-          </div>
-        </div>
-
-        <div class="mt-6 rounded-2xl border border-mint/30 bg-mint/[0.08] p-8">
-          <p class="text-sm font-semibold uppercase tracking-wide text-mint">Total que hoy no entra</p>
-          <p class="mt-2 font-serif text-5xl font-black tabular-nums md:text-6xl">US$16.560<span class="text-2xl font-medium text-cream/50"> por mes</span></p>
-        </div>
       </div>
     </section>
 
     <!-- ══════════ EL CONTEXTO ══════════ -->
     <section class="border-t border-line">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">El contexto</p>
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">El contexto</p>
         <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
           Tu paciente ya decidió <em class="text-pine-dark">cómo</em> quiere agendar.
         </h2>
@@ -195,7 +190,7 @@ const posts = [
     <section id="sara" class="border-t border-line bg-paper">
       <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-2 md:items-center">
         <div>
-          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">Conoce a Sara</p>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Conoce a Sara</p>
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
             23:41 entra una consulta.<br /><em class="text-pine-dark">23:43 está pagada y agendada.</em>
           </h2>
@@ -243,7 +238,7 @@ const posts = [
           />
         </div>
         <div class="order-1 md:order-2">
-          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">Spotlight · Sara</p>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Spotlight · Sara</p>
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
             Además de atender y vender, <em class="text-pine-dark">Sara es tu secretaria.</em>
           </h2>
@@ -266,7 +261,7 @@ const posts = [
     <!-- ══════════ AGENDA ══════════ -->
     <section id="agenda" class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">Agenda</p>
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Agenda</p>
         <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
           La agenda que se llena sola.
         </h2>
@@ -303,7 +298,7 @@ const posts = [
     <section id="cobros" class="border-t border-line">
       <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-2 md:items-center">
         <div>
-          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">Cobros</p>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cobros</p>
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
             Cobra antes de atender.
           </h2>
@@ -339,7 +334,7 @@ const posts = [
     <!-- ══════════ MARKETING ══════════ -->
     <section class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">Marketing</p>
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Marketing</p>
         <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
           Marketing que no depende de que tengas tiempo.
         </h2>
@@ -392,7 +387,7 @@ const posts = [
     <section class="border-t border-line">
       <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-2 md:items-center">
         <div>
-          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">Implementación</p>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Implementación</p>
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
             Conectas tu Google Calendar y ya está funcionando.
           </h2>
@@ -429,7 +424,7 @@ const posts = [
     <section id="caso" class="border-t border-line bg-paper">
       <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-2 md:items-center">
         <div>
-          <p class="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-pine-dark">Caso de éxito</p>
+          <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Caso de éxito</p>
           <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="mb-6 h-9 w-auto" loading="lazy" />
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
             Ya está funcionando en clínicas reales.
@@ -466,7 +461,7 @@ const posts = [
     <!-- ══════════ CTA FINAL ══════════ -->
     <section class="border-t border-line bg-ink text-cream">
       <div class="reveal mx-auto max-w-4xl px-5 py-28 text-center">
-        <p class="mb-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-mint">
+        <p class="mb-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-mint">
           <span class="dot h-2 w-2"></span> La recepción que nunca cierra
         </p>
         <h2 class="mx-auto max-w-3xl font-serif text-4xl font-black leading-tight text-balance md:text-6xl">

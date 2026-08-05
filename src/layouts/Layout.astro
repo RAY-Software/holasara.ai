@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 
 interface Props {
   title?: string;
@@ -38,6 +39,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body class="min-h-screen antialiased">
     <slot />
+    <WhatsAppFloat />
 
     <script>
       // Scroll reveal
