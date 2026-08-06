@@ -28,14 +28,25 @@ import { whatsappLink } from '../lib/whatsapp';
           <p class="mt-6 max-w-xl text-lg text-salvia">
             ViaLaser puso a Sara a atender su WhatsApp, Instagram y web. Esto pasó, sin sumar a nadie a recepción.
           </p>
-          <a
-            href={whatsappLink()}
-            target="_blank"
-            rel="noopener"
-            class="mt-8 inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
-          >
-            Habla con Sara
-          </a>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href="https://vialaser.uy"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+            >
+              Probarlo ahora
+            </a>
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+            >
+              Habla con Sara
+            </a>
+          </div>
+          <p class="mt-3 text-sm text-salvia">Sara está atendiendo en vivo en <span class="font-medium text-ink">vialaser.uy</span>.</p>
         </div>
         <div class="flex justify-center md:justify-end">
           <img
