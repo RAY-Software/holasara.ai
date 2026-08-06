@@ -3,7 +3,23 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
+import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
+
+const steps = [
+  { title: 'El paciente agenda', body: 'Por WhatsApp, Instagram o tu web, en la conversación con Sara.' },
+  { title: 'Paga en el momento', body: 'Anticipo o consulta, con un link de pago seguro dentro del mismo chat.' },
+  { title: 'La cita queda firme', body: 'El que paga, viene: menos ausencias y caja adelantada desde el primer mes.' },
+];
+
+const faqs = [
+  { q: '¿Cómo cobra Sara?', a: 'Con un link de pago seguro dentro de la conversación. El paciente paga desde su teléfono, sin fricción.' },
+  { q: '¿Puedo elegir qué cobrar?', a: 'Sí. Defines si pides anticipo, consulta completa o ambos, y para qué tratamientos aplica.' },
+  { q: '¿El anticipo baja las ausencias de verdad?', a: 'Es el filtro más efectivo que existe: quien deja plata comprometida, aparece. Se nota desde el primer mes.' },
+  { q: '¿Y si el paciente prefiere pagar en la clínica?', a: 'Puedes seguir aceptando el pago presencial. El cobro online es para asegurar la cita y adelantar la caja, no para reemplazar tu forma de trabajar.' },
+];
 
 const methods = [
   { t: 'Anticipo en línea al reservar', b: 'Compromete la cita y adelanta el flujo de caja. Baja la ausencia desde el primer mes.' },
@@ -43,6 +59,12 @@ const methods = [
         </div>
       </div>
     </section>
+
+    <FeatureSteps title="Del sí del paciente al pago, sin&nbsp;fricción." steps={steps} />
+
+    <CtaInline title="Que tu hora deje de ser&nbsp;gratis." />
+
+    <FeatureFaq items={faqs} />
 
     <CtaBand />
   </main>

@@ -3,7 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
+
+const faqs = [
+  { q: '¿Sara publica sola o apruebo yo?', a: 'Sara prepara el texto, la imagen y el calendario. Apruebas antes de que salga; nada se publica sin tu ok.' },
+  { q: '¿Usa la marca de mi clínica?', a: 'Sí. Las publicaciones salen con tu identidad: tu logo, tus colores y el tono de tu clínica.' },
+  { q: '¿Qué pasa con los comentarios y mensajes?', a: 'Sara los atiende. A quien comenta o escribe por una publicación, lo lleva de la conversación hasta la cita agendada.' },
+  { q: '¿Puedo saber qué publicación funcionó?', a: 'Cada mes tienes, en español claro, qué post trajo más consultas y cuánto se facturó. Sin planillas.' },
+];
 
 const points = [
   { t: 'Publicaciones listas para salir', b: 'Sara escribe el texto, elige la imagen y arma el calendario con la marca de tu clínica. Tú solo apruebas.' },
@@ -65,6 +74,10 @@ const flow = [
         </div>
       </div>
     </section>
+
+    <CtaInline title="Que cada publicación termine en una cita, no en un&nbsp;like." />
+
+    <FeatureFaq items={faqs} />
 
     <CtaBand />
   </main>

@@ -3,7 +3,23 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
+import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
+
+const steps = [
+  { title: 'Se agenda la cita', body: 'Sara la reserva desde el chat, o tu equipo la carga: todo cae en tu Google Calendar.' },
+  { title: 'Sara la cuida', body: 'Cobra el anticipo, recuerda, confirma y libera el hueco si alguien cancela.' },
+  { title: 'La agenda se llena sola', body: 'Reofrece los huecos a la lista de espera y reactiva a los que no vuelven.' },
+];
+
+const faqs = [
+  { q: '¿Se integra con el calendario que ya uso?', a: 'Sí. Sara lee y escribe en tu Google Calendar. No migras nada ni cambias de sistema.' },
+  { q: '¿Puede reservar dos pacientes en el mismo horario?', a: 'No. Agenda solo sobre la disponibilidad real y bloquea al instante, así no hay dobles reservas.' },
+  { q: '¿Mi equipo puede seguir cargando turnos a mano?', a: 'Claro. Sara convive con tu equipo: lo que cargue recepción también queda reflejado y cuidado.' },
+  { q: '¿Sirve si tengo varios profesionales o sucursales?', a: 'Sí. Se configura por agenda y por sucursal, para que cada turno caiga donde corresponde.' },
+];
 
 const items = [
   { t: 'Anticipo o consulta cobrada al reservar', b: 'El que paga, viene. Es el filtro de ausencias más efectivo que existe.' },
@@ -50,6 +66,12 @@ const items = [
         </div>
       </div>
     </section>
+
+    <FeatureSteps title="Cómo se llena tu agenda, paso a&nbsp;paso." steps={steps} />
+
+    <CtaInline title="Que tu agenda deje de depender de que alguien la&nbsp;empuje." />
+
+    <FeatureFaq items={faqs} />
 
     <CtaBand />
   </main>

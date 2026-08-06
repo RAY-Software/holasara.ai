@@ -5,6 +5,14 @@ import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import CtaInline from '../components/CtaInline.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+
+const faqs = [
+  { q: '¿Se nota que es una inteligencia artificial?', a: 'Sara se presenta con naturalidad y responde con el tono de tu clínica. El paciente siente que lo atiende alguien que sabe, no un bot con botones.' },
+  { q: '¿Atiende solo en mi horario?', a: 'Atiende las 24 horas, los fines de semana y en los picos. Justo cuando tu recepción no está, que es cuando entra la mayoría de las consultas.' },
+  { q: '¿Reemplaza a mi recepción?', a: 'La libera de lo repetitivo (responder lo mismo, confirmar, perseguir pagos) para que se dedique al paciente que está en la clínica.' },
+  { q: '¿Habla como en mi país?', a: 'Sí. Sara adapta el registro al país de tu clínica, para que suene natural para tus pacientes.' },
+];
 
 const does = [
   { t: 'Responde en el momento', b: 'En WhatsApp e Instagram, de día o de madrugada. El primer contacto no espera al día siguiente.' },
@@ -83,6 +91,8 @@ const does = [
         </div>
       </div>
     </section>
+
+    <FeatureFaq items={faqs} />
 
     <CtaBand />
   </main>

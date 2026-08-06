@@ -3,7 +3,22 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
+
+const needs = [
+  { t: 'Tu Google Calendar', b: 'El mismo que ya usas. Autorizas el acceso en un clic y Sara empieza a leer y escribir ahí.' },
+  { t: 'Una línea de WhatsApp', b: 'Conectamos una línea de WhatsApp Business para tu clínica. Coordinamos el número contigo.' },
+  { t: 'Tu forma de trabajar', b: 'Nos cuentas tus tratamientos, precios y disponibilidad, y Sara aprende a atender como tu clínica.' },
+];
+
+const faqs = [
+  { q: '¿Cuánto tarda en estar funcionando?', a: 'Poco. Autorizar el calendario es un clic; el resto es cargar tu información y afinar el tono. Lo hacemos contigo.' },
+  { q: '¿Tengo que cambiar de sistema?', a: 'No. Sara trabaja sobre tu Google Calendar y tu WhatsApp. No migras datos ni aprendes una herramienta nueva.' },
+  { q: '¿Qué pasa con la historia clínica de mis pacientes?', a: 'No se almacena historia clínica ni información médica en Sara. Eso queda donde está hoy.' },
+  { q: '¿Mi equipo tiene que aprender a usarla?', a: 'Casi nada: Sara atiende sola y tu equipo le habla por WhatsApp como a una persona más. Sin pantallas nuevas.' },
+];
 
 const steps = [
   { t: 'Un clic y listo', b: 'Autorizas tu cuenta de Google y Sara empieza a leer y escribir en el calendario que ya usas. No migras nada, no cambias de herramienta.' },
@@ -43,6 +58,28 @@ const steps = [
         </div>
       </div>
     </section>
+
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Lo único que necesitas para&nbsp;arrancar.
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          {
+            needs.map((n) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{n.t}</h3>
+                <p class="mt-2 text-salvia">{n.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title="Conectas el calendario hoy y Sara empieza a&nbsp;atender." />
+
+    <FeatureFaq items={faqs} />
 
     <CtaBand />
   </main>
