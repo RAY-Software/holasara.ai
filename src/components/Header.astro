@@ -7,27 +7,27 @@ import { productGroups, topLinks } from '../data/nav';
 <header class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
   <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
     <a href="/" class="flex items-center" aria-label="Sara, inicio">
-      <Wordmark class="text-2xl" />
+      <Wordmark class="text-[1.9rem]" />
     </a>
 
     <!-- ─── Nav desktop ─── -->
     <nav class="hidden items-center gap-1 lg:flex">
-      <!-- Producto (mega menú) -->
-      <div class="group">
+      <!-- Producto (mega menú, hover-intent con delay via JS) -->
+      <div class="group" data-mega>
         <button
           type="button"
           class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
           aria-haspopup="true"
         >
           Producto
-          <svg class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
 
-        <!-- Panel (wrapper full-width = puente de hover para que no se corte al bajar el puntero) -->
+        <!-- Panel: full-width; visibilidad manejada por JS (is-open) con delay de cierre -->
         <div
-          class="invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
+          class="mega-panel invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
         >
           <div class="mx-auto grid w-[min(96vw,1024px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_280px]">
             <div class="grid grid-cols-2 gap-x-10 gap-y-9 sm:grid-cols-4">
@@ -181,6 +181,39 @@ import { productGroups, topLinks } from '../data/nav';
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       openI.classList.toggle('hidden', open);
       closeI.classList.toggle('hidden', !open);
+    });
+  })();
+</script>
+
+<style>
+  /* Estado abierto del mega menú (lo togglea el JS con delay de cierre) */
+  [data-mega].is-open .mega-panel {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  [data-mega].is-open .mega-chevron {
+    transform: rotate(180deg);
+  }
+</style>
+
+<script is:inline>
+  // Hover-intent: abre al entrar, y al salir espera un poco antes de cerrar, así
+  // el puntero puede cruzar el hueco entre el botón y el panel sin que se cierre.
+  (function () {
+    document.querySelectorAll('[data-mega]').forEach(function (el) {
+      var t;
+      function open() { clearTimeout(t); el.classList.add('is-open'); }
+      function scheduleClose() { clearTimeout(t); t = setTimeout(function () { el.classList.remove('is-open'); }, 260); }
+      el.addEventListener('mouseenter', open);
+      el.addEventListener('mouseleave', scheduleClose);
+      el.addEventListener('focusin', open);
+      el.addEventListener('focusout', scheduleClose);
+      el.addEventListener('keydown', function (e) { if (e.key === 'Escape') { clearTimeout(t); el.classList.remove('is-open'); } });
+      // al hacer clic en un link del panel, cerrar de una
+      el.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { clearTimeout(t); el.classList.remove('is-open'); });
+      });
     });
   })();
 </script>
