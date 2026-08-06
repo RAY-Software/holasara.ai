@@ -33,14 +33,6 @@ const context = [
   },
 ];
 
-const agenda = [
-  { title: 'Anticipo o consulta cobrada al reservar', body: 'El que paga, viene. Es el filtro de ausencias más efectivo que existe.' },
-  { title: 'Recordatorios y confirmación automáticos', body: 'Sin que nadie de recepción levante el teléfono.' },
-  { title: 'Lista de espera activa', body: 'Se cancela una cita y Sara la vuelve a ofrecer al instante.' },
-  { title: 'Reactivación de pacientes inactivos', body: 'Los que no vuelven hace meses, contactados uno por uno.' },
-  { title: 'Seguimiento post-tratamiento', body: 'Controles y retoques agendados en el momento justo, sin que los persigas.' },
-];
-
 const payments = [
   { title: 'Anticipo en línea al reservar', body: 'Compromete la cita y adelanta el flujo de caja. Baja la ausencia desde el primer mes.' },
   { title: 'Consulta cobrada por adelantado', body: 'El paciente paga cuando agenda, no cuando llega. Tu hora deja de ser gratis.' },
@@ -332,55 +324,6 @@ const posts = [
 
     <!-- CTA intercalado -->
     <CtaInline title="Cada consulta que no respondes a tiempo, agenda en&nbsp;otra clínica." />
-
-    <!-- ══════════ AGENDA (layout asimétrico: statement + lista) ══════════ -->
-    <section id="agenda" class="border-t border-line bg-paper">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <div class="grid gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16 md:items-start">
-          <div class="md:sticky md:top-24">
-            <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Agenda</p>
-            <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
-              La agenda que se llena&nbsp;sola.
-            </h2>
-            <div class="mt-7 rounded-xl border border-pine/25 bg-mint/[0.08] px-6 py-5">
-              <p class="font-accent text-2xl italic text-pine-dark">El que paga, viene.</p>
-            </div>
-            <a
-              href="/agenda"
-              class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
-            >
-              Ver la agenda en detalle <span aria-hidden="true">→</span>
-            </a>
-          </div>
-
-          <ul class="border-t border-line">
-            {
-              agenda.map((a) => (
-                <li class="flex gap-5 border-b border-line py-6">
-                  <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint" />
-                  <div>
-                    <h3 class="text-lg font-semibold text-ink">{a.title}</h3>
-                    <p class="mt-1 text-salvia">{a.body}</p>
-                  </div>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-
-        <div class="mt-14 overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
-          <img
-            src="/img/agenda.jpg"
-            width="1200"
-            height="1186"
-            alt="Vista de la agenda semanal: citas con anticipo pagado, confirmadas, recordatorios enviados y huecos revendidos desde la lista de espera."
-            loading="lazy"
-            decoding="async"
-            class="w-full"
-          />
-        </div>
-      </div>
-    </section>
 
     <!-- ══════════ COBROS ══════════ -->
     <section id="cobros" class="border-t border-line">
