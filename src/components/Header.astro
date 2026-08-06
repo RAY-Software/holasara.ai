@@ -1,41 +1,94 @@
 ---
 import Wordmark from './Wordmark.astro';
 import { whatsappLink } from '../lib/whatsapp';
-
-const nav = [
-  { href: '/sara', label: 'Conoce a Sara' },
-  { href: '/agenda', label: 'Agenda' },
-  { href: '/cobros', label: 'Cobros' },
-  { href: '/instagram', label: 'Instagram' },
-  { href: '/caso', label: 'Caso real' },
-];
+import { productGroups, topLinks } from '../data/nav';
 ---
 
-<header class="sticky top-0 z-50 border-b border-line/70 bg-cream/85 backdrop-blur-md">
-  <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
+<header class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
+  <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
     <a href="/" class="flex items-center" aria-label="Sara, inicio">
       <Wordmark class="text-2xl" />
     </a>
 
-    <nav class="hidden items-center gap-7 md:flex">
+    <!-- ─── Nav desktop ─── -->
+    <nav class="hidden items-center gap-1 lg:flex">
+      <!-- Producto (mega menú) -->
+      <div class="group">
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
+          aria-haspopup="true"
+        >
+          Producto
+          <svg class="h-3.5 w-3.5 transition-transform group-hover:rotate-180" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <!-- Panel -->
+        <div
+          class="invisible absolute left-0 right-0 top-full z-50 mx-auto w-[min(94vw,900px)] translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
+        >
+          <div class="grid gap-6 rounded-2xl border border-line bg-white p-6 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_230px]">
+            <div class="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
+              {
+                productGroups.map((g) => (
+                  <div>
+                    <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
+                    <ul class="flex flex-col gap-3.5">
+                      {g.items.map((it) => (
+                        <li>
+                          <a href={it.href} class="group/link block">
+                            <span class="block text-sm font-semibold text-ink transition-colors group-hover/link:text-pine-dark">
+                              {it.name}
+                            </span>
+                            <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              }
+            </div>
+
+            <!-- Card caso ViaLaser -->
+            <a
+              href="/caso"
+              class="flex flex-col justify-between gap-4 rounded-xl bg-ink p-5 text-cream transition-transform hover:-translate-y-0.5"
+            >
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">Caso real</p>
+                <p class="mt-2 font-serif text-lg font-black leading-tight">ViaLaser ya trabaja con Sara.</p>
+              </div>
+              <div>
+                <p class="font-serif text-3xl font-black tabular-nums text-mint">US$1.071</p>
+                <p class="mt-1 text-xs text-cream/70">en citas, atribuidas por canal</p>
+                <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
+                  Ver el caso <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
       {
-        nav.map((item) => (
-          <a
-            href={item.href}
-            class="text-sm font-medium text-salvia transition-colors hover:text-ink"
-          >
-            {item.label}
+        topLinks.map((l) => (
+          <a href={l.href} class="rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink">
+            {l.name}
           </a>
         ))
       }
     </nav>
 
-    <div class="flex items-center gap-2.5">
+    <!-- ─── CTAs desktop ─── -->
+    <div class="hidden items-center gap-2.5 lg:flex">
       <a
         href={whatsappLink()}
         target="_blank"
         rel="noopener"
-        class="hidden items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30 sm:inline-flex"
+        class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
       >
         <span class="dot h-2 w-2"></span>
         Habla con Sara
@@ -47,5 +100,86 @@ const nav = [
         Pedir demo
       </a>
     </div>
+
+    <!-- ─── Toggle mobile ─── -->
+    <button
+      id="nav-toggle"
+      type="button"
+      class="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink lg:hidden"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <svg id="nav-open-icon" class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+      <svg id="nav-close-icon" class="hidden h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- ─── Drawer mobile ─── -->
+  <div id="mobile-nav" class="hidden border-t border-line bg-cream lg:hidden">
+    <div class="max-h-[calc(100vh-4rem)] space-y-7 overflow-auto px-5 py-6">
+      {
+        productGroups.map((g) => (
+          <div>
+            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
+            <ul class="flex flex-col">
+              {g.items.map((it) => (
+                <li>
+                  <a href={it.href} class="block border-b border-line/70 py-2.5 text-ink">
+                    {it.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+      <div>
+        <ul class="flex flex-col">
+          {
+            topLinks.map((l) => (
+              <li>
+                <a href={l.href} class="block border-b border-line/70 py-2.5 font-semibold text-ink">
+                  {l.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="flex flex-col gap-3 pt-1">
+        <a href="/demo" class="inline-flex items-center justify-center rounded-full bg-pine px-5 py-3 text-base font-semibold text-cream">
+          Pedir demo
+        </a>
+        <a
+          href={whatsappLink()}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-base font-semibold text-ink"
+        >
+          <span class="dot h-2 w-2"></span> Habla con Sara
+        </a>
+      </div>
+    </div>
   </div>
 </header>
+
+<script is:inline>
+  (function () {
+    var btn = document.getElementById('nav-toggle');
+    var panel = document.getElementById('mobile-nav');
+    var openI = document.getElementById('nav-open-icon');
+    var closeI = document.getElementById('nav-close-icon');
+    if (!btn || !panel) return;
+    btn.addEventListener('click', function () {
+      var open = panel.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      openI.classList.toggle('hidden', open);
+      closeI.classList.toggle('hidden', !open);
+    });
+  })();
+</script>
