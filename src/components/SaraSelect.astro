@@ -1,0 +1,166 @@
+---
+// Dropdown custom (no nativo) estilado con la paleta Salvia. Escribe a un
+// <input type="hidden"> para que el form lo lea vía FormData igual que un select.
+// Accesible: aria-haspopup/expanded/listbox/option + teclado (flechas/Enter/Esc).
+interface Option {
+  value: string;
+  label: string;
+}
+interface Props {
+  name: string;
+  label: string;
+  placeholder?: string;
+  options: Option[];
+  required?: boolean;
+}
+const { name, label, placeholder = 'Elige una opción', options, required = false } = Astro.props;
+const labelId = `${name}-label`;
+---
+
+<div>
+  <label id={labelId} class="mb-1.5 block text-sm font-medium text-ink">{label}</label>
+  <div class="sara-select relative" data-name={name}>
+    <button
+      type="button"
+      class="sara-select-trigger flex w-full items-center justify-between gap-2 rounded-xl border border-line bg-white px-3.5 py-2.5 text-left transition-colors hover:border-ink/25 focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+      aria-labelledby={labelId}
+    >
+      <span class="sara-select-value truncate text-salvia" data-placeholder={placeholder}>{placeholder}</span>
+      <svg class="sara-select-chevron h-4 w-4 shrink-0 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <ul
+      class="sara-select-menu absolute z-20 mt-2 hidden max-h-64 w-full overflow-auto rounded-xl border border-line bg-white p-1.5 shadow-[0_16px_40px_-20px_rgba(20,38,31,0.35)]"
+      role="listbox"
+      aria-labelledby={labelId}
+      tabindex="-1"
+    >
+      {
+        options.map((o) => (
+          <li
+            role="option"
+            data-value={o.value}
+            aria-selected="false"
+            class="sara-select-option flex cursor-pointer items-center justify-between gap-2 rounded-lg px-3 py-2 text-ink"
+          >
+            <span>{o.label}</span>
+            <svg class="sara-select-check h-4 w-4 shrink-0 text-pine" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </li>
+        ))
+      }
+    </ul>
+
+    <input type="hidden" name={name} value="" data-required={required ? 'true' : undefined} />
+  </div>
+</div>
+
+<style>
+  /* Estados por CSS/aria (evita depender de clases toggleadas por JS / purge). */
+  .sara-select-trigger[aria-expanded='true'] .sara-select-chevron {
+    transform: rotate(180deg);
+  }
+  .sara-select-option .sara-select-check {
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .sara-select-option[aria-selected='true'] {
+    color: var(--color-pine-dark);
+    font-weight: 600;
+  }
+  .sara-select-option[aria-selected='true'] .sara-select-check {
+    opacity: 1;
+  }
+  .sara-select-option:hover,
+  .sara-select-option[data-active] {
+    background: color-mix(in srgb, var(--color-mint) 12%, transparent);
+  }
+</style>
+
+<script>
+  function initSaraSelects() {
+    document.querySelectorAll('.sara-select').forEach((root) => {
+      const el = root as HTMLElement;
+      if (el.dataset.bound) return;
+      el.dataset.bound = '1';
+
+      const trigger = el.querySelector('.sara-select-trigger') as HTMLButtonElement;
+      const menu = el.querySelector('.sara-select-menu') as HTMLElement;
+      const valueEl = el.querySelector('.sara-select-value') as HTMLElement;
+      const hidden = el.querySelector('input[type="hidden"]') as HTMLInputElement;
+      const options = Array.from(el.querySelectorAll('.sara-select-option')) as HTMLElement[];
+      const placeholder = valueEl.dataset.placeholder || '';
+      let active = -1;
+
+      const isOpen = () => !menu.classList.contains('hidden');
+
+      function setActive(i: number) {
+        options.forEach((o) => o.removeAttribute('data-active'));
+        active = Math.max(0, Math.min(i, options.length - 1));
+        const o = options[active];
+        if (o) {
+          o.setAttribute('data-active', '');
+          o.scrollIntoView({ block: 'nearest' });
+        }
+      }
+      function open() {
+        menu.classList.remove('hidden');
+        trigger.setAttribute('aria-expanded', 'true');
+        active = options.findIndex((o) => o.getAttribute('aria-selected') === 'true');
+        setActive(active < 0 ? 0 : active);
+        document.addEventListener('click', onDoc, true);
+      }
+      function close() {
+        menu.classList.add('hidden');
+        trigger.setAttribute('aria-expanded', 'false');
+        document.removeEventListener('click', onDoc, true);
+      }
+      function onDoc(e: Event) {
+        if (!el.contains(e.target as Node)) close();
+      }
+      function choose(o: HTMLElement) {
+        options.forEach((x) => x.setAttribute('aria-selected', 'false'));
+        o.setAttribute('aria-selected', 'true');
+        hidden.value = o.dataset.value || '';
+        valueEl.textContent = o.querySelector('span')?.textContent || placeholder;
+        valueEl.classList.remove('text-salvia');
+        valueEl.classList.add('text-ink');
+        close();
+        trigger.focus();
+        hidden.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+
+      trigger.addEventListener('click', () => (isOpen() ? close() : open()));
+      trigger.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (!isOpen() && (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          open();
+          return;
+        }
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          setActive(active + 1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setActive(active - 1);
+        } else if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (options[active]) choose(options[active]);
+        } else if (e.key === 'Escape') {
+          close();
+        }
+      });
+      options.forEach((o, i) => {
+        o.addEventListener('click', () => choose(o));
+        o.addEventListener('mousemove', () => setActive(i));
+      });
+    });
+  }
+  initSaraSelects();
+  document.addEventListener('astro:after-swap', initSaraSelects);
+</script>
