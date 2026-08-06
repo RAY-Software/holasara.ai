@@ -9,7 +9,7 @@ interface Props {
 }
 
 const {
-  title = 'Sara — La recepción que nunca cierra',
+  title = 'Sara · La recepción que nunca cierra',
   description =
     'Sara es la secretaria con IA de tu clínica: atiende WhatsApp e Instagram las 24 horas, agenda, cobra el anticipo y baja las ausencias. Más pacientes, más facturación, todo automático.',
   schema,
@@ -83,7 +83,7 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Marketing tags (GA4 + Google Ads + Meta Pixel) — solo en producción -->
+    <!-- Marketing tags (GA4 + Google Ads + Meta Pixel) · solo en producción -->
     {
       import.meta.env.PROD && (
         <Fragment>
@@ -112,7 +112,7 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
     <meta property="og:image" content={new URL('/og-image.jpg', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Sara — La recepción que nunca cierra" />
+    <meta property="og:image:alt" content="Sara · La recepción que nunca cierra" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={new URL('/og-image.jpg', Astro.site)} />
 
