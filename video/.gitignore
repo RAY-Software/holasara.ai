@@ -1,0 +1,10 @@
+node_modules/
+frames/
+out/_video.mp4
+out/preview.mp4
+out/qa/
+out/*.log
+.DS_Store
+
+assets/pdf/
+assets/ref/
