@@ -1,0 +1,82 @@
+---
+// Franja/carrusel de clientes reales ("ya trabajan con Sara"). Prueba social
+// honesta: logos reales, sin métricas inventadas (las métricas reales de
+// ViaLaser viven en la sección de caso). FaceUp y ViaLaser son imágenes reales;
+// DrReyes y Sorace & Mendoza van como wordmark de texto (sus logos no rinden
+// sobre fondo claro / no existen como imagen). Marquee suave, respeta reduced-motion.
+interface Props {
+  label?: string;
+  tone?: 'light' | 'paper';
+}
+const { label = 'Clínicas que ya trabajan con Sara', tone = 'paper' } = Astro.props;
+
+type Item =
+  | { kind: 'img'; src: string; alt: string; h: string }
+  | { kind: 'text'; text: string };
+
+const clients: Item[] = [
+  { kind: 'img', src: '/img/clients/faceup.png', alt: 'FaceUp', h: 'h-6 md:h-7' },
+  { kind: 'img', src: '/img/clients/vialaser.png', alt: 'ViaLaser', h: 'h-6 md:h-7' },
+  { kind: 'text', text: 'Dr. Reyes' },
+  { kind: 'text', text: 'Sorace & Mendoza' },
+];
+// Duplicamos para un loop continuo sin cortes.
+const loop = [...clients, ...clients];
+const bg = tone === 'light' ? 'bg-white' : 'bg-paper';
+---
+
+<section class={`border-y border-line ${bg}`}>
+  <div class="mx-auto max-w-6xl px-5 py-9">
+    <p class="text-center text-xs font-semibold uppercase tracking-[0.16em] text-salvia">{label}</p>
+
+    <div class="clients-marquee mt-6 overflow-hidden">
+      <ul class="clients-track flex w-max items-center gap-12 md:gap-16">
+        {
+          loop.map((c, i) => (
+            <li class="flex shrink-0 items-center" aria-hidden={i >= clients.length ? 'true' : undefined}>
+              {c.kind === 'img' ? (
+                <img
+                  src={c.src}
+                  alt={c.alt}
+                  class={`${c.h} w-auto opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0`}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <span class="whitespace-nowrap font-serif text-xl font-black tracking-tight text-ink/70 transition-colors hover:text-ink md:text-2xl">
+                  {c.text}
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .clients-track {
+    animation: clients-scroll 26s linear infinite;
+  }
+  .clients-marquee:hover .clients-track {
+    animation-play-state: paused;
+  }
+  /* -50% = ancho de una copia del set (duplicado arriba) → loop perfecto */
+  @keyframes clients-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .clients-track {
+      animation: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem 3rem;
+    }
+  }
+</style>
