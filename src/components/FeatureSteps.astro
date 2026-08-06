@@ -1,0 +1,41 @@
+---
+// "Cómo funciona" — pasos numerados. Reusable en las páginas de feature.
+interface Step {
+  title: string;
+  body: string;
+}
+interface Props {
+  eyebrow?: string;
+  title: string; // admite &nbsp; / <em>
+  steps: Step[];
+  dark?: boolean;
+}
+const { eyebrow = 'Cómo funciona', title, steps, dark = false } = Astro.props;
+const wrap = dark ? 'bg-ink text-cream' : 'bg-paper';
+const eyebrowCls = dark ? 'text-mint' : 'text-pine-dark';
+const bodyCls = dark ? 'text-cream/65' : 'text-salvia';
+const numCls = dark ? 'text-mint' : 'text-pine-dark';
+const lineCls = dark ? 'bg-cream/15' : 'bg-line';
+---
+
+<section class={`border-t border-line ${wrap}`}>
+  <div class="reveal mx-auto max-w-6xl px-5 py-24">
+    <p class={`mb-3 text-sm font-semibold uppercase tracking-[0.14em] ${eyebrowCls}`}>{eyebrow}</p>
+    <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={title} />
+
+    <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+      {
+        steps.map((s, i) => (
+          <div>
+            <div class="flex items-center gap-4">
+              <span class={`font-serif text-4xl font-black tabular-nums ${numCls}`}>{`0${i + 1}`}</span>
+              <span class={`h-px flex-1 ${lineCls}`} />
+            </div>
+            <h3 class={`mt-5 text-xl font-semibold ${dark ? 'text-cream' : 'text-ink'}`}>{s.title}</h3>
+            <p class={`mt-2 ${bodyCls}`}>{s.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

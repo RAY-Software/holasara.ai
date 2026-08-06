@@ -1,0 +1,33 @@
+---
+// FAQ con <details> nativo (accesible, sin JS). Reusable en páginas de feature.
+interface QA {
+  q: string;
+  a: string;
+}
+interface Props {
+  title?: string;
+  items: QA[];
+}
+const { title = 'Preguntas frecuentes', items } = Astro.props;
+---
+
+<section class="border-t border-line">
+  <div class="reveal mx-auto max-w-3xl px-5 py-24">
+    <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{title}</h2>
+    <div class="mt-10 divide-y divide-line border-t border-line">
+      {
+        items.map((it) => (
+          <details class="group py-5">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold text-ink [&::-webkit-details-marker]:hidden">
+              {it.q}
+              <svg class="h-5 w-5 shrink-0 text-salvia transition-transform group-open:rotate-45" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              </svg>
+            </summary>
+            <p class="mt-3 text-salvia">{it.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

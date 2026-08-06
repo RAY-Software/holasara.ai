@@ -27,22 +27,22 @@ import { productGroups, topLinks } from '../data/nav';
 
         <!-- Panel -->
         <div
-          class="invisible absolute left-0 right-0 top-full z-50 mx-auto w-[min(94vw,900px)] translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
+          class="invisible absolute left-0 right-0 top-full z-50 mx-auto w-[min(96vw,1024px)] translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
         >
-          <div class="grid gap-6 rounded-2xl border border-line bg-white p-6 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_230px]">
-            <div class="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
+          <div class="grid gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_280px]">
+            <div class="grid grid-cols-2 gap-x-10 gap-y-9 sm:grid-cols-4">
               {
                 productGroups.map((g) => (
                   <div>
-                    <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
-                    <ul class="flex flex-col gap-3.5">
+                    <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
+                    <ul class="flex flex-col gap-6">
                       {g.items.map((it) => (
                         <li>
                           <a href={it.href} class="group/link block">
-                            <span class="block text-sm font-semibold text-ink transition-colors group-hover/link:text-pine-dark">
+                            <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
                               {it.name}
                             </span>
-                            <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>
+                            <span class="mt-1 block text-xs leading-snug text-salvia">{it.desc}</span>
                           </a>
                         </li>
                       ))}
@@ -52,18 +52,19 @@ import { productGroups, topLinks } from '../data/nav';
               }
             </div>
 
-            <!-- Card caso ViaLaser -->
-            <a
-              href="/caso"
-              class="flex flex-col justify-between gap-4 rounded-xl bg-ink p-5 text-cream transition-transform hover:-translate-y-0.5"
-            >
-              <div>
+            <!-- Promo: imagen de ViaLaser (caso real) -->
+            <a href="/caso" class="group/case relative flex min-h-[280px] overflow-hidden rounded-xl bg-ink">
+              <img
+                src="/img/vialaser-chart.jpg"
+                alt="Resultados reales de ViaLaser con Sara"
+                class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-300 group-hover/case:scale-[1.04]"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/5"></div>
+              <div class="relative mt-auto p-5">
                 <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">Caso real</p>
-                <p class="mt-2 font-serif text-lg font-black leading-tight">ViaLaser ya trabaja con Sara.</p>
-              </div>
-              <div>
-                <p class="font-serif text-3xl font-black tabular-nums text-mint">US$1.071</p>
-                <p class="mt-1 text-xs text-cream/70">en citas, atribuidas por canal</p>
+                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">ViaLaser ya trabaja con Sara.</p>
                 <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
                   Ver el caso <span aria-hidden="true">→</span>
                 </span>

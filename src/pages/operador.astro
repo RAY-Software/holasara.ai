@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const orders = [
+  '“Bloquea mi agenda el viernes a la tarde.”',
+  '“Pasa a Juan Pérez al jueves 10.”',
+  '“Reagenda a todos los del martes, avisales.”',
+  '“¿Cuántos turnos tengo mañana?”',
+];
+
+const caps = [
+  { t: 'Le hablas como a tu equipo', b: 'Sin app nueva ni pantallas. Le escribís por WhatsApp lo que necesitás y lo resuelve.' },
+  { t: 'Avisa a cada paciente', b: 'Cuando reprogramás, Sara le escribe a cada uno con la nueva hora. Vos no perseguís a nadie.' },
+  { t: 'Trabaja sobre tu calendario', b: 'Los cambios quedan en el mismo Google Calendar que ve tu equipo. Sin dobles reservas.' },
+  { t: 'Solo para tu equipo', b: 'El modo operador se activa por número autorizado. Un paciente no puede pedirle esto.' },
+];
+
+const steps = [
+  { title: 'Le escribís la orden', body: 'Desde tu WhatsApp: bloquear, mover, reagendar o consultar la agenda.' },
+  { title: 'Sara la ejecuta', body: 'Actualiza el calendario y resuelve el cambio en el momento.' },
+  { title: 'Notifica a los pacientes', body: 'Le avisa a cada afectado la nueva hora, sin que levantes el teléfono.' },
+];
+
+const faqs = [
+  { q: '¿Cualquiera puede darle órdenes a Sara?', a: 'No. El modo operador se habilita solo para los números de teléfono que autorices (el tuyo, el de recepción). Los pacientes nunca acceden a estas acciones.' },
+  { q: '¿Necesito instalar una app?', a: 'No. Todo pasa por WhatsApp, el mismo que ya usás todo el día.' },
+  { q: '¿Y si reagendo veinte turnos de golpe?', a: 'Sara los mueve y le escribe a cada paciente por separado con su nueva hora. Es justo el caso donde más tiempo te ahorra.' },
+  { q: '¿Puedo ver qué hizo?', a: 'Cada cambio queda reflejado en tu Google Calendar y en el panel, así siempre tenés el registro.' },
+];
+---
+
+<Layout
+  title="Modo operador · Sara"
+  description="Tu equipo le pide cosas a Sara por WhatsApp: bloquear agenda, mover un turno o reagendar el día entero. Sara ejecuta y le avisa a cada paciente."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Atiende · Modo operador"
+      title="Además de atender, <em class='text-pine-dark'>Sara es tu secretaria.</em>"
+      lead="Le hablás por WhatsApp como a cualquier persona de tu equipo. Gestiona la agenda entera y le avisa a cada paciente. Las 24 horas."
+      image="/img/operador.jpg"
+      imageAlt="Sara reprograma todas las citas del martes y avisa a cada paciente por WhatsApp."
+      imageW={1200}
+      imageH={1087}
+    />
+
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-4xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Le decís, y pasa</p>
+        <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Órdenes que Sara resuelve&nbsp;sola.
+        </h2>
+        <div class="mt-10 flex flex-col gap-3">
+          {
+            orders.map((o) => (
+              <div class="rounded-xl border border-line bg-white px-5 py-4 font-accent text-lg italic text-pine-dark">
+                {o}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureSteps title="Cómo funciona el modo&nbsp;operador." steps={steps} />
+
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <div class="grid gap-6 md:grid-cols-2">
+          {
+            caps.map((c) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
+                <p class="mt-2 text-salvia">{c.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title="Que reprogramar un día entero sea un solo&nbsp;mensaje." />
+
+    <FeatureFaq items={faqs} />
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>

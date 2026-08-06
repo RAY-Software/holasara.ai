@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const caps = [
+  { t: 'Recordatorio automático', b: 'Sara le escribe al paciente antes de la cita, en el momento justo. Nadie de recepción tiene que acordarse.' },
+  { t: 'Confirmación en un toque', b: 'El paciente confirma o avisa que no puede, directo en el chat. Vos ves la agenda al día.' },
+  { t: 'El hueco no se pierde', b: 'Si alguien cancela, esa hora vuelve a estar disponible y Sara la ofrece a la lista de espera.' },
+  { t: 'Sin llamadas incómodas', b: 'Se termina el “te llamo para confirmar”. Todo por WhatsApp, como el paciente prefiere.' },
+];
+
+const steps = [
+  { title: 'Se agenda la cita', body: 'Por Sara o cargada por tu equipo: entra al calendario que ya usás.' },
+  { title: 'Sara recuerda y pide confirmar', body: 'Un mensaje claro antes del turno, con la opción de confirmar o reprogramar.' },
+  { title: 'La agenda queda limpia', body: 'Confirmados marcados, cancelaciones liberadas y huecos vueltos a ofrecer.' },
+];
+
+const faqs = [
+  { q: '¿Cuándo manda el recordatorio?', a: 'En la ventana que mejor funciona para tu clínica (por ejemplo, el día anterior). Lo ajustamos en la implementación.' },
+  { q: '¿Qué pasa si el paciente no confirma?', a: 'Sara puede reintentar y, si el turno se libera, ofrecerlo a alguien de la lista de espera para no perder la hora.' },
+  { q: '¿Sirve para cualquier tratamiento?', a: 'Sí. Funciona igual para una consulta de valoración que para un control post-tratamiento.' },
+  { q: '¿Reemplaza a mi recepción?', a: 'La libera de la tarea más repetitiva. Tu equipo deja de perseguir confirmaciones y se dedica al paciente que está en la clínica.' },
+];
+---
+
+<Layout
+  title="Recordatorios y confirmación · Sara"
+  description="Sara recuerda cada cita y pide confirmación por WhatsApp, sin que nadie de recepción llame. Menos ausencias, agenda siempre al día."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Agenda · Recordatorios"
+      title="Menos ausencias, <em class='text-pine-dark'>sin levantar el teléfono.</em>"
+      lead="La ausencia es plata que se va. Sara recuerda cada cita y pide confirmación por WhatsApp, en automático, para que tu agenda llegue llena al día."
+      image="/img/agenda.jpg"
+      imageAlt="Agenda semanal con citas confirmadas y recordatorios enviados por Sara."
+      imageW={1200}
+      imageH={1186}
+    />
+
+    <FeatureSteps title="Confirmar deja de ser una tarea de&nbsp;recepción." steps={steps} />
+
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Todo lo que hace por tus&nbsp;confirmaciones.
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            caps.map((c) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
+                <p class="mt-2 text-salvia">{c.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title="Que las ausencias dejen de comerte la&nbsp;agenda." />
+
+    <FeatureFaq items={faqs} />
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>
