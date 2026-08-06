@@ -10,7 +10,7 @@ const bubbles = [
 ];
 ---
 
-<div class="w-full max-w-sm rounded-3xl border border-line bg-paper p-4 shadow-[0_20px_50px_-24px_rgba(20,38,31,0.45)]">
+<div class="w-full max-w-sm rounded-2xl border border-line bg-paper p-4 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]">
   <div class="mb-4 flex items-center gap-3 border-b border-line pb-4">
     <div
       class="grid h-10 w-10 place-items-center rounded-full border border-line font-serif font-black text-lg text-pine-dark"
@@ -33,8 +33,8 @@ const bubbles = [
         <div
           class={
             b.who === 'in'
-              ? 'max-w-[82%] self-start rounded-2xl rounded-bl-sm bg-ink/[0.06] px-3 py-2 text-[14px] leading-snug text-ink'
-              : 'max-w-[82%] self-end rounded-2xl rounded-br-sm border border-mint/35 bg-mint/[0.14] px-3 py-2 text-[14px] leading-snug text-ink'
+              ? 'max-w-[82%] self-start rounded-xl rounded-bl-sm bg-ink/[0.06] px-3 py-2 text-[14px] leading-snug text-ink'
+              : 'max-w-[82%] self-end rounded-xl rounded-br-sm border border-mint/35 bg-mint/[0.14] px-3 py-2 text-[14px] leading-snug text-ink'
           }
         >
           {b.text}

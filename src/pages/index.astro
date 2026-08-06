@@ -112,7 +112,7 @@ const posts = [
             width="1200"
             height="1424"
             alt="Profesional en una clínica de estética, con el circuito de Sara: te encuentran, chatean, agenda, cobra y pide la reseña."
-            class="w-full max-w-lg rounded-3xl border border-line shadow-[0_20px_50px_-24px_rgba(20,38,31,0.45)]"
+            class="w-full max-w-lg rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
             fetchpriority="high"
           />
         </div>
@@ -127,7 +127,7 @@ const posts = [
           Mira a Sara en 60&nbsp;segundos.
         </h2>
 
-        <div class="group relative mt-10 aspect-video overflow-hidden rounded-3xl border border-line bg-ink shadow-[0_30px_60px_-30px_rgba(20,38,31,0.6)]">
+        <div class="group relative mt-10 aspect-video overflow-hidden rounded-2xl border border-line bg-ink shadow-[0_16px_40px_-26px_rgba(20,38,31,0.38)]">
           <div
             class="absolute inset-0"
             style="background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--color-pine) 45%, transparent), transparent 60%);"
@@ -168,7 +168,7 @@ const posts = [
         <div class="mt-14 grid gap-6 md:grid-cols-3">
           {
             context.map((c) => (
-              <div class="rounded-2xl border border-line bg-paper p-8">
+              <div class="rounded-xl border border-line bg-paper p-8">
                 <span class="font-accent text-2xl italic text-pine-dark">{c.n}</span>
                 <h3 class="mt-3 text-xl font-semibold">{c.title}</h3>
                 <p class="mt-2 text-salvia">{c.body}</p>
@@ -216,7 +216,7 @@ const posts = [
             alt="Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo."
             loading="lazy"
             decoding="async"
-            class="w-full max-w-sm rounded-3xl border border-line shadow-[0_20px_50px_-24px_rgba(20,38,31,0.45)]"
+            class="w-full max-w-sm rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
           />
         </div>
       </div>
@@ -233,7 +233,7 @@ const posts = [
             alt="Sara gestiona la agenda de la semana y reprograma todas las citas del martes, avisando a cada paciente."
             loading="lazy"
             decoding="async"
-            class="w-full rounded-2xl border border-line shadow-[0_20px_50px_-24px_rgba(20,38,31,0.45)]"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
           />
         </div>
         <div class="order-1 md:order-2">
@@ -274,18 +274,18 @@ const posts = [
         <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {
             agenda.map((a) => (
-              <div class="flex flex-col rounded-2xl border border-line bg-cream p-7">
+              <div class="flex flex-col rounded-xl border border-line bg-cream p-7">
                 <h3 class="text-lg font-semibold text-ink">{a.title}</h3>
                 <p class="mt-2 text-salvia">{a.body}</p>
               </div>
             ))
           }
-          <div class="flex flex-col justify-center rounded-2xl border border-pine/25 bg-mint/[0.08] p-7">
+          <div class="flex flex-col justify-center rounded-xl border border-pine/25 bg-mint/[0.08] p-7">
             <p class="font-accent text-xl italic text-pine-dark">El que paga, viene.</p>
           </div>
         </div>
 
-        <div class="mt-8 overflow-hidden rounded-2xl border border-line bg-white shadow-[0_20px_50px_-30px_rgba(20,38,31,0.5)]">
+        <div class="mt-8 overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
           <img
             src="/img/agenda.jpg"
             width="1200"
@@ -336,7 +336,7 @@ const posts = [
             alt="Panel de cobros: anticipos, consultas y gift cards cobrados por Sara, todos sin recepción."
             loading="lazy"
             decoding="async"
-            class="w-full rounded-2xl border border-line shadow-[0_20px_50px_-30px_rgba(20,38,31,0.5)]"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
           />
         </div>
       </div>
@@ -364,7 +364,7 @@ const posts = [
           <div class="flex h-full flex-col gap-6">
             {
               marketing.map((m) => (
-                <div class="flex flex-1 flex-col justify-center rounded-2xl border border-line bg-cream p-7">
+                <div class="flex flex-1 flex-col justify-center rounded-xl border border-line bg-cream p-7">
                   <h3 class="text-xl font-semibold">{m.title}</h3>
                   <p class="mt-2 text-salvia">{m.body}</p>
                 </div>
@@ -379,7 +379,7 @@ const posts = [
               alt="Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir."
               loading="lazy"
               decoding="async"
-              class="w-full rounded-2xl border border-line shadow-[0_20px_50px_-30px_rgba(20,38,31,0.5)]"
+              class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
             />
           </div>
         </div>
@@ -390,7 +390,7 @@ const posts = [
             {
               posts.map((p) => (
                 <div>
-                  <div class="overflow-hidden rounded-2xl border border-line bg-white shadow-[0_20px_50px_-30px_rgba(20,38,31,0.5)]">
+                  <div class="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
                     <img src={p.src} alt={p.step} loading="lazy" decoding="async" class="w-full" />
                   </div>
                   <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
@@ -441,7 +441,7 @@ const posts = [
             alt="Sara sincronizada con Google Calendar, agendando solo en los espacios libres del consultorio."
             loading="lazy"
             decoding="async"
-            class="w-full rounded-2xl border border-line shadow-[0_20px_50px_-30px_rgba(20,38,31,0.5)]"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
           />
         </div>
       </div>
@@ -485,7 +485,7 @@ const posts = [
             alt="Turnos de ViaLaser por canal y conversaciones por semana atendidas por Sara."
             loading="lazy"
             decoding="async"
-            class="w-full rounded-2xl border border-line shadow-[0_20px_50px_-30px_rgba(20,38,31,0.5)]"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
           />
         </div>
       </div>
