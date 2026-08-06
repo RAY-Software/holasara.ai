@@ -132,27 +132,47 @@ const posts = [
           Mira a Sara en 60&nbsp;segundos.
         </h2>
 
-        <div class="group relative mt-10 aspect-video overflow-hidden rounded-2xl border border-line bg-ink shadow-[0_16px_40px_-26px_rgba(20,38,31,0.38)]">
-          <div
-            class="absolute inset-0"
-            style="background: radial-gradient(120% 90% at 50% 0%, color-mix(in srgb, var(--color-pine) 45%, transparent), transparent 60%);"
-            aria-hidden="true"
+        <!-- Video demo: portada liviana (thumbnail YouTube); el iframe se carga recién al clic -->
+        <div
+          id="video-embed"
+          data-yt="-HAjxKXeltI"
+          class="group relative mt-10 aspect-video cursor-pointer overflow-hidden rounded-2xl border border-line bg-ink shadow-[0_16px_40px_-26px_rgba(20,38,31,0.38)]"
+        >
+          <img
+            src="https://img.youtube.com/vi/-HAjxKXeltI/maxresdefault.jpg"
+            alt="Video: Sara en acción, en 60 segundos"
+            class="absolute inset-0 h-full w-full object-cover opacity-95 transition group-hover:opacity-100"
+            loading="lazy"
+            decoding="async"
+          />
+          <button
+            type="button"
+            class="absolute inset-0 flex items-center justify-center bg-ink/25 transition group-hover:bg-ink/15"
+            aria-label="Reproducir el video de Sara"
           >
-          </div>
-          <div class="absolute inset-0 flex flex-col items-center justify-center gap-5">
             <span class="grid h-20 w-20 place-items-center rounded-full bg-mint shadow-lg transition-transform duration-300 group-hover:scale-110">
               <svg width="26" height="30" viewBox="0 0 26 30" fill="none" aria-hidden="true">
                 <path d="M25 13.27a2 2 0 0 1 0 3.46L3 29.32A2 2 0 0 1 0 27.6V2.4A2 2 0 0 1 3 .68l22 12.6Z" fill="#14261F" />
               </svg>
             </span>
-            <p class="font-serif text-xl font-bold text-cream">Video demo</p>
-          </div>
-          <span class="absolute left-4 top-4 rounded-full border border-cream/25 bg-ink/60 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cream/70 backdrop-blur">
-            Placeholder · 16:9
-          </span>
+          </button>
         </div>
       </div>
     </section>
+
+    <script is:inline>
+      (function () {
+        var el = document.getElementById('video-embed');
+        if (!el) return;
+        el.addEventListener('click', function () {
+          var id = el.getAttribute('data-yt');
+          el.innerHTML =
+            '<iframe class="absolute inset-0 h-full w-full" src="https://www.youtube-nocookie.com/embed/' +
+            id +
+            '?autoplay=1&rel=0" title="Sara en acción" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+        });
+      })();
+    </script>
 
     <!-- ══════════ EL CONTEXTO (banda oscura) ══════════ -->
     <section class="bg-ink text-cream">
