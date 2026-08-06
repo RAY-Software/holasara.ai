@@ -20,13 +20,6 @@ const roleOptions = [
   { value: 'Recepción', label: 'Recepción' },
   { value: 'Otro', label: 'Otro' },
 ];
-const sourceOptions = [
-  { value: 'Instagram', label: 'Instagram' },
-  { value: 'Google', label: 'Google' },
-  { value: 'Recomendación', label: 'Recomendación' },
-  { value: 'Anuncio', label: 'Un anuncio' },
-  { value: 'Otro', label: 'Otro' },
-];
 
 const benefits = [
   {
@@ -116,38 +109,36 @@ const benefits = [
           <form id="demo-form" class="mt-7 flex flex-col gap-5" novalidate data-endpoint={DEMO_ENDPOINT}>
             <SaraSelect name="role" label="¿Cuál es tu rol?" options={roleOptions} required />
 
-            <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label for="firstName" class="mb-1.5 block text-sm font-medium text-ink">Nombre</label>
-                <input id="firstName" name="firstName" type="text" autocomplete="given-name" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-              </div>
-              <div>
-                <label for="lastName" class="mb-1.5 block text-sm font-medium text-ink">Apellido</label>
-                <input id="lastName" name="lastName" type="text" autocomplete="family-name" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-              </div>
+            <div>
+              <label for="name" class="mb-1.5 block text-sm font-medium text-ink">Nombre y apellido</label>
+              <input id="name" name="name" type="text" autocomplete="name" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label for="email" class="mb-1.5 block text-sm font-medium text-ink">Email</label>
-                <input id="email" name="email" type="email" autocomplete="email" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-              </div>
-              <div>
-                <label for="phone" class="mb-1.5 block text-sm font-medium text-ink">WhatsApp</label>
-                <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+52 …" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-              </div>
+            <div>
+              <label for="clinic" class="mb-1.5 block text-sm font-medium text-ink">Nombre de la clínica</label>
+              <input id="clinic" name="clinic" type="text" autocomplete="off" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              <p id="clinic-hint" class="mt-1 hidden text-xs text-salvia">Empieza a escribir y elígela de la lista.</p>
+              <input type="hidden" name="clinic_place_id" id="clinic_place_id" />
+              <input type="hidden" name="clinic_address" id="clinic_address" />
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label for="clinic" class="mb-1.5 block text-sm font-medium text-ink">Nombre de la clínica</label>
-                <input id="clinic" name="clinic" type="text" autocomplete="off" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-                <p id="clinic-hint" class="mt-1 hidden text-xs text-salvia">Empieza a escribir y elígela de la lista.</p>
-                <input type="hidden" name="clinic_place_id" id="clinic_place_id" />
-                <input type="hidden" name="clinic_address" id="clinic_address" />
-              </div>
-              <SaraSelect name="source" label="¿Cómo nos conociste?" options={sourceOptions} />
+            <div>
+              <label for="phone" class="mb-1.5 block text-sm font-medium text-ink">WhatsApp</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+52 …" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
             </div>
+
+            <div>
+              <label for="email" class="mb-1.5 block text-sm font-medium text-ink">
+                Email <span class="font-normal text-salvia">(opcional)</span>
+              </label>
+              <input id="email" name="email" type="email" autocomplete="email" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+            </div>
+
+            <!-- Atribución: se rellenan al enviar, desde la URL o la cookie sara_click -->
+            <input type="hidden" name="gclid" id="f_gclid" />
+            <input type="hidden" name="wbraid" id="f_wbraid" />
+            <input type="hidden" name="gbraid" id="f_gbraid" />
+            <input type="hidden" name="fbclid" id="f_fbclid" />
 
             <label class="flex items-start gap-3 text-sm text-salvia">
               <input type="checkbox" name="consent" required class="mt-1 h-4 w-4 shrink-0 rounded border-line text-pine focus:ring-pine/25" />
@@ -258,33 +249,124 @@ const benefits = [
         }
       })();
 
+      // ── Atribución ──────────────────────────────────────────────────────────
+      // Click-ids de la URL; si no vienen, de la cookie sara_click (90 días) que
+      // deja el script del Layout. Sirven para dos cosas: subir la conversión
+      // offline cuando el lead cierra, y arrastrar el token al handoff de WhatsApp.
+      var CLICK_KEYS = ['gclid', 'wbraid', 'gbraid', 'fbclid'];
+
+      function clickIds() {
+        var out = {};
+        var p = new URLSearchParams(location.search);
+        var found = false;
+        CLICK_KEYS.forEach(function (k) {
+          out[k] = p.get(k) || '';
+          if (out[k]) found = true;
+        });
+        if (found) return out;
+        var m = document.cookie.match('(^|;)\\s*sara_click\\s*=\\s*([^;]+)');
+        var raw = m ? decodeURIComponent(m.pop()) : '';
+        CLICK_KEYS.forEach(function (k) {
+          var mm = raw.match(new RegExp('\\[' + k + ':([^\\]]+)\\]'));
+          out[k] = mm ? mm[1] : '';
+        });
+        return out;
+      }
+
+      function clickToken(ids) {
+        return CLICK_KEYS.filter(function (k) {
+          return ids[k];
+        })
+          .map(function (k) {
+            return '[' + k + ':' + ids[k] + ']';
+          })
+          .join('');
+      }
+
+      // ── Enhanced Conversions ────────────────────────────────────────────────
+      // gtag hashea (SHA-256) del lado del cliente; nosotros solo normalizamos.
+      // Teléfono a E.164: si no trae +, le anteponemos el código del país detectado.
+      function normPhone(raw) {
+        var s = String(raw || '').trim();
+        if (s.charAt(0) === '+') return '+' + s.slice(1).replace(/\D/g, '');
+        var d = s.replace(/\D/g, '');
+        if (!d) return '';
+        var cc = IS_AR ? '54' : '52';
+        if (d.length > 10 && d.indexOf(cc) === 0) return '+' + d;
+        return '+' + cc + d;
+      }
+
+      function setUserData(data) {
+        try {
+          if (!window.gtag) return;
+          var ud = {};
+          var mail = String(data.email || '').trim().toLowerCase();
+          var tel = normPhone(data.phone);
+          if (mail) ud.email = mail;
+          if (tel) ud.phone_number = tel;
+          if (ud.email || ud.phone_number) gtag('set', 'user_data', ud);
+        } catch (e) {}
+      }
+
       function showError(msg) {
         errBox.textContent = msg;
         errBox.classList.remove('hidden');
       }
 
-      function fireLead() {
+      // Dispara los eventos de lead y llama a cb() cuando Ads confirmó (o a los 900 ms,
+      // lo que pase primero). Sin esto, el redirect a WhatsApp mata el request de
+      // conversión antes de que salga y se pierden leads en el reporte.
+      function fireLead(data, cb) {
+        var done = false;
+        function once() {
+          if (done) return;
+          done = true;
+          if (cb) cb();
+        }
+
         try { if (window.fbq) fbq('track', 'Lead', { content_name: 'demo-page' }); } catch (e) {}
+
+        var c = window.__saraTrack;
+        var hasAds = !!(window.gtag && c && c.adsId && c.demoLabel);
+
         try {
           if (window.gtag) {
-            gtag('event', 'generate_lead', { event_category: 'engagement', event_label: 'demo-page' });
-            gtag('event', 'demo_solicitada', { event_category: 'engagement', event_label: 'demo-page', value: 1 });
-            var c = window.__saraTrack;
-            if (c && c.adsId && c.adsLabel) gtag('event', 'conversion', { send_to: c.adsId + '/' + c.adsLabel });
+            setUserData(data);
+            gtag('event', 'generate_lead', {
+              event_category: 'engagement',
+              event_label: 'demo-page',
+              transport_type: 'beacon',
+            });
+            gtag('event', 'demo_solicitada', {
+              event_category: 'engagement',
+              event_label: 'demo-page',
+              value: 1,
+              transport_type: 'beacon',
+            });
+            if (hasAds) {
+              gtag('event', 'conversion', {
+                send_to: c.adsId + '/' + c.demoLabel,
+                event_callback: once,
+              });
+            }
           }
         } catch (e) {}
+
+        if (hasAds) setTimeout(once, 900);
+        else once();
       }
 
-      function waHandoff(data) {
+      function waHandoff(data, token) {
         var msg =
           'Hola Sara, quiero una demo para mi clínica.\n' +
           '• Clínica: ' + (data.clinic || '-') + '\n' +
-          '• Nombre: ' + (data.firstName || '') + ' ' + (data.lastName || '') + '\n' +
+          '• Nombre: ' + (data.name || '-') + '\n' +
           '• Rol: ' + (data.role || '-');
+        if (token) msg += '\n' + token;
         return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
       }
 
-      // El link de fallback abre WhatsApp directo
+      // El link de fallback abre WhatsApp directo (el Layout le inyecta el token)
       var fb = form.querySelector('[data-wa-fallback]');
       if (fb) fb.setAttribute('href', 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Sara, quiero una demo para mi clínica.'));
 
@@ -292,14 +374,21 @@ const benefits = [
         ev.preventDefault();
         errBox.classList.add('hidden');
 
+        // Click-ids frescos justo antes de leer el form
+        var ids = clickIds();
+        CLICK_KEYS.forEach(function (k) {
+          var el = document.getElementById('f_' + k);
+          if (el) el.value = ids[k];
+        });
+
         var fd = new FormData(form);
         var data = Object.fromEntries(fd.entries());
 
-        // Validación mínima
-        if (!data.role || !data.firstName || !data.lastName || !data.email || !data.phone || !data.clinic) {
+        // Validación mínima. Email es opcional, pero si lo escriben tiene que ser válido.
+        if (!data.role || !data.name || !data.phone || !data.clinic) {
           return showError('Completa los campos requeridos para pedir tu demo.');
         }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(data.email))) {
+        if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(data.email))) {
           return showError('Revisa el email: no parece válido.');
         }
         if (!fd.get('consent')) {
@@ -309,14 +398,20 @@ const benefits = [
         btn.disabled = true;
         btn.textContent = 'Enviando…';
 
-        function done() {
-          fireLead();
+        var token = clickToken(ids);
+
+        function showSuccess() {
           form.classList.add('hidden');
           var ok = document.getElementById('demo-success');
           if (ok) ok.classList.remove('hidden');
         }
 
-        var payload = Object.assign({}, data, { source_page: 'demo', region: IS_AR ? 'AR' : 'MX', ts: new Date().toISOString() });
+        var payload = Object.assign({}, data, {
+          source_page: 'demo',
+          region: IS_AR ? 'AR' : 'MX',
+          page_url: location.href,
+          ts: new Date().toISOString(),
+        });
 
         if (endpoint) {
           fetch(endpoint, {
@@ -326,17 +421,20 @@ const benefits = [
           })
             .then(function (r) {
               if (!r.ok) throw new Error('bad status');
-              done();
+              fireLead(data);
+              showSuccess();
             })
             .catch(function () {
               // Si el endpoint falla, no perdemos el lead: handoff a WhatsApp
-              fireLead();
-              window.location.href = waHandoff(data);
+              fireLead(data, function () {
+                window.location.href = waHandoff(data, token);
+              });
             });
         } else {
           // Sin backend configurado: handoff a WhatsApp con el resumen
-          fireLead();
-          window.location.href = waHandoff(data);
+          fireLead(data, function () {
+            window.location.href = waHandoff(data, token);
+          });
         }
       });
     })();

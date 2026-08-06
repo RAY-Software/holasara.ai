@@ -1,0 +1,174 @@
+---
+import { GA4_ID, GOOGLE_ADS_ID, ADS_WA_LABEL } from '../lib/tracking';
+import { WHATSAPP_AR, WHATSAPP_MX, WHATSAPP_TEXT } from '../lib/whatsapp';
+
+// Puente para Google Ads. La final URL de un anuncio no puede ser wa.me: Google exige
+// que el dominio del destino coincida con el visible. Esta página vive en holasara.ai,
+// rutea AR/MX y arrastra el gclid dentro del texto del mensaje — que es lo que después
+// nos deja subir la conversación como conversión offline.
+//
+//   Uso en anuncios:  https://holasara.ai/wa
+//   Mensaje a medida: https://holasara.ai/wa?m=Hola%20Sara%2C%20vi%20su%20anuncio
+//
+// Página deliberadamente mínima: sin Tailwind, sin fuentes, sin JSON-LD. Solo el tag y
+// el redirect. Muestra una tarjeta con botón manual para que no sea una pantalla en
+// blanco si el redirect tarda o el navegador lo bloquea.
+const gtagSrc = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
+const gtagJs =
+  `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}` +
+  `gtag('js',new Date());gtag('config','${GA4_ID}');` +
+  (GOOGLE_ADS_ID ? `gtag('config','${GOOGLE_ADS_ID}');` : '');
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Abriendo WhatsApp · Sara</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {
+      import.meta.env.PROD && (
+        <Fragment>
+          <script async is:inline src={gtagSrc} />
+          <script is:inline set:html={gtagJs} />
+        </Fragment>
+      )
+    }
+    <style>
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        background: #f7f5f0;
+        color: #14261f;
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        padding: 24px;
+      }
+      .card {
+        max-width: 340px;
+        text-align: center;
+      }
+      .dot {
+        width: 44px;
+        height: 44px;
+        margin: 0 auto 20px;
+        border-radius: 999px;
+        border: 3px solid rgba(20, 38, 31, 0.12);
+        border-top-color: #25d366;
+        animation: spin 0.9s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .dot {
+          animation: none;
+        }
+      }
+      h1 {
+        font-size: 1.15rem;
+        margin: 0 0 8px;
+      }
+      p {
+        margin: 0 0 20px;
+        color: #5c6b64;
+        font-size: 0.95rem;
+      }
+      a.btn {
+        display: inline-block;
+        background: #14261f;
+        color: #f7f5f0;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 999px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="dot" aria-hidden="true"></div>
+      <h1>Abriendo WhatsApp…</h1>
+      <p>Si no se abre solo, tocá el botón.</p>
+      <a class="btn" id="wa-manual" href={`https://wa.me/${WHATSAPP_MX}`}>Hablar con Sara</a>
+    </div>
+
+    <script
+      is:inline
+      define:vars={{ WHATSAPP_AR, WHATSAPP_MX, WHATSAPP_TEXT, ADS_WA_LABEL, GOOGLE_ADS_ID }}
+    >
+      (function () {
+        var p = new URLSearchParams(location.search);
+
+        // 1) Click-ids: de la URL, o de la cookie que dejó una visita anterior al sitio.
+        function getCookie(n) {
+          var m = document.cookie.match('(^|;)\\s*' + n + '\\s*=\\s*([^;]+)');
+          return m ? m.pop() : '';
+        }
+        var toks = [];
+        ['gclid', 'wbraid', 'gbraid', 'fbclid'].forEach(function (k) {
+          var v = p.get(k);
+          if (v) toks.push('[' + k + ':' + v + ']');
+        });
+        var token = toks.join('');
+        if (token) {
+          document.cookie =
+            'sara_click=' + encodeURIComponent(token) + ';path=/;max-age=' + 60 * 60 * 24 * 90 + ';SameSite=Lax';
+        } else {
+          token = decodeURIComponent(getCookie('sara_click') || '');
+        }
+
+        // 2) Ruteo AR/MX, mismo criterio que el resto del sitio.
+        var IS_AR = false;
+        try {
+          var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+          IS_AR = /America\/Argentina/.test(tz) || /^es-AR/i.test(navigator.language || '');
+        } catch (e) {}
+        var WA = IS_AR ? WHATSAPP_AR : WHATSAPP_MX;
+
+        // 3) El token viaja DENTRO del mensaje: es lo que después matchea el backend
+        //    para subir la conversación como conversión offline.
+        var msg = (p.get('m') || WHATSAPP_TEXT) + (token ? ' ' + token : '');
+        var target = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+
+        var manual = document.getElementById('wa-manual');
+        if (manual) manual.href = target;
+
+        // 4) Conversión secundaria + GA4, con event_callback para no perderla en el
+        //    redirect. Si el tag no está, no esperamos nada.
+        var went = false;
+        function go() {
+          if (went) return;
+          went = true;
+          window.location.replace(target);
+        }
+
+        var hasAds = !!(window.gtag && GOOGLE_ADS_ID && ADS_WA_LABEL);
+        try {
+          if (window.gtag) {
+            gtag('event', 'generate_lead', {
+              event_category: 'engagement',
+              event_label: 'wa-bridge',
+              transport_type: 'beacon',
+            });
+          }
+          if (hasAds) {
+            gtag('event', 'conversion', {
+              send_to: GOOGLE_ADS_ID + '/' + ADS_WA_LABEL,
+              event_callback: go,
+            });
+          }
+        } catch (e) {}
+
+        // Sin tag: redirect inmediato. Con tag: 700 ms de gracia y salimos igual.
+        if (hasAds) setTimeout(go, 700);
+        else setTimeout(go, 0);
+      })();
+    </script>
+  </body>
+</html>
