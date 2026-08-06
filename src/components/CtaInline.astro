@@ -1,0 +1,38 @@
+---
+// CTA compacto para intercalar entre secciones (rompe monotonía + convierte).
+// Distinto del CtaBand final: es una tira tintada, no una banda de pantalla completa.
+import { whatsappLink } from '../lib/whatsapp';
+
+interface Props {
+  title?: string; // puede contener &nbsp; / <em>
+  cta?: string; // texto del botón primario
+}
+const {
+  title = 'Que la próxima consulta no espere a&nbsp;mañana.',
+  cta = 'Pedir demo',
+} = Astro.props;
+---
+
+<section class="border-t border-line bg-paper">
+  <div class="mx-auto max-w-6xl px-5 py-12">
+    <div class="flex flex-col items-center gap-6 rounded-2xl border border-pine/20 bg-mint/[0.07] px-6 py-8 text-center sm:flex-row sm:justify-between sm:gap-8 sm:px-9 sm:text-left">
+      <p class="font-serif text-xl font-black leading-snug text-ink md:text-2xl" set:html={title} />
+      <div class="flex shrink-0 flex-wrap items-center justify-center gap-3">
+        <a
+          href="/demo"
+          class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+        >
+          {cta}
+        </a>
+        <a
+          href={whatsappLink()}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 rounded-full border border-pine/30 px-6 py-3 text-base font-semibold text-pine-dark transition-colors hover:bg-pine/5"
+        >
+          Habla con Sara
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

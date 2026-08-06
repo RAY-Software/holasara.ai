@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CtaBand from '../components/CtaBand.astro';
+import CtaInline from '../components/CtaInline.astro';
 import { whatsappLink } from '../lib/whatsapp';
 
 const saraDoes = [
@@ -153,25 +154,32 @@ const posts = [
       </div>
     </section>
 
-    <!-- ══════════ EL CONTEXTO ══════════ -->
-    <section class="border-t border-line">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">El contexto</p>
-        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
-          Tu paciente ya decidió <em class="text-pine-dark">cómo</em> quiere&nbsp;agendar.
-        </h2>
-        <p class="mt-5 max-w-2xl text-lg text-salvia">
-          Espera lo mismo que en cualquier otro servicio: respuesta inmediata. La clínica que
-          responde primero se queda con el paciente.
-        </p>
+    <!-- ══════════ EL CONTEXTO (banda oscura) ══════════ -->
+    <section class="bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24 md:py-28">
+        <div class="max-w-3xl">
+          <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-mint">
+            <span class="h-2 w-2 rounded-full bg-mint"></span>El contexto
+          </p>
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
+            Tu paciente ya decidió <em class="text-mint">cómo</em> quiere&nbsp;agendar.
+          </h2>
+          <p class="mt-5 text-lg text-cream/70">
+            Espera lo mismo que en cualquier otro servicio: respuesta inmediata. La clínica que
+            responde primero se queda con el&nbsp;paciente.
+          </p>
+        </div>
 
-        <div class="mt-14 grid gap-6 md:grid-cols-3">
+        <div class="mt-16 grid gap-x-10 gap-y-12 md:grid-cols-3">
           {
             context.map((c) => (
-              <div class="rounded-xl border border-line bg-paper p-8">
-                <span class="font-accent text-2xl italic text-pine-dark">{c.n}</span>
-                <h3 class="mt-3 text-xl font-semibold">{c.title}</h3>
-                <p class="mt-2 text-salvia">{c.body}</p>
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{c.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{c.title}</h3>
+                <p class="mt-2 text-cream/65">{c.body}</p>
               </div>
             ))
           }
@@ -257,35 +265,45 @@ const posts = [
       </div>
     </section>
 
-    <!-- ══════════ AGENDA ══════════ -->
+    <!-- CTA intercalado -->
+    <CtaInline title="Cada consulta que no respondes a tiempo, agenda en&nbsp;otra clínica." />
+
+    <!-- ══════════ AGENDA (layout asimétrico: statement + lista) ══════════ -->
     <section id="agenda" class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Agenda</p>
-        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
-          La agenda que se llena&nbsp;sola.
-        </h2>
-        <a
-          href="/agenda"
-          class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
-        >
-          Ver la agenda en detalle <span aria-hidden="true">→</span>
-        </a>
-
-        <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {
-            agenda.map((a) => (
-              <div class="flex flex-col rounded-xl border border-line bg-cream p-7">
-                <h3 class="text-lg font-semibold text-ink">{a.title}</h3>
-                <p class="mt-2 text-salvia">{a.body}</p>
-              </div>
-            ))
-          }
-          <div class="flex flex-col justify-center rounded-xl border border-pine/25 bg-mint/[0.08] p-7">
-            <p class="font-accent text-xl italic text-pine-dark">El que paga, viene.</p>
+        <div class="grid gap-12 md:grid-cols-[0.9fr_1.1fr] md:gap-16 md:items-start">
+          <div class="md:sticky md:top-24">
+            <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Agenda</p>
+            <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
+              La agenda que se llena&nbsp;sola.
+            </h2>
+            <div class="mt-7 rounded-xl border border-pine/25 bg-mint/[0.08] px-6 py-5">
+              <p class="font-accent text-2xl italic text-pine-dark">El que paga, viene.</p>
+            </div>
+            <a
+              href="/agenda"
+              class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+            >
+              Ver la agenda en detalle <span aria-hidden="true">→</span>
+            </a>
           </div>
+
+          <ul class="border-t border-line">
+            {
+              agenda.map((a) => (
+                <li class="flex gap-5 border-b border-line py-6">
+                  <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint" />
+                  <div>
+                    <h3 class="text-lg font-semibold text-ink">{a.title}</h3>
+                    <p class="mt-1 text-salvia">{a.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
         </div>
 
-        <div class="mt-8 overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
+        <div class="mt-14 overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
           <img
             src="/img/agenda.jpg"
             width="1200"
@@ -341,6 +359,9 @@ const posts = [
         </div>
       </div>
     </section>
+
+    <!-- CTA intercalado -->
+    <CtaInline title="Ve a Sara atendiendo tu clínica, en vivo." cta="Pedir mi demo" />
 
     <!-- ══════════ MARKETING ══════════ -->
     <section class="border-t border-line bg-paper">
