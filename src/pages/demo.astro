@@ -9,6 +9,9 @@ import { WHATSAPP_AR, WHATSAPP_MX } from '../lib/whatsapp';
 // el formulario hace handoff a WhatsApp con un resumen prellenado, así siempre
 // funciona sin backend. Cuando quieras CRM, setea PUBLIC_DEMO_ENDPOINT en Vercel.
 const DEMO_ENDPOINT = import.meta.env.PUBLIC_DEMO_ENDPOINT ?? '';
+// Google Places (browser key, referrer-restricted). Si no está seteada, el campo
+// clínica queda como input de texto normal (degradación elegante, como RAY).
+const GOOGLE_MAPS_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
 
 const roleOptions = [
   { value: 'Dueño/a', label: 'Dueño/a de la clínica' },
@@ -138,7 +141,10 @@ const benefits = [
             <div class="grid gap-4 sm:grid-cols-2">
               <div>
                 <label for="clinic" class="mb-1.5 block text-sm font-medium text-ink">Nombre de la clínica</label>
-                <input id="clinic" name="clinic" type="text" autocomplete="organization" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+                <input id="clinic" name="clinic" type="text" autocomplete="off" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+                <p id="clinic-hint" class="mt-1 hidden text-xs text-salvia">Empieza a escribir y elígela de la lista.</p>
+                <input type="hidden" name="clinic_place_id" id="clinic_place_id" />
+                <input type="hidden" name="clinic_address" id="clinic_address" />
               </div>
               <SaraSelect name="source" label="¿Cómo nos conociste?" options={sourceOptions} />
             </div>
@@ -182,7 +188,7 @@ const benefits = [
 
   <Footer />
 
-  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX }}>
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, GOOGLE_MAPS_KEY }}>
     (function () {
       var form = document.getElementById('demo-form');
       if (!form) return;
@@ -197,6 +203,60 @@ const benefits = [
         IS_AR = /America\/Argentina/.test(tz) || /^es-AR/i.test(navigator.language || '');
       } catch (e) {}
       var WA = IS_AR ? WHATSAPP_AR : WHATSAPP_MX;
+
+      // ── Google Places autocomplete en el campo clínica (degradación elegante) ──
+      // Si no hay key o la API no carga, el input queda como texto normal.
+      (function initClinicAutocomplete() {
+        if (!GOOGLE_MAPS_KEY) return; // sin key → input normal
+        var input = document.getElementById('clinic');
+        var placeIdEl = document.getElementById('clinic_place_id');
+        var addressEl = document.getElementById('clinic_address');
+        var hint = document.getElementById('clinic-hint');
+        if (!input) return;
+
+        function attach() {
+          try {
+            var ac = new google.maps.places.Autocomplete(input, {
+              types: ['establishment'],
+              fields: ['name', 'place_id', 'formatted_address'],
+              componentRestrictions: { country: IS_AR ? ['ar'] : ['mx', 'ar'] },
+            });
+            ac.addListener('place_changed', function () {
+              var p = ac.getPlace() || {};
+              if (p.name) input.value = p.name;
+              if (placeIdEl) placeIdEl.value = p.place_id || '';
+              if (addressEl) addressEl.value = p.formatted_address || '';
+            });
+            // typing manual limpia la selección previa
+            input.addEventListener('input', function () {
+              if (placeIdEl) placeIdEl.value = '';
+              if (addressEl) addressEl.value = '';
+            });
+            if (hint) hint.classList.remove('hidden');
+          } catch (e) {}
+        }
+
+        if (window.google && window.google.maps && window.google.maps.places) {
+          attach();
+        } else {
+          var s = document.createElement('script');
+          s.src =
+            'https://maps.googleapis.com/maps/api/js?key=' +
+            encodeURIComponent(GOOGLE_MAPS_KEY) +
+            '&libraries=places&v=weekly&loading=async';
+          s.async = true;
+          s.defer = true;
+          s.onload = function () {
+            // poll hasta que Places esté disponible
+            var tries = 0;
+            (function poll() {
+              if (window.google && window.google.maps && window.google.maps.places) attach();
+              else if (tries++ < 50) setTimeout(poll, 100);
+            })();
+          };
+          document.head.appendChild(s);
+        }
+      })();
 
       function showError(msg) {
         errBox.textContent = msg;
