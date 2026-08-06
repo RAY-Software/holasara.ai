@@ -165,9 +165,18 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
         if (token) setCookie('sara_click', encodeURIComponent(token));
         else token = decodeURIComponent(getCookie('sara_click') || '');
 
-        // 2) Meter el token en el mensaje de wa.me + disparar Lead al click
+        // Ruteo AR/MX (igual que ray-website): el link se server-renderiza a la línea MX
+        // y acá lo pasamos a la AR para visitantes de Argentina (timezone o idioma).
+        var WA_MX = '526144659466', WA_AR = '5491150363441', IS_AR = false;
+        try {
+          var _tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
+          IS_AR = /America\/Argentina/.test(_tz) || /^es-AR/i.test(navigator.language || '');
+        } catch (e) {}
+
+        // 2) Ruteo AR/MX + token en el mensaje de wa.me + disparar Lead al click
         function enhance() {
           document.querySelectorAll('a[href^="https://wa.me/"]').forEach(function (a) {
+            if (IS_AR) a.href = a.href.replace('/' + WA_MX, '/' + WA_AR);
             if (token && a.href.indexOf('%5Bgclid') === -1 && a.href.indexOf('%5Bfbclid') === -1) {
               try {
                 var u = new URL(a.href);
