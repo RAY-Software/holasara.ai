@@ -233,6 +233,68 @@ const posts = [
       </div>
     </section>
 
+    <!-- ══════════ MARKETING ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Marketing</p>
+        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
+          Sara también lleva tu&nbsp;Instagram.
+        </h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">
+          Crea las publicaciones de tu clínica y atiende a quien responde, hasta agendar.
+          Tu marketing y tu agenda, por fin&nbsp;conectados.
+        </p>
+        <a
+          href="/instagram"
+          class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+        >
+          Ver cómo Sara lleva tu Instagram <span aria-hidden="true">→</span>
+        </a>
+
+        <div class="mt-14 grid gap-14 md:grid-cols-[0.85fr_1.15fr] md:items-stretch">
+          <div class="flex h-full flex-col gap-6">
+            {
+              marketing.map((m) => (
+                <div class="flex flex-1 flex-col justify-center rounded-xl border border-line bg-cream p-7">
+                  <h3 class="text-xl font-semibold">{m.title}</h3>
+                  <p class="mt-2 text-salvia">{m.body}</p>
+                </div>
+              ))
+            }
+          </div>
+          <div class="flex justify-center md:justify-end">
+            <img
+              src="/img/instagram.jpg"
+              width="1200"
+              height="1242"
+              alt="Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir."
+              loading="lazy"
+              decoding="async"
+              class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+            />
+          </div>
+        </div>
+
+        <div class="mt-14">
+          <p class="text-sm font-semibold uppercase tracking-wide text-pine-dark">Del post a la cita, paso a paso</p>
+          <div class="mt-6 grid gap-6 sm:grid-cols-3">
+            {
+              posts.map((p) => (
+                <div>
+                  <div class="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
+                    <img src={p.src} alt={p.step} loading="lazy" decoding="async" class="w-full" />
+                  </div>
+                  <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
+                  <p class="text-salvia">{p.body}</p>
+                </div>
+              ))
+            }
+          </div>
+          <p class="mt-8 text-lg text-salvia">Instagram, el chat y el cobro, en un mismo lugar. Nadie más cierra ese&nbsp;círculo.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- ══════════ SPOTLIGHT · OPERADORA ══════════ -->
     <section class="border-t border-line">
       <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[1.15fr_0.85fr] md:items-center">
@@ -365,68 +427,6 @@ const posts = [
 
     <!-- CTA intercalado -->
     <CtaInline title="Ve a Sara atendiendo tu clínica, en vivo." cta="Pedir mi demo" />
-
-    <!-- ══════════ MARKETING ══════════ -->
-    <section class="border-t border-line bg-paper">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Marketing</p>
-        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl">
-          Sara también lleva tu&nbsp;Instagram.
-        </h2>
-        <p class="mt-5 max-w-2xl text-lg text-salvia">
-          Crea las publicaciones de tu clínica y atiende a quien responde, hasta agendar.
-          Tu marketing y tu agenda, por fin&nbsp;conectados.
-        </p>
-        <a
-          href="/instagram"
-          class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
-        >
-          Ver cómo Sara lleva tu Instagram <span aria-hidden="true">→</span>
-        </a>
-
-        <div class="mt-14 grid gap-14 md:grid-cols-[0.85fr_1.15fr] md:items-stretch">
-          <div class="flex h-full flex-col gap-6">
-            {
-              marketing.map((m) => (
-                <div class="flex flex-1 flex-col justify-center rounded-xl border border-line bg-cream p-7">
-                  <h3 class="text-xl font-semibold">{m.title}</h3>
-                  <p class="mt-2 text-salvia">{m.body}</p>
-                </div>
-              ))
-            }
-          </div>
-          <div class="flex justify-center md:justify-end">
-            <img
-              src="/img/instagram.jpg"
-              width="1200"
-              height="1242"
-              alt="Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir."
-              loading="lazy"
-              decoding="async"
-              class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-            />
-          </div>
-        </div>
-
-        <div class="mt-14">
-          <p class="text-sm font-semibold uppercase tracking-wide text-pine-dark">Del post a la cita, paso a paso</p>
-          <div class="mt-6 grid gap-6 sm:grid-cols-3">
-            {
-              posts.map((p) => (
-                <div>
-                  <div class="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
-                    <img src={p.src} alt={p.step} loading="lazy" decoding="async" class="w-full" />
-                  </div>
-                  <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
-                  <p class="text-salvia">{p.body}</p>
-                </div>
-              ))
-            }
-          </div>
-          <p class="mt-8 text-lg text-salvia">Instagram, el chat y el cobro, en un mismo lugar. Nadie más cierra ese&nbsp;círculo.</p>
-        </div>
-      </div>
-    </section>
 
     <!-- ══════════ IMPLEMENTACIÓN ══════════ -->
     <section class="border-t border-line">

@@ -11,12 +11,14 @@ interface Props {
 const { label = 'Clínicas que ya trabajan con Sara', tone = 'paper' } = Astro.props;
 
 type Item =
-  | { kind: 'img'; src: string; alt: string; h: string }
+  | { kind: 'img'; src: string; alt: string; h: string; cls?: string }
   | { kind: 'text'; text: string };
 
 const clients: Item[] = [
   { kind: 'img', src: '/img/clients/faceup.png', alt: 'FaceUp', h: 'h-6 md:h-7' },
   { kind: 'img', src: '/img/clients/vialaser.png', alt: 'ViaLaser', h: 'h-6 md:h-7' },
+  // El PNG de Physiup es blanco (el sitio lo recolorea por CSS) → brightness-0 lo vuelve visible.
+  { kind: 'img', src: '/img/clients/physiup.png', alt: 'Physiup', h: 'h-4 md:h-5', cls: 'brightness-0' },
   { kind: 'text', text: 'Dr. Reyes' },
   { kind: 'text', text: 'Sorace & Mendoza' },
 ];
@@ -38,7 +40,7 @@ const bg = tone === 'light' ? 'bg-white' : 'bg-paper';
                 <img
                   src={c.src}
                   alt={c.alt}
-                  class={`${c.h} w-auto opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0`}
+                  class={`${c.h} ${c.cls ?? ''} w-auto opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0`}
                   loading="lazy"
                   decoding="async"
                 />
