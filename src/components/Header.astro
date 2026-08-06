@@ -25,11 +25,11 @@ import { productGroups, topLinks } from '../data/nav';
           </svg>
         </button>
 
-        <!-- Panel -->
+        <!-- Panel (wrapper full-width = puente de hover para que no se corte al bajar el puntero) -->
         <div
-          class="invisible absolute left-0 right-0 top-full z-50 mx-auto w-[min(96vw,1024px)] translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
+          class="invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
         >
-          <div class="grid gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_280px]">
+          <div class="mx-auto grid w-[min(96vw,1024px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_280px]">
             <div class="grid grid-cols-2 gap-x-10 gap-y-9 sm:grid-cols-4">
               {
                 productGroups.map((g) => (
