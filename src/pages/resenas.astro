@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const caps = [
+  { t: 'Pide la reseña en el momento justo', b: 'Después de la cita, cuando el paciente está contento, Sara le pide la reseña por WhatsApp. Ahí es cuando responde.' },
+  { t: 'Un clic para el paciente', b: 'Le deja el link directo a tu ficha de Google. Sin buscar, sin fricción: más reseñas de verdad.' },
+  { t: 'Mejor reputación, más consultas', b: 'Más reseñas de 5 estrellas te hacen aparecer mejor en Google y le dan confianza a quien todavía no te eligió.' },
+  { t: 'Cierra el círculo', b: 'La reseña que hoy escribe un paciente es la que mañana convence al próximo. Y ese próximo también entra por Sara.' },
+];
+
+const steps = [
+  { title: 'Termina la cita', body: 'El paciente se va contento con su tratamiento.' },
+  { title: 'Sara pide la reseña', body: 'Un mensaje amable por WhatsApp con el link directo a tu Google.' },
+  { title: 'Sube tu reputación', body: 'Más reseñas reales, mejor posición en Google y más pacientes nuevos.' },
+];
+
+const faqs = [
+  { q: '¿Cuándo pide la reseña?', a: 'Después de la cita, en la ventana donde el paciente está más receptivo. El momento se ajusta a tu flujo.' },
+  { q: '¿A dónde van las reseñas?', a: 'A tu ficha de Google Business, que es la que ve todo el que te busca. Sara deja el link directo para que sea un solo clic.' },
+  { q: '¿Sara escribe las reseñas?', a: 'No. Las reseñas las escribe cada paciente, con su experiencia real. Sara solo se ocupa de pedirlas en el momento justo y facilitar el paso.' },
+  { q: '¿Sirve para el SEO local?', a: 'Sí. Un flujo constante de reseñas nuevas y de buena calificación ayuda a que tu clínica aparezca mejor en las búsquedas de tu zona.' },
+];
+---
+
+<Layout
+  title="Reseñas · Sara"
+  description="Sara pide la reseña en el momento justo, con el link directo a tu Google. Más reseñas de 5 estrellas, mejor reputación y más pacientes nuevos."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Marketing · Reseñas"
+      title="Más reseñas de 5 estrellas, <em class='text-pine-dark'>sin que las pidas.</em>"
+      lead="La reseña que hoy deja un paciente es la que mañana convence al próximo. Sara la pide en el momento justo y te deja el link directo a Google."
+    />
+
+    <FeatureSteps title="De una buena cita a una buena&nbsp;reseña." steps={steps} />
+
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Todo lo que hace por tu&nbsp;reputación.
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            caps.map((c) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
+                <p class="mt-2 text-salvia">{c.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title="Que cada paciente feliz deje una reseña&nbsp;nueva." />
+
+    <FeatureFaq items={faqs} />
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>

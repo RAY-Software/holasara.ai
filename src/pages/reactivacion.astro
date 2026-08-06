@@ -1,0 +1,71 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const caps = [
+  { t: 'Lista de espera que se mueve sola', b: 'Se cancela una cita y Sara ofrece ese hueco al instante a quien estaba esperando. La hora no queda vacía.' },
+  { t: 'Reactiva a los que no vuelven', b: 'Contacta uno por uno a los pacientes que no aparecen hace meses y los invita a volver, con el mensaje justo.' },
+  { t: 'Seguimiento post-tratamiento', b: 'Agenda controles y retoques en el momento correcto, sin que tengas que perseguir a nadie.' },
+  { t: 'Cada contacto, con criterio', b: 'No es spam masivo: Sara escribe cuando tiene sentido y con el tono de tu clínica.' },
+];
+
+const steps = [
+  { title: 'Se libera o se enfría un turno', body: 'Una cancelación deja un hueco, o un paciente lleva meses sin volver.' },
+  { title: 'Sara sale a buscar', body: 'Ofrece el hueco a la lista de espera o reactiva al paciente inactivo, por WhatsApp.' },
+  { title: 'La agenda se vuelve a llenar', body: 'La hora que se iba a perder termina ocupada y cobrada.' },
+];
+
+const faqs = [
+  { q: '¿Cómo arma la lista de espera?', a: 'Cuando alguien quiere un horario que está ocupado, Sara lo anota. Si ese horario se libera, se lo ofrece automáticamente.' },
+  { q: '¿A quién reactiva?', a: 'A pacientes que hace tiempo no vuelven. El criterio (cuánto tiempo, qué tratamientos) lo definimos contigo en la implementación.' },
+  { q: '¿No molesta a los pacientes?', a: 'Sara contacta con mesura y siempre da la opción de no recibir más mensajes. El objetivo es traer de vuelta a quien te elige, no incomodar.' },
+  { q: '¿Esto también cobra?', a: 'Sí: cuando reactiva o llena un hueco, puede pedir el anticipo en la misma conversación, como en cualquier reserva.' },
+];
+---
+
+<Layout
+  title="Lista de espera y reactivación · Sara"
+  description="Sara llena los huecos de cancelaciones con la lista de espera y trae de vuelta a los pacientes que no vuelven hace meses, uno por uno."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Agenda · Lista de espera y reactivación"
+      title="La hora que se libera <em class='text-pine-dark'>no se pierde.</em>"
+      lead="Una cancelación no tiene por qué ser un hueco vacío, y un paciente que no vuelve no está perdido. Sara llena la agenda y reactiva, uno por uno."
+    />
+
+    <FeatureSteps title="De un hueco vacío a una hora&nbsp;cobrada." steps={steps} />
+
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Todo lo que hace para llenar tu&nbsp;agenda.
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            caps.map((c) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
+                <p class="mt-2 text-salvia">{c.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title="Que ninguna hora de tu agenda quede&nbsp;vacía." />
+
+    <FeatureFaq items={faqs} />
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>

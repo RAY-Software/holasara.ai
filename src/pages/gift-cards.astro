@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureFaq from '../components/FeatureFaq.astro';
+import CtaInline from '../components/CtaInline.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+const caps = [
+  { t: 'Cobras hoy, atiendes después', b: 'La gift card entra como ingreso adelantado. El tratamiento se agenda cuando el destinatario la usa.' },
+  { t: 'Un paciente nuevo, sin publicidad', b: 'Quien recibe la gift card no te conocía. Llega recomendado por alguien que ya confía en ti.' },
+  { t: 'Se compra desde tu web', b: 'La gift card se vende en tu propio sitio, con tu marca. Sin apps de terceros ni comisiones de marketplace.' },
+  { t: 'Sara acompaña la compra', b: 'Responde dudas, guía el pago y, cuando el destinatario quiere usarla, la agenda.' },
+];
+
+const steps = [
+  { title: 'Alguien compra una gift card', body: 'Desde tu web, para regalar un tratamiento a otra persona.' },
+  { title: 'Cobras al instante', body: 'El pago entra hoy, aunque el tratamiento sea dentro de semanas.' },
+  { title: 'Llega un paciente nuevo', body: 'El destinatario agenda con Sara y conoce tu clínica por primera vez.' },
+];
+
+const faqs = [
+  { q: '¿Dónde se venden las gift cards?', a: 'En tu propio sitio web, con la marca de tu clínica. El pago se procesa de forma segura; no dependés de una app externa.' },
+  { q: '¿Sirve para cualquier tratamiento?', a: 'Definís qué montos o tratamientos se pueden regalar. Es flexible según lo que ofrezca tu clínica.' },
+  { q: '¿Cómo se usa la gift card?', a: 'El destinatario escribe por WhatsApp o entra a la web, y Sara la valida al agendar la cita.' },
+  { q: '¿Por qué conviene?', a: 'Es de los pocos ingresos que además te traen un paciente nuevo que no te costó publicidad: llega por recomendación de alguien que ya te eligió.' },
+];
+---
+
+<Layout
+  title="Gift cards · Sara"
+  description="Vende tratamientos por adelantado con gift cards desde tu propia web. Cobras hoy y ganas un paciente nuevo que llega por recomendación."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Cobros · Gift cards"
+      title="Cobra hoy. Y ganas un paciente <em class='text-pine-dark'>que no te conocía.</em>"
+      lead="Tu paciente le regala un tratamiento a alguien de confianza. Cobras por adelantado y sumas un paciente nuevo, sin gastar en publicidad."
+      image="/img/cobros.jpg"
+      imageAlt="Panel de cobros: anticipos, consultas y gift cards cobrados por Sara."
+      imageW={1200}
+      imageH={1186}
+    />
+
+    <FeatureSteps title="Un regalo que te deja caja y un paciente&nbsp;nuevo." steps={steps} />
+
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Todo lo que hacen tus gift&nbsp;cards.
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            caps.map((c) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
+                <p class="mt-2 text-salvia">{c.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title="Convierte a tus pacientes en tu mejor&nbsp;publicidad." />
+
+    <FeatureFaq items={faqs} />
+
+    <CtaBand />
+  </main>
+  <Footer />
+</Layout>
