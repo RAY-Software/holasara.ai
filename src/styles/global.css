@@ -1,29 +1,7 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/fraunces"; /* solo para acentos en itálica */
-
-/* ---- Chopin Trial (display de marca, igual que RAY-Website) ---- */
-@font-face {
-  font-family: 'Chopin Trial';
-  font-style: normal;
-  font-weight: 900;
-  font-display: swap;
-  src: url('/fonts/Chopin-Trial-Black.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Chopin Trial';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('/fonts/Chopin-Trial-Bold.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Chopin Trial';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/Chopin-Trial-Medium.woff2') format('woff2');
-}
+@import "@fontsource-variable/archivo"; /* display de marca (dirección 4d: sara▌) */
 
 /* ---- Sara · paleta Salvia ---- */
 @theme {
@@ -34,13 +12,14 @@
   --color-ink: #14261f;
   --color-pine: #1f7a5c;
   --color-pine-dark: #1a6349;
-  --color-mint: #2fb985;
+  --color-mint: #3fe08a; /* verde del cursor de marca (dirección 4d) */
   --color-salvia: #5e6b62;
   --color-line: #e4e8e4;
   --color-line-dark: #223029;
 
-  /* display de marca = Chopin; acentos itálicos = Fraunces; cuerpo = Inter */
-  --font-serif: "Chopin Trial", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  /* display de marca = Archivo (peso 900, todo minúscula); acentos = Fraunces; cuerpo = Inter */
+  --font-display: "Archivo Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Archivo Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-accent: "Fraunces Variable", ui-serif, "New York", Georgia, serif;
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
@@ -60,7 +39,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Chopin no tiene itálica: los <em> dentro de titulares van rectos (solo color). */
+/* Los <em> dentro de titulares van rectos (énfasis solo por color, no itálica). */
 h1 em,
 h2 em,
 .font-serif em {
@@ -87,6 +66,22 @@ h2 em,
 }
 @media (prefers-reduced-motion: reduce) {
   .dot { animation: none; }
+}
+
+/* Cursor de marca (wordmark sara▌): bloque verde que parpadea seco (step, no fade) */
+.caret {
+  display: inline-block;
+  width: 0.34em;
+  height: 0.76em;
+  background: var(--color-mint);
+  animation: sara-caret 1.1s steps(1) infinite;
+}
+@keyframes sara-caret {
+  0%, 48%   { opacity: 1; }
+  49%, 100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .caret { animation: none; }
 }
 
 /* reveal on scroll */

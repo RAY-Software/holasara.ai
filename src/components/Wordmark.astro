@@ -1,11 +1,14 @@
 ---
 interface Props {
   class?: string;
-  dark?: boolean; // true when on a dark (tinta bosque) background
+  dark?: boolean; // true cuando va sobre fondo oscuro
 }
 const { class: cls = '', dark = false } = Astro.props;
 ---
 
-<span class={`font-serif font-black inline-flex items-start leading-none tracking-tight ${dark ? 'text-cream' : 'text-ink'} ${cls}`}>
-  Sara<span class="dot ml-[0.06em] mt-[0.18em] h-[0.12em] w-[0.12em]" aria-hidden="true"></span>
+<span
+  class={`font-display inline-flex items-center gap-[0.10em] leading-none ${dark ? 'text-cream' : 'text-ink'} ${cls}`}
+  style="font-weight:900; letter-spacing:-0.06em;"
+>
+  sara<span class="caret" aria-hidden="true"></span>
 </span>
