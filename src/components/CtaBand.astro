@@ -18,13 +18,21 @@ const {
     </p>
     <h2 class="mx-auto max-w-3xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={title} />
     <p class="mx-auto mt-6 max-w-xl text-lg text-cream/80">{sub}</p>
-    <a
-      href={whatsappLink()}
-      target="_blank"
-      rel="noopener"
-      class="mt-10 inline-flex items-center gap-2 rounded-full bg-cream px-8 py-4 text-lg font-semibold text-ink transition-opacity hover:opacity-90"
-    >
-      Habla con Sara
-    </a>
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/demo"
+        class="inline-flex items-center gap-2 rounded-full bg-cream px-8 py-4 text-lg font-semibold text-ink transition-opacity hover:opacity-90"
+      >
+        Pedir demo
+      </a>
+      <a
+        href={whatsappLink()}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-2 rounded-full border border-cream/40 px-8 py-4 text-lg font-semibold text-cream transition-colors hover:bg-cream/10"
+      >
+        Habla con Sara
+      </a>
+    </div>
   </div>
 </section>

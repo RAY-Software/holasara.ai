@@ -30,14 +30,22 @@ const nav = [
       }
     </nav>
 
-    <a
-      href={whatsappLink()}
-      target="_blank"
-      rel="noopener"
-      class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
-    >
-      <span class="dot h-2 w-2"></span>
-      Habla con Sara
-    </a>
+    <div class="flex items-center gap-2.5">
+      <a
+        href={whatsappLink()}
+        target="_blank"
+        rel="noopener"
+        class="hidden items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30 sm:inline-flex"
+      >
+        <span class="dot h-2 w-2"></span>
+        Habla con Sara
+      </a>
+      <a
+        href="/demo"
+        class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
+      >
+        Pedir demo
+      </a>
+    </div>
   </div>
 </header>
