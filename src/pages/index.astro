@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CtaBand from '../components/CtaBand.astro';
 import { whatsappLink } from '../lib/whatsapp';
 
 const saraDoes = [
@@ -491,27 +492,7 @@ const posts = [
     </section>
 
     <!-- ══════════ CTA FINAL ══════════ -->
-    <section class="border-t border-line bg-ink text-cream">
-      <div class="reveal mx-auto max-w-4xl px-5 py-28 text-center">
-        <p class="mb-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-mint">
-          <span class="dot h-2 w-2"></span> La recepción que nunca cierra
-        </p>
-        <h2 class="mx-auto max-w-3xl font-serif text-4xl font-black leading-tight text-balance md:text-6xl">
-          Que la próxima consulta de las 23:41 no se te&nbsp;escape.
-        </h2>
-        <p class="mx-auto mt-6 max-w-xl text-lg text-cream/70">
-          Pon a Sara a atender, agendar y cobrar hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.
-        </p>
-        <a
-          href={whatsappLink()}
-          target="_blank"
-          rel="noopener"
-          class="mt-10 inline-flex items-center gap-2 rounded-full bg-mint px-8 py-4 text-lg font-semibold text-ink transition-opacity hover:opacity-90"
-        >
-          Habla con Sara
-        </a>
-      </div>
-    </section>
+    <CtaBand />
   </main>
 
   <Footer />
