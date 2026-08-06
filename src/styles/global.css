@@ -27,14 +27,16 @@
 
 /* ---- Sara · paleta Salvia ---- */
 @theme {
-  --color-cream: #f3f0e7;
-  --color-paper: #fcfbf7;
+  /* Neutros fríos (no beige cálido): el lienzo es blanco y el pino es la estrella.
+     'cream'/'paper' quedan como grises muy suaves con un dejo verde-salvia, no beige. */
+  --color-cream: #eef1ee;
+  --color-paper: #f6f8f7;
   --color-ink: #14261f;
   --color-pine: #1f7a5c;
   --color-pine-dark: #1a6349;
   --color-mint: #2fb985;
   --color-salvia: #5e6b62;
-  --color-line: #e4dece;
+  --color-line: #e4e8e4;
   --color-line-dark: #223029;
 
   /* display de marca = Chopin; acentos itálicos = Fraunces; cuerpo = Inter */
@@ -51,7 +53,7 @@ html {
 }
 
 body {
-  background: var(--color-cream);
+  background: #ffffff;
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
