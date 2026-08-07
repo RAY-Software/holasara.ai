@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
 import CtaBand from '../components/CtaBand.astro';
+import ClientsStrip from '../components/ClientsStrip.astro';
 import { whatsappLink } from '../lib/whatsapp';
 
 const includes = [
@@ -45,6 +46,8 @@ const faqs = [
         </p>
       </div>
     </section>
+
+    <ClientsStrip />
 
     <section class="border-b border-line bg-paper">
       <div class="mx-auto grid max-w-5xl gap-8 px-5 py-20 md:grid-cols-[1.1fr_0.9fr] md:items-center">

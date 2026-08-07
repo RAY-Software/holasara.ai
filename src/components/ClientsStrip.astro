@@ -1,65 +1,69 @@
 ---
-// Franja/carrusel de clientes reales ("ya trabajan con Sara"). Prueba social
-// honesta: logos reales, sin métricas inventadas (las métricas reales de
-// ViaLaser viven en la sección de caso). FaceUp y ViaLaser son imágenes reales;
-// DrReyes y Sorace & Mendoza van como wordmark de texto (sus logos no rinden
-// sobre fondo claro / no existen como imagen). Marquee suave, respeta reduced-motion.
+// Carrusel de clientes reales ("ya trabajan con Sara"). Prueba social honesta:
+// fotos reales de cada clínica (bajadas de sus sitios en prod) + nombre y rubro,
+// sin métricas inventadas (las métricas reales de ViaLaser viven en /caso).
+// Marquee suave estilo tira de casos, pausa al hover, respeta reduced-motion.
 interface Props {
   label?: string;
   tone?: 'light' | 'paper';
 }
 const { label = 'Clínicas que ya trabajan con Sara', tone = 'paper' } = Astro.props;
 
-type Item =
-  | { kind: 'img'; src: string; alt: string; h: string; cls?: string }
-  | { kind: 'text'; text: string };
+type Client = { name: string; tag: string; img: string; alt: string };
 
-const clients: Item[] = [
-  { kind: 'img', src: '/img/clients/faceup.png', alt: 'FaceUp', h: 'h-6 md:h-7' },
-  { kind: 'img', src: '/img/clients/vialaser.png', alt: 'ViaLaser', h: 'h-6 md:h-7' },
-  // El PNG de Physiup es blanco (el sitio lo recolorea por CSS) → brightness-0 lo vuelve visible.
-  { kind: 'img', src: '/img/clients/physiup.png', alt: 'Physiup', h: 'h-4 md:h-5', cls: 'brightness-0' },
-  { kind: 'text', text: 'Dr. Reyes' },
-  { kind: 'text', text: 'Sorace & Mendoza' },
+const clients: Client[] = [
+  { name: 'ViaLaser', tag: 'Depilación láser', img: '/img/tenants/vialaser.jpg', alt: 'Recepción del centro de depilación láser ViaLaser' },
+  { name: 'FaceUp', tag: 'Estética facial', img: '/img/tenants/faceup.jpg', alt: 'Tratamiento facial en la clínica FaceUp' },
+  { name: 'DrReyes', tag: 'Rinoplastia', img: '/img/tenants/drreyes.jpg', alt: 'Perfil facial que ilustra la rinoplastia en DrReyes' },
+  { name: 'Physiup', tag: 'Fisioterapia', img: '/img/tenants/physiup.jpg', alt: 'Physiup, centro de fisioterapia y movimiento' },
+  { name: 'Sorace & Mendoza', tag: 'Cirugía plástica y estética', img: '/img/tenants/sorace.jpg', alt: 'Consulta en Dres. Sorace & Mendoza, cirugía plástica' },
 ];
 // Duplicamos para un loop continuo sin cortes.
 const loop = [...clients, ...clients];
 const bg = tone === 'light' ? 'bg-white' : 'bg-paper';
+const edge = tone === 'light' ? 'from-white' : 'from-paper';
 ---
 
-<section class={`border-y border-line ${bg}`}>
-  <div class="mx-auto max-w-6xl px-5 py-9">
+<section class={`overflow-hidden border-y border-line ${bg}`} aria-label={label}>
+  <div class="mx-auto max-w-6xl px-5 pt-9">
     <p class="text-center text-xs font-semibold uppercase tracking-[0.16em] text-salvia">{label}</p>
+  </div>
 
-    <div class="clients-marquee mt-6 overflow-hidden">
-      <ul class="clients-track flex w-max items-center gap-12 md:gap-16">
-        {
-          loop.map((c, i) => (
-            <li class="flex shrink-0 items-center" aria-hidden={i >= clients.length ? 'true' : undefined}>
-              {c.kind === 'img' ? (
-                <img
-                  src={c.src}
-                  alt={c.alt}
-                  class={`${c.h} ${c.cls ?? ''} w-auto opacity-70 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0`}
-                  loading="lazy"
-                  decoding="async"
-                />
-              ) : (
-                <span class="whitespace-nowrap font-serif text-xl font-black tracking-tight text-ink/70 transition-colors hover:text-ink md:text-2xl">
-                  {c.text}
-                </span>
-              )}
-            </li>
-          ))
-        }
-      </ul>
-    </div>
+  <div class="clients-marquee relative mt-7 pb-9">
+    <!-- Máscaras de degradé en los bordes -->
+    <div class={`pointer-events-none absolute inset-y-0 left-0 z-10 w-14 bg-gradient-to-r ${edge} to-transparent sm:w-20`}></div>
+    <div class={`pointer-events-none absolute inset-y-0 right-0 z-10 w-14 bg-gradient-to-l ${edge} to-transparent sm:w-20`}></div>
+
+    <ul class="clients-track flex w-max gap-4 px-5 sm:gap-5">
+      {
+        loop.map((c, i) => (
+          <li
+            class="relative aspect-[4/3] w-[260px] shrink-0 overflow-hidden rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.35)] md:w-[300px]"
+            aria-hidden={i >= clients.length ? 'true' : undefined}
+          >
+            <img
+              src={c.img}
+              alt={i >= clients.length ? '' : c.alt}
+              class="absolute inset-0 h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/25 to-transparent" />
+            <div class="absolute inset-x-0 bottom-0 p-4 text-white">
+              <h3 class="font-serif text-lg font-black leading-tight tracking-tight drop-shadow-sm">{c.name}</h3>
+              <p class="mt-0.5 text-xs font-semibold uppercase tracking-[0.12em] text-mint">{c.tag}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
 <style>
   .clients-track {
-    animation: clients-scroll 26s linear infinite;
+    animation: clients-scroll 32s linear infinite;
+    will-change: transform;
   }
   .clients-marquee:hover .clients-track {
     animation-play-state: paused;
@@ -74,11 +78,11 @@ const bg = tone === 'light' ? 'bg-white' : 'bg-paper';
     }
   }
   @media (prefers-reduced-motion: reduce) {
+    .clients-marquee {
+      overflow-x: auto;
+    }
     .clients-track {
       animation: none;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 2rem 3rem;
     }
   }
 </style>
