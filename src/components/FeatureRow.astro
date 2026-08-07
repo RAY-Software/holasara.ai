@@ -1,0 +1,42 @@
+---
+// Fila de capacidad: copy + visual, alternando lado. Es el ladrillo del patrón
+// "profundo" (intercalar texto e imagen/chat para explicar el feature a fondo).
+// El visual va en el slot por defecto: una <img>, un <ConversationDemo/>, lo que sea.
+
+interface Props {
+  eyebrow?: string;
+  title: string; // puede contener <em> y &nbsp;
+  body?: string;
+  points?: string[]; // bullets opcionales bajo el body
+  flip?: boolean; // true = visual a la izquierda en desktop
+}
+const { eyebrow, title, body, points = [], flip = false } = Astro.props;
+---
+
+<div class="grid items-center gap-12 md:grid-cols-2 md:gap-14">
+  <div class={flip ? 'md:order-2' : ''}>
+    {
+      eyebrow && (
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{eyebrow}</p>
+      )
+    }
+    <h3 class="font-serif text-2xl font-black leading-tight text-balance md:text-3xl" set:html={title} />
+    {body && <p class="mt-4 text-lg text-salvia">{body}</p>}
+    {
+      points.length > 0 && (
+        <ul class="mt-6 flex flex-col gap-3">
+          {points.map((p) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint" />
+              <span class="text-ink" set:html={p} />
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+
+  <div class={`flex justify-center ${flip ? 'md:order-1 md:justify-start' : 'md:justify-end'}`}>
+    <slot />
+  </div>
+</div>

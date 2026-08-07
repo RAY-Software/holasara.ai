@@ -46,14 +46,17 @@ const { eyebrow, title, lead, image, imageAlt = '', imageW, imageH } = Astro.pro
     {
       image && (
         <div class="flex justify-center md:justify-center">
-          <img
-            src={image}
-            width={imageW}
-            height={imageH}
-            alt={imageAlt}
-            class="mx-auto h-auto max-h-[520px] w-auto max-w-full rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
-            fetchpriority="high"
-          />
+          <div class="relative inline-block">
+            <img
+              src={image}
+              width={imageW}
+              height={imageH}
+              alt={imageAlt}
+              class="block h-auto max-h-[520px] w-auto max-w-full rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
+              fetchpriority="high"
+            />
+            <slot name="image-overlay" />
+          </div>
         </div>
       )
     }

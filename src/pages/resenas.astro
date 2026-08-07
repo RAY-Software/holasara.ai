@@ -3,61 +3,155 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
-import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import ConversationDemo from '../components/ConversationDemo.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
 import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
 
-const caps = [
-  { t: 'Pide la reseña en el momento justo', b: 'Después de la cita, cuando el paciente está contento, Sara le pide la reseña por WhatsApp. Ahí es cuando responde.' },
-  { t: 'Un clic para el paciente', b: 'Le deja el link directo a tu ficha de Google. Sin buscar, sin fricción: más reseñas de verdad.' },
-  { t: 'Mejor reputación, más consultas', b: 'Más reseñas de 5 estrellas te hacen aparecer mejor en Google y le dan confianza a quien todavía no te eligió.' },
-  { t: 'Cierra el círculo', b: 'La reseña que hoy escribe un paciente es la que mañana convence al próximo. Y ese próximo también entra por Sara.' },
-];
-
 const steps = [
-  { title: 'Termina la cita', body: 'El paciente se va contento con su tratamiento.' },
-  { title: 'Sara pide la reseña', body: 'Un mensaje amable por WhatsApp con el link directo a tu Google.' },
-  { title: 'Sube tu reputación', body: 'Más reseñas reales, mejor posición en Google y más pacientes nuevos.' },
+  { n: '01', title: 'Termina la cita', body: 'El paciente se va contento con su tratamiento.' },
+  { n: '02', title: 'Sara pide la reseña', body: 'Un mensaje amable por WhatsApp, en la ventana en que sí responden, con el link directo a tu Google.' },
+  { n: '03', title: 'Sube tu reputación', body: 'Más reseñas reales, mejor posición en Google y más pacientes nuevos que llegan solos.' },
 ];
 
 const faqs = [
   { q: '¿Cuándo pide la reseña?', a: 'Después de la cita, en la ventana donde el paciente está más receptivo. El momento se ajusta a tu flujo.' },
   { q: '¿A dónde van las reseñas?', a: 'A tu ficha de Google Business, que es la que ve todo el que te busca. Sara deja el link directo para que sea un solo clic.' },
   { q: '¿Sara escribe las reseñas?', a: 'No. Las reseñas las escribe cada paciente, con su experiencia real. Sara solo se ocupa de pedirlas en el momento justo y facilitar el paso.' },
+  { q: '¿Sabe quién dejó la reseña?', a: 'Sara registra a quién le pidió la reseña y quién hizo clic en el link. Ves el ciclo completo en el panel, sin planillas.' },
   { q: '¿Sirve para el SEO local?', a: 'Sí. Un flujo constante de reseñas nuevas y de buena calificación ayuda a que tu clínica aparezca mejor en las búsquedas de tu zona.' },
 ];
 ---
 
 <Layout
   title="Reseñas · Sara"
-  description="Sara pide la reseña en el momento justo, con el link directo a tu Google. Más reseñas de 5 estrellas, mejor reputación y más pacientes nuevos."
+  description="Sara pide la reseña en el momento justo, con el link directo a tu Google, y registra quién hizo clic. Más reseñas de 5 estrellas, mejor reputación y más pacientes nuevos."
 >
   <Header />
   <main>
     <PageHero
       eyebrow="Marketing · Reseñas"
       title="Más reseñas de 5 estrellas, <em class='text-pine-dark'>sin que las pidas.</em>"
-      lead="La reseña que hoy deja un paciente es la que mañana convence al próximo. Sara la pide en el momento justo y te deja el link directo a Google."
+      lead="La reseña que hoy deja un paciente es la que mañana convence al próximo. Sara la pide en el momento justo, con el link directo a Google, y registra quién respondió."
+      image="/img/hero/resenas-hero.jpg"
+      imageAlt="Una paciente contenta mira cinco estrellas en su teléfono, en una clínica luminosa."
+      imageW={1200}
+      imageH={900}
     />
 
-    <FeatureSteps title="De una buena cita a una buena&nbsp;reseña." steps={steps} />
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">En el momento justo</p>
+          <p class="mt-1 text-salvia">Después de la cita, cuando el paciente está contento.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Un solo clic</p>
+          <p class="mt-1 text-salvia">Link directo a tu Google. Sin buscar, sin fricción.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Con seguimiento</p>
+          <p class="mt-1 text-salvia">Sabes a quién se la pidió y quién hizo clic.</p>
+        </div>
+      </div>
+    </section>
 
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
     <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cómo lo hace Sara</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            De una buena cita a una buena&nbsp;reseña.
+          </h2>
+          <p class="mt-5 text-lg text-salvia">
+            La mayoría de los pacientes contentos nunca deja una reseña, no porque no quiera, sino porque nadie
+            se la pide en el momento justo ni le facilita el paso. Sara hace las dos&nbsp;cosas.
+          </p>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Juan! ¿Cómo estuvo tu sesión? Si quedaste conforme, nos ayudarías un montón con una reseña en Google 🙏', t: '17:30' },
+              { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-clinica', t: '17:30' },
+              { who: 'in', text: 'Listo, ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:04' },
+              { who: 'out', text: '¡Mil gracias, Juan! Nos ayuda muchísimo 🙌', t: '20:04' },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
-          Todo lo que hace por tu&nbsp;reputación.
+          La reputación deja de depender de la&nbsp;suerte.
         </h2>
-        <div class="mt-12 grid gap-6 md:grid-cols-2">
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
           {
-            caps.map((c) => (
-              <div class="rounded-xl border border-line bg-cream p-7">
-                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
-                <p class="mt-2 text-salvia">{c.b}</p>
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
               </div>
             ))
           }
         </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="Con seguimiento"
+          title="Sabes a quién se la pidió <em class='text-pine-dark'>y quién hizo clic.</em>"
+          body="No es un mensaje al vacío. Sara registra a quién le pidió la reseña y quién abrió el link. En el panel ves el ciclo completo, sin planillas ni adivinanzas."
+          points={[
+            'Reseña pedida, marcada por paciente',
+            'Clic en el link, registrado',
+            'El ciclo completo, en el panel',
+          ]}
+        >
+          <img
+            src="/img/agenda.jpg"
+            width="1200"
+            height="900"
+            alt="Panel donde cada paciente muestra si se le pidió la reseña y si hizo clic en el link."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Cierra el círculo"
+          title="La reseña de hoy <em class='text-pine-dark'>trae al paciente de mañana.</em>"
+          body="Más reseñas de 5 estrellas te hacen aparecer mejor en Google y le dan confianza a quien todavía no te eligió. Y ese próximo paciente también entra por Sara, que lo atiende y lo agenda."
+          points={[
+            'Mejor posición en tu búsqueda local',
+            'Más confianza para el que aún no te conoce',
+            'Y Sara atiende a ese nuevo paciente',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'in', text: 'Hola! Vi que tienen muy buenas reseñas 🙌 ¿hacen depilación de piernas?', t: '12:10' },
+              { who: 'out', text: '¡Hola! Gracias 😊 Sí, hacemos piernas enteras. El pack de 6 sesiones está $17.900 y la primera es de prueba. ¿Te agendo?', t: '12:10' },
+              { who: 'in', text: 'Sí, perfecto', t: '12:11' },
+            ]}
+          />
+        </FeatureRow>
       </div>
     </section>
 

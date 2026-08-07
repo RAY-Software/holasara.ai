@@ -3,64 +3,128 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
-import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import ConversationDemo from '../components/ConversationDemo.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
 import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
 
-const caps = [
-  { t: 'Un número, todos los canales', b: 'WhatsApp e Instagram entran al mismo lugar. Sara no pierde el hilo aunque el paciente cambie de canal.' },
-  { t: 'Los comentarios también cuentan', b: 'Cuando alguien comenta una publicación, Sara le escribe por privado y lo lleva a agendar.' },
-  { t: 'Habla como tu recepción', b: 'Con el tono de tu clínica y el registro de tu país. Sin respuestas robóticas ni plantillas frías.' },
-  { t: 'Te pasa la posta cuando hace falta', b: 'Si una consulta necesita a una persona, Sara avisa a tu equipo con todo el contexto de la charla.' },
-];
-
 const steps = [
-  { title: 'Llega el mensaje', body: 'Por WhatsApp o Instagram, casi siempre fuera del horario de recepción.' },
-  { title: 'Sara responde al instante', body: 'Informa tratamientos, precios y la disponibilidad real de tu agenda.' },
-  { title: 'Agenda y cobra ahí mismo', body: 'Reserva la cita y toma el anticipo sin salir de la conversación.' },
+  { n: '01', title: 'Llega el mensaje', body: 'Por WhatsApp, Instagram o el chat de tu web, casi siempre fuera del horario de recepción.' },
+  { n: '02', title: 'Sara responde al instante', body: 'Informa tratamientos, precios y la disponibilidad real de tu agenda, con el tono de tu clínica.' },
+  { n: '03', title: 'Agenda y cobra ahí mismo', body: 'Reserva la cita y toma el anticipo sin salir de la conversación. Y queda atribuida al canal que la trajo.' },
 ];
 
 const faqs = [
   { q: '¿Usa mi número de WhatsApp actual?', a: 'Sara atiende sobre una línea de WhatsApp Business conectada a tu clínica. Coordinamos el número en la implementación; no tienes que cambiar de teléfono personal.' },
+  { q: '¿Responde los comentarios de Instagram?', a: 'Cuando alguien comenta una publicación, Sara le escribe por mensaje directo para seguir la conversación en privado y llevarla a una cita. El comentario público no se usa para datos sensibles.' },
+  { q: '¿Pierde el hilo si el paciente cambia de canal?', a: 'No. Sara mantiene el historial de esa persona, así retoma la conversación con contexto aunque haya empezado en Instagram y siga por WhatsApp.' },
+  { q: '¿Qué pasa si le preguntan algo que no sabe?', a: 'Si una consulta excede lo que puede resolver, la deriva a tu equipo con el contexto completo de la charla, así nadie empieza de cero.' },
   { q: '¿Se nota que es una IA?', a: 'Sara se presenta con naturalidad y responde con el tono de tu clínica. El paciente siente que lo atiende alguien que sabe, no un bot con botones.' },
-  { q: '¿Responde los comentarios públicos de Instagram?', a: 'Cuando alguien comenta, Sara le escribe por mensaje directo para seguir la conversación en privado y agendar. El comentario público no se usa para datos sensibles.' },
-  { q: '¿Qué pasa si le preguntan algo que no sabe?', a: 'Si algo excede lo que puede resolver, Sara lo deriva a tu equipo con el contexto completo, así nadie arranca de cero.' },
 ];
 ---
 
 <Layout
   title="WhatsApp e Instagram 24/7 · Sara"
-  description="Sara atiende WhatsApp e Instagram las 24 horas: informa, agenda y cobra en la misma conversación, con el tono de tu clínica. Hasta los comentarios terminan en una cita."
+  description="Sara atiende WhatsApp, Instagram y el chat de tu web las 24 horas: informa, agenda y cobra en la misma conversación. Hasta los comentarios terminan en una cita, atribuida a su canal."
 >
   <Header />
   <main>
     <PageHero
-      eyebrow="Atiende · Canales"
+      eyebrow="Atiende · WhatsApp e Instagram 24/7"
       title="Responde donde te escriben. <em class='text-pine-dark'>A cualquier hora.</em>"
-      lead="El primer contacto entra por WhatsApp o Instagram, y casi nunca en horario de oficina. Sara contesta en el momento, informa de verdad y deja la cita agendada."
-      image="/img/chat-whatsapp.jpg"
-      imageAlt="Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo."
-      imageW={945}
-      imageH={2045}
-    />
+      lead="El primer contacto entra por WhatsApp, Instagram o el chat de tu web, y casi nunca en horario de oficina. Sara es la misma en todos: contesta en el momento, informa de verdad y deja la cita agendada."
+      image="/img/hero/canales-hero.jpg"
+      imageAlt="Un teléfono en un mostrador de clínica, de noche: Sara responde por WhatsApp, Instagram y la web a cualquier hora."
+      imageW={1200}
+      imageH={900}
+    >
+      <div
+        slot="image-overlay"
+        class="absolute -bottom-5 left-4 flex items-center gap-2 rounded-2xl border border-line bg-white/95 px-3 py-2.5 shadow-[0_12px_34px_-16px_rgba(20,38,31,0.45)] backdrop-blur-sm md:left-6"
+      >
+        <span class="grid h-9 w-9 place-items-center rounded-full" style="background:#25D366" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="#fff" aria-hidden="true">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.13c-.24.68-1.42 1.31-1.96 1.36-.5.05-.99.23-3.34-.7-2.83-1.11-4.62-4-4.76-4.19-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07.99-2.35.26-.28.57-.35.76-.35l.55.01c.18 0 .42-.07.65.5.24.58.81 1.99.88 2.13.07.14.12.3.02.5-.09.19-.14.31-.28.47l-.42.5c-.14.14-.29.3-.12.6.17.29.76 1.25 1.63 2.03 1.12 1 2.06 1.31 2.35 1.45.29.14.46.12.63-.07.17-.19.73-.85.92-1.14.19-.28.39-.24.65-.14.26.09 1.67.79 1.96.93.29.14.48.21.55.33.07.12.07.68-.17 1.36Z" />
+          </svg>
+        </span>
+        <span class="grid h-9 w-9 place-items-center rounded-[10px]" style="background:linear-gradient(45deg,#f9ce34,#ee2a7b 55%,#6228d7)" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true">
+            <rect x="4" y="4" width="16" height="16" rx="5" />
+            <circle cx="12" cy="12" r="3.6" />
+            <circle cx="16.8" cy="7.2" r="1.1" fill="#fff" stroke="none" />
+          </svg>
+        </span>
+        <span class="grid h-9 w-9 place-items-center rounded-full bg-pine" aria-label="Chat web">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#F7F5EF" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18M12 3c2.5 2.4 2.5 15.6 0 18M12 3c-2.5 2.4-2.5 15.6 0 18" />
+          </svg>
+        </span>
+      </div>
+    </PageHero>
 
-    <FeatureSteps
-      title="Del mensaje a la cita, sin que nadie de recepción&nbsp;intervenga."
-      steps={steps}
-    />
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">WhatsApp</p>
+          <p class="mt-1 text-salvia">Sobre tu línea de WhatsApp Business, sin cambiar de número.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Instagram</p>
+          <p class="mt-1 text-salvia">Mensajes directos y hasta los comentarios de tus posts.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Chat web y formulario</p>
+          <p class="mt-1 text-salvia">En tu sitio, 24/7. La misma Sara, el mismo criterio.</p>
+        </div>
+      </div>
+    </section>
 
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
     <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cómo lo hace Sara</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            La consulta de las 23:41 no espera a&nbsp;mañana.
+          </h2>
+          <p class="mt-5 text-lg text-salvia">
+            La clínica que responde primero se queda con el paciente. Sara contesta en el momento en que te
+            escriben, informa de verdad y deja la cita agendada antes de que se enfríe el&nbsp;interés.
+          </p>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'in', text: 'Hola! Vi que hacen limpieza facial, ¿tienen turno esta semana?', t: '21:15' },
+              { who: 'out', text: '¡Hola! Sí, hacemos limpieza facial profunda. Tengo miércoles 16:00 o jueves 11:00. ¿Cuál te queda mejor? La reserva se confirma con un anticipo.', t: '21:15' },
+              { who: 'in', text: 'Miércoles', t: '21:16' },
+              { who: 'out', text: '¡Listo! Miércoles 16:00 reservado ✅ Te paso el link del anticipo y te llega el recordatorio un día antes.', t: '21:16' },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
-          Todo lo que hace en tus&nbsp;canales.
+          Del mensaje a la cita, sin que recepción&nbsp;intervenga.
         </h2>
-        <div class="mt-12 grid gap-6 md:grid-cols-2">
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
           {
-            caps.map((c) => (
-              <div class="rounded-xl border border-line bg-cream p-7">
-                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
-                <p class="mt-2 text-salvia">{c.b}</p>
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
               </div>
             ))
           }
@@ -68,7 +132,73 @@ const faqs = [
       </div>
     </section>
 
-    <CtaInline title="La próxima consulta de las 23:41 no tiene por qué&nbsp;esperar." />
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="Instagram"
+          title="Hasta un comentario <em class='text-pine-dark'>termina en una cita.</em>"
+          body="Cuando alguien comenta una publicación, Sara le escribe por mensaje directo, sigue la conversación en privado y la lleva a agendar. El interés que generó tu contenido no se pierde en los comentarios."
+          points={[
+            'Responde comentarios por mensaje directo',
+            'Atiende los DM como en WhatsApp',
+            'Del post a la reserva, sin cortar el hilo',
+          ]}
+        >
+          <ConversationDemo
+            channel="instagram"
+            bubbles={[
+              { who: 'out', text: '¡Hola! Vi tu comentario en la publicación 🙌 Te escribo por aquí para ayudarte. ¿Qué zona te interesa?', t: '19:40' },
+              { who: 'in', text: 'Hola! quería saber el precio de axilas', t: '19:52' },
+              { who: 'out', text: '¡Genial! El pack de 6 sesiones de axilas está $4.900, y la primera es de regalo para que pruebes. ¿Te agendo la de prueba?', t: '19:52' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Con tu equipo"
+          title="Y cuando hace falta una persona, <em class='text-pine-dark'>te pasa la posta.</em>"
+          body="Si una consulta necesita a alguien de tu equipo, Sara no improvisa: avisa con todo el contexto de la charla, así la persona retoma sin pedirle al paciente que repita nada."
+          points={[
+            'Deriva a tu equipo con el historial completo',
+            'El paciente no empieza de cero',
+            'Sara vuelve a tomar el hilo después',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'in', text: 'Necesito factura a nombre de mi empresa, ¿se puede?', t: '10:08' },
+              { who: 'out', text: '¡Buena pregunta! Eso lo maneja el equipo directamente. Ya les paso tu consulta con el detalle para que te ayuden. En un momento te escriben 🙌', t: '10:08' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Atribución"
+          title="Y sabes qué canal <em class='text-pine-dark'>te trae los turnos.</em>"
+          body="Cada cita queda atribuida al canal que la originó: WhatsApp, Instagram o la web. Dejas de adivinar dónde invertir: los números te lo dicen."
+          points={[
+            'Turnos por canal, mes a mes',
+            'Valor generado por cada canal',
+            'Todo en el panel, sin planillas',
+          ]}
+        >
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1130"
+            height="944"
+            alt="Panel con los turnos por canal: WhatsApp, Instagram y web, con el valor generado por cada uno."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title="La consulta de las 23:41 no tiene por qué&nbsp;esperar." />
 
     <FeatureFaq items={faqs} />
 

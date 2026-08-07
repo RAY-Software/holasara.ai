@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Placeholder de imagen">
+  <rect width="1200" height="900" rx="24" fill="#f2f4ef"/>
+  <rect x="16" y="16" width="1168" height="868" rx="18" fill="none" stroke="#9db3a4" stroke-width="3" stroke-dasharray="14 12"/>
+  <g fill="none" stroke="#6f8a79" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="470" y="345" width="260" height="185" rx="16"/>
+    <circle cx="545" cy="410" r="26"/>
+    <path d="M470 500l78-70 55 45 60-52 67 60"/>
+  </g>
+  <text x="600" y="600" text-anchor="middle" font-family="Georgia, serif" font-size="46" font-weight="700" fill="#2f5f4a">Imagen del hero</text>
+  <text x="600" y="650" text-anchor="middle" font-family="-apple-system, Segoe UI, Roboto, sans-serif" font-size="27" fill="#6f8a79">Placeholder — reemplazar por render de Gemini</text>
+</svg>
