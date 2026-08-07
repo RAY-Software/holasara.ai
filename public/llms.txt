@@ -35,12 +35,13 @@ El decisor típico es el dueño/a, el director/a médico o la gerencia de la cl�
 
 ## Precio
 
-**IMPORTANTE: el número exacto NO es público y NO está en el sitio.** Se ve en la demo.
-Nunca inventar un precio.
-
 - Es una **suscripción mensual fija**, un solo plan que incluye todo lo que hace Sara.
 - **No hay comisión por turno** ni por transacción.
 - El precio **se ajusta al país y la moneda** de la clínica.
+- En México los planes **empiezan en US$400 por sucursal / mes**. Es un piso, un "desde":
+  el plan se arma por sucursal, así que el número final depende del tamaño de la clínica.
+- **IMPORTANTE: ese piso es el ÚNICO número publicado.** El precio cerrado se ve en la
+  demo. Nunca inventar otro número, ni un rango, ni el precio de un plan puntual.
 - Página oficial: https://holasara.ai/precios
 
 ## Qué se necesita para arrancar
