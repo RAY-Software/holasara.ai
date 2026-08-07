@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SaraSelect from '../components/SaraSelect.astro';
 import ClientsStrip from '../components/ClientsStrip.astro';
-import { WHATSAPP_AR, WHATSAPP_MX } from '../lib/whatsapp';
+import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
 
 // Endpoint opcional para el lead (Zapier/Make catch hook). Si no está seteado,
 // el formulario hace handoff a WhatsApp con un resumen prellenado, así siempre
@@ -182,7 +182,7 @@ const benefits = [
 
   <Footer />
 
-  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, GOOGLE_MAPS_KEY }}>
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, GOOGLE_MAPS_KEY }}>
     (function () {
       var form = document.getElementById('demo-form');
       if (!form) return;
@@ -365,13 +365,18 @@ const benefits = [
           '• Clínica: ' + (data.clinic || '-') + '\n' +
           '• Nombre: ' + (data.name || '-') + '\n' +
           '• Rol: ' + (data.role || '-');
-        if (token) msg += '\n' + token;
+        msg += '\n' + SRC_TAG + (token || '');
         return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
       }
 
-      // El link de fallback abre WhatsApp directo (el Layout le inyecta el token)
+      // El link de fallback abre WhatsApp directo. Le ponemos el marcador acá porque el
+      // enhance() del Layout ya corrió cuando seteamos este href, así que no lo tocaría.
       var fb = form.querySelector('[data-wa-fallback]');
-      if (fb) fb.setAttribute('href', 'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Sara, quiero una demo para mi clínica.'));
+      if (fb)
+        fb.setAttribute(
+          'href',
+          'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Sara, quiero una demo para mi clínica. ' + SRC_TAG)
+        );
 
       form.addEventListener('submit', function (ev) {
         ev.preventDefault();

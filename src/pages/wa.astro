@@ -1,6 +1,6 @@
 ---
 import { GA4_ID, GOOGLE_ADS_ID, ADS_WA_LABEL } from '../lib/tracking';
-import { WHATSAPP_AR, WHATSAPP_MX, WHATSAPP_TEXT } from '../lib/whatsapp';
+import { WHATSAPP_AR, WHATSAPP_MX, WHATSAPP_TEXT, SRC_TAG } from '../lib/whatsapp';
 
 // Puente para Google Ads. La final URL de un anuncio no puede ser wa.me: Google exige
 // que el dominio del destino coincida con el visible. Esta página vive en holasara.ai,
@@ -100,7 +100,7 @@ const gtagJs =
 
     <script
       is:inline
-      define:vars={{ WHATSAPP_AR, WHATSAPP_MX, WHATSAPP_TEXT, ADS_WA_LABEL, GOOGLE_ADS_ID }}
+      define:vars={{ WHATSAPP_AR, WHATSAPP_MX, WHATSAPP_TEXT, SRC_TAG, ADS_WA_LABEL, GOOGLE_ADS_ID }}
     >
       (function () {
         var p = new URLSearchParams(location.search);
@@ -131,9 +131,11 @@ const gtagJs =
         } catch (e) {}
         var WA = IS_AR ? WHATSAPP_AR : WHATSAPP_MX;
 
-        // 3) El token viaja DENTRO del mensaje: es lo que después matchea el backend
-        //    para subir la conversación como conversión offline.
-        var msg = (p.get('m') || WHATSAPP_TEXT) + (token ? ' ' + token : '');
+        // 3) Marca + token viajan DENTRO del mensaje: el token es lo que matchea el
+        //    backend para subir la conversación como conversión offline, y el marcador
+        //    de marca es lo que lo distingue de una conversación de RAY (línea y backend
+        //    son compartidos). Esta es la ruta de Google, que no trae `referral`.
+        var msg = (p.get('m') || WHATSAPP_TEXT) + ' ' + SRC_TAG + token;
         var target = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
 
         var manual = document.getElementById('wa-manual');
