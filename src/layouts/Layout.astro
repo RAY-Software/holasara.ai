@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { GA4_ID, META_PIXEL_ID, GOOGLE_ADS_ID, saraTrack } from '../lib/tracking';
 
 interface Props {
   title?: string;
@@ -18,14 +19,9 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = (Astro.site?.toString() ?? 'https://holasara.ai/').replace(/\/$/, '');
 
-// --- Tracking (Fase 1) ---
-// Los tags se cargan SOLO en build de producción y SOLO si defines las env vars.
-// Definí en .env (y en Vercel): PUBLIC_META_PIXEL_ID, PUBLIC_GOOGLE_ADS_ID,
-// PUBLIC_GOOGLE_ADS_LEAD_LABEL. GA4 ya está seteado (holasara), overrideable por env.
-const GA4_ID = import.meta.env.PUBLIC_GA4_ID ?? 'G-NRN8H0WR62';
-const META_PIXEL_ID = import.meta.env.PUBLIC_META_PIXEL_ID ?? '';
-const GOOGLE_ADS_ID = import.meta.env.PUBLIC_GOOGLE_ADS_ID ?? '';
-const GOOGLE_ADS_LEAD_LABEL = import.meta.env.PUBLIC_GOOGLE_ADS_LEAD_LABEL ?? '';
+// --- Tracking ---
+// Config centralizada en src/lib/tracking.ts (labels separados para form y WhatsApp).
+// Definí las env vars en .env y en Vercel → Settings → Environment Variables (Production).
 
 // JS inline de los tags (armado acá para evitar template literals anidados en el markup)
 const gtagJs =
@@ -38,8 +34,7 @@ const pixelJs = META_PIXEL_ID
 const pixelNoscript = META_PIXEL_ID
   ? `<img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1"/>`
   : '';
-const saraTrackObj = JSON.stringify({ adsId: GOOGLE_ADS_ID, adsLabel: GOOGLE_ADS_LEAD_LABEL });
-const saraTrackJs = 'window.__saraTrack=' + saraTrackObj + ';';
+const saraTrackJs = 'window.__saraTrack=' + JSON.stringify(saraTrack) + ';';
 const gtagSrc = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
 
 const baseSchema = {
@@ -198,10 +193,13 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
                     transport_type: 'beacon',
                   });
               } catch (e) {}
+              // Conversión SECUNDARIA (observación). El clic no es un lead: la conversión
+              // que optimiza es la conversación real, que se sube por offline import
+              // matcheando el token que va acá abajo dentro del texto del mensaje.
               try {
                 var c = window.__saraTrack;
-                if (window.gtag && c && c.adsId && c.adsLabel)
-                  gtag('event', 'conversion', { send_to: c.adsId + '/' + c.adsLabel });
+                if (window.gtag && c && c.adsId && c.waLabel)
+                  gtag('event', 'conversion', { send_to: c.adsId + '/' + c.waLabel });
               } catch (e) {}
             });
           });
