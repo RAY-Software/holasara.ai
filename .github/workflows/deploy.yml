@@ -29,6 +29,41 @@ jobs:
         run: npm i -g vercel@latest
       - name: Pull Vercel env (production)
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      # Las vars de tracking están cargadas en Vercel como Sensitive Environment
+      # Variables: su valor no se puede volver a leer una vez creado, ni por dashboard
+      # ni por API, así que `vercel pull` escribe el literal "[SENSITIVE]" en lugar del
+      # valor. Como este proyecto buildea ACÁ y no en Vercel (--prebuilt, el workaround
+      # de arriba), ese placeholder termina horneado en el HTML: gtag emite
+      # config('[SENSITIVE]') y no dispara ninguna conversión. Estuvo así hasta el
+      # 2026-08-07 — cero conversiones registradas del sitio.
+      #
+      # Reponerlas acá es seguro: son IDs de tag público. Viajan en el HTML servido a
+      # cualquier visitante, así que ponerlas en un repo público no expone nada que no
+      # esté ya expuesto. NO agregues acá nada que sí sea secreto.
+      #
+      # Solo pisa el valor si vino como placeholder. Si algún día dejan de estar
+      # marcadas como sensibles, el pull trae el valor real y este paso no toca nada.
+      - name: Reponer las PUBLIC_* que Vercel devuelve censuradas
+        run: |
+          ENVFILE=.vercel/.env.production.local
+          repair() {
+            key=$1; val=$2
+            if ! grep -qE "^${key}=" "$ENVFILE"; then
+              echo "${key}=\"${val}\"" >> "$ENVFILE"
+              echo "  + ${key}: no estaba en Vercel, agregada"
+            elif grep -qE "^${key}=\"?\[SENSITIVE\]\"?$" "$ENVFILE"; then
+              sed -i "s|^${key}=.*$|${key}=\"${val}\"|" "$ENVFILE"
+              echo "  ~ ${key}: placeholder repuesto"
+            else
+              echo "  = ${key}: valor real, sin tocar"
+            fi
+          }
+          repair PUBLIC_GOOGLE_ADS_ID         "AW-18221376083"
+          repair PUBLIC_GOOGLE_ADS_DEMO_LABEL "4p8nCPmuzN0cENPE0PBD"
+          repair PUBLIC_GOOGLE_ADS_WA_LABEL   "SOAbCPyuzN0cENPE0PBD"
+          repair PUBLIC_META_PIXEL_ID         "4546263272359000"
+
       - name: Build
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy (prebuilt → production)
