@@ -3,57 +3,120 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
-import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import ConversationDemo from '../components/ConversationDemo.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
 import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
 
-const caps = [
-  { t: 'Lista de espera que se mueve sola', b: 'Se cancela una cita y Sara ofrece ese hueco al instante a quien estaba esperando. La hora no queda vacía.' },
-  { t: 'Reactiva a los que no vuelven', b: 'Contacta uno por uno a los pacientes que no aparecen hace meses y los invita a volver, con el mensaje justo.' },
-  { t: 'Seguimiento post-tratamiento', b: 'Agenda controles y retoques en el momento correcto, sin que tengas que perseguir a nadie.' },
-  { t: 'Cada contacto, con criterio', b: 'No es spam masivo: Sara escribe cuando tiene sentido y con el tono de tu clínica.' },
+// Cómo funciona, en 3 tiempos (mecánica real del panel).
+const steps = [
+  { n: '01', title: 'Se libera o se enfría un turno', body: 'Una cita se cancela, alguien no confirma, o un paciente lleva meses sin volver. Sara lo detecta en la agenda.' },
+  { n: '02', title: 'Sara sale a buscar, sin que le pidas', body: 'Escribe por WhatsApp en el momento justo y ofrece dos horarios concretos. Si no responde, vuelve a intentar con criterio.' },
+  { n: '03', title: 'La agenda se vuelve a llenar', body: 'La hora que se iba a perder queda reservada, con el anticipo cobrado y atribuida al canal que la trajo.' },
 ];
 
-const steps = [
-  { title: 'Se libera o se enfría un turno', body: 'Una cancelación deja un hueco, o un paciente lleva meses sin volver.' },
-  { title: 'Sara sale a buscar', body: 'Ofrece el hueco a la lista de espera o reactiva al paciente inactivo, por WhatsApp.' },
-  { title: 'La agenda se vuelve a llenar', body: 'La hora que se iba a perder termina ocupada y cobrada.' },
+// Estados reales que verías en el panel de Chats.
+const estados = [
+  { tag: '📨 Seguimiento', desc: 'Sara reintentó el contacto. El contador (×3) muestra cuántas veces.' },
+  { tag: 'Reservó', desc: 'El paciente volvió a agendar desde la reactivación.' },
+  { tag: '⏰ Recordatorio', desc: 'Sara le recuerda el turno un día antes para que no se caiga de nuevo.' },
+  { tag: '✅ Confirmado', desc: 'El paciente confirmó que viene. La hora es tuya.' },
 ];
 
 const faqs = [
-  { q: '¿Cómo arma la lista de espera?', a: 'Cuando alguien quiere un horario que está ocupado, Sara lo anota. Si ese horario se libera, se lo ofrece automáticamente.' },
-  { q: '¿A quién reactiva?', a: 'A pacientes que hace tiempo no vuelven. El criterio (cuánto tiempo, qué tratamientos) lo definimos contigo en la implementación.' },
-  { q: '¿No molesta a los pacientes?', a: 'Sara contacta con mesura y siempre da la opción de no recibir más mensajes. El objetivo es traer de vuelta a quien te elige, no incomodar.' },
-  { q: '¿Esto también cobra?', a: 'Sí: cuando reactiva o llena un hueco, puede pedir el anticipo en la misma conversación, como en cualquier reserva.' },
+  { q: '¿A quién reactiva Sara?', a: 'A tres grupos: el que canceló o no vino, el que quedó a mitad de una conversación sin agendar, y el paciente que hace meses no vuelve. El criterio de tiempo y tratamientos lo definimos contigo en la implementación.' },
+  { q: '¿Cómo arma la lista de espera?', a: 'Cuando alguien pide un horario que está ocupado, Sara lo anota. Si ese horario se libera por una cancelación, se lo ofrece automáticamente a quien estaba esperando, por orden.' },
+  { q: '¿No termina molestando a los pacientes?', a: 'No hace envíos masivos. Escribe cuando hay un motivo real (un turno que quedó pendiente, un hueco que se abrió), reintenta con mesura y siempre respeta a quien pide no seguir recibiendo mensajes. El objetivo es traer de vuelta a quien te elige, no incomodar.' },
+  { q: '¿Cuántas veces insiste?', a: 'Las que tengan sentido, no más. En el panel ves el contador de seguimiento (📨 Seguimiento ×3) por conversación. Cuando el paciente responde o pide parar, Sara se detiene.' },
+  { q: '¿Esto también cobra?', a: 'Sí. Cuando reactiva o llena un hueco, Sara puede pedir el anticipo en la misma conversación, igual que en cualquier reserva. La hora vuelve ocupada y ya paga.' },
+  { q: '¿Por qué canales reactiva?', a: 'Por donde el paciente te habló: WhatsApp, Instagram o el chat de tu web. Es la misma Sara en los tres, con el historial de esa persona.' },
 ];
 ---
 
 <Layout
   title="Lista de espera y reactivación · Sara"
-  description="Sara llena los huecos de cancelaciones con la lista de espera y trae de vuelta a los pacientes que no vuelven hace meses, uno por uno."
+  description="Sara llena los huecos de cancelaciones con la lista de espera y trae de vuelta, uno por uno, a los pacientes que no vuelven hace meses. Con criterio, y cobrando el anticipo."
 >
   <Header />
   <main>
     <PageHero
       eyebrow="Agenda · Lista de espera y reactivación"
       title="La hora que se libera <em class='text-pine-dark'>no se pierde.</em>"
-      lead="Una cancelación no tiene por qué ser un hueco vacío, y un paciente que no vuelve no está perdido. Sara llena la agenda y reactiva, uno por uno."
+      lead="Una cancelación no tiene por qué ser un hueco vacío, y un paciente que no vuelve no está perdido. Sara persigue cada turno que quedó en el aire y vuelve a llenar la agenda, uno por uno."
+      image="/img/hero/reactivacion-hero.jpg"
+      imageAlt="Un rincón de tratamiento luminoso con un sillón junto a la ventana: ningún espacio queda vacío."
+      imageW={1200}
+      imageH={900}
     />
 
-    <FeatureSteps title="De un hueco vacío a una hora&nbsp;cobrada." steps={steps} />
+    <!-- ══════════ TIRA DE MECÁNICA (no son stats inventadas: es lo que hace) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">Reintenta hasta que responde</p>
+          <p class="mt-1 text-salvia">Varios seguimientos con criterio, sin volverse spam.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Ofrece dos horarios concretos</p>
+          <p class="mt-1 text-salvia">No pregunta al aire: propone y cierra en el mismo chat.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Cobra el anticipo</p>
+          <p class="mt-1 text-salvia">La hora vuelve ocupada y ya pagada, no de palabra.</p>
+        </div>
+      </div>
+    </section>
 
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
     <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cómo lo hace Sara</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            Un turno que quedó pendiente, de vuelta en la agenda.
+          </h2>
+          <p class="mt-5 text-lg text-salvia">
+            Esta es una reactivación real, tal cual sale por WhatsApp. Sara retoma el turno que no se concretó,
+            propone horarios y lo deja reservado, sin que recepción toque nada.
+          </p>
+          <p class="mt-4 text-salvia">
+            El contador <span class="font-semibold text-pine-dark">📨 Seguimiento ×3</span> es de ella: significa
+            que ya había intentado tres veces antes de que esta persona respondiera. La constancia que nadie en
+            recepción tiene tiempo de&nbsp;sostener.
+          </p>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Juli! Soy Sara. Quedó pendiente tu turno de cavado y no quería que se te pase. Tengo miércoles 19:30 o 20:00. ¿Te viene bien alguno?', t: '10:03' },
+              { who: 'in', text: 'Uy sí, se me había pasado 🙈 el de las 19:30 me sirve', t: '18:22' },
+              { who: 'out', text: '¡Genial! Te dejo agendada el miércoles 19:30. Para confirmar la reserva va un anticipo, te paso el link 👇', t: '18:22' },
+              { who: 'in', text: 'Listo, ya pagué', t: '18:25' },
+              { who: 'out', text: '¡Reservado! ✅ Te llega el recordatorio un día antes. ¡Nos vemos el miércoles!', t: '18:25' },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
-          Todo lo que hace para llenar tu&nbsp;agenda.
+          De un hueco vacío a una hora&nbsp;cobrada.
         </h2>
-        <div class="mt-12 grid gap-6 md:grid-cols-2">
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
           {
-            caps.map((c) => (
-              <div class="rounded-xl border border-line bg-cream p-7">
-                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
-                <p class="mt-2 text-salvia">{c.b}</p>
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
               </div>
             ))
           }
@@ -61,7 +124,139 @@ const faqs = [
       </div>
     </section>
 
+    <!-- ══════════ CAPACIDADES · filas alternadas (copy + visual) ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="Detecta"
+          title="Ve el turno que quedó <em class='text-pine-dark'>en el aire.</em>"
+          body="No espera a que alguien revise la agenda. Sara identifica al que canceló, al que no confirmó y al que dejó la conversación a medias sin reservar. Cada uno es una hora recuperable."
+          points={[
+            'Cancelaciones y ausencias del día',
+            'Conversaciones que no terminaron en turno',
+            'Pacientes inactivos hace meses',
+          ]}
+        >
+          <!-- GEMINI: reemplazar por render de una agenda con huecos resaltados que se van llenando. Placeholder: imagen existente. -->
+          <img
+            src="/img/agenda.jpg"
+            width="1200"
+            height="900"
+            alt="Agenda de la semana con huecos libres que Sara vuelve a llenar."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Insiste con criterio"
+          title="Constante, <em class='text-pine-dark'>nunca pesada.</em>"
+          body="Reintenta cuando tiene sentido y para cuando corresponde. Si el paciente pide no seguir recibiendo mensajes, lo respeta al instante. Nada de envíos masivos."
+          points={[
+            'Reintentos espaciados, no en ráfaga',
+            'Se detiene apenas responde o pide parar',
+            'Siempre con el tono de tu clínica',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola! Quedó pendiente tu turno de axilas. Tengo jueves 12:30 o 16:00, ¿te sirve alguno?', t: 'Mar 10:01' },
+              { who: 'out', text: '¡Hola de nuevo! ¿Te reservo el jueves así no se te pasa? Quedan pocos lugares esta semana 🙂', t: 'Mié 09:40' },
+              { who: 'in', text: 'Hola, ahora no puedo, gracias', t: 'Mié 13:10' },
+              { who: 'out', text: '¡Sin problema! Cualquier cosa quedo atenta, escríbeme cuando quieras 🌿', t: 'Mié 13:10' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Lista de espera"
+          title="El hueco que se libera <em class='text-pine-dark'>ya tiene dueño.</em>"
+          body="Cuando alguien quería un horario ocupado, Sara lo anotó. Si esa hora se cae, se la ofrece de una a quien estaba esperando, por orden. La agenda se mueve sola."
+        >
+          <ConversationDemo
+            channel="instagram"
+            bubbles={[
+              { who: 'out', text: '¡Hola, Meli! Se liberó un lugar mañana viernes 15:40, que era el horario que querías. ¿Lo tomas?', t: '11:12' },
+              { who: 'in', text: '¡Sí! lo quiero 🙌', t: '11:15' },
+              { who: 'out', text: '¡Listo! Viernes 15:40 reservado. Te paso el link del anticipo para dejarlo confirmado.', t: '11:15' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Confirma"
+          title="Y el día antes, <em class='text-pine-dark'>confirma que vienes.</em>"
+          body="Recuperar el turno es la mitad; la otra es que no se caiga. El día antes, Sara pide confirmación para evitar el no-show. Y si el paciente no puede, libera la hora y se la ofrece a la lista de espera."
+          points={[
+            'Recordatorio y confirmación automáticos',
+            'Menos ausencias, sin llamar a nadie',
+            'Si se cae, la hora vuelve a la lista de espera',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Paula! Te recuerdo tu turno de mañana jueves a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+              { who: 'in', text: 'Sí! ahí voy', t: '19:12' },
+              { who: 'out', text: '¡Genial! Queda confirmada tu asistencia para mañana a las 14:00. ¡Te esperamos!', t: '19:12' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Pide la reseña"
+          title="Y después del turno, <em class='text-pine-dark'>pide la reseña.</em>"
+          body="Cuando el paciente sale contento, Sara le pide la reseña en Google en el momento justo, con el link directo. El círculo se cierra: el turno que recuperaste hoy trae al próximo paciente mañana."
+          points={[
+            'La pide en la ventana en que sí responden',
+            'Link directo a tu Google, un solo clic',
+            'Mejor reputación, más pacientes nuevos',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Juan! ¿Cómo estuvo tu sesión? Si quedaste conforme, nos ayudarías un montón con una reseña en Google 🙏', t: '17:30' },
+              { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-clinica', t: '17:30' },
+              { who: 'in', text: 'Listo, ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:04' },
+              { who: 'out', text: '¡Mil gracias, Juan! Nos ayuda muchísimo 🙌', t: '20:04' },
+            ]}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
     <CtaInline title="Que ninguna hora de tu agenda quede&nbsp;vacía." />
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Así se ve en tu panel</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Cada reactivación deja&nbsp;rastro.
+        </h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">
+          En la bandeja de Chats, cada conversación muestra en qué estado está. De un vistazo sabes qué está
+          persiguiendo Sara y qué ya volvió a&nbsp;agendar.
+        </p>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
 
     <FeatureFaq items={faqs} />
 

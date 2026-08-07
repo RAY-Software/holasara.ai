@@ -1,0 +1,427 @@
+---
+// Mock de conversación real de Sara, fiel a la UI del canal (WhatsApp / Instagram).
+// Perspectiva: el teléfono del PACIENTE. Sara es el contacto (foto + "en línea"),
+// y es quien escribe a los clientes → sus mensajes entran a la izquierda (recibidos);
+// las respuestas del paciente salen a la derecha (enviados, con doble check).
+// Incluye la barra de escribir abajo para que se lea como una captura real.
+// Sin pills de estado adentro (eso no existe en WhatsApp): los estados se muestran
+// aparte, en la sección "Así se ve en tu panel".
+//
+// Uso:
+//   <ConversationDemo channel="whatsapp"
+//     bubbles={[{ who:'out', text:'…', t:'10:03' }, { who:'in', text:'…', t:'10:14' }]} />
+//   who: 'out' = Sara (izquierda) · 'in' = paciente (derecha)
+
+interface Bubble {
+  who: 'in' | 'out';
+  text: string;
+  t?: string;
+}
+interface Props {
+  channel?: 'whatsapp' | 'instagram';
+  name?: string;
+  subtitle?: string;
+  avatar?: string;
+  bubbles: Bubble[];
+}
+const {
+  channel = 'whatsapp',
+  name = 'Sara',
+  subtitle,
+  avatar = '/agents/sara-thumb.png',
+  bubbles,
+} = Astro.props;
+
+const sub = subtitle ?? (channel === 'whatsapp' ? 'en línea' : 'Activa ahora');
+---
+
+<figure class="chat" data-channel={channel}>
+  <div class="chat__header">
+    <svg class="chat__back" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    <span class="chat__avatar">
+      <img class="chat__photo" src={avatar} alt={name} width="38" height="38" loading="lazy" decoding="async" />
+      {
+        channel === 'instagram' && (
+          <span class="chat__badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="5" y="5" width="14" height="14" rx="4.2" stroke="#fff" stroke-width="2" />
+              <circle cx="12" cy="12" r="3.2" stroke="#fff" stroke-width="2" />
+              <circle cx="16.6" cy="7.4" r="1.15" fill="#fff" />
+            </svg>
+          </span>
+        )
+      }
+    </span>
+    <span class="chat__id">
+      <span class="chat__name">{name}</span>
+      <span class="chat__sub">{sub}</span>
+    </span>
+    {
+      channel === 'whatsapp' && (
+        <span class="chat__icons">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 8l6-3v14l-6-3M3 6h12v12H3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          </svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11 11 0 003.5.56 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.56 3.5a1 1 0 01-.24 1l-2.2 2.3z" />
+          </svg>
+        </span>
+      )
+    }
+    {
+      channel === 'instagram' && (
+        <span class="chat__icons">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11 11 0 003.5.56 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.56 3.5a1 1 0 01-.24 1l-2.2 2.3z" stroke="currentColor" stroke-width="1.6" />
+          </svg>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M23 7l-7 5 7 5V7zM1 5h13a2 2 0 012 2v10a2 2 0 01-2 2H1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+          </svg>
+        </span>
+      )
+    }
+  </div>
+
+  <div class="chat__body">
+    {
+      bubbles.map((b) => (
+        <div class={`msg ${b.who === 'out' ? 'msg--left' : 'msg--right'}`}>
+          <span class="msg__text">{b.text}</span>
+          <span class="msg__meta">
+            {b.t}
+            {b.who === 'in' && channel === 'whatsapp' && (
+              <svg class="tick" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+                <path d="M1 6.6l3.1 3.1L10.4 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6.4 9.7L12.7 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            )}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+
+  {
+    channel === 'whatsapp' && (
+      <div class="compose">
+        <div class="compose__field">
+          <svg class="compose__emoji" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
+            <path d="M9 10h.01M15 10h.01M8.5 14a4 4 0 007 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+          <span class="compose__ph">Mensaje</span>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 11.5l-8.5 8.5a5 5 0 01-7-7l8.5-8.5a3.5 3.5 0 015 5l-8.5 8.5a2 2 0 01-3-3l8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 8h3l2-2h6l2 2h3v11H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+            <circle cx="12" cy="13" r="3" stroke="currentColor" stroke-width="1.6" />
+          </svg>
+        </div>
+        <button class="compose__send" type="button" aria-label="Enviar">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 3a3 3 0 013 3v5a3 3 0 01-6 0V6a3 3 0 013-3z" />
+            <path d="M6 11a6 6 0 0012 0M12 17v4" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
+  {
+    channel === 'instagram' && (
+      <div class="compose">
+        <span class="compose__cam" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 8h3l1.5-2h7L17 8h3v10H4z" stroke="#fff" stroke-width="1.7" stroke-linejoin="round" />
+            <circle cx="12" cy="12.5" r="3" stroke="#fff" stroke-width="1.7" />
+          </svg>
+        </span>
+        <div class="compose__field">
+          <span class="compose__ph">Mensaje...</span>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 15a3 3 0 003-3V6a3 3 0 00-6 0v6a3 3 0 003 3zM6 12a6 6 0 0012 0M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.6" />
+            <path d="M4 15l4-4 3 3 4-4 5 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+          </svg>
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21s-7-4.35-7-9a4 4 0 017-2.65A4 4 0 0119 12c0 4.65-7 9-7 9z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+    )
+  }
+</figure>
+
+<style>
+  .chat {
+    width: 100%;
+    max-width: 22rem;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--color-line, #e6e2d9);
+    background: #fff;
+    box-shadow: 0 12px 34px -20px rgba(20, 38, 31, 0.32);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .chat__header {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 0.8rem;
+  }
+  .chat__back {
+    width: 20px;
+    height: 20px;
+    margin-right: -0.15rem;
+    flex: none;
+    opacity: 0.9;
+  }
+  .chat__photo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+    background: #dfe7e2;
+  }
+  .chat__id {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.15;
+  }
+  .chat__name {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .chat__sub {
+    font-size: 0.72rem;
+    opacity: 0.9;
+  }
+  .chat__icons {
+    margin-left: auto;
+    display: flex;
+    gap: 0.85rem;
+    opacity: 0.92;
+  }
+  .chat__icons svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .chat__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.85rem 0.7rem;
+  }
+  .msg {
+    max-width: 82%;
+    padding: 0.42rem 0.58rem 0.3rem;
+    font-size: 0.86rem;
+    line-height: 1.32;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
+  }
+  .msg__meta {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 0.22rem;
+    margin-top: 0.12rem;
+    font-size: 0.63rem;
+  }
+  .tick {
+    width: 16px;
+    height: 11px;
+  }
+
+  .compose {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.6rem;
+  }
+  .compose__field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.5rem 0.7rem;
+  }
+  .compose__field svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    color: #8696a0;
+  }
+  .compose__ph {
+    flex: 1;
+    font-size: 0.84rem;
+    color: #8696a0;
+  }
+  .compose__send {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex: none;
+    border: 0;
+    cursor: default;
+  }
+  .compose__send svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ── WhatsApp ─────────────────────────────── */
+  [data-channel='whatsapp'] .chat__header {
+    background: #075e54;
+    color: #fff;
+  }
+  [data-channel='whatsapp'] .chat__sub {
+    color: #d9fdd3;
+  }
+  [data-channel='whatsapp'] .chat__body {
+    background-color: #ece5dd;
+    background-image: radial-gradient(rgba(11, 20, 26, 0.035) 1px, transparent 1px);
+    background-size: 15px 15px;
+  }
+  [data-channel='whatsapp'] .msg {
+    color: #111b21;
+    border-radius: 8px;
+    box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+  }
+  [data-channel='whatsapp'] .msg--left {
+    align-self: flex-start;
+    background: #fff;
+    border-top-left-radius: 0;
+  }
+  [data-channel='whatsapp'] .msg--right {
+    align-self: flex-end;
+    background: #d9fdd3;
+    border-top-right-radius: 0;
+  }
+  [data-channel='whatsapp'] .msg__meta {
+    color: #667781;
+  }
+  [data-channel='whatsapp'] .msg--left::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -7px;
+    border: 7px solid transparent;
+    border-top-color: #fff;
+    border-right: 0;
+  }
+  [data-channel='whatsapp'] .msg--right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -7px;
+    border: 7px solid transparent;
+    border-top-color: #d9fdd3;
+    border-left: 0;
+  }
+  [data-channel='whatsapp'] .compose {
+    background: #f0f2f5;
+  }
+  [data-channel='whatsapp'] .compose__send {
+    background: #00a884;
+    color: #fff;
+  }
+
+  /* ── Instagram ────────────────────────────── */
+  [data-channel='instagram'] .chat__header {
+    background: #fff;
+    color: #000;
+    border-bottom: 1px solid #efefef;
+  }
+  [data-channel='instagram'] .chat__sub {
+    color: #8e8e8e;
+  }
+  [data-channel='instagram'] .chat__body {
+    background: #fff;
+  }
+  [data-channel='instagram'] .msg {
+    border-radius: 20px;
+  }
+  [data-channel='instagram'] .msg--left {
+    align-self: flex-start;
+    background: #efefef;
+    color: #000;
+    border-bottom-left-radius: 5px;
+  }
+  [data-channel='instagram'] .msg--right {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #5b51d8, #a033c4);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+  }
+  [data-channel='instagram'] .msg--left .msg__meta {
+    color: #8e8e8e;
+  }
+  [data-channel='instagram'] .msg--right .msg__meta {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  [data-channel='instagram'] .compose {
+    background: #fff;
+    border-top: 1px solid #efefef;
+  }
+  [data-channel='instagram'] .compose__field {
+    border: 1px solid #dbdbdb;
+  }
+
+  /* ── Avatar + badge de canal ──────────────── */
+  .chat__avatar {
+    position: relative;
+    flex: none;
+    display: block;
+    line-height: 0;
+  }
+  .chat__badge {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 6px;
+    background: linear-gradient(45deg, #f9ce34 5%, #ee2a7b 55%, #6228d7 95%);
+    border: 2px solid #fff;
+    display: grid;
+    place-items: center;
+  }
+  .chat__badge svg {
+    width: 10px;
+    height: 10px;
+  }
+  .compose__cam {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    flex: none;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(45deg, #405de6, #5b51d8, #833ab4);
+  }
+  .compose__cam svg {
+    width: 18px;
+    height: 18px;
+  }
+  [data-channel='instagram'] .compose__field svg {
+    color: #262626;
+  }
+  [data-channel='instagram'] .compose__ph {
+    color: #8e8e8e;
+  }
+</style>

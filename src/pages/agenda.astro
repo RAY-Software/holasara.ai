@@ -3,51 +3,191 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
-import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import ConversationDemo from '../components/ConversationDemo.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
 import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
 
 const steps = [
-  { title: 'Se agenda la cita', body: 'Sara la reserva desde el chat, o tu equipo la carga: todo cae en tu Google Calendar.' },
-  { title: 'Sara la cuida', body: 'Cobra el anticipo, recuerda, confirma y libera el hueco si alguien cancela.' },
-  { title: 'La agenda se llena sola', body: 'Reofrece los huecos a la lista de espera y reactiva a los que no vuelven.' },
-];
-
-const faqs = [
-  { q: '¿Se integra con el calendario que ya uso?', a: 'Sí. Sara lee y escribe en tu Google Calendar. No migras nada ni cambias de sistema.' },
-  { q: '¿Puede reservar dos pacientes en el mismo horario?', a: 'No. Agenda solo sobre la disponibilidad real y bloquea al instante, así no hay dobles reservas.' },
-  { q: '¿Mi equipo puede seguir cargando turnos a mano?', a: 'Claro. Sara convive con tu equipo: lo que cargue recepción también queda reflejado y cuidado.' },
-  { q: '¿Sirve si tengo varios profesionales o sucursales?', a: 'Sí. Se configura por agenda y por sucursal, para que cada turno caiga donde corresponde.' },
+  { n: '01', title: 'Se agenda la cita', body: 'Sara la reserva desde el chat, o tu equipo la carga: todo cae en el Google Calendar que ya usas.' },
+  { n: '02', title: 'Sara la cuida', body: 'Cobra el anticipo, recuerda, confirma y libera el hueco al instante si alguien cancela.' },
+  { n: '03', title: 'La agenda se llena sola', body: 'Reofrece los huecos a la lista de espera y reactiva a los pacientes que no vuelven.' },
 ];
 
 const items = [
-  { t: 'Anticipo o consulta cobrada al reservar', b: 'El que paga, viene. Es el filtro de ausencias más efectivo que existe.' },
-  { t: 'Recordatorios y confirmación automáticos', b: 'Sin que nadie de recepción levante el teléfono.' },
+  { t: 'Anticipo o consulta al reservar', b: 'El que paga, viene. Es el filtro de ausencias más efectivo que existe.' },
+  { t: 'Recordatorios y confirmación', b: 'Automáticos, sin que nadie de recepción levante el teléfono.' },
   { t: 'Lista de espera activa', b: 'Se cancela una cita y Sara la vuelve a ofrecer al instante.' },
-  { t: 'Reactivación de pacientes inactivos', b: 'Los que no vuelven hace meses, contactados uno por uno.' },
+  { t: 'Reactivación de inactivos', b: 'Los que no vuelven hace meses, contactados uno por uno.' },
   { t: 'Seguimiento post-tratamiento', b: 'Controles y retoques agendados en el momento justo, sin que los persigas.' },
+];
+
+const faqs = [
+  { q: '¿Se integra con el calendario que ya uso?', a: 'Sí. Sara lee y escribe en tu Google Calendar. No migras nada ni cambias de sistema, y tu equipo lo sigue viendo como siempre.' },
+  { q: '¿Puede reservar dos pacientes en el mismo horario?', a: 'No. Agenda solo sobre la disponibilidad real y bloquea al instante, así no hay dobles reservas.' },
+  { q: '¿Mi equipo puede seguir cargando turnos a mano?', a: 'Claro. Sara convive con tu equipo: lo que cargue recepción también queda reflejado y cuidado.' },
+  { q: '¿Sirve si tengo varios profesionales o sucursales?', a: 'Sí. Se configura por agenda y por sucursal, para que cada turno caiga donde corresponde.' },
+  { q: '¿Toca mi historia clínica?', a: 'No. No se almacena historia clínica ni información médica. Sara trabaja sobre el calendario, eso queda donde está hoy.' },
 ];
 ---
 
 <Layout
-  title="Agenda · La agenda que se llena sola"
-  description="Anticipo al reservar, recordatorios y confirmación automáticos, lista de espera activa y reactivación de pacientes. La agenda de tu clínica se llena y se cuida sola."
+  title="Agenda automática · La agenda que se llena sola"
+  description="Sara agenda sobre tu Google Calendar, sin dobles turnos. Cobra el anticipo, recuerda, confirma, reofrece los huecos a la lista de espera y reactiva a los que no vuelven."
 >
   <Header />
   <main>
     <PageHero
-      eyebrow="Agenda"
+      eyebrow="Agenda · Agenda automática"
       title="La agenda que se llena <em class='text-pine-dark'>sola.</em>"
-      lead="Sara no solo agenda: cobra por adelantado, recuerda, confirma, reofrece los huecos que se liberan y trae de vuelta a los que dejaron de venir."
-      image="/img/agenda.jpg"
-      imageAlt="Vista de la agenda semanal: citas con anticipo pagado, confirmadas, recordatorios enviados y huecos revendidos desde la lista de espera."
+      lead="Sara no solo agenda: reserva sobre tu calendario real sin dobles turnos, cobra por adelantado, recuerda, confirma, reofrece los huecos que se liberan y trae de vuelta a los que dejaron de venir."
+      image="/img/hero/agenda-hero.jpg"
+      imageAlt="Escritorio sereno de clínica con una agenda abierta, café y una ramita de salvia."
       imageW={1200}
-      imageH={1186}
+      imageH={900}
     />
 
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
     <section class="border-b border-line bg-paper">
-      <div class="mx-auto max-w-6xl px-5 py-24">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">Sobre tu Google Calendar</p>
+          <p class="mt-1 text-salvia">Lee y escribe en el que ya usas. No migras nada.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Sin dobles turnos</p>
+          <p class="mt-1 text-salvia">Agenda solo sobre disponibilidad real y bloquea al instante.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Cuida cada cita</p>
+          <p class="mt-1 text-salvia">Anticipo, recordatorio, confirmación y rescate del hueco.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cómo lo hace Sara</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            Ofrece solo lo que de verdad está&nbsp;libre.
+          </h2>
+          <p class="mt-5 text-lg text-salvia">
+            Sara no promete horarios que no existen: mira tu disponibilidad real, ofrece lo que hay y bloquea en
+            el momento. Sin dobles turnos, sin idas y vueltas para&nbsp;coordinar.
+          </p>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'in', text: 'Hola, quiero sacar un turno para valoración', t: '09:20' },
+              { who: 'out', text: '¡Hola! Con gusto. Para esta semana tengo martes 10:30, miércoles 16:00 o jueves 09:00. ¿Cuál te queda mejor?', t: '09:20' },
+              { who: 'in', text: 'Miércoles 16:00', t: '09:21' },
+              { who: 'out', text: '¡Listo! Miércoles 16:00 reservado ✅ Lo dejé en la agenda y te llega el recordatorio un día antes.', t: '09:21' },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          De una cita agendada a una agenda&nbsp;llena.
+        </h2>
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="Sincronizada"
+          title="Vive en el calendario <em class='text-pine-dark'>que ya usas.</em>"
+          body="Sara lee y escribe en tu Google Calendar. Lo que agenda aparece al instante para tu equipo, y lo que carga recepción también queda cuidado. Nadie migra nada ni cambia de sistema."
+          points={[
+            'Lee y escribe en tu Google Calendar',
+            'Convive con lo que carga tu equipo',
+            'Por profesional y por sucursal',
+          ]}
+        >
+          <img
+            src="/img/agenda.jpg"
+            width="1200"
+            height="900"
+            alt="Agenda semanal sincronizada: citas con anticipo pagado, confirmadas y huecos vueltos a ofrecer."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Cuida cada cita"
+          title="Cobra, recuerda <em class='text-pine-dark'>y confirma.</em>"
+          body="Cada turno que entra queda protegido: Sara puede pedir el anticipo al reservar, recordar el día antes y pedir confirmación, para que la agenda llegue llena al día."
+          points={[
+            'Anticipo al reservar, el mejor filtro de ausencias',
+            'Recordatorio y confirmación automáticos',
+            'La agenda llega llena, sin sorpresas',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Paula! Te recuerdo tu turno de mañana a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+              { who: 'in', text: 'Sí! ahí voy', t: '19:12' },
+              { who: 'out', text: '¡Genial! Queda confirmada tu asistencia. ¡Te esperamos!', t: '19:12' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Y la vuelve a llenar"
+          title="El hueco que se libera <em class='text-pine-dark'>no queda vacío.</em>"
+          body="Si una cita se cae, Sara ofrece esa hora a la lista de espera. Y a los pacientes que no vuelven hace meses, los contacta uno por uno para traerlos de nuevo."
+          points={[
+            'Lista de espera que se mueve sola',
+            'Reactivación de pacientes inactivos',
+            'La agenda no depende de que alguien la empuje',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Juli! Quedó pendiente tu turno y no quería que se te pase. Tengo miércoles 19:30 o 20:00. ¿Te viene bien alguno?', t: '10:03' },
+              { who: 'in', text: 'El de las 19:30 me sirve', t: '18:22' },
+              { who: 'out', text: '¡Listo! Miércoles 19:30 reservado ✅', t: '18:22' },
+            ]}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title="Que tu agenda deje de depender de que alguien la&nbsp;empuje." />
+
+    <!-- ══════════ 5 FORMAS ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
           Cinco formas de que no te quede un hueco&nbsp;vacío.
         </h2>
@@ -66,10 +206,6 @@ const items = [
         </div>
       </div>
     </section>
-
-    <FeatureSteps title="Cómo se llena tu agenda, paso a&nbsp;paso." steps={steps} />
-
-    <CtaInline title="Que tu agenda deje de depender de que alguien la&nbsp;empuje." />
 
     <FeatureFaq items={faqs} />
 

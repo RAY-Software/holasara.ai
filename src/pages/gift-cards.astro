@@ -3,26 +3,20 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
-import FeatureSteps from '../components/FeatureSteps.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import ConversationDemo from '../components/ConversationDemo.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
 import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
 
-const caps = [
-  { t: 'Cobras hoy, atiendes después', b: 'La gift card entra como ingreso adelantado. El tratamiento se agenda cuando el destinatario la usa.' },
-  { t: 'Un paciente nuevo, sin publicidad', b: 'Quien recibe la gift card no te conocía. Llega recomendado por alguien que ya confía en ti.' },
-  { t: 'Se compra desde tu web', b: 'La gift card se vende en tu propio sitio, con tu marca. Sin apps de terceros ni comisiones de marketplace.' },
-  { t: 'Sara acompaña la compra', b: 'Responde dudas, guía el pago y, cuando el destinatario quiere usarla, la agenda.' },
-];
-
 const steps = [
-  { title: 'Alguien compra una gift card', body: 'Desde tu web, para regalar un tratamiento a otra persona.' },
-  { title: 'Cobras al instante', body: 'El pago entra hoy, aunque el tratamiento sea dentro de semanas.' },
-  { title: 'Llega un paciente nuevo', body: 'El destinatario agenda con Sara y conoce tu clínica por primera vez.' },
+  { n: '01', title: 'Alguien compra una gift card', body: 'Desde tu web, con tu marca, para regalar un tratamiento a otra persona.' },
+  { n: '02', title: 'Cobras al instante', body: 'El pago entra hoy (por Stripe), aunque el tratamiento sea dentro de semanas.' },
+  { n: '03', title: 'Llega un paciente nuevo', body: 'El destinatario agenda con Sara y conoce tu clínica por primera vez, por recomendación.' },
 ];
 
 const faqs = [
-  { q: '¿Dónde se venden las gift cards?', a: 'En tu propio sitio web, con la marca de tu clínica. El pago se procesa de forma segura; no dependes de una app externa.' },
+  { q: '¿Dónde se venden las gift cards?', a: 'En tu propio sitio web, con la marca de tu clínica. El pago se procesa de forma segura por Stripe; no dependes de una app externa ni pagas comisión de marketplace.' },
   { q: '¿Sirve para cualquier tratamiento?', a: 'Defines qué montos o tratamientos se pueden regalar. Es flexible según lo que ofrezca tu clínica.' },
   { q: '¿Cómo se usa la gift card?', a: 'El destinatario escribe por WhatsApp o entra a la web, y Sara la valida al agendar la cita.' },
   { q: '¿Por qué conviene?', a: 'Es de los pocos ingresos que además te traen un paciente nuevo que no te costó publicidad: llega por recomendación de alguien que ya te eligió.' },
@@ -31,7 +25,7 @@ const faqs = [
 
 <Layout
   title="Gift cards · Sara"
-  description="Vende tratamientos por adelantado con gift cards desde tu propia web. Cobras hoy y ganas un paciente nuevo que llega por recomendación."
+  description="Vende tratamientos por adelantado con gift cards desde tu propia web. Cobras hoy y ganas un paciente nuevo que llega por recomendación, y Sara la valida al agendar."
 >
   <Header />
   <main>
@@ -39,29 +33,124 @@ const faqs = [
       eyebrow="Cobros · Gift cards"
       title="Cobra hoy. Y ganas un paciente <em class='text-pine-dark'>que no te conocía.</em>"
       lead="Tu paciente le regala un tratamiento a alguien de confianza. Cobras por adelantado y sumas un paciente nuevo, sin gastar en publicidad."
-      image="/img/cobros.jpg"
-      imageAlt="Panel de cobros: anticipos, consultas y gift cards cobrados por Sara."
+      image="/img/hero/gift-cards-hero.jpg"
+      imageAlt="Una gift card de clínica con un lazo de lino sobre un plato con eucalipto."
       imageW={1200}
-      imageH={1186}
+      imageH={900}
     />
 
-    <FeatureSteps title="Un regalo que te deja caja y un paciente&nbsp;nuevo." steps={steps} />
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">Se vende en tu web</p>
+          <p class="mt-1 text-salvia">Con tu marca, sin apps de terceros ni comisiones.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Cobras hoy</p>
+          <p class="mt-1 text-salvia">Ingreso adelantado, aunque la usen en semanas.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Trae un paciente nuevo</p>
+          <p class="mt-1 text-salvia">Que llega recomendado por alguien que ya confía en ti.</p>
+        </div>
+      </div>
+    </section>
 
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
     <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cómo lo hace Sara</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            El regalo llega, y se transforma en una&nbsp;cita.
+          </h2>
+          <p class="mt-5 text-lg text-salvia">
+            La gift card no queda en un cajón. Cuando el destinatario escribe, Sara la valida y agenda la primera
+            cita ahí mismo. Ese paciente nuevo entra sin que gastes en&nbsp;publicidad.
+          </p>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'in', text: 'Hola! Me regalaron una gift card de la clínica, ¿cómo la uso?', t: '15:40' },
+              { who: 'out', text: '¡Hola! Qué lindo regalo 🎁 Ya la validé en el sistema. ¿Para qué tratamiento la quieres usar? Te busco un turno.', t: '15:40' },
+              { who: 'in', text: 'Limpieza facial. ¿Tienen esta semana?', t: '15:41' },
+              { who: 'out', text: '¡Sí! Tengo jueves 16:00 o viernes 11:00. La gift card cubre la sesión, así que ya quedaría reservada. ¿Cuál te queda mejor?', t: '15:41' },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
-          Todo lo que hacen tus gift&nbsp;cards.
+          Un regalo que te deja caja y un paciente&nbsp;nuevo.
         </h2>
-        <div class="mt-12 grid gap-6 md:grid-cols-2">
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
           {
-            caps.map((c) => (
-              <div class="rounded-xl border border-line bg-cream p-7">
-                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
-                <p class="mt-2 text-salvia">{c.b}</p>
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
               </div>
             ))
           }
         </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="En tu web, con tu marca"
+          title="Se compran en tu sitio, <em class='text-pine-dark'>no en un marketplace.</em>"
+          body="La gift card se vende desde tu propia web, con tu identidad, y el pago se procesa por Stripe. Sin apps de terceros que se queden con una comisión de cada regalo."
+          points={[
+            'Tu sitio, tu marca, tu logo',
+            'Pago seguro por Stripe',
+            'Sin comisiones de marketplace',
+          ]}
+        >
+          <img
+            src="/img/cobros.jpg"
+            width="1200"
+            height="1186"
+            alt="Panel con las gift cards vendidas y cobradas por la plataforma."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Sara acompaña"
+          title="Guía la compra <em class='text-pine-dark'>y agenda al que la recibe.</em>"
+          body="Sara responde las dudas de quien compra, ayuda con el pago y, cuando el destinatario quiere usar su regalo, lo valida y le agenda la primera cita. El círculo se cierra solo."
+          points={[
+            'Responde dudas y guía el pago',
+            'Valida la gift card al agendar',
+            'Convierte el regalo en un paciente que vuelve',
+          ]}
+        >
+          <ConversationDemo
+            channel="instagram"
+            bubbles={[
+              { who: 'in', text: 'Hola, quiero regalar una gift card, ¿cómo hago?', t: '20:10' },
+              { who: 'out', text: '¡Hola! Súper fácil. Entras a nuestra web, eliges el monto o el tratamiento y pagas. Te llega la gift card para reenviar a quien quieras 🎁 ¿Te paso el link?', t: '20:10' },
+              { who: 'in', text: 'Sí, gracias!', t: '20:11' },
+            ]}
+          />
+        </FeatureRow>
       </div>
     </section>
 
