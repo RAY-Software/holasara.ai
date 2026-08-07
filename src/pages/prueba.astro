@@ -1,0 +1,326 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ClientsStrip from '../components/ClientsStrip.astro';
+import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
+
+// Base de la app del trial (nuestro backend + el reveal). El form POStea a
+// `${TRIAL_BASE}/api/public/demo` (createDemo) y, con el token, redirige a
+// `${TRIAL_BASE}/demo/{token}`. Configurable en Vercel; default a prueba.rayapp.ai.
+// Para full-continuidad (fast-follow) se apunta a https://app.holasara.ai.
+const TRIAL_BASE = (import.meta.env.PUBLIC_TRIAL_BASE ?? 'https://prueba.rayapp.ai').replace(/\/$/, '');
+// Google Places (browser key, referrer-restricted). Sin key → el campo negocio
+// queda como input de texto normal (degradación elegante, igual que /demo).
+const GOOGLE_MAPS_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
+
+const benefits = [
+  {
+    t: 'Con tu propia marca',
+    b: 'Tomamos el nombre, el color y las fotos de tu negocio. El sitio se ve como tuyo, no como una plantilla.',
+  },
+  {
+    t: 'Sara atiende en vivo',
+    b: 'Escríbele como un paciente: informa, agenda y cobra el anticipo, como si ya trabajara ahí.',
+  },
+  {
+    t: 'Sin instalar nada',
+    b: 'No migras datos ni tocas tu historia clínica. Lo ves funcionando en segundos.',
+  },
+  {
+    t: 'Gratis y sin tarjeta',
+    b: 'Míralo primero. Si te gusta, activas tu prueba de 7 días ahí mismo.',
+  },
+];
+---
+
+<Layout
+  title="Prueba Sara con tu negocio · gratis, en vivo"
+  description="Elige tu negocio y en segundos armamos tu sitio con tu marca y a Sara atendiendo en vivo. Pruébala como si ya trabajara para ti. Gratis, sin tarjeta."
+>
+  <Header />
+
+  <main class="bg-paper">
+    <div class="mx-auto max-w-6xl px-5 py-14 md:py-20">
+      <a href="/" class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+        <span aria-hidden="true">←</span> Volver al inicio
+      </a>
+
+      <div class="grid gap-12 md:grid-cols-[0.95fr_1.05fr] md:gap-16 md:items-start">
+        <!-- ─── Izquierda: propuesta ─── -->
+        <div>
+          <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+            <span class="dot h-2 w-2"></span> Pruébala gratis
+          </p>
+          <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl">
+            Mira tu propio sitio con Sara atendiendo <em class="text-pine-dark">en vivo</em>.
+          </h1>
+          <p class="mt-6 max-w-xl text-lg text-salvia">
+            Elige tu negocio y en segundos armamos tu sitio con tu marca y a Sara, tu asistente,
+            lista para responder y agendar turnos. Pruébala como si ya trabajara para ti.
+          </p>
+
+          <div class="mt-10 rounded-xl border border-line bg-cream p-7">
+            <div class="flex items-center gap-3">
+              <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="h-7 w-auto" loading="lazy" />
+              <span class="text-sm font-medium text-salvia">Ya trabaja acá</span>
+            </div>
+            <div class="mt-6 grid grid-cols-3 gap-4">
+              <div>
+                <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">114</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">consultas atendidas sin recepción</p>
+              </div>
+              <div>
+                <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">7/10</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">citas agendadas por Sara</p>
+              </div>
+              <div>
+                <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">US$1.071</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">en citas, atribuidas por canal</p>
+              </div>
+            </div>
+          </div>
+
+          <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+            {
+              benefits.map((x) => (
+                <li>
+                  <h3 class="text-[15px] font-semibold text-ink">{x.t}</h3>
+                  <p class="mt-1 text-sm text-salvia">{x.b}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <!-- ─── Derecha: formulario ─── -->
+        <div class="rounded-2xl border border-line bg-cream p-7 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] md:p-9">
+          <h2 class="font-serif text-2xl font-black text-ink">Arma tu demo</h2>
+          <p class="mt-2 text-sm text-salvia">Elige tu negocio y lo ves en vivo en segundos. Gratis, sin tarjeta.</p>
+
+          <form id="trial-form" class="mt-7 flex flex-col gap-5" novalidate data-base={TRIAL_BASE}>
+            <div>
+              <label for="business" class="mb-1.5 block text-sm font-medium text-ink">Tu negocio</label>
+              <input id="business" name="business" type="text" autocomplete="off" required placeholder="Busca tu negocio en Google…" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              <p id="business-hint" class="mt-1 hidden text-xs text-salvia">Empieza a escribir y elígelo de la lista.</p>
+              <input type="hidden" name="place_id" id="place_id" />
+              <input type="hidden" name="address" id="address" />
+              <input type="hidden" name="category" id="category" />
+            </div>
+
+            <div>
+              <label for="email" class="mb-1.5 block text-sm font-medium text-ink">Tu email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required placeholder="tu@tunegocio.com" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+            </div>
+
+            <!-- Atribución: se rellenan al enviar, desde la URL o la cookie sara_click -->
+            <input type="hidden" name="gclid" id="f_gclid" />
+            <input type="hidden" name="wbraid" id="f_wbraid" />
+            <input type="hidden" name="gbraid" id="f_gbraid" />
+            <input type="hidden" name="fbclid" id="f_fbclid" />
+
+            <label class="flex items-start gap-3 text-sm text-salvia">
+              <input type="checkbox" name="consent" required class="mt-1 h-4 w-4 shrink-0 rounded border-line text-pine focus:ring-pine/25" />
+              <span>Confirmo que este es mi negocio y acepto que me contacten por WhatsApp o email sobre mi demo.</span>
+            </label>
+
+            <p id="trial-error" class="hidden rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700"></p>
+
+            <button
+              type="submit"
+              id="trial-submit"
+              class="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-pine px-6 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-pine-dark disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Ver mi sitio con Sara en vivo
+            </button>
+
+            <p class="text-center text-xs text-salvia">Gratis. Sin tarjeta. Listo en segundos.</p>
+          </form>
+
+          <!-- Estado de carga mientras genera el demo -->
+          <div id="trial-loading" class="hidden">
+            <div class="grid place-items-center py-10 text-center">
+              <span class="dot h-3 w-3"></span>
+              <h2 class="mt-5 font-serif text-2xl font-black text-ink">Armando tu sitio…</h2>
+              <p class="mt-2 max-w-sm text-salvia">Estamos preparando tu marca y a Sara. Un segundo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <ClientsStrip />
+
+  <Footer />
+
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, GOOGLE_MAPS_KEY }}>
+    (function () {
+      var form = document.getElementById('trial-form');
+      if (!form) return;
+      var btn = document.getElementById('trial-submit');
+      var errBox = document.getElementById('trial-error');
+      var base = form.getAttribute('data-base') || '';
+
+      // Región (mismo criterio que el resto del sitio) → sesga el country del autocomplete.
+      var IS_AR = false;
+      try {
+        var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
+        IS_AR = /America\/Argentina/.test(tz) || /^es-AR/i.test(navigator.language || '');
+      } catch (e) {}
+      var WA = IS_AR ? WHATSAPP_AR : WHATSAPP_MX;
+
+      // ── Google Places autocomplete en el campo negocio (degradación elegante) ──
+      (function initBusinessAutocomplete() {
+        if (!GOOGLE_MAPS_KEY) return;
+        var input = document.getElementById('business');
+        var placeIdEl = document.getElementById('place_id');
+        var addressEl = document.getElementById('address');
+        var categoryEl = document.getElementById('category');
+        var hint = document.getElementById('business-hint');
+        if (!input) return;
+
+        function attach() {
+          try {
+            var ac = new google.maps.places.Autocomplete(input, {
+              types: ['establishment'],
+              fields: ['name', 'place_id', 'formatted_address', 'types'],
+            });
+            ac.addListener('place_changed', function () {
+              var p = ac.getPlace() || {};
+              if (p.name) input.value = p.name;
+              if (placeIdEl) placeIdEl.value = p.place_id || '';
+              if (addressEl) addressEl.value = p.formatted_address || '';
+              if (categoryEl) categoryEl.value = (p.types && p.types[0]) || '';
+            });
+            input.addEventListener('input', function () {
+              if (placeIdEl) placeIdEl.value = '';
+              if (addressEl) addressEl.value = '';
+              if (categoryEl) categoryEl.value = '';
+            });
+            if (hint) hint.classList.remove('hidden');
+          } catch (e) {}
+        }
+
+        if (window.google && window.google.maps && window.google.maps.places) {
+          attach();
+        } else {
+          var s = document.createElement('script');
+          s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(GOOGLE_MAPS_KEY) + '&libraries=places&v=weekly&loading=async';
+          s.async = true;
+          s.defer = true;
+          s.onload = function () {
+            var tries = 0;
+            (function poll() {
+              if (window.google && window.google.maps && window.google.maps.places) attach();
+              else if (tries++ < 50) setTimeout(poll, 100);
+            })();
+          };
+          document.head.appendChild(s);
+        }
+      })();
+
+      // ── Atribución: click-ids de la URL o de la cookie sara_click (90 días, la deja el Layout) ──
+      var CLICK_KEYS = ['gclid', 'wbraid', 'gbraid', 'fbclid'];
+      function clickIds() {
+        var out = {};
+        var p = new URLSearchParams(location.search);
+        var found = false;
+        CLICK_KEYS.forEach(function (k) { out[k] = p.get(k) || ''; if (out[k]) found = true; });
+        if (found) return out;
+        var m = document.cookie.match('(^|;)\\s*sara_click\\s*=\\s*([^;]+)');
+        var raw = m ? decodeURIComponent(m.pop()) : '';
+        CLICK_KEYS.forEach(function (k) {
+          var mm = raw.match(new RegExp('\\[' + k + ':([^\\]]+)\\]'));
+          out[k] = mm ? mm[1] : '';
+        });
+        return out;
+      }
+
+      function setUserData(email) {
+        try {
+          if (!window.gtag) return;
+          var mail = String(email || '').trim().toLowerCase();
+          if (mail) gtag('set', 'user_data', { email: mail });
+        } catch (e) {}
+      }
+
+      // Dispara el lead (demo generado) y llama cb() cuando Ads confirmó (o a los 900 ms).
+      function fireLead(email, cb) {
+        var done = false;
+        function once() { if (done) return; done = true; if (cb) cb(); }
+        try { if (window.fbq) fbq('track', 'Lead', { content_name: 'prueba-page' }); } catch (e) {}
+        var c = window.__saraTrack;
+        var hasAds = !!(window.gtag && c && c.adsId && c.demoLabel);
+        try {
+          if (window.gtag) {
+            setUserData(email);
+            gtag('event', 'generate_lead', { event_category: 'engagement', event_label: 'prueba-page', transport_type: 'beacon' });
+            gtag('event', 'demo_solicitada', { event_category: 'engagement', event_label: 'prueba-page', value: 1, transport_type: 'beacon' });
+            if (hasAds) gtag('event', 'conversion', { send_to: c.adsId + '/' + c.demoLabel, event_callback: once });
+          }
+        } catch (e) {}
+        if (hasAds) setTimeout(once, 900); else once();
+      }
+
+      function showError(msg) {
+        errBox.textContent = msg;
+        errBox.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Ver mi sitio con Sara en vivo';
+      }
+
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        errBox.classList.add('hidden');
+
+        var ids = clickIds();
+        CLICK_KEYS.forEach(function (k) { var el = document.getElementById('f_' + k); if (el) el.value = ids[k]; });
+
+        var fd = new FormData(form);
+        var email = String(fd.get('email') || '').trim();
+        var business = String(fd.get('business') || '').trim();
+        if (!business) return showError('Elige tu negocio para generar el demo.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Revisa tu email: no parece válido.');
+        if (!fd.get('consent')) return showError('Necesitamos tu OK para generar el demo.');
+
+        btn.disabled = true;
+        btn.textContent = 'Generando…';
+
+        // Shape que espera createDemo: { email, gbp: { placeId, name, address, category }, clickIds }.
+        var payload = {
+          email: email,
+          gbp: {
+            placeId: String(fd.get('place_id') || ''),
+            name: business,
+            address: String(fd.get('address') || ''),
+            category: String(fd.get('category') || ''),
+          },
+          clickIds: ids,
+        };
+
+        fetch(base + '/api/public/demo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.d || !res.d.token) throw new Error((res.d && res.d.error) || 'No se pudo generar el demo.');
+            var token = res.d.token;
+            // Estado de carga mientras redirige
+            form.classList.add('hidden');
+            var loading = document.getElementById('trial-loading');
+            if (loading) loading.classList.remove('hidden');
+            // Conversión (demo generado) + redirect al reveal en el mismo dominio de la app.
+            fireLead(email, function () {
+              window.location.href = base + '/demo/' + encodeURIComponent(token);
+            });
+          })
+          .catch(function (e) {
+            showError((e && e.message) || 'No se pudo generar el demo. Probá de nuevo.');
+          });
+      });
+    })();
+  </script>
+</Layout>
