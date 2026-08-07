@@ -63,6 +63,19 @@ jobs:
           repair PUBLIC_GOOGLE_ADS_DEMO_LABEL "4p8nCPmuzN0cENPE0PBD"
           repair PUBLIC_GOOGLE_ADS_WA_LABEL   "SOAbCPyuzN0cENPE0PBD"
           repair PUBLIC_META_PIXEL_ID         "4546263272359000"
+          # La browser key de Places no va inline: a diferencia de los IDs de tag,
+          # habilita llamadas facturables, y una AIza… en un repo público se la comen
+          # los scrapers y el secret scanning de GitHub (que puede hacer que Google la
+          # deshabilite sola). Vive en Settings → Secrets and variables → Actions →
+          # Variables. Si no está seteada, dejamos el placeholder y el campo "clínica"
+          # cae a input de texto — degradado, no roto.
+          if [ -n "$MAPS_KEY" ]; then
+            repair PUBLIC_GOOGLE_MAPS_API_KEY "$MAPS_KEY"
+          else
+            echo "  ! PUBLIC_GOOGLE_MAPS_API_KEY: sin variable de Actions, se deja como está"
+          fi
+        env:
+          MAPS_KEY: ${{ vars.PUBLIC_GOOGLE_MAPS_API_KEY }}
 
       - name: Build
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
