@@ -82,12 +82,18 @@ jobs:
       # visitante; esta tiene que quedarse del lado del servidor. Va como secret (no
       # como variable) para que Actions la enmascare en los logs.
       - name: Inyectar la key server-side de Places
+        # No va como env var: las funciones de Vercel leen su entorno de runtime desde la
+        # configuración del proyecto en Vercel, que no controlamos. Comprobado con la sonda
+        # /api/ping — el build la tenía y la función no la veía. Lo que sí controlamos es
+        # el build, así que la escribimos en el módulo que la función importa y viaja
+        # dentro del bundle. El código de una función no se sirve al navegador.
         run: |
-          ENVFILE=.vercel/.env.production.local
-          grep -v '^PLACES_API_KEY=' "$ENVFILE" > "$ENVFILE.tmp" 2>/dev/null || true
-          mv "$ENVFILE.tmp" "$ENVFILE"
-          printf 'PLACES_API_KEY="%s"\n' "$PLACES_API_KEY" >> "$ENVFILE"
-          echo "  PLACES_API_KEY: inyectada (${#PLACES_API_KEY} caracteres)"
+          if [ -z "$PLACES_API_KEY" ]; then
+            echo "::error::falta el secret PLACES_API_KEY — el autocompletado quedaría muerto"
+            exit 1
+          fi
+          printf "export const PLACES_API_KEY = '%s';\n" "$PLACES_API_KEY" > api/_key.js
+          echo "  api/_key.js escrito (${#PLACES_API_KEY} caracteres)"
         env:
           PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
 
