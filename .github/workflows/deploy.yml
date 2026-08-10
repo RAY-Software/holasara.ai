@@ -77,6 +77,20 @@ jobs:
         env:
           MAPS_KEY: ${{ vars.PUBLIC_GOOGLE_MAPS_API_KEY }}
 
+      # Key server-side de Places, para la función de api/. NO lleva prefijo PUBLIC_
+      # a propósito: las PUBLIC_ se hornean en el HTML y quedan a la vista de cualquier
+      # visitante; esta tiene que quedarse del lado del servidor. Va como secret (no
+      # como variable) para que Actions la enmascare en los logs.
+      - name: Inyectar la key server-side de Places
+        run: |
+          ENVFILE=.vercel/.env.production.local
+          grep -v '^PLACES_API_KEY=' "$ENVFILE" > "$ENVFILE.tmp" 2>/dev/null || true
+          mv "$ENVFILE.tmp" "$ENVFILE"
+          printf 'PLACES_API_KEY="%s"\n' "$PLACES_API_KEY" >> "$ENVFILE"
+          echo "  PLACES_API_KEY: inyectada (${#PLACES_API_KEY} caracteres)"
+        env:
+          PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+
       - name: Build
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy (prebuilt → production)
