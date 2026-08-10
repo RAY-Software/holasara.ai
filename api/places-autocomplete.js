@@ -54,7 +54,16 @@ export default async function handler(req, res) {
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'desconocida';
   if (limitado(ip)) return res.status(429).json({ error: 'demasiadas_consultas', sugerencias: [] });
 
-  const clave = q.toLowerCase();
+  // Países a los que restringir, igual que el widget viejo: /demo acota (mx,ar según
+  // la zona horaria) y /prueba no acota. Vacío = sin restricción.
+  const paises = String(req.query?.country ?? '')
+    .toLowerCase()
+    .split(',')
+    .map((c) => c.trim())
+    .filter((c) => /^[a-z]{2}$/.test(c))
+    .slice(0, 5);
+
+  const clave = `${paises.join('+')}|${q.toLowerCase()}`;
   const enCache = cache.get(clave);
   if (enCache && enCache.hasta > Date.now()) {
     res.setHeader('X-Cache', 'HIT');
@@ -69,13 +78,20 @@ export default async function handler(req, res) {
         'X-Goog-Api-Key': PLACES_API_KEY,
         // Pedimos solo lo que se pinta en la lista. Menos payload y menos datos de
         // terceros dando vueltas por nuestro servidor.
-        'X-Goog-FieldMask':
-          'suggestions.placePrediction.text.text,suggestions.placePrediction.structuredFormat',
+        'X-Goog-FieldMask': [
+          'suggestions.placePrediction.text.text',
+          'suggestions.placePrediction.structuredFormat',
+          'suggestions.placePrediction.placeId',
+          'suggestions.placePrediction.types',
+        ].join(','),
       },
       body: JSON.stringify({
         input: q,
-        includedRegionCodes: ['mx'],
         languageCode: 'es',
+        // Negocios, no direcciones sueltas — equivale al types:['establishment'] del
+        // widget viejo.
+        includedPrimaryTypes: ['establishment'],
+        ...(paises.length ? { includedRegionCodes: paises } : {}),
       }),
     });
 
@@ -92,7 +108,12 @@ export default async function handler(req, res) {
       .map((p) => ({
         texto: p.text?.text ?? '',
         principal: p.structuredFormat?.mainText?.text ?? '',
+        // El widget viejo guardaba formatted_address, que exigía una segunda llamada
+        // (Place Details) y se factura aparte. secondaryText ya trae la dirección con
+        // el detalle suficiente para identificar el local, en la misma llamada.
         secundario: p.structuredFormat?.secondaryText?.text ?? '',
+        placeId: p.placeId ?? '',
+        tipo: (p.types || [])[0] ?? '',
       }))
       .filter((s) => s.texto);
 

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PlacesAutocomplete from '../components/PlacesAutocomplete.astro';
 import ClientsStrip from '../components/ClientsStrip.astro';
 import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
 
@@ -10,9 +11,6 @@ import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
 // `${TRIAL_BASE}/demo/{token}`. Configurable en Vercel; default a prueba.rayapp.ai.
 // Para full-continuidad (fast-follow) se apunta a https://app.holasara.ai.
 const TRIAL_BASE = (import.meta.env.PUBLIC_TRIAL_BASE ?? 'https://prueba.rayapp.ai').replace(/\/$/, '');
-// Google Places (browser key, referrer-restricted). Sin key → el campo negocio
-// queda como input de texto normal (degradación elegante, igual que /demo).
-const GOOGLE_MAPS_KEY = import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY ?? '';
 
 const benefits = [
   {
@@ -101,7 +99,10 @@ const benefits = [
           <form id="trial-form" class="mt-7 flex flex-col gap-5" novalidate data-base={TRIAL_BASE}>
             <div>
               <label for="business" class="mb-1.5 block text-sm font-medium text-ink">Tu negocio</label>
-              <input id="business" name="business" type="text" autocomplete="off" required placeholder="Busca tu negocio en Google…" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              <input id="business" name="business" type="text" autocomplete="off" required placeholder="Busca tu negocio en Google…"
+                data-places-autocomplete data-hint="business-hint"
+                data-target-place-id="place_id" data-target-address="address" data-target-category="category"
+                class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
               <p id="business-hint" class="mt-1 hidden text-xs text-salvia">Empieza a escribir y elígelo de la lista.</p>
               <input type="hidden" name="place_id" id="place_id" />
               <input type="hidden" name="address" id="address" />
@@ -154,7 +155,7 @@ const benefits = [
 
   <Footer />
 
-  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, GOOGLE_MAPS_KEY }}>
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG }}>
     (function () {
       var form = document.getElementById('trial-form');
       if (!form) return;
@@ -170,51 +171,8 @@ const benefits = [
       } catch (e) {}
       var WA = IS_AR ? WHATSAPP_AR : WHATSAPP_MX;
 
-      // ── Google Places autocomplete en el campo negocio (degradación elegante) ──
-      (function initBusinessAutocomplete() {
-        if (!GOOGLE_MAPS_KEY) return;
-        var input = document.getElementById('business');
-        var placeIdEl = document.getElementById('place_id');
-        var addressEl = document.getElementById('address');
-        var categoryEl = document.getElementById('category');
-        var hint = document.getElementById('business-hint');
-        if (!input) return;
-
-        function attach() {
-          try {
-            var ac = new google.maps.places.Autocomplete(input, {
-              types: ['establishment'],
-              fields: ['name', 'place_id', 'formatted_address', 'types'],
-            });
-            ac.addListener('place_changed', function () {
-              var p = ac.getPlace() || {};
-              if (p.name) input.value = p.name;
-              if (placeIdEl) placeIdEl.value = p.place_id || '';
-              if (addressEl) addressEl.value = p.formatted_address || '';
-              if (categoryEl) categoryEl.value = (p.types && p.types[0]) || '';
-            });
-            input.addEventListener('input', function () {
-              if (placeIdEl) placeIdEl.value = '';
-              if (addressEl) addressEl.value = '';
-              if (categoryEl) categoryEl.value = '';
-            });
-            if (hint) hint.classList.remove('hidden');
-          } catch (e) {}
-        }
-
-        if (window.google && window.google.maps && window.google.maps.places) {
-          attach();
-        } else {
-          var s = document.createElement('script');
-          s.src = 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(GOOGLE_MAPS_KEY) + '&libraries=places&v=weekly&loading=async';
-          s.async = true;
-          s.defer = true;
-          s.onload = function () {
-            var tries = 0;
-            (function poll() {
-              if (window.google && window.google.maps && window.google.maps.places) attach();
-              else if (tries++ < 50) setTimeout(poll, 100);
-            })();
+      // El autocompletado del campo negocio vive en <PlacesAutocomplete />: le pega a
+      // nuestro /api/places-autocomplete, así que la key de Google no viaja al cliente.
           };
           document.head.appendChild(s);
         }
@@ -323,4 +281,5 @@ const benefits = [
       });
     })();
   </script>
+  <PlacesAutocomplete />
 </Layout>

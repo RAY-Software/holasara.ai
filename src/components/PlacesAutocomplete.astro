@@ -1,0 +1,184 @@
+---
+// Autocompletado de negocios contra /api/places-autocomplete.
+//
+// Reemplaza al widget de google.maps.places.Autocomplete, que obligaba a publicar la
+// key de Maps en el HTML. Acá el navegador no habla con Google: le pregunta a nuestra
+// función serverless, que tiene la key del lado del servidor.
+//
+// Se engancha solo a cualquier input con data-places-autocomplete en la página, y
+// toma de sus data-* a qué campos ocultos escribir. Así las dos páginas que lo usan
+// (/demo y /prueba) comparten el comportamiento sin duplicar el script.
+//
+//   <input data-places-autocomplete
+//          data-hint="clinic-hint"          (opcional) párrafo que se muestra al activar
+//          data-country="mx,ar"             (opcional) restricción de países
+//          data-target-place-id="place_id"  (opcional) id del hidden a rellenar
+//          data-target-address="address"
+//          data-target-category="category" />
+//
+// Degradación elegante: si el endpoint falla o no devuelve nada, el input sigue siendo
+// un campo de texto común y el formulario se envía igual.
+---
+
+<script>
+  const DEBOUNCE_MS = 220;
+  const MIN_CARACTERES = 3;
+
+  // data-country="auto" reproduce el criterio AR/MX del resto del sitio, que no se
+  // puede resolver en el build porque depende de la zona horaria del visitante.
+  function paises(attr: string | undefined) {
+    if (attr !== 'auto') return attr || '';
+    let esAR = false;
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      esAR = /America\/Argentina/.test(tz) || /^es-AR/i.test(navigator.language || '');
+    } catch (e) {}
+    return esAR ? 'ar' : 'mx,ar';
+  }
+
+  function montar(input: HTMLInputElement) {
+    const hint = input.dataset.hint ? document.getElementById(input.dataset.hint) : null;
+    const campo = (attr: string | undefined) => (attr ? document.getElementById(attr) : null);
+    const elPlaceId = campo(input.dataset.targetPlaceId) as HTMLInputElement | null;
+    const elDireccion = campo(input.dataset.targetAddress) as HTMLInputElement | null;
+    const elCategoria = campo(input.dataset.targetCategory) as HTMLInputElement | null;
+
+    // El input necesita un contenedor posicionado para colgarle la lista debajo.
+    const envoltorio = document.createElement('div');
+    envoltorio.className = 'relative';
+    input.parentNode?.insertBefore(envoltorio, input);
+    envoltorio.appendChild(input);
+
+    const lista = document.createElement('ul');
+    lista.className =
+      'absolute z-30 mt-1 hidden max-h-64 w-full overflow-auto rounded-xl border border-line bg-white py-1 shadow-[0_12px_28px_-16px_rgba(20,38,31,0.45)]';
+    lista.setAttribute('role', 'listbox');
+    envoltorio.appendChild(lista);
+
+    input.setAttribute('role', 'combobox');
+    input.setAttribute('aria-expanded', 'false');
+    input.setAttribute('aria-autocomplete', 'list');
+    input.setAttribute('autocomplete', 'off');
+
+    let sugerencias: any[] = [];
+    let activo = -1;
+    let temporizador: ReturnType<typeof setTimeout> | undefined;
+    let pedido = 0;
+
+    const limpiarOcultos = () => {
+      if (elPlaceId) elPlaceId.value = '';
+      if (elDireccion) elDireccion.value = '';
+      if (elCategoria) elCategoria.value = '';
+    };
+
+    function cerrar() {
+      lista.classList.add('hidden');
+      input.setAttribute('aria-expanded', 'false');
+      activo = -1;
+    }
+
+    function pintarActivo() {
+      [...lista.children].forEach((li, i) => {
+        li.classList.toggle('bg-cream', i === activo);
+        if (i === activo) li.setAttribute('aria-selected', 'true');
+        else li.removeAttribute('aria-selected');
+      });
+    }
+
+    function elegir(i: number) {
+      const s = sugerencias[i];
+      if (!s) return;
+      input.value = s.principal || s.texto;
+      if (elPlaceId) elPlaceId.value = s.placeId || '';
+      if (elDireccion) elDireccion.value = s.secundario || '';
+      if (elCategoria) elCategoria.value = s.tipo || '';
+      cerrar();
+    }
+
+    function render() {
+      lista.innerHTML = '';
+      if (!sugerencias.length) return cerrar();
+      sugerencias.forEach((s, i) => {
+        const li = document.createElement('li');
+        li.className = 'cursor-pointer px-3.5 py-2 text-sm hover:bg-cream';
+        li.setAttribute('role', 'option');
+        const fuerte = document.createElement('span');
+        fuerte.className = 'block font-medium text-ink';
+        fuerte.textContent = s.principal || s.texto;
+        const suave = document.createElement('span');
+        suave.className = 'block text-xs text-salvia';
+        suave.textContent = s.secundario || '';
+        li.append(fuerte, suave);
+        // mousedown y no click: el blur del input llega antes que el click y cerraría
+        // la lista sin llegar a seleccionar.
+        li.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+          elegir(i);
+        });
+        lista.appendChild(li);
+      });
+      lista.classList.remove('hidden');
+      input.setAttribute('aria-expanded', 'true');
+      pintarActivo();
+    }
+
+    const country = paises(input.dataset.country);
+
+    async function buscar(q: string) {
+      const mio = ++pedido;
+      const url =
+        '/api/places-autocomplete?q=' +
+        encodeURIComponent(q) +
+        (country ? '&country=' + encodeURIComponent(country) : '');
+      try {
+        const r = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (!r.ok) return;
+        const datos = await r.json();
+        // Descarta respuestas viejas que llegan tarde y pisarían a una más nueva.
+        if (mio !== pedido) return;
+        sugerencias = datos.sugerencias || [];
+        render();
+      } catch (e) {
+        /* sin sugerencias: el input sigue siendo texto común */
+      }
+    }
+
+    input.addEventListener('input', () => {
+      limpiarOcultos();
+      const q = input.value.trim();
+      clearTimeout(temporizador);
+      if (q.length < MIN_CARACTERES) {
+        sugerencias = [];
+        return cerrar();
+      }
+      temporizador = setTimeout(() => buscar(q), DEBOUNCE_MS);
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (lista.classList.contains('hidden')) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activo = Math.min(activo + 1, sugerencias.length - 1);
+        pintarActivo();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activo = Math.max(activo - 1, 0);
+        pintarActivo();
+      } else if (e.key === 'Enter') {
+        if (activo >= 0) {
+          e.preventDefault();
+          elegir(activo);
+        }
+      } else if (e.key === 'Escape') {
+        cerrar();
+      }
+    });
+
+    input.addEventListener('blur', () => setTimeout(cerrar, 120));
+    if (hint) hint.classList.remove('hidden');
+  }
+
+  document
+    .querySelectorAll<HTMLInputElement>('input[data-places-autocomplete]')
+    .forEach(montar);
+</script>
