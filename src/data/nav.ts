@@ -25,7 +25,7 @@ export const productGroups: FeatureGroup[] = [
   {
     label: 'Agenda',
     items: [
-      { name: 'Agenda automática', href: '/agenda', desc: 'Reserva sola, sin dobles turnos.' },
+      { name: 'Agenda automática', href: '/agenda', desc: 'Agenda sola, sin dobles reservas.' },
       { name: 'Recordatorios y confirmación', href: '/recordatorios', desc: 'Menos ausencias, sin llamar.' },
       { name: 'Lista de espera y reactivación', href: '/reactivacion', desc: 'Llena huecos y trae de vuelta.' },
     ],

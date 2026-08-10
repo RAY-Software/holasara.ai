@@ -19,20 +19,20 @@ const orders = [
   '“Bloquea mi agenda el viernes a la tarde.”',
   '“Pasa a Juan Pérez al jueves 10.”',
   '“Reagenda a todos los del martes y avísales.”',
-  '“¿Cuántos turnos tengo mañana?”',
+  '“¿Cuántas citas tengo mañana?”',
 ];
 
 const faqs = [
   { q: '¿Cualquiera puede darle órdenes a Sara?', a: 'No. El modo operador se habilita solo para los números de teléfono que autorices (el tuyo, el de recepción). Los pacientes nunca acceden a estas acciones.' },
   { q: '¿Necesito instalar una app?', a: 'No. Todo pasa por WhatsApp, el mismo que ya usas todo el día.' },
-  { q: '¿Y si reagendo veinte turnos de golpe?', a: 'Sara los mueve y le escribe a cada paciente por separado con su nueva hora. Es justo el caso donde más tiempo te ahorra.' },
+  { q: '¿Y si reagendo veinte citas de golpe?', a: 'Sara las mueve y le escribe a cada paciente por separado con su nueva hora. Es justo el caso donde más tiempo te ahorra.' },
   { q: '¿Puedo ver qué hizo?', a: 'Cada cambio queda reflejado en tu Google Calendar y en el panel, así siempre tienes el registro.' },
 ];
 ---
 
 <Layout
   title="Modo operador · Sara"
-  description="Tu equipo le pide cosas a Sara por WhatsApp: bloquear la agenda, mover un turno o reagendar el día entero. Sara ejecuta en tu calendario y le avisa a cada paciente."
+  description="Tu equipo le pide cosas a Sara por WhatsApp: bloquear la agenda, mover una cita o reagendar el día entero. Sara ejecuta en tu calendario y le avisa a cada paciente."
 >
   <Header />
   <main>
@@ -83,7 +83,7 @@ const faqs = [
             name="Sara"
             bubbles={[
               { who: 'in', text: 'Reagenda a todos los del martes al jueves, mismo horario, y avísales', t: '08:15' },
-              { who: 'out', text: '¡Hecho! ✅ Moví los 8 turnos del martes al jueves a la misma hora. Ya le escribí a cada paciente con su nueva hora para que confirme.', t: '08:15' },
+              { who: 'out', text: '¡Hecho! ✅ Moví las 8 citas del martes al jueves a la misma hora. Ya le escribí a cada paciente con su nueva hora para que confirme.', t: '08:15' },
               { who: 'in', text: 'Perfecto, gracias', t: '08:16' },
               { who: 'out', text: 'De nada 🙌 Te aviso a medida que vayan confirmando. El martes queda libre en tu calendario.', t: '08:16' },
             ]}
@@ -121,7 +121,7 @@ const faqs = [
         <FeatureRow
           eyebrow="Le dices, y pasa"
           title="Órdenes que resuelve <em class='text-pine-dark'>sola.</em>"
-          body="Bloquear una tarde, mover un paciente, reagendar el día o consultar cuántos turnos tienes mañana. Le escribes como a tu recepción, y lo hace."
+          body="Bloquear una tarde, mover un paciente, reagendar el día o consultar cuántas citas tienes mañana. Le escribes como a tu recepción, y lo hace."
         >
           <div class="w-full">
             <div class="flex flex-col gap-3">
@@ -159,7 +159,7 @@ const faqs = [
         <FeatureRow
           eyebrow="Con control"
           title="Solo tu equipo <em class='text-pine-dark'>puede pedírselo.</em>"
-          body="El modo operador se activa por número autorizado. Un paciente puede agendar y consultar, pero nunca bloquear tu agenda ni mover turnos de otros. Ese poder es solo tuyo y de tu equipo."
+          body="El modo operador se activa por número autorizado. Un paciente puede agendar y consultar, pero nunca bloquear tu agenda ni mover citas de otros. Ese poder es solo tuyo y de tu equipo."
           points={[
             'Se habilita por número de teléfono',
             'Un paciente no accede a estas acciones',

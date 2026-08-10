@@ -10,7 +10,7 @@ Idioma: español (LATAM). Todas las páginas están en https://holasara.ai/
 ## A quién sirve
 
 Clínicas de estética, medicina estética, depilación láser, dermatología, odontología
-y consultorios de salud que reciben consultas por WhatsApp e Instagram y agendan turnos.
+y consultorios de salud que reciben consultas por WhatsApp e Instagram y agendan citas.
 El decisor típico es el dueño/a, el director/a médico o la gerencia de la clínica.
 
 ## El problema que resuelve
@@ -36,7 +36,7 @@ El decisor típico es el dueño/a, el director/a médico o la gerencia de la cl�
 ## Precio
 
 - Es una **suscripción mensual fija**, un solo plan que incluye todo lo que hace Sara.
-- **No hay comisión por turno** ni por transacción.
+- **No hay comisión por cita** ni por transacción.
 - El precio **se ajusta al país y la moneda** de la clínica.
 - En México los planes **empiezan en US$400 por sucursal / mes**. Es un piso, un "desde":
   el plan se arma por sucursal, así que el número final depende del tamaño de la clínica.
@@ -90,7 +90,7 @@ Sara se presenta con naturalidad y responde con el tono de la clínica. El pacie
 siente que lo atiende alguien que sabe, no un bot con botones.
 
 **¿Reemplaza a la recepción?**
-No. La libera de lo repetitivo —responder lo mismo, confirmar turnos, perseguir pagos—
+No. La libera de lo repetitivo —responder lo mismo, confirmar citas, perseguir pagos—
 para que se dedique al paciente que está en la clínica.
 
 **¿Usa el número de WhatsApp actual?**
@@ -116,7 +116,7 @@ No. Agenda solo sobre disponibilidad real y bloquea al instante.
 **¿Sirve con varios profesionales o sucursales?**
 Sí. Se configura por agenda y por sucursal.
 
-**¿El equipo puede seguir cargando turnos a mano?**
+**¿El equipo puede seguir cargando citas a mano?**
 Sí. Sara convive con el equipo; lo que carga recepción también queda reflejado.
 
 **¿Cómo cobra Sara?**
@@ -133,7 +133,7 @@ desde el primer mes.
 Se puede seguir aceptando el pago presencial. El cobro online asegura la cita y adelanta
 la caja, no reemplaza la forma de trabajar.
 
-**¿Cobran comisión por turno?**
+**¿Cobran comisión por cita?**
 No. Suscripción mensual fija, sin comisión por transacción.
 
 **¿Hay contrato de permanencia?**

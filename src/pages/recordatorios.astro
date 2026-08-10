@@ -18,7 +18,7 @@ const steps = [
 const faqs = [
   { q: '¿Cuándo manda el recordatorio?', a: 'En la ventana que mejor funciona para tu clínica (por ejemplo, el día anterior). Lo ajustamos en la implementación.' },
   { q: '¿Cómo confirma el paciente?', a: 'Directo en el chat: responde SÍ para confirmar. Sin apps, sin links raros, sin llamadas. En el panel ves quién confirmó de un vistazo.' },
-  { q: '¿Qué pasa si el paciente no confirma?', a: 'Sara puede reintentar con criterio y, si el turno igual se libera, ofrecerlo a alguien de la lista de espera para no perder la hora.' },
+  { q: '¿Qué pasa si el paciente no confirma?', a: 'Sara puede reintentar con criterio y, si la cita igual se libera, ofrecerla a alguien de la lista de espera para no perder la hora.' },
   { q: '¿Sirve para cualquier tratamiento?', a: 'Sí. Funciona igual para una consulta de valoración que para un control post-tratamiento.' },
   { q: '¿Reemplaza a mi recepción?', a: 'La libera de la tarea más repetitiva. Tu equipo deja de perseguir confirmaciones y se dedica al paciente que está en la clínica.' },
 ];
@@ -75,7 +75,7 @@ const faqs = [
           <ConversationDemo
             channel="whatsapp"
             bubbles={[
-              { who: 'out', text: 'Hola, Paula! Te recuerdo tu turno de mañana jueves a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+              { who: 'out', text: 'Hola, Paula! Te recuerdo tu cita de mañana jueves a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
               { who: 'in', text: 'Sí! ahí voy', t: '19:12' },
               { who: 'out', text: '¡Genial! Queda confirmada tu asistencia para mañana a las 14:00. ¡Te esperamos!', t: '19:12' },
             ]}
@@ -123,7 +123,7 @@ const faqs = [
           <ConversationDemo
             channel="whatsapp"
             bubbles={[
-              { who: 'out', text: 'Hola, Martín! Te recuerdo tu turno de mañana a las 11:00. ¿Confirmas que vienes?', t: '18:00' },
+              { who: 'out', text: 'Hola, Martín! Te recuerdo tu cita de mañana a las 11:00. ¿Confirmas que vienes?', t: '18:00' },
               { who: 'in', text: 'Uy, mañana no voy a poder 😞', t: '18:20' },
               { who: 'out', text: '¡Sin problema! ¿Te reprogramo? Tengo viernes 10:00 o lunes 16:00. Y así libero tu hora de mañana para alguien que la está esperando.', t: '18:20' },
             ]}
@@ -132,9 +132,9 @@ const faqs = [
 
         <FeatureRow
           flip
-          eyebrow="Después del turno"
+          eyebrow="Después de la cita"
           title="Y cierra el círculo <em class='text-pine-dark'>con la reseña.</em>"
-          body="El mismo canal que confirma el turno pide la reseña cuando el paciente sale contento. Menos ausencias hoy, mejor reputación mañana."
+          body="El mismo canal que confirma la cita pide la reseña cuando el paciente sale contento. Menos ausencias hoy, mejor reputación mañana."
         >
           <ConversationDemo
             channel="whatsapp"

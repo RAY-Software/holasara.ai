@@ -26,22 +26,22 @@ const items = [
 const faqs = [
   { q: '¿Se integra con el calendario que ya uso?', a: 'Sí. Sara lee y escribe en tu Google Calendar. No migras nada ni cambias de sistema, y tu equipo lo sigue viendo como siempre.' },
   { q: '¿Puede reservar dos pacientes en el mismo horario?', a: 'No. Agenda solo sobre la disponibilidad real y bloquea al instante, así no hay dobles reservas.' },
-  { q: '¿Mi equipo puede seguir cargando turnos a mano?', a: 'Claro. Sara convive con tu equipo: lo que cargue recepción también queda reflejado y cuidado.' },
-  { q: '¿Sirve si tengo varios profesionales o sucursales?', a: 'Sí. Se configura por agenda y por sucursal, para que cada turno caiga donde corresponde.' },
+  { q: '¿Mi equipo puede seguir cargando citas a mano?', a: 'Claro. Sara convive con tu equipo: lo que cargue recepción también queda reflejado y cuidado.' },
+  { q: '¿Sirve si tengo varios profesionales o sucursales?', a: 'Sí. Se configura por agenda y por sucursal, para que cada cita caiga donde corresponde.' },
   { q: '¿Toca mi historia clínica?', a: 'No. No se almacena historia clínica ni información médica. Sara trabaja sobre el calendario, eso queda donde está hoy.' },
 ];
 ---
 
 <Layout
   title="Agenda automática · La agenda que se llena sola"
-  description="Sara agenda sobre tu Google Calendar, sin dobles turnos. Cobra el anticipo, recuerda, confirma, reofrece los huecos a la lista de espera y reactiva a los que no vuelven."
+  description="Sara agenda sobre tu Google Calendar, sin dobles reservas. Cobra el anticipo, recuerda, confirma, reofrece los huecos a la lista de espera y reactiva a los que no vuelven."
 >
   <Header />
   <main>
     <PageHero
       eyebrow="Agenda · Agenda automática"
       title="La agenda que se llena <em class='text-pine-dark'>sola.</em>"
-      lead="Sara no solo agenda: reserva sobre tu calendario real sin dobles turnos, cobra por adelantado, recuerda, confirma, reofrece los huecos que se liberan y trae de vuelta a los que dejaron de venir."
+      lead="Sara no solo agenda: reserva sobre tu calendario real sin dobles reservas, cobra por adelantado, recuerda, confirma, reofrece los huecos que se liberan y trae de vuelta a los que dejaron de venir."
       image="/img/hero/agenda-hero.jpg"
       imageAlt="Escritorio sereno de clínica con una agenda abierta, café y una ramita de salvia."
       imageW={1200}
@@ -56,7 +56,7 @@ const faqs = [
           <p class="mt-1 text-salvia">Lee y escribe en el que ya usas. No migras nada.</p>
         </div>
         <div class="py-2 sm:border-l sm:border-line sm:pl-8">
-          <p class="font-serif text-lg font-black text-ink">Sin dobles turnos</p>
+          <p class="font-serif text-lg font-black text-ink">Sin dobles reservas</p>
           <p class="mt-1 text-salvia">Agenda solo sobre disponibilidad real y bloquea al instante.</p>
         </div>
         <div class="py-2 sm:border-l sm:border-line sm:pl-8">
@@ -76,14 +76,14 @@ const faqs = [
           </h2>
           <p class="mt-5 text-lg text-salvia">
             Sara no promete horarios que no existen: mira tu disponibilidad real, ofrece lo que hay y bloquea en
-            el momento. Sin dobles turnos, sin idas y vueltas para&nbsp;coordinar.
+            el momento. Sin dobles reservas, sin idas y vueltas para&nbsp;coordinar.
           </p>
         </div>
         <div class="flex justify-center md:justify-end">
           <ConversationDemo
             channel="whatsapp"
             bubbles={[
-              { who: 'in', text: 'Hola, quiero sacar un turno para valoración', t: '09:20' },
+              { who: 'in', text: 'Hola, quiero agendar una cita para valoración', t: '09:20' },
               { who: 'out', text: '¡Hola! Con gusto. Para esta semana tengo martes 10:30, miércoles 16:00 o jueves 09:00. ¿Cuál te queda mejor?', t: '09:20' },
               { who: 'in', text: 'Miércoles 16:00', t: '09:21' },
               { who: 'out', text: '¡Listo! Miércoles 16:00 reservado ✅ Lo dejé en la agenda y te llega el recordatorio un día antes.', t: '09:21' },
@@ -144,7 +144,7 @@ const faqs = [
           flip
           eyebrow="Cuida cada cita"
           title="Cobra, recuerda <em class='text-pine-dark'>y confirma.</em>"
-          body="Cada turno que entra queda protegido: Sara puede pedir el anticipo al reservar, recordar el día antes y pedir confirmación, para que la agenda llegue llena al día."
+          body="Cada cita que entra queda protegida: Sara puede pedir el anticipo al reservar, recordar el día antes y pedir confirmación, para que la agenda llegue llena al día."
           points={[
             'Anticipo al reservar, el mejor filtro de ausencias',
             'Recordatorio y confirmación automáticos',
@@ -154,7 +154,7 @@ const faqs = [
           <ConversationDemo
             channel="whatsapp"
             bubbles={[
-              { who: 'out', text: 'Hola, Paula! Te recuerdo tu turno de mañana a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+              { who: 'out', text: 'Hola, Paula! Te recuerdo tu cita de mañana a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
               { who: 'in', text: 'Sí! ahí voy', t: '19:12' },
               { who: 'out', text: '¡Genial! Queda confirmada tu asistencia. ¡Te esperamos!', t: '19:12' },
             ]}
@@ -174,7 +174,7 @@ const faqs = [
           <ConversationDemo
             channel="whatsapp"
             bubbles={[
-              { who: 'out', text: 'Hola, Juli! Quedó pendiente tu turno y no quería que se te pase. Tengo miércoles 19:30 o 20:00. ¿Te viene bien alguno?', t: '10:03' },
+              { who: 'out', text: 'Hola, Juli! Quedó pendiente tu cita y no quería que se te pase. Tengo miércoles 19:30 o 20:00. ¿Te viene bien alguno?', t: '10:03' },
               { who: 'in', text: 'El de las 19:30 me sirve', t: '18:22' },
               { who: 'out', text: '¡Listo! Miércoles 19:30 reservado ✅', t: '18:22' },
             ]}

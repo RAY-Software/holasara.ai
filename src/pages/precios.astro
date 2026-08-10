@@ -20,7 +20,7 @@ const includes = [
 ];
 
 const faqs = [
-  { q: '¿Cobran comisión por turno?', a: 'No. Es una suscripción mensual fija. Los turnos que agende Sara no te suman una comisión por transacción.' },
+  { q: '¿Cobran comisión por cita?', a: 'No. Es una suscripción mensual fija. Las citas que agende Sara no te suman una comisión por transacción.' },
   { q: '¿El precio es el mismo en todos los países?', a: `Se ajusta al país. En México los planes arrancan en ${PRICE_MX.display} ${PRICE_UNIT}, y es un piso: el número final depende de cuántas sucursales tengas. En la demo te pasamos el exacto para tu caso.` },
   { q: '¿Qué pasa si tengo varias sucursales?', a: 'El plan se arma por sucursal. Si manejas varias sedes, decínoslo en la demo y te pasamos el número cerrado para todas.' },
   { q: '¿Hay contrato de permanencia?', a: 'Trabajamos con un modelo simple y sin letra chica. Los detalles los vemos en la demo, con todo claro antes de empezar.' },
@@ -30,7 +30,7 @@ const faqs = [
 
 <Layout
   title="Precios · Sara"
-  description="Un plan que incluye todo lo que hace Sara, con precio por país y sin comisión por turno. Pide tu precio en una demo."
+  description="Un plan que incluye todo lo que hace Sara, con precio por país y sin comisión por cita. Pide tu precio en una demo."
 >
   <Header />
   <main>
@@ -43,7 +43,7 @@ const faqs = [
           Un plan. Todo lo que hace&nbsp;Sara.
         </h1>
         <p class="mx-auto mt-6 max-w-xl text-lg text-salvia">
-          Sin planes confusos ni comisión por turno. Una suscripción mensual que incluye a Sara
+          Sin planes confusos ni comisión por cita. Una suscripción mensual que incluye a Sara
           completa, desde <strong class="font-semibold text-ink">{PRICE_MX.display} {PRICE_UNIT}</strong>.
         </p>
       </div>
@@ -80,7 +80,7 @@ const faqs = [
           </p>
           <p class="mt-2 text-sm font-semibold text-salvia">{PRICE_UNIT}</p>
           <p class="mt-4 text-salvia">
-            Todo lo que hace Sara incluido, sin comisión por turno. El plan final depende de tu país
+            Todo lo que hace Sara incluido, sin comisión por cita. El plan final depende de tu país
             y de cuántas sucursales tengas.
           </p>
           <a
