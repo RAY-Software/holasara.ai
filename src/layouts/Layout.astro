@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import AgentToggle from '../components/AgentToggle.astro';
 import { GA4_ID, META_PIXEL_ID, GOOGLE_ADS_ID, saraTrack } from '../lib/tracking';
 import { SRC_TAG } from '../lib/whatsapp';
 
@@ -119,6 +120,7 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
   <body class="min-h-screen antialiased">
     <slot />
     <WhatsAppFloat />
+    <AgentToggle active="human" />
 
     <script>
       // Scroll reveal

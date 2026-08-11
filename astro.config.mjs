@@ -7,7 +7,8 @@ import sitemap from '@astrojs/sitemap';
 // Estático. Español (LATAM) como idioma principal; EN se puede sumar bajo /en más adelante.
 export default defineConfig({
   site: 'https://holasara.ai',
-  integrations: [sitemap()],
+  // La /agent es la vista para LLMs (noindex) → fuera del sitemap.
+  integrations: [sitemap({ filter: (page) => !page.includes('/agent') })],
   vite: {
     plugins: [tailwindcss()],
   },

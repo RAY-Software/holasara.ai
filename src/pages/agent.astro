@@ -1,0 +1,137 @@
+---
+import AgentToggle from '../components/AgentToggle.astro';
+import { buildAgentMarkdown, llmsBodyOnly } from '../lib/agentView';
+// El cuerpo del /llms.txt ya publicado, embebido en build (sin re-fetch).
+import llms from '../../public/llms.txt?raw';
+
+// Vista de agente del sitio (konghq.com/?mode=agent). El rewrite de vercel.json manda
+// cualquier URL con ?mode=agent acá, preservando el path en el browser. Es una página
+// autónoma (sin el chrome de marketing): Markdown en crudo, para que lo lea un LLM.
+const md = buildAgentMarkdown(llmsBodyOnly(llms));
+
+const esc = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// Resalta los links `[label](href)` como anclas, dejando el resto como texto plano
+// (igual que Kong: se ve la sintaxis Markdown literal y los links son clickeables).
+const renderLine = (line: string): string => {
+  const re = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let out = '';
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(line))) {
+    out += esc(line.slice(last, m.index));
+    const href = m[2];
+    const external = /^https?:/i.test(href);
+    const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : '';
+    out += `<a class="agent-link" href="${esc(href)}"${attrs}>${esc(`[${m[1]}](${href})`)}</a>`;
+    last = re.lastIndex;
+  }
+  out += esc(line.slice(last));
+  return out || '&nbsp;';
+};
+
+const bodyHtml = md.split('\n').map(renderLine).join('\n');
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, follow" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Sara · Vista de agente</title>
+    <meta name="description" content="Versión Markdown de holasara.ai para asistentes de IA." />
+  </head>
+  <body class="agent-body">
+    <AgentToggle active="agent" />
+    <main class="agent-main">
+      <div class="agent-topbar">
+        <span class="agent-eyebrow">Vista de agente · Markdown</span>
+        <button id="agent-copy" class="agent-copy" type="button" aria-label="Copiar Markdown">Copiar</button>
+      </div>
+      <pre class="agent-pre" set:html={bodyHtml}></pre>
+    </main>
+    <pre id="agent-raw" hidden>{md}</pre>
+
+    <style is:global>
+      .agent-body {
+        margin: 0;
+        min-height: 100vh;
+        background: #0b1410;
+        color: #c7d0c9;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      .agent-main {
+        max-width: 60rem;
+        margin: 0 auto;
+        padding: 3.5rem 1.5rem 4rem 4rem;
+      }
+      .agent-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+      }
+      .agent-eyebrow {
+        font-size: 0.72rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #5f6f64;
+      }
+      .agent-copy {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.4rem 0.7rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: #c7d0c9;
+        background: transparent;
+        border: 1px solid #2a3a31;
+        border-radius: 0.4rem;
+        cursor: pointer;
+        transition: border-color 0.15s ease, color 0.15s ease;
+      }
+      .agent-copy:hover { border-color: #45564b; color: #f3f6f4; }
+      .agent-pre {
+        margin: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        font-size: 0.94rem;
+        line-height: 1.75;
+        color: #3fe08a;
+      }
+      .agent-link {
+        color: #5be3a0;
+        text-decoration: none;
+        border-radius: 0.2rem;
+        padding: 0 0.1rem;
+        background: rgba(63, 224, 138, 0.12);
+      }
+      .agent-link:hover { text-decoration: underline; }
+      @media (min-width: 640px) {
+        .agent-main { padding-left: 5rem; padding-right: 2.5rem; }
+      }
+    </style>
+
+    <script is:inline>
+      (function () {
+        var btn = document.getElementById('agent-copy');
+        var raw = document.getElementById('agent-raw');
+        if (!btn || !raw) return;
+        btn.addEventListener('click', function () {
+          navigator.clipboard.writeText(raw.textContent || '').then(
+            function () {
+              var t = btn.textContent;
+              btn.textContent = 'Copiado';
+              setTimeout(function () { btn.textContent = t; }, 1500);
+            },
+            function () {}
+          );
+        });
+      })();
+    </script>
+  </body>
+</html>
