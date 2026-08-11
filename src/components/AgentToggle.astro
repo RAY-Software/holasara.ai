@@ -1,0 +1,96 @@
+---
+// Switch flotante Humano / Agente en el borde izquierdo (patrón de konghq.com).
+// Presente en las dos vistas para que una persona o un LLM descubran la alternativa.
+// Los hrefs se corrigen en runtime desde location (el rewrite de ?mode=agent preserva
+// el path), así funciona igual en cualquier página sin lógica server-side.
+interface Props {
+  active?: 'human' | 'agent';
+}
+const { active = 'human' } = Astro.props;
+const path = Astro.url.pathname === '/agent' ? '/' : Astro.url.pathname;
+const humanHref = path;
+const agentHref = `${path}?mode=agent`;
+---
+
+<nav class="agent-toggle" aria-label="Cambiar entre vista humana y de agente">
+  <a
+    class="agent-toggle__opt"
+    data-role="human"
+    href={humanHref}
+    rel="nofollow"
+    aria-current={active === 'human' ? 'true' : undefined}
+  >
+    <span class="agent-toggle__dot" aria-hidden="true"></span>
+    <span class="agent-toggle__label">Humano</span>
+  </a>
+  <a
+    class="agent-toggle__opt"
+    data-role="agent"
+    href={agentHref}
+    rel="nofollow"
+    aria-current={active === 'agent' ? 'true' : undefined}
+  >
+    <span class="agent-toggle__dot" aria-hidden="true"></span>
+    <span class="agent-toggle__label">Agente</span>
+  </a>
+</nav>
+
+<style>
+  .agent-toggle {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    z-index: 50;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.9rem 0.5rem 0.9rem 0.4rem;
+    border: 1px solid #223029;
+    border-left: 0;
+    border-radius: 0 0.75rem 0.75rem 0;
+    background: rgba(11, 20, 16, 0.82);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+  .agent-toggle__opt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    text-decoration: none;
+  }
+  .agent-toggle__dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 9999px;
+    background: #4b5a51;
+    transition: background-color 0.15s ease;
+  }
+  .agent-toggle__label {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    color: #7c8a80;
+    transition: color 0.15s ease;
+  }
+  .agent-toggle__opt:hover .agent-toggle__dot { background: #9aa89e; }
+  .agent-toggle__opt:hover .agent-toggle__label { color: #d6ddd7; }
+  .agent-toggle__opt[aria-current='true'] .agent-toggle__dot { background: #3fe08a; }
+  .agent-toggle__opt[aria-current='true'] .agent-toggle__label { color: #f3f6f4; }
+</style>
+
+<script is:inline>
+  // El rewrite de ?mode=agent conserva el path en la URL → recalculamos los destinos
+  // desde location para que "Humano" vuelva a la página real y "Agente" la abra en modo agente.
+  (function () {
+    var path = location.pathname === '/agent' ? '/' : location.pathname;
+    var h = document.querySelector('.agent-toggle__opt[data-role="human"]');
+    var a = document.querySelector('.agent-toggle__opt[data-role="agent"]');
+    if (h) h.setAttribute('href', path);
+    if (a) a.setAttribute('href', path + '?mode=agent');
+  })();
+</script>
