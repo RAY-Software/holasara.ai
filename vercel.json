@@ -1,12 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [
-    {
-      "source": "/:path*",
-      "has": [{ "type": "query", "key": "mode", "value": "agent" }],
-      "destination": "/agent"
-    }
-  ],
   "headers": [
     {
       "source": "/llms.txt",
