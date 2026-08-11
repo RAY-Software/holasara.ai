@@ -18,26 +18,39 @@ const agentHref = `${path}?mode=agent`;
     data-role="human"
     href={humanHref}
     rel="nofollow"
+    title="Vista humana"
+    aria-label="Vista humana"
     aria-current={active === 'human' ? 'true' : undefined}
   >
-    <span class="agent-toggle__dot" aria-hidden="true"></span>
-    <span class="agent-toggle__label">Humano</span>
+    <svg class="agent-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="8" r="3.6" />
+      <path d="M5.5 20c0-3.6 3-5.6 6.5-5.6s6.5 2 6.5 5.6" />
+    </svg>
   </a>
   <a
     class="agent-toggle__opt"
     data-role="agent"
     href={agentHref}
     rel="nofollow"
+    title="Vista de agente (Markdown para IA)"
+    aria-label="Vista de agente"
     aria-current={active === 'agent' ? 'true' : undefined}
   >
-    <span class="agent-toggle__dot" aria-hidden="true"></span>
-    <span class="agent-toggle__label">Agente</span>
+    <svg class="agent-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4.5" y="8.5" width="15" height="10.5" rx="2.5" />
+      <path d="M12 8.5v-3" />
+      <circle cx="12" cy="4.4" r="1.1" />
+      <path d="M9.2 13.2h.01M14.8 13.2h.01" />
+      <path d="M2.6 13v3M21.4 13v3" />
+    </svg>
   </a>
 </nav>
 
 <style>
-  /* Rail con etiquetas siempre visibles. Vive en el gutter izquierdo que reserva
-     global.css (.mx-auto.px-5) → nunca pisa el contenido. */
+  /* Rail de iconos, discreto. Vive en el gutter izquierdo que reserva global.css
+     (.mx-auto.px-5) → nunca pisa el contenido. Sin texto: la etiqueta va en title
+     (tooltip) + aria-label (lectores de pantalla). Semi-transparente en reposo
+     para no competir con el contenido; se afirma al hover. */
   .agent-toggle {
     position: fixed;
     left: 0;
@@ -47,46 +60,41 @@ const agentHref = `${path}?mode=agent`;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.9rem 0.5rem 0.9rem 0.4rem;
-    border: 1px solid #223029;
+    gap: 0.15rem;
+    padding: 0.3rem 0.25rem;
+    border: 1px solid rgba(34, 48, 41, 0.6);
     border-left: 0;
-    border-radius: 0 0.75rem 0.75rem 0;
-    background: rgba(11, 20, 16, 0.82);
+    border-radius: 0 0.6rem 0.6rem 0;
+    background: rgba(11, 20, 16, 0.5);
     backdrop-filter: blur(6px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    opacity: 0.7;
+    transition: opacity 0.18s ease, background-color 0.18s ease;
+  }
+  .agent-toggle:hover,
+  .agent-toggle:focus-within {
+    opacity: 1;
+    background: rgba(11, 20, 16, 0.85);
   }
   .agent-toggle__opt {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.25rem 0;
+    justify-content: center;
+    padding: 0.32rem;
+    border-radius: 0.45rem;
+    color: #8a978d;
     text-decoration: none;
+    transition: color 0.15s ease, background-color 0.15s ease;
   }
-  .agent-toggle__dot {
-    width: 0.4rem;
-    height: 0.4rem;
-    border-radius: 9999px;
-    background: #566459;
-    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  .agent-toggle__icon {
+    width: 1.05rem;
+    height: 1.05rem;
+    display: block;
   }
-  .agent-toggle__label {
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.16em;
-    color: #7c8a80;
-    transition: color 0.15s ease;
-  }
-  .agent-toggle__opt:hover .agent-toggle__dot { background: #9aa89e; }
-  .agent-toggle__opt:hover .agent-toggle__label { color: #d6ddd7; }
-  .agent-toggle__opt[aria-current='true'] .agent-toggle__dot {
+  .agent-toggle__opt:hover { color: #e6ebe7; }
+  .agent-toggle__opt[aria-current='true'] {
+    color: #0b1410;
     background: #3fe08a;
-    box-shadow: 0 0 0 3px rgba(63, 224, 138, 0.18);
   }
-  .agent-toggle__opt[aria-current='true'] .agent-toggle__label { color: #f3f6f4; }
 </style>
 
 <script is:inline>
