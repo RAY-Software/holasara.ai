@@ -39,6 +39,18 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Gutter para el rail Agente/Humano (patrón konghq): reserva una columna a la
+   izquierda insetando el CONTENIDO de los containers (`.mx-auto.px-5`) sin tocar
+   los fondos full-bleed de las secciones — el rail flota sobre el fondo, nunca
+   sobre el texto. La especificidad (0,2,0) le gana a `.px-5`, así que sobrescribe
+   solo el padding-left (el derecho queda en 1.25rem). Solo hace falta en viewports
+   angostos: en desktop ancho el margen auto del max-w ya deja el rail libre. */
+@media (max-width: 1279px) {
+  .mx-auto.px-5 {
+    padding-left: 3.5rem;
+  }
+}
+
 /* Los <em> dentro de titulares van rectos (énfasis solo por color, no itálica). */
 h1 em,
 h2 em,
