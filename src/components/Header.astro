@@ -1,6 +1,5 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { whatsappLink } from '../lib/whatsapp';
 import { productGroups, topLinks } from '../data/nav';
 ---
 
@@ -85,14 +84,13 @@ import { productGroups, topLinks } from '../data/nav';
 
     <!-- ─── CTAs desktop ─── -->
     <div class="hidden items-center gap-2.5 lg:flex">
+      {/* CTA al grader — `product=servicios` activa la variante Sara
+          (cookie + CTAs de demo a holasara.ai/demo). NO quitar el param. */}
       <a
-        href={whatsappLink()}
-        target="_blank"
-        rel="noopener"
+        href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
         class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
       >
-        <span class="dot h-2 w-2"></span>
-        Habla con Sara
+        Escanear mi negocio
       </a>
       <a
         href="/demo"
@@ -157,12 +155,10 @@ import { productGroups, topLinks } from '../data/nav';
           Pedir demo
         </a>
         <a
-          href={whatsappLink()}
-          target="_blank"
-          rel="noopener"
+          href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
           class="inline-flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-base font-semibold text-ink"
         >
-          <span class="dot h-2 w-2"></span> Habla con Sara
+          Escanear mi negocio
         </a>
       </div>
     </div>
