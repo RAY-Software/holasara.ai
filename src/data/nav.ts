@@ -52,7 +52,7 @@ export const topLinks: FeatureLink[] = [
   { name: 'Implementación', href: '/implementacion', desc: 'Conectas tu calendario y listo.' },
   { name: 'Precios', href: '/precios', desc: 'Planes por país.' },
   {
-    name: 'Escáner de Google',
+    name: 'Escanear mi negocio',
     // `product=servicios` le dice al grader que este visitante viene de Sara:
     // persiste cookie y todos sus CTAs de demo apuntan a holasara.ai/demo
     // en vez del sitio de Food. NO quitar el parámetro.
