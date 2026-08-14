@@ -51,12 +51,4 @@ export const topLinks: FeatureLink[] = [
   { name: 'Casos', href: '/caso', desc: 'Clínicas reales con Sara.' },
   { name: 'Implementación', href: '/implementacion', desc: 'Conectas tu calendario y listo.' },
   { name: 'Precios', href: '/precios', desc: 'Planes por país.' },
-  {
-    name: 'Escanear mi negocio',
-    // `product=servicios` le dice al grader que este visitante viene de Sara:
-    // persiste cookie y todos sus CTAs de demo apuntan a holasara.ai/demo
-    // en vez del sitio de Food. NO quitar el parámetro.
-    href: 'https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara',
-    desc: 'Mira cómo aparece tu negocio en Google, gratis.',
-  },
 ];
