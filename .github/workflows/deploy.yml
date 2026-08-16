@@ -25,6 +25,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      # Guarda pre-deploy: un <script is:inline> con SyntaxError se sirve tal cual y rompe la
+      # página entera (fue el bug del funnel del free trial del 10-ago). Abortá antes de buildear.
+      - name: Guard — los <script is:inline> parsean
+        run: node scripts/check-inline-scripts.mjs
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
       - name: Pull Vercel env (production)

@@ -1,0 +1,22 @@
+name: Synthetic check · funnel del Free Trial
+
+# Sonda de producción del funnel self-serve (holasara.ai/prueba → prueba.rayapp.ai).
+# El bug del 10-ago estuvo caído ~5 días sin que nadie lo viera porque el funnel no tenía
+# monitoreo. Esto lo caza en ≤6h: si algo se rompe, el job falla y GitHub notifica.
+# No crea datos (sonda no-destructiva). Se puede correr a mano con "Run workflow".
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # cada 6 horas
+  workflow_dispatch: {}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Sonda del funnel en producción
+        run: node scripts/synthetic-check.mjs
