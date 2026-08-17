@@ -51,6 +51,7 @@ export const productGroups: FeatureGroup[] = [
 export const industryLinks: FeatureLink[] = [
   { name: 'Depilación láser', href: '/negocios/depilacion-laser', desc: 'La agenda llena entre sesiones, sin ausencias.' },
   { name: 'Medicina estética', href: '/negocios/medicina-estetica', desc: 'Consultas y tratamientos, cobrados por adelantado.' },
+  { name: 'Implante capilar', href: '/negocios/implante-capilar', desc: 'Diagnósticos agendados y fechas aseguradas con anticipo.' },
   { name: 'Odontología', href: '/negocios/odontologia', desc: 'Turnos que se confirman solos, sin recepción saturada.' },
   { name: 'Estética y spa', href: '/negocios/estetica-spa', desc: 'Reservas 24/7 por WhatsApp e Instagram.' },
 ];
