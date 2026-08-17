@@ -4,15 +4,15 @@
  */
 
 /**
- * CTA "Escanear mi negocio" del header, que sale a grader.rayapp.ai.
+ * CTA "Escanear mi negocio" que sale a grader.rayapp.ai (header + hero).
  *
- * Apagado mientras corren las campañas de Google Ads (desde 2026-08-17). El grader
- * es otro dominio y solo tiene GA4 (`G-DK6TVZ0YVE`), no el tag de Ads: una conversión
- * allá es invisible para el bidding de la cuenta 139-339-4662. Con el CTA visible, el
- * botón más prominente del header se lleva tráfico pago a un embudo que no medimos, y
- * Smart Bidding aprende con datos incompletos.
+ * Prendido 2026-08-17 por decisión de Franco. OJO con el contexto que motivó el
+ * apagado original: el grader es otro dominio y solo tiene GA4 (`G-DK6TVZ0YVE`),
+ * no el tag de Google Ads — una conversión allá es invisible para el bidding de la
+ * cuenta 139-339-4662. Con campañas activas, este CTA manda tráfico pago a un embudo
+ * que Ads no mide y Smart Bidding aprende con datos incompletos.
  *
- * Para revertir alcanza con poner `true`. Si algún día el grader carga el tag de Ads
- * y la conversión vuelve a la misma cuenta, esta constante deja de tener sentido.
+ * Poner en `false` para volver a ocultarlo si eso vuelve a ser un problema. La
+ * solución de fondo es que el grader dispare la conversión a la misma cuenta de Ads.
  */
-export const SHOW_GRADER_CTA = false;
+export const SHOW_GRADER_CTA = true;
