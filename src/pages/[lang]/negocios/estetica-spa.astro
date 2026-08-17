@@ -1,0 +1,581 @@
+---
+import { getStaticPaths, toLocale } from '../../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import PageHero from '../../../components/PageHero.astro';
+import FeatureRow from '../../../components/FeatureRow.astro';
+import ConversationDemo from '../../../components/ConversationDemo.astro';
+import FeatureFaq from '../../../components/FeatureFaq.astro';
+import CtaInline from '../../../components/CtaInline.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Software para estética y spa · Sara',
+    metaDesc:
+      'Sara atiende, agenda y cobra por WhatsApp e Instagram para centros de estética, spa y salones de belleza. Reservas 24/7, anticipo por adelantado y reactivación de las clientas que no vuelven.',
+
+    heroEyebrow: 'Negocios · Estética y spa',
+    heroTitle: "La agenda se llena <em class='text-pine-dark'>sola, día y noche.</em>",
+    heroLead:
+      'En estética y spa, la clienta reserva cuando puede, muchas veces de noche, y vuelve si alguien la invita. Sara atiende por WhatsApp e Instagram, cobra el anticipo y trae de vuelta a la que dejó de venir.',
+    heroImgAlt: 'Esteticista realizando un tratamiento facial a una clienta en un spa cálido y sereno.',
+
+    mech1t: 'Reserva 24/7 por WhatsApp e Instagram',
+    mech1d: 'Contesta y agenda cuando la clienta por fin tiene un rato.',
+    mech2t: 'Cobra el anticipo por adelantado',
+    mech2d: 'La cabina queda ocupada y pagada, no reservada de palabra.',
+    mech3t: 'Reactiva a la que no vuelve',
+    mech3d: 'Trae de vuelta a la clienta que hace semanas no reserva.',
+
+    demoKicker: 'Cómo lo hace Sara',
+    demoH2: 'Una reserva de Instagram, agendada y&nbsp;cobrada.',
+    demoP1:
+      'Esta es una reserva real, tal cual llega por chat. Sara responde la duda, propone horario y deja el tratamiento agendado con el anticipo pagado, sin que recepción toque nada.',
+    demoP2:
+      'Llegó un domingo a la noche, el horario en que más consultan y menos gente hay para responder. Sara no la dejó&nbsp;enfriar.',
+    demoBubbles: [
+      { who: 'in', text: 'Hola! hacen limpieza facial profunda? cuánto sale 😊', t: '22:47' },
+      { who: 'out', text: '¡Hola! Sí, la limpieza facial profunda está $890 y dura una hora. ¿Quieres que te reserve un turno?', t: '22:47' },
+      { who: 'in', text: 'Dale, tienes algo esta semana?', t: '22:49' },
+      { who: 'out', text: 'Tengo jueves 17:30 o sábado 11:00. ¿Cuál te viene mejor?', t: '22:49' },
+      { who: 'in', text: 'Sábado 11 🙌', t: '22:50' },
+      { who: 'out', text: '¡Listo! Sábado 11:00 reservado. Para dejarlo confirmado va un anticipo, te paso el link 👇', t: '22:50' },
+      { who: 'in', text: 'Ya pagué', t: '22:53' },
+      { who: 'out', text: '¡Reservado! ✅ Te llega el recordatorio un día antes. ¡Nos vemos el sábado!', t: '22:53' },
+    ],
+
+    whyKicker: 'Por qué la estética es distinta',
+    whyH2: 'Tu negocio no vive de una reserva. Vive de la clienta&nbsp;que vuelve.',
+    steps: [
+      {
+        n: '01',
+        title: 'El negocio vive de la recurrencia',
+        body: 'Un tratamiento de estética se repite cada pocas semanas. La clienta que no vuelve no es un turno perdido: es facturación que se va mes a mes.',
+      },
+      {
+        n: '02',
+        title: 'La reserva llega de noche',
+        body: 'Te escriben por Instagram fuera de horario, cuando la clienta por fin tiene un rato. Si no contestas en el momento, reserva en otro lado.',
+      },
+      {
+        n: '03',
+        title: 'El hueco no se llena solo',
+        body: 'Una cancelación de última hora deja una cabina vacía. Sin alguien que salga a cubrirla, esa hora se pierde entera.',
+      },
+    ],
+
+    fr1Eyebrow: 'Atiende 24/7',
+    fr1Title: "Contesta y reserva <em class='text-pine-dark'>a cualquier hora.</em>",
+    fr1Body:
+      'La reserva de estética llega cuando la clienta tiene un rato, casi siempre de noche. Sara responde precio, duración y disponibilidad por WhatsApp e Instagram, y agenda en la misma conversación. Ninguna reserva se pierde por no contestar a tiempo.',
+    fr1Points: [
+      'WhatsApp, Instagram y el chat de tu web',
+      'Precios y servicios que cargas una sola vez',
+      'De la duda a la reserva, sin cambiar de app',
+    ],
+    fr1Bubbles: [
+      { who: 'in', text: 'Hola, hacen depilación con cera y masajes? quería reservar', t: '20:14' },
+      { who: 'out', text: '¡Hola! Sí, hacemos las dos cosas. ¿Qué te gustaría reservar y para qué día?', t: '20:14' },
+      { who: 'in', text: 'Un masaje descontracturante, cuándo tienes?', t: '20:16' },
+      { who: 'out', text: 'Tengo martes 18:00 o miércoles 10:30. ¿Cuál prefieres?', t: '20:16' },
+    ],
+
+    fr2Eyebrow: 'Cobra el anticipo',
+    fr2Title: "La cabina se reserva <em class='text-pine-dark'>con el anticipo pagado.</em>",
+    fr2Body:
+      'Una reserva sin anticipo es una reserva que se cae a último momento. Sara pide el anticipo en el mismo chat, con link de pago, antes de bloquear la cabina. La hora queda ocupada de verdad y las ausencias bajan solas.',
+    fr2Points: [
+      'Link de pago en la misma conversación',
+      'La cabina se bloquea recién con el anticipo',
+      'Menos ausencias de última hora',
+    ],
+    fr2Bubbles: [
+      { who: 'out', text: 'Te dejo el turno el jueves 17:30. Para confirmarlo va un anticipo que se descuenta del total 🙂', t: '15:02' },
+      { who: 'out', text: 'Link 👉 pago.holasara.ai/tu-centro', t: '15:02' },
+      { who: 'in', text: 'Listo, pagué', t: '15:09' },
+      { who: 'out', text: '¡Confirmado! ✅ Jueves 17:30. Te espero.', t: '15:09' },
+    ],
+
+    fr3Eyebrow: 'Reactiva',
+    fr3Title: "A la clienta que hace semanas no vuelve, <em class='text-pine-dark'>la trae de vuelta.</em>",
+    fr3Body:
+      'En estética, la facturación está en la recurrencia. Sara ve quién hace semanas no reserva y le escribe para volver a agendar, en el momento justo según su tratamiento. Recupera clientas que se estaban yendo sin que te dieras cuenta.',
+    fr3Points: [
+      'Detecta a la clienta que dejó de venir',
+      'Escribe en la ventana justa de cada tratamiento',
+      'Recupera recurrencia que se iba a perder',
+    ],
+    fr3Bubbles: [
+      { who: 'out', text: 'Hola, Meli! Hace un mes de tu última limpieza facial, es buen momento para repetirla y mantener la piel 🌿 Tengo viernes 15:40 o sábado 12:00.', t: '11:12' },
+      { who: 'in', text: 'Uy sí! el viernes me sirve', t: '11:15' },
+      { who: 'out', text: '¡Genial! Viernes 15:40 reservado. Te paso el link del anticipo para dejarlo confirmado 👇', t: '11:15' },
+    ],
+
+    fr4Eyebrow: 'Lista de espera',
+    fr4Title: "El hueco que se libera <em class='text-pine-dark'>ya tiene dueña.</em>",
+    fr4Body:
+      'Cuando alguien quería un horario ocupado, Sara lo anotó. Si esa hora se cae por una cancelación, se la ofrece de una a quien estaba esperando, por orden. La cabina que se iba a quedar vacía se vuelve a llenar sola.',
+    fr4Points: [
+      'Anota a quien pide un horario ocupado',
+      'Ofrece la hora liberada por orden de espera',
+      'La cancelación de última hora no queda en hueco',
+    ],
+    fr4Bubbles: [
+      { who: 'out', text: '¡Hola, Caro! Se liberó un lugar mañana viernes 16:00, que era el horario que querías. ¿Lo tomas?', t: '11:12' },
+      { who: 'in', text: '¡Sí! lo quiero 🙌', t: '11:15' },
+      { who: 'out', text: '¡Listo! Viernes 16:00 reservado. Te paso el link del anticipo para dejarlo confirmado.', t: '11:15' },
+    ],
+
+    fr5Eyebrow: 'Pide la reseña',
+    fr5Title: "Y al terminar, <em class='text-pine-dark'>pide la reseña.</em>",
+    fr5Body:
+      'Cuando la clienta sale contenta, Sara le pide la reseña en Google en el momento justo, con el link directo. En estética, donde todo se elige por recomendación, cada reseña de 5 estrellas te trae a la próxima clienta.',
+    fr5Points: [
+      'La pide en la ventana en que sí responden',
+      'Link directo a tu Google, un solo clic',
+      'Mejor reputación, más clientas nuevas',
+    ],
+    fr5Bubbles: [
+      { who: 'out', text: 'Hola, Sofi! ¿Cómo te sentiste hoy? Si quedaste conforme, nos ayudarías un montón con una reseña en Google 🙏', t: '17:40' },
+      { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-centro', t: '17:40' },
+      { who: 'in', text: 'Listo! ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+      { who: 'out', text: '¡Mil gracias, Sofi! Nos ayuda muchísimo 🙌', t: '20:12' },
+    ],
+
+    ctaInline1: 'Que ninguna cabina de tu centro quede&nbsp;vacía.',
+
+    caseKicker: 'Caso real',
+    caseQuote:
+      '“Sara contesta las reservas de Instagram a la noche y trae de vuelta a las clientas que dejaban de venir. Se nos llenó la&nbsp;agenda.”',
+    caseAttr: 'Un centro de estética que ya trabaja con Sara todos los días.',
+    caseLink: 'Ver el caso completo',
+    caseImgAlt: 'Resultados reales de un centro de estética trabajando con Sara.',
+
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada reserva y cada reactivación deja&nbsp;rastro.',
+    panelP:
+      'En la bandeja de Chats, cada conversación muestra en qué estado está. De un vistazo sabes a qué clienta está trayendo de vuelta Sara, qué anticipo ya entró y quién confirmó su&nbsp;turno.',
+    estados: [
+      { tag: '📨 Seguimiento', desc: 'Sara volvió a buscar a una clienta que hace semanas no vuelve. El contador (×3) muestra cuántas veces insistió.' },
+      { tag: 'Reservó', desc: 'La clienta agendó su próximo tratamiento desde la conversación.' },
+      { tag: '💳 Anticipo cobrado', desc: 'El anticipo entró antes del turno. La cabina queda ocupada de verdad, no de palabra.' },
+      { tag: '✅ Confirmado', desc: 'La clienta confirmó que viene. La cabina no queda vacía.' },
+    ],
+
+    faqs: [
+      {
+        q: '¿Sara reserva por Instagram además de WhatsApp?',
+        a: 'Por los dos, y también por el chat de tu web. Es la misma Sara en los tres canales, con el historial de cada clienta. La mayoría de las reservas de estética llegan por Instagram fuera de horario, y ahí contesta al instante.',
+      },
+      {
+        q: '¿Cobra el anticipo de la reserva?',
+        a: 'Sí. Sara puede pedir el anticipo en el mismo chat, con link de pago, antes de bloquear la cabina. La hora queda ocupada de verdad, que es lo que baja las ausencias de última hora.',
+      },
+      {
+        q: '¿Trae de vuelta a las clientas que no vuelven?',
+        a: 'Sí. Sara ve quién hace semanas no reserva y le escribe para volver a agendar, en el momento justo según su tratamiento. Recupera clientas que se estaban yendo sin que te des cuenta.',
+      },
+      {
+        q: '¿Qué hace con las cancelaciones de última hora?',
+        a: 'Cuando alguien pide un horario ocupado, Sara lo anota en la lista de espera. Si esa hora se libera por una cancelación, se la ofrece automáticamente a quien estaba esperando, por orden. La cabina no queda vacía.',
+      },
+      {
+        q: '¿No termina molestando a las clientas?',
+        a: 'No hace envíos masivos. Escribe cuando hay un motivo real, como un tratamiento que toca repetir o un hueco que se abrió, reintenta con mesura y respeta a quien pide no seguir recibiendo mensajes.',
+      },
+      {
+        q: '¿Sirve si tengo varios locales?',
+        a: 'Sí. Sara maneja la agenda de cada local y deriva a cada clienta a la sede que le queda cómoda, todo en un solo panel. Si trabajas con varias sucursales, escríbenos y te mostramos cómo lo resolvemos.',
+      },
+    ],
+
+    ctaBandTitle: 'Que la reserva de las 23:00 no se te&nbsp;escape.',
+    ctaBandSub:
+      'Pon a Sara a atender, agendar y cobrar el anticipo hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
+  },
+  en: {
+    metaTitle: 'Software for beauty & spa · Sara',
+    metaDesc:
+      'Sara answers, books and collects payment over WhatsApp and Instagram for beauty centers, spas and salons. 24/7 booking, deposits up front, and win-back for the clients who stop coming.',
+
+    heroEyebrow: 'Businesses · Beauty & spa',
+    heroTitle: "Your calendar fills up <em class='text-pine-dark'>on its own, day and night.</em>",
+    heroLead:
+      'In beauty & spa, clients book whenever they can, often at night, and come back when someone invites them. Sara answers on WhatsApp and Instagram, collects the deposit and wins back the ones who stopped coming.',
+    heroImgAlt: 'Esthetician giving a client a facial treatment in a warm, serene spa.',
+
+    mech1t: '24/7 booking on WhatsApp and Instagram',
+    mech1d: 'Answers and books whenever the client finally has a moment.',
+    mech2t: 'Collects the deposit up front',
+    mech2d: 'The room stays booked and paid for, not held on someone’s word.',
+    mech3t: 'Wins back the ones who stop coming',
+    mech3d: 'Brings back the client who hasn’t booked in weeks.',
+
+    demoKicker: 'How Sara does it',
+    demoH2: 'An Instagram booking, scheduled and&nbsp;paid.',
+    demoP1:
+      'This is a real booking, exactly as it comes in over chat. Sara answers the question, proposes a time and leaves the treatment booked with the deposit paid, without the front desk lifting a finger.',
+    demoP2:
+      'It came in on a Sunday night, the hour when the most people ask and the fewest are around to answer. Sara didn’t let it go&nbsp;cold.',
+    demoBubbles: [
+      { who: 'in', text: 'Hi! do you do deep facial cleansing? how much is it 😊', t: '10:47 pm' },
+      { who: 'out', text: 'Hi! Yes, the deep facial cleansing is $890 and lasts an hour. Want me to book you a spot?', t: '10:47 pm' },
+      { who: 'in', text: 'Sure, do you have anything this week?', t: '10:49 pm' },
+      { who: 'out', text: 'I have Thursday 5:30 pm or Saturday 11:00 am. Which works better?', t: '10:49 pm' },
+      { who: 'in', text: 'Saturday at 11 🙌', t: '10:50 pm' },
+      { who: 'out', text: 'All set! Saturday 11:00 am booked. To confirm it there’s a deposit, here’s the link 👇', t: '10:50 pm' },
+      { who: 'in', text: 'Just paid', t: '10:53 pm' },
+      { who: 'out', text: 'Booked! ✅ You’ll get a reminder the day before. See you Saturday!', t: '10:53 pm' },
+    ],
+
+    whyKicker: 'Why beauty is different',
+    whyH2: 'Your business doesn’t live on one booking. It lives on the client&nbsp;who returns.',
+    steps: [
+      {
+        n: '01',
+        title: 'The business runs on recurring visits',
+        body: 'A beauty treatment repeats every few weeks. A client who doesn’t come back isn’t one lost booking: it’s revenue slipping away month after month.',
+      },
+      {
+        n: '02',
+        title: 'The booking arrives at night',
+        body: 'They message you on Instagram after hours, when the client finally has a moment. If you don’t reply right then, they book somewhere else.',
+      },
+      {
+        n: '03',
+        title: 'The gap won’t fill itself',
+        body: 'A last-minute cancellation leaves a room empty. With no one stepping in to fill it, that hour is lost entirely.',
+      },
+    ],
+
+    fr1Eyebrow: 'Answers 24/7',
+    fr1Title: "Answers and books <em class='text-pine-dark'>at any hour.</em>",
+    fr1Body:
+      'Beauty bookings come in whenever the client has a moment, almost always at night. Sara answers price, duration and availability over WhatsApp and Instagram, and books right in the conversation. No booking is lost for not replying in time.',
+    fr1Points: [
+      'WhatsApp, Instagram and your website chat',
+      'Prices and services you load just once',
+      'From question to booking, without switching apps',
+    ],
+    fr1Bubbles: [
+      { who: 'in', text: 'Hi, do you do waxing and massages? I wanted to book', t: '8:14 pm' },
+      { who: 'out', text: 'Hi! Yes, we do both. What would you like to book, and for what day?', t: '8:14 pm' },
+      { who: 'in', text: 'A deep-tissue massage, when do you have?', t: '8:16 pm' },
+      { who: 'out', text: 'I have Tuesday 6:00 pm or Wednesday 10:30 am. Which do you prefer?', t: '8:16 pm' },
+    ],
+
+    fr2Eyebrow: 'Collects the deposit',
+    fr2Title: "The room is booked <em class='text-pine-dark'>with the deposit paid.</em>",
+    fr2Body:
+      'A booking without a deposit is a booking that falls through at the last minute. Sara asks for the deposit right in the chat, with a payment link, before blocking the room. The hour is truly taken and no-shows drop on their own.',
+    fr2Points: [
+      'Payment link in the same conversation',
+      'The room is blocked only once the deposit is in',
+      'Fewer last-minute no-shows',
+    ],
+    fr2Bubbles: [
+      { who: 'out', text: 'I’ll hold your appointment for Thursday 5:30 pm. To confirm it there’s a deposit that comes off the total 🙂', t: '3:02 pm' },
+      { who: 'out', text: 'Link 👉 pago.holasara.ai/tu-centro', t: '3:02 pm' },
+      { who: 'in', text: 'Done, paid', t: '3:09 pm' },
+      { who: 'out', text: 'Confirmed! ✅ Thursday 5:30 pm. See you then.', t: '3:09 pm' },
+    ],
+
+    fr3Eyebrow: 'Wins back',
+    fr3Title: "The client who hasn’t returned in weeks, <em class='text-pine-dark'>she brings back.</em>",
+    fr3Body:
+      'In beauty, revenue lives in recurring visits. Sara sees who hasn’t booked in weeks and messages them to book again, at the right moment for their treatment. She recovers clients who were slipping away without you noticing.',
+    fr3Points: [
+      'Spots the client who stopped coming',
+      'Messages in the right window for each treatment',
+      'Recovers recurring revenue that was about to be lost',
+    ],
+    fr3Bubbles: [
+      { who: 'out', text: 'Hi, Meli! It’s been a month since your last facial, a good time to repeat it and keep your skin glowing 🌿 I have Friday 3:40 pm or Saturday 12:00 pm.', t: '11:12 am' },
+      { who: 'in', text: 'Oh yes! Friday works for me', t: '11:15 am' },
+      { who: 'out', text: 'Great! Friday 3:40 pm booked. Here’s the deposit link to confirm it 👇', t: '11:15 am' },
+    ],
+
+    fr4Eyebrow: 'Waitlist',
+    fr4Title: "The gap that opens up <em class='text-pine-dark'>already has a taker.</em>",
+    fr4Body:
+      'When someone wanted a time that was taken, Sara noted it down. If that hour falls through from a cancellation, she offers it right away to whoever was waiting, in order. The room that would have sat empty fills up on its own again.',
+    fr4Points: [
+      'Notes down whoever asks for a taken time',
+      'Offers the freed-up hour by waitlist order',
+      'The last-minute cancellation doesn’t leave a gap',
+    ],
+    fr4Bubbles: [
+      { who: 'out', text: 'Hi, Caro! A spot just opened up tomorrow, Friday at 4:00 pm, the time you wanted. Want it?', t: '11:12 am' },
+      { who: 'in', text: 'Yes! I want it 🙌', t: '11:15 am' },
+      { who: 'out', text: 'All set! Friday 4:00 pm booked. Here’s the deposit link to confirm it.', t: '11:15 am' },
+    ],
+
+    fr5Eyebrow: 'Asks for the review',
+    fr5Title: "And when it’s done, <em class='text-pine-dark'>she asks for the review.</em>",
+    fr5Body:
+      'When the client leaves happy, Sara asks for a Google review at just the right moment, with the direct link. In beauty, where everything is chosen by word of mouth, every 5-star review brings you the next client.',
+    fr5Points: [
+      'Asks in the window when people actually reply',
+      'Direct link to your Google, one single click',
+      'Better reputation, more new clients',
+    ],
+    fr5Bubbles: [
+      { who: 'out', text: 'Hi, Sofi! How did you feel today? If you were happy with it, a Google review would help us a ton 🙏', t: '5:40 pm' },
+      { who: 'out', text: 'Here’s the direct link, just one click 👉 g.page/tu-centro', t: '5:40 pm' },
+      { who: 'in', text: 'Done! left it already ⭐️⭐️⭐️⭐️⭐️', t: '8:12 pm' },
+      { who: 'out', text: 'Thank you so much, Sofi! It helps us a lot 🙌', t: '8:12 pm' },
+    ],
+
+    ctaInline1: 'Don’t let a single room in your center sit&nbsp;empty.',
+
+    caseKicker: 'Real case',
+    caseQuote:
+      '“Sara answers the Instagram bookings at night and brings back the clients who were drifting away. Our calendar filled&nbsp;up.”',
+    caseAttr: 'A beauty center that already works with Sara every day.',
+    caseLink: 'See the full case',
+    caseImgAlt: 'Real results from a beauty center working with Sara.',
+
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every booking and every win-back leaves a&nbsp;trace.',
+    panelP:
+      'In the Chats inbox, every conversation shows what state it’s in. At a glance you know which client Sara is bringing back, which deposit already came in and who confirmed their&nbsp;appointment.',
+    estados: [
+      { tag: '📨 Follow-up', desc: 'Sara reached out again to a client who hasn’t been back in weeks. The counter (×3) shows how many times she followed up.' },
+      { tag: 'Booked', desc: 'The client booked her next treatment right from the conversation.' },
+      { tag: '💳 Deposit collected', desc: 'The deposit came in before the appointment. The room is truly taken, not just held on someone’s word.' },
+      { tag: '✅ Confirmed', desc: 'The client confirmed she’s coming. The room won’t sit empty.' },
+    ],
+
+    faqs: [
+      {
+        q: 'Does Sara book through Instagram as well as WhatsApp?',
+        a: 'Both, and through your website chat too. It’s the same Sara across all three channels, with each client’s history. Most beauty bookings come in through Instagram after hours, and that’s where she replies instantly.',
+      },
+      {
+        q: 'Does she collect the booking deposit?',
+        a: 'Yes. Sara can ask for the deposit right in the chat, with a payment link, before blocking the room. The hour is truly taken, which is what brings down last-minute no-shows.',
+      },
+      {
+        q: 'Does she win back clients who stop coming?',
+        a: 'Yes. Sara sees who hasn’t booked in weeks and messages them to book again, at just the right moment for their treatment. She recovers clients who were leaving without you noticing.',
+      },
+      {
+        q: 'What does she do with last-minute cancellations?',
+        a: 'When someone asks for a time that’s taken, Sara adds them to the waitlist. If that hour frees up from a cancellation, she automatically offers it to whoever was waiting, in order. The room doesn’t sit empty.',
+      },
+      {
+        q: 'Doesn’t she end up bothering clients?',
+        a: 'She doesn’t send mass blasts. She writes when there’s a real reason, like a treatment due for a repeat or a gap that just opened, follows up in moderation and respects anyone who asks to stop receiving messages.',
+      },
+      {
+        q: 'Does it work if I have several locations?',
+        a: 'Yes. Sara manages each location’s calendar and sends each client to the branch that’s convenient for them, all in one dashboard. If you work with multiple locations, message us and we’ll show you how we handle it.',
+      },
+    ],
+
+    ctaBandTitle: 'Don’t let the 11 pm booking slip&nbsp;away.',
+    ctaBandSub:
+      'Put Sara to work answering, booking and collecting deposits today. Without changing your calendar or the way you work.',
+  },
+}[lang];
+
+const {
+  steps,
+  estados,
+  faqs,
+  demoBubbles,
+  fr1Points,
+  fr1Bubbles,
+  fr2Points,
+  fr2Bubbles,
+  fr3Points,
+  fr3Bubbles,
+  fr4Points,
+  fr4Bubbles,
+  fr5Points,
+  fr5Bubbles,
+} = dict;
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDesc}>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/estetica-spa-hero.jpg"
+      imageAlt={dict.heroImgAlt}
+      imageW={1200}
+      imageH={896}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.mech1t}</p>
+          <p class="mt-1 text-salvia">{dict.mech1d}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.mech2t}</p>
+          <p class="mt-1 text-salvia">{dict.mech2d}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.mech3t}</p>
+          <p class="mt-1 text-salvia">{dict.mech3d}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.demoKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.demoH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.demoP1}</p>
+          <p class="mt-4 text-salvia" set:html={dict.demoP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo channel="instagram" lang={lang} bubbles={demoBubbles} />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ POR QUÉ ES DISTINTO · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{dict.whyKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.whyH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.fr1Eyebrow}
+          title={dict.fr1Title}
+          body={dict.fr1Body}
+          points={fr1Points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={fr1Bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.fr2Eyebrow}
+          title={dict.fr2Title}
+          body={dict.fr2Body}
+          points={fr2Points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={fr2Bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.fr3Eyebrow}
+          title={dict.fr3Title}
+          body={dict.fr3Body}
+          points={fr3Points}
+        >
+          <ConversationDemo channel="instagram" lang={lang} bubbles={fr3Bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.fr4Eyebrow}
+          title={dict.fr4Title}
+          body={dict.fr4Body}
+          points={fr4Points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={fr4Bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.fr5Eyebrow}
+          title={dict.fr5Title}
+          body={dict.fr5Body}
+          points={fr5Points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={fr5Bubbles} />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline1} lang={lang} />
+
+    <!-- ══════════ CASO REAL · placeholder, reemplazar por testimonial propio ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.caseKicker}</p>
+          <blockquote class="font-serif text-2xl font-black leading-snug text-ink text-balance md:text-3xl" set:html={dict.caseQuote} />
+          <p class="mt-6 text-salvia">{dict.caseAttr}</p>
+          <a href={L('/caso')} class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            {dict.caseLink} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div>
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt={dict.caseImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelP} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand title={dict.ctaBandTitle} sub={dict.ctaBandSub} lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

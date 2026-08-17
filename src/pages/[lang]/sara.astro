@@ -1,0 +1,357 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Conoce a Sara · La secretaria con IA de tu clínica',
+    metaDescription:
+      'Sara atiende WhatsApp e Instagram las 24 horas, informa precios reales, vende con el criterio que defines y agenda cobrando el anticipo. Sin sumar a nadie a recepción.',
+    heroEyebrow: 'Atiende · Conoce a Sara',
+    heroTitle: "Atiende, aconseja y cobra. <em class='text-pine-dark'>Con el criterio de tu clínica.</em>",
+    heroLead:
+      'Sara es la secretaria con IA de tu clínica. Trabaja de noche, los fines de semana y en los picos: responde, arma la propuesta que conviene, agenda y cobra. Sin sumar a nadie a recepción.',
+    heroImageAlt:
+      'Recepcionista de una clínica de estética sonriendo, con un teléfono en la mano, en un espacio luminoso con plantas de salvia.',
+    strip: [
+      { t: 'Atiende 24/7', b: 'Responde al instante en WhatsApp, Instagram y tu web.' },
+      { t: 'Vende con criterio', b: 'Ofrece el plan que conviene, con precios reales. No inventa.' },
+      { t: 'Agenda y cobra', b: 'Reserva la cita y cobra el anticipo en el mismo chat.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: '23:41 entra una consulta. 23:43 está pagada y&nbsp;agendada.',
+    howP1:
+      'Una consulta real de madrugada, tal cual sale por WhatsApp. Sara informa, arma la propuesta, propone horario y deja la reserva paga, sin que nadie de tu equipo esté&nbsp;despierto.',
+    howP2:
+      'Lo mismo pasa a las 3 de la tarde en el pico, cuando recepción no da abasto. Sara no hace&nbsp;cola.',
+    howBubbles: [
+      { who: 'in', text: 'Hola, vi lo de depilación láser. ¿Cuánto sale piernas completas?', t: '23:41' },
+      { who: 'out', text: '¡Hola! Piernas enteras las tenemos en el pack de 6 sesiones a $6,900. Suelto saldría el doble, así que con el pack ahorras un 50%. Además, la primera sesión de prueba es sin costo. ¿Quieres que te agende esa primera sesión para conocer el tratamiento?', t: '23:41' },
+      { who: 'in', text: 'Sí, me interesa. ¿Tienen esta semana?', t: '23:42' },
+      { who: 'out', text: '¡Sí! Tengo jueves 17:30 o viernes 18:00. Para dejar la reserva confirmada va un anticipo. ¿Cuál te queda mejor?', t: '23:42' },
+      { who: 'in', text: 'Jueves', t: '23:43' },
+      { who: 'out', text: '¡Listo! Jueves 17:30 reservado ✅ Te paso el link del anticipo y te llega el recordatorio un día antes.', t: '23:43' },
+    ],
+    stepsH2: 'Todo lo que resuelve una recepción, sin&nbsp;recepción.',
+    steps: [
+      { n: '01', title: 'El paciente escribe', body: 'Por WhatsApp, Instagram o el chat de tu web, casi siempre fuera del horario de recepción. Sara responde al instante.' },
+      { n: '02', title: 'Informa, aconseja y vende', body: 'Explica tratamientos, da precios reales y arma la propuesta que conviene, con el tono de tu clínica. Nunca inventa nada.' },
+      { n: '03', title: 'Agenda y cobra', body: 'Reserva la cita en tu calendario y cobra la consulta o el anticipo en la misma conversación. Después recuerda y confirma.' },
+    ],
+    row1Eyebrow: 'Vende con criterio',
+    row1Title: "No es un bot con botones. <em class='text-pine-dark'>Aconseja.</em>",
+    row1Body:
+      'Entiende lo que el paciente necesita, ofrece el plan que de verdad le conviene y muestra el ahorro frente a las sesiones sueltas. Cuando tiene sentido, propone la primera sesión de prueba para bajar la barrera.',
+    row1Points: [
+      'Arma la propuesta según lo que consultan',
+      'Muestra el ahorro del pack, no solo el precio',
+      'Ofrece la sesión de prueba para cerrar',
+    ],
+    row1Bubbles: [
+      { who: 'in', text: 'Quiero axilas y cavado', t: '13:02' },
+      { who: 'out', text: '¡Buenísimo! Para esas dos zonas te conviene el pack combinado: 6 sesiones de axilas + cavado a $3,900. Por separado saldría casi el doble, así que ahorras un 50%. La primera de axilas va de regalo. ¿Te agendo la primera sesión?', t: '13:02' },
+      { who: 'in', text: 'Sí, ¿qué días tienen?', t: '13:04' },
+    ],
+    row2Eyebrow: 'Con límites claros',
+    row2Title: "Nunca inventa un precio <em class='text-pine-dark'>ni una promesa.</em>",
+    row2Body:
+      'Sara solo trabaja con lo que cargaste. Si le piden algo que no tiene (un descuento extra, una condición especial), no improvisa: lo dice con naturalidad y deriva la consulta a tu equipo.',
+    row2Points: [
+      'Solo precios y condiciones que cargaste',
+      'Si no lo tiene, lo aclara y no promete',
+      'Deriva a un humano cuando hace falta',
+    ],
+    row2Bubbles: [
+      { who: 'in', text: '¿Me hacen un descuento si pago las 6 hoy?', t: '17:20' },
+      { who: 'out', text: 'Te cuento lo que tengo cargado: el pack de 6 ya incluye el 50% de ahorro. Un descuento adicional no te lo puedo confirmar yo, pero le paso tu consulta al equipo para que lo revise. ¿Te parece?', t: '17:20' },
+      { who: 'in', text: 'Sí, perfecto', t: '17:21' },
+    ],
+    row3Eyebrow: 'También es tu secretaria',
+    row3Title: "Le hablas como a tu equipo, <em class='text-pine-dark'>y ella ejecuta.</em>",
+    row3Body:
+      'Además de atender y vender, Sara gestiona tu agenda. Le pides algo en tus palabras y lo resuelve, avisando a cada paciente. Las 24 horas.',
+    row3Quotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes y avísales.”'],
+    row3Link: 'Ver el modo operador',
+    ctaInline: 'Esto mismo, con el nombre de tu&nbsp;clínica.',
+    configKicker: 'Se configura por clínica',
+    configH2: 'Tú defines cómo atiende y&nbsp;vende.',
+    configLead:
+      'Sara no viene con una personalidad de fábrica. Desde el panel ajustas su estilo, su estrategia y su tono, y cambia al instante para toda tu&nbsp;clínica.',
+    config: [
+      { t: 'Estilo de agendamiento', b: 'Que pregunte la preferencia del paciente y confirme, o que ofrezca directamente los horarios disponibles. Como prefieras.' },
+      { t: 'Estrategia de venta', b: 'Presets listos (Fuerte, Consultiva o Sin venta) o afinas cada palanca: qué ofrece primero, upsell de combos, si regala la primera sesión, si muestra el ahorro del pack.' },
+      { t: 'Tono', b: 'Comercial, neutro, clínico o cálido. Sara habla con la voz de tu clínica, no con la de un bot.' },
+      { t: 'Instrucciones especiales', b: 'Reglas puntuales en tus palabras. Sara las sigue, pero nunca promete precios ni condiciones que no cargaste.' },
+    ],
+    faqs: [
+      { q: '¿Se nota que es una inteligencia artificial?', a: 'Sara se presenta con naturalidad y responde con el tono que elegiste para tu clínica. El paciente siente que lo atiende alguien que sabe, no un bot con botones.' },
+      { q: '¿Atiende solo en mi horario?', a: 'Atiende las 24 horas, los fines de semana y en los picos. Justo cuando tu recepción no está, que es cuando entra la mayoría de las consultas.' },
+      { q: '¿Puede inventar un precio o una promoción?', a: 'No. Sara solo trabaja con lo que cargaste: precios, packs y condiciones. Si le preguntan algo que no tiene, lo dice y deriva la consulta a tu equipo. Nunca promete lo que no existe.' },
+      { q: '¿Qué tanto puedo controlar cómo vende?', a: 'Todo. Eliges un preset (Fuerte, Consultiva o Sin venta) o ajustas cada palanca: qué ofrece primero, si hace upsell de combos, si menciona cuotas, si regala la primera sesión. La configuración es por clínica.' },
+      { q: '¿Reemplaza a mi recepción?', a: 'La libera de lo repetitivo (responder lo mismo, confirmar citas, perseguir pagos) para que se dedique al paciente que está en la clínica.' },
+      { q: '¿Habla como en mi país?', a: 'Sí. Sara adapta el registro al país de tu clínica, para que suene natural para tus pacientes.' },
+    ],
+  },
+  en: {
+    metaTitle: "Meet Sara · Your clinic's AI receptionist",
+    metaDescription:
+      'Sara handles WhatsApp and Instagram around the clock, shares real prices, sells with the judgment you define and books while collecting the deposit. Without adding anyone to your front desk.',
+    heroEyebrow: 'Answers · Meet Sara',
+    heroTitle: "Answers, advises and gets paid. <em class='text-pine-dark'>With your clinic's judgment.</em>",
+    heroLead:
+      "Sara is your clinic's AI receptionist. She works nights, weekends and peak hours: she answers, builds the right offer, books and gets paid. Without adding anyone to your front desk.",
+    heroImageAlt:
+      'A receptionist at an aesthetics clinic smiling, phone in hand, in a bright space with sage plants.',
+    strip: [
+      { t: 'Answers 24/7', b: 'Replies instantly on WhatsApp, Instagram and your website.' },
+      { t: 'Sells with judgment', b: 'Offers the right plan, with real prices. Never makes things up.' },
+      { t: 'Books and gets paid', b: 'Books the appointment and collects the deposit in the same chat.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: "11:41 pm an enquiry comes in. 11:43 pm it's paid and&nbsp;booked.",
+    howP1:
+      'A real late-night enquiry, exactly as it comes in over WhatsApp. Sara answers, builds the offer, proposes a time and leaves the booking paid, without anyone on your team being&nbsp;awake.',
+    howP2:
+      "The same happens at 3 in the afternoon at peak time, when the front desk can't keep up. Sara never makes anyone&nbsp;wait.",
+    howBubbles: [
+      { who: 'in', text: 'Hi, I saw your laser hair removal. How much for full legs?', t: '11:41 pm' },
+      { who: 'out', text: 'Hi there! Full legs come in our 6-session pack for $6,900. Paying per session would cost double, so the pack saves you 50%. Plus, your first trial session is free. Want me to book that first session so you can try the treatment?', t: '11:41 pm' },
+      { who: 'in', text: "Yes, I'm interested. Any openings this week?", t: '11:42 pm' },
+      { who: 'out', text: 'Yes! I have Thursday at 5:30 pm or Friday at 6:00 pm. To confirm the booking there’s a deposit. Which works better for you?', t: '11:42 pm' },
+      { who: 'in', text: 'Thursday', t: '11:43 pm' },
+      { who: 'out', text: "Done! Thursday at 5:30 pm booked ✅ I'll send you the deposit link and you'll get a reminder the day before.", t: '11:43 pm' },
+    ],
+    stepsH2: 'Everything a front desk handles, without a front&nbsp;desk.',
+    steps: [
+      { n: '01', title: 'The patient messages', body: 'Over WhatsApp, Instagram or your website chat, almost always outside front-desk hours. Sara replies instantly.' },
+      { n: '02', title: 'Informs, advises and sells', body: "She explains treatments, gives real prices and builds the right offer, in your clinic's tone. She never makes anything up." },
+      { n: '03', title: 'Books and gets paid', body: 'She books the appointment in your calendar and collects the consult fee or deposit in the same conversation. Then she reminds and confirms.' },
+    ],
+    row1Eyebrow: 'Sells with judgment',
+    row1Title: "Not a bot with buttons. <em class='text-pine-dark'>She advises.</em>",
+    row1Body:
+      'She understands what the patient needs, offers the plan that truly fits and shows the savings versus paying per session. When it makes sense, she proposes a free trial session to lower the barrier.',
+    row1Points: [
+      'Builds the offer around what they ask',
+      'Shows the pack savings, not just the price',
+      'Offers the trial session to close',
+    ],
+    row1Bubbles: [
+      { who: 'in', text: 'I want underarms and bikini', t: '1:02 pm' },
+      { who: 'out', text: 'Great choice! For those two areas the combo pack is your best bet: 6 sessions of underarms + bikini for $3,900. Separately it would cost almost double, so you save 50%. Your first underarm session is on us. Want me to book your first session?', t: '1:02 pm' },
+      { who: 'in', text: 'Yes, what days do you have?', t: '1:04 pm' },
+    ],
+    row2Eyebrow: 'With clear limits',
+    row2Title: "She never invents a price <em class='text-pine-dark'>or a promise.</em>",
+    row2Body:
+      "Sara only works with what you loaded. If someone asks for something she doesn't have (an extra discount, a special condition), she doesn't improvise: she says so naturally and passes the question to your team.",
+    row2Points: [
+      'Only prices and terms you loaded',
+      "If she doesn't have it, she says so and won't promise",
+      'Hands off to a human when needed',
+    ],
+    row2Bubbles: [
+      { who: 'in', text: 'Any discount if I pay for all 6 today?', t: '5:20 pm' },
+      { who: 'out', text: "Here's what I have on file: the 6-session pack already includes 50% savings. I can't confirm an additional discount myself, but I'll pass your question to the team to look into. Sound good?", t: '5:20 pm' },
+      { who: 'in', text: 'Yes, perfect', t: '5:21 pm' },
+    ],
+    row3Eyebrow: "She's your secretary too",
+    row3Title: "You talk to her like your team, <em class='text-pine-dark'>and she gets it done.</em>",
+    row3Body:
+      'Beyond answering and selling, Sara manages your calendar. You ask for something in your own words and she handles it, notifying every patient. Around the clock.',
+    row3Quotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday and let them know.”'],
+    row3Link: 'See operator mode',
+    ctaInline: "This exact thing, with your clinic's&nbsp;name.",
+    configKicker: 'Configured per clinic',
+    configH2: 'You define how she answers and&nbsp;sells.',
+    configLead:
+      "Sara doesn't come with a factory personality. From the dashboard you adjust her style, her strategy and her tone, and it changes instantly across your whole&nbsp;clinic.",
+    config: [
+      { t: 'Booking style', b: "Have her ask the patient's preference and confirm, or offer the available times directly. However you prefer." },
+      { t: 'Sales strategy', b: 'Ready-made presets (Strong, Consultative or No selling) or fine-tune every lever: what she offers first, combo upsells, whether she gives away the first session, whether she shows the pack savings.' },
+      { t: 'Tone', b: "Sales-driven, neutral, clinical or warm. Sara speaks in your clinic's voice, not a bot's." },
+      { t: 'Special instructions', b: "Specific rules in your own words. Sara follows them, but never promises prices or terms you didn't load." },
+    ],
+    faqs: [
+      { q: "Can people tell it's an AI?", a: "Sara introduces herself naturally and replies in the tone you chose for your clinic. Patients feel they're talking to someone who knows their stuff, not a bot with buttons." },
+      { q: 'Does she only work during my hours?', a: 'She works around the clock, on weekends and at peak times. Right when your front desk is out, which is when most enquiries come in.' },
+      { q: 'Can she make up a price or a promo?', a: "No. Sara only works with what you loaded: prices, packs and terms. If someone asks for something she doesn't have, she says so and passes the question to your team. She never promises what doesn't exist." },
+      { q: 'How much control do I have over how she sells?', a: 'Full control. You pick a preset (Strong, Consultative or No selling) or adjust every lever: what she offers first, whether she upsells combos, whether she mentions installments, whether she gives away the first session. It’s configured per clinic.' },
+      { q: 'Does she replace my front desk?', a: "She frees it from the repetitive part (answering the same questions, confirming appointments, chasing payments) so it can focus on the patient who's in the clinic." },
+      { q: 'Does she speak like people in my country?', a: "Yes. Sara adapts her register to your clinic's country, so she sounds natural to your patients." },
+    ],
+  },
+}[lang];
+
+const { steps, config, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/sara-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={900}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia" set:html={dict.howP1} />
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.howBubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.row1Bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row2Eyebrow}
+          title={dict.row2Title}
+          body={dict.row2Body}
+          points={dict.row2Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.row2Bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.row3Eyebrow}
+          title={dict.row3Title}
+          body={dict.row3Body}
+        >
+          <div class="w-full">
+            <div class="flex flex-col gap-3">
+              {
+                dict.row3Quotes.map((q) => (
+                  <div class="rounded-xl border border-line bg-paper px-4 py-3 font-accent text-lg italic text-pine-dark">{q}</div>
+                ))
+              }
+            </div>
+            <a
+              href={L('/operador')}
+              class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+            >
+              {dict.row3Link} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <!-- ══════════ CONFIGURACIÓN ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.configKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.configH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.configLead} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            config.map((c) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{c.t}</h3>
+                <p class="mt-2 text-salvia">{c.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

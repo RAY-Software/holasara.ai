@@ -1,4 +1,8 @@
-import { productGroups, topLinks } from '../data/nav';
+import { getProductGroups, getTopLinks } from '../data/nav';
+
+// El agent view se publica en español (idioma principal del sitio).
+const productGroups = getProductGroups('es');
+const topLinks = getTopLinks('es');
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Vista de agente (patrón de konghq.com/?mode=agent): arma un Markdown limpio y

@@ -1,0 +1,126 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
+import { whatsappLink, whatsappText } from '../../lib/whatsapp';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Caso de éxito · ViaLaser ya trabaja con Sara',
+    metaDescription:
+      '114 conversaciones atendidas por Sara sin que recepción tocara nada y 7 de cada 10 citas agendadas por Sara en WhatsApp, Instagram y la web, cada una atribuida al canal que la trajo.',
+    back: 'Volver al inicio',
+    kicker: 'Caso de éxito',
+    h1: 'Ya está funcionando en clínicas&nbsp;reales.',
+    lead: 'ViaLaser puso a Sara a atender su WhatsApp, Instagram y web. Esto pasó, sin sumar a nadie a recepción.',
+    ctaPrimary: 'Probarlo ahora',
+    talk: 'Habla con Sara',
+    liveNote: 'Sara está atendiendo en vivo en <span class="font-medium text-ink">vialaser.uy</span>.',
+    chartAlt: 'Citas de ViaLaser por canal y conversaciones por semana atendidas por Sara.',
+    ctaInlineTitle: '¿Quieres números así en tu&nbsp;clínica?',
+    ctaInlineCta: 'Pedir mi demo',
+    stat1Num: '114',
+    stat1: 'conversaciones atendidas por Sara, sin que recepción tocara nada.',
+    stat2Num: '7 de 10',
+    stat2: 'citas agendadas por Sara en WhatsApp, Instagram y la web.',
+  },
+  en: {
+    metaTitle: 'Success story · ViaLaser already works with Sara',
+    metaDescription:
+      '114 conversations handled by Sara without the front desk touching a thing, and 7 out of 10 appointments booked by Sara across WhatsApp, Instagram and the web, each attributed to the channel that brought it.',
+    back: 'Back to home',
+    kicker: 'Success story',
+    h1: 'It’s already running in real&nbsp;clinics.',
+    lead: 'ViaLaser put Sara to work on their WhatsApp, Instagram and website. This is what happened, without adding anyone to the front desk.',
+    ctaPrimary: 'Try it now',
+    talk: 'Talk to Sara',
+    liveNote: 'Sara is answering live at <span class="font-medium text-ink">vialaser.uy</span>.',
+    chartAlt: 'ViaLaser appointments by channel and conversations per week handled by Sara.',
+    ctaInlineTitle: 'Want numbers like these at your&nbsp;clinic?',
+    ctaInlineCta: 'Book my demo',
+    stat1Num: '114',
+    stat1: 'conversations handled by Sara, without the front desk touching a thing.',
+    stat2Num: '7 of 10',
+    stat2: 'appointments booked by Sara across WhatsApp, Instagram and the web.',
+  },
+}[lang];
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <section class="border-b border-line">
+      <div class="mx-auto grid max-w-6xl gap-14 px-5 pb-20 pt-14 md:grid-cols-[0.95fr_1.05fr] md:items-center">
+        <div>
+          <a href={L('/')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+            <span aria-hidden="true">←</span> {dict.back}
+          </a>
+          <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.kicker}</p>
+          <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="mb-6 h-9 w-auto" />
+          <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl" set:html={dict.h1} />
+          <p class="mt-6 max-w-xl text-lg text-salvia">
+            {dict.lead}
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href={L('/demo')}
+              class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+            >
+              {dict.ctaPrimary}
+            </a>
+            <a
+              href={whatsappLink(whatsappText(lang))}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+            >
+              {dict.talk}
+            </a>
+          </div>
+          <p class="mt-3 text-sm text-salvia" set:html={dict.liveNote} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1130"
+            height="944"
+            alt={dict.chartAlt}
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <ClientsStrip lang={lang} />
+
+    <CtaInline title={dict.ctaInlineTitle} cta={dict.ctaInlineCta} lang={lang} />
+
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-6 px-5 py-24 md:grid-cols-2">
+        <div class="rounded-xl border border-line bg-cream p-8">
+          <p class="font-serif text-5xl font-black text-pine-dark tabular-nums">{dict.stat1Num}</p>
+          <p class="mt-3 text-salvia">{dict.stat1}</p>
+        </div>
+        <div class="rounded-xl border border-line bg-cream p-8">
+          <p class="font-serif text-5xl font-black text-pine-dark tabular-nums">{dict.stat2Num}</p>
+          <p class="mt-3 text-salvia">{dict.stat2}</p>
+        </div>
+      </div>
+    </section>
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

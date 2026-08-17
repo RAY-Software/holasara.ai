@@ -1,7 +1,18 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { whatsappLink } from '../lib/whatsapp';
-import { industryLinks, sizeLinks } from '../data/nav';
+import { whatsappLink, whatsappText } from '../lib/whatsapp';
+import { getIndustryLinks, getSizeLinks } from '../data/nav';
+import { defaultLocale, localePath, type Locale } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang?: Locale;
+}
+const { lang = defaultLocale } = Astro.props;
+const t = useTranslations(lang);
+const industryLinks = getIndustryLinks(lang);
+const sizeLinks = getSizeLinks(lang);
+const L = (p: string) => localePath(p, lang);
 const year = new Date().getFullYear();
 ---
 
@@ -10,59 +21,59 @@ const year = new Date().getFullYear();
     <div class="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
       <div class="max-w-sm">
         <Wordmark class="text-3xl" dark />
-        <p class="mt-4 text-lg text-cream/70">La recepción que nunca cierra.</p>
+        <p class="mt-4 text-lg text-cream/70">{t('footer.tagline')}</p>
         <a
-          href={whatsappLink()}
+          href={whatsappLink(whatsappText(lang))}
           target="_blank"
           rel="noopener"
           class="mt-6 inline-flex items-center gap-2 rounded-full bg-mint px-5 py-2.5 text-sm font-semibold text-ink transition-opacity hover:opacity-90"
         >
-          Habla con Sara
+          {t('footer.talkToSara')}
         </a>
       </div>
       <div class="grid grid-cols-2 gap-10 text-sm text-cream/70 sm:grid-cols-3">
-        <nav aria-label="Negocios por industria">
-          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Negocios</p>
+        <nav aria-label={t('footer.business')}>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">{t('footer.business')}</p>
           <ul class="flex flex-col gap-2.5">
             {
               industryLinks.map((it) => (
                 <li>
-                  <a href={it.href} class="transition-colors hover:text-cream">{it.name}</a>
+                  <a href={L(it.href)} class="transition-colors hover:text-cream">{it.name}</a>
                 </li>
               ))
             }
           </ul>
         </nav>
-        <nav aria-label="Negocios por tamaño">
-          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Por tamaño</p>
+        <nav aria-label={t('footer.bySize')}>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">{t('footer.bySize')}</p>
           <ul class="flex flex-col gap-2.5">
             {
               sizeLinks.map((it) => (
                 <li>
-                  <a href={it.href} class="transition-colors hover:text-cream">{it.name}</a>
+                  <a href={L(it.href)} class="transition-colors hover:text-cream">{it.name}</a>
                 </li>
               ))
             }
           </ul>
         </nav>
-        <nav aria-label="Enlaces de la empresa">
-          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Sara</p>
+        <nav aria-label={t('footer.company')}>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">{t('footer.company')}</p>
           <ul class="flex flex-col gap-2.5">
-            <li><a href="/nosotros" class="transition-colors hover:text-cream">Nosotros</a></li>
-            <li><a href="/caso" class="transition-colors hover:text-cream">Casos</a></li>
-            <li><a href="/precios" class="transition-colors hover:text-cream">Precios</a></li>
-            <li><a href="/terminos" class="transition-colors hover:text-cream">Términos y condiciones</a></li>
-            <li><a href="/privacidad" class="transition-colors hover:text-cream">Política de privacidad</a></li>
+            <li><a href={L('/nosotros')} class="transition-colors hover:text-cream">{t('footer.about')}</a></li>
+            <li><a href={L('/caso')} class="transition-colors hover:text-cream">{t('footer.cases')}</a></li>
+            <li><a href={L('/precios')} class="transition-colors hover:text-cream">{t('footer.pricing')}</a></li>
+            <li><a href={L('/terminos')} class="transition-colors hover:text-cream">{t('footer.terms')}</a></li>
+            <li><a href={L('/privacidad')} class="transition-colors hover:text-cream">{t('footer.privacy')}</a></li>
           </ul>
         </nav>
       </div>
     </div>
 
     <div class="mt-14 flex flex-col gap-2 border-t border-cream/10 pt-6 text-xs text-cream/45 md:flex-row md:justify-between">
-      <p>© {year} Sara, un producto de BotBit, Inc. (RAY). Todos los derechos reservados.</p>
+      <p>© {year} Sara, {t('footer.productOf')} {t('footer.rights')}</p>
       <p class="flex flex-wrap gap-x-4 gap-y-1">
-        <a href="/terminos" class="transition-colors hover:text-cream/80">Términos</a>
-        <a href="/privacidad" class="transition-colors hover:text-cream/80">Privacidad</a>
+        <a href={L('/terminos')} class="transition-colors hover:text-cream/80">{t('footer.termsShort')}</a>
+        <a href={L('/privacidad')} class="transition-colors hover:text-cream/80">{t('footer.privacyShort')}</a>
         <a href="mailto:info@rayapp.io" class="transition-colors hover:text-cream/80">info@rayapp.io</a>
       </p>
     </div>

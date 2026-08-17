@@ -1,0 +1,348 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Agenda automática · La agenda que se llena sola',
+    metaDescription:
+      'Sara agenda sobre tu Google Calendar, sin dobles reservas. Cobra el anticipo, recuerda, confirma, reofrece los huecos a la lista de espera y reactiva a los que no vuelven.',
+    heroEyebrow: 'Agenda · Agenda automática',
+    heroTitle: "La agenda que se llena <em class='text-pine-dark'>sola.</em>",
+    heroLead:
+      'Sara no solo agenda: reserva sobre tu calendario real sin dobles reservas, cobra por adelantado, recuerda, confirma, reofrece los huecos que se liberan y trae de vuelta a los que dejaron de venir.',
+    heroImageAlt: 'Escritorio sereno de clínica con una agenda abierta, café y una ramita de salvia.',
+    strip: [
+      { t: 'Sobre tu Google Calendar', b: 'Lee y escribe en el que ya usas. No migras nada.' },
+      { t: 'Sin dobles reservas', b: 'Agenda solo sobre disponibilidad real y bloquea al instante.' },
+      { t: 'Cuida cada cita', b: 'Anticipo, recordatorio, confirmación y rescate del hueco.' },
+    ],
+    comoKicker: 'Cómo lo hace Sara',
+    comoH2: 'Ofrece solo lo que de verdad está&nbsp;libre.',
+    comoLead:
+      'Sara no promete horarios que no existen: mira tu disponibilidad real, ofrece lo que hay y bloquea en el momento. Sin dobles reservas, sin idas y vueltas para&nbsp;coordinar.',
+    demo1: [
+      { who: 'in', text: 'Hola, quiero agendar una cita para valoración', t: '09:20' },
+      { who: 'out', text: '¡Hola! Con gusto. Para esta semana tengo martes 10:30, miércoles 16:00 o jueves 09:00. ¿Cuál te queda mejor?', t: '09:20' },
+      { who: 'in', text: 'Miércoles 16:00', t: '09:21' },
+      { who: 'out', text: '¡Listo! Miércoles 16:00 reservado ✅ Lo dejé en la agenda y te llega el recordatorio un día antes.', t: '09:21' },
+    ],
+    tiemposH2: 'De una cita agendada a una agenda&nbsp;llena.',
+    steps: [
+      { n: '01', title: 'Se agenda la cita', body: 'Sara la reserva desde el chat, o tu equipo la carga: todo cae en el Google Calendar que ya usas.' },
+      { n: '02', title: 'Sara la cuida', body: 'Cobra el anticipo, recuerda, confirma y libera el hueco al instante si alguien cancela.' },
+      { n: '03', title: 'La agenda se llena sola', body: 'Reofrece los huecos a la lista de espera y reactiva a los pacientes que no vuelven.' },
+    ],
+    row1Eyebrow: 'Sincronizada',
+    row1Title: "Vive en el calendario <em class='text-pine-dark'>que ya usas.</em>",
+    row1Body:
+      'Sara lee y escribe en tu Google Calendar. Lo que agenda aparece al instante para tu equipo, y lo que carga recepción también queda cuidado. Nadie migra nada ni cambia de sistema.',
+    row1Points: [
+      'Lee y escribe en tu Google Calendar',
+      'Convive con lo que carga tu equipo',
+      'Por profesional y por sucursal',
+    ],
+    row1ImgAlt: 'Agenda semanal sincronizada: citas con anticipo pagado, confirmadas y huecos vueltos a ofrecer.',
+    row2Eyebrow: 'Cuida cada cita',
+    row2Title: "Cobra, recuerda <em class='text-pine-dark'>y confirma.</em>",
+    row2Body:
+      'Cada cita que entra queda protegida: Sara puede pedir el anticipo al reservar, recordar el día antes y pedir confirmación, para que la agenda llegue llena al día.',
+    row2Points: [
+      'Anticipo al reservar, el mejor filtro de ausencias',
+      'Recordatorio y confirmación automáticos',
+      'La agenda llega llena, sin sorpresas',
+    ],
+    demo2: [
+      { who: 'out', text: 'Hola, Paula! Te recuerdo tu cita de mañana a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+      { who: 'in', text: 'Sí! ahí voy', t: '19:12' },
+      { who: 'out', text: '¡Genial! Queda confirmada tu asistencia. ¡Te esperamos!', t: '19:12' },
+    ],
+    row3Eyebrow: 'Y la vuelve a llenar',
+    row3Title: "El hueco que se libera <em class='text-pine-dark'>no queda vacío.</em>",
+    row3Body:
+      'Si una cita se cae, Sara ofrece esa hora a la lista de espera. Y a los pacientes que no vuelven hace meses, los contacta uno por uno para traerlos de nuevo.',
+    row3Points: [
+      'Lista de espera que se mueve sola',
+      'Reactivación de pacientes inactivos',
+      'La agenda no depende de que alguien la empuje',
+    ],
+    demo3: [
+      { who: 'out', text: 'Hola, Juli! Quedó pendiente tu cita y no quería que se te pase. Tengo miércoles 19:30 o 20:00. ¿Te viene bien alguno?', t: '10:03' },
+      { who: 'in', text: 'El de las 19:30 me sirve', t: '18:22' },
+      { who: 'out', text: '¡Listo! Miércoles 19:30 reservado ✅', t: '18:22' },
+    ],
+    ctaInline1: 'Que tu agenda deje de depender de que alguien la&nbsp;empuje.',
+    formasH2: 'Cinco formas de que no te quede un hueco&nbsp;vacío.',
+    items: [
+      { t: 'Anticipo o consulta al reservar', b: 'El que paga, viene. Es el filtro de ausencias más efectivo que existe.' },
+      { t: 'Recordatorios y confirmación', b: 'Automáticos, sin que nadie de recepción levante el teléfono.' },
+      { t: 'Lista de espera activa', b: 'Se cancela una cita y Sara la vuelve a ofrecer al instante.' },
+      { t: 'Reactivación de inactivos', b: 'Los que no vuelven hace meses, contactados uno por uno.' },
+      { t: 'Seguimiento post-tratamiento', b: 'Controles y retoques agendados en el momento justo, sin que los persigas.' },
+    ],
+    accentQuote: 'El que paga, viene.',
+    faqs: [
+      { q: '¿Se integra con el calendario que ya uso?', a: 'Sí. Sara lee y escribe en tu Google Calendar. No migras nada ni cambias de sistema, y tu equipo lo sigue viendo como siempre.' },
+      { q: '¿Y si no uso Google Calendar (Flowww, AgendaPro, Doctoralia…)?', a: 'Hoy Sara agenda sobre Google Calendar. Si tu clínica usa otra agenda, lo vemos en la demo: en la mayoría alcanza con conectar una cuenta de Google a tu operación y te ayudamos a dejarla lista. Cuéntanos qué usas y te decimos si encaja antes de arrancar.' },
+      { q: '¿Puede reservar dos pacientes en el mismo horario?', a: 'No. Agenda solo sobre la disponibilidad real y bloquea al instante, así no hay dobles reservas.' },
+      { q: '¿Mi equipo puede seguir cargando citas a mano?', a: 'Claro. Sara convive con tu equipo: lo que cargue recepción también queda reflejado y cuidado.' },
+      { q: '¿Sirve si tengo varios profesionales o sucursales?', a: 'Sí. Se configura por agenda y por sucursal, para que cada cita caiga donde corresponde.' },
+      { q: '¿Toca mi historia clínica?', a: 'No. No se almacena historia clínica ni información médica. Sara trabaja sobre el calendario, eso queda donde está hoy.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Automatic calendar · The calendar that fills itself',
+    metaDescription:
+      'Sara books on your Google Calendar, with no double bookings. She collects the deposit, reminds, confirms, re-offers open slots to the waitlist and wins back the ones who stop coming.',
+    heroEyebrow: 'Calendar · Automatic calendar',
+    heroTitle: "The calendar that fills <em class='text-pine-dark'>itself.</em>",
+    heroLead:
+      'Sara does more than book: she reserves on your real calendar with no double bookings, collects payment upfront, reminds, confirms, re-offers the slots that open up and brings back the ones who stopped coming.',
+    heroImageAlt: 'A calm clinic desk with an open planner, coffee and a sprig of sage.',
+    strip: [
+      { t: 'On your Google Calendar', b: 'Reads and writes in the one you already use. You migrate nothing.' },
+      { t: 'No double bookings', b: 'Books only on real availability and blocks instantly.' },
+      { t: 'Cares for every appointment', b: 'Deposit, reminder, confirmation and slot rescue.' },
+    ],
+    comoKicker: 'How Sara does it',
+    comoH2: "She offers only what's actually&nbsp;open.",
+    comoLead:
+      "Sara never promises slots that don't exist. She checks your real availability, offers what's open and blocks it on the spot. No double bookings, no back and forth to&nbsp;coordinate.",
+    demo1: [
+      { who: 'in', text: "Hi, I'd like to book an appointment for an assessment", t: '09:20' },
+      { who: 'out', text: 'Hi! Happy to help. This week I have Tuesday 10:30, Wednesday 4:00 pm or Thursday 9:00. Which works best for you?', t: '09:20' },
+      { who: 'in', text: 'Wednesday 4:00 pm', t: '09:21' },
+      { who: 'out', text: "Done! Wednesday 4:00 pm booked ✅ I added it to the calendar and you'll get a reminder the day before.", t: '09:21' },
+    ],
+    tiemposH2: 'From one booked appointment to a full&nbsp;calendar.',
+    steps: [
+      { n: '01', title: 'The appointment gets booked', body: 'Sara books it from the chat, or your team adds it: everything lands in the Google Calendar you already use.' },
+      { n: '02', title: 'Sara looks after it', body: 'She collects the deposit, reminds, confirms and frees the slot instantly if someone cancels.' },
+      { n: '03', title: 'The calendar fills itself', body: 'She re-offers open slots to the waitlist and wins back the patients who stop coming.' },
+    ],
+    row1Eyebrow: 'Synced',
+    row1Title: "Lives in the calendar <em class='text-pine-dark'>you already use.</em>",
+    row1Body:
+      'Sara reads and writes in your Google Calendar. What she books shows up instantly for your team, and what the front desk adds is cared for too. No one migrates anything or switches systems.',
+    row1Points: [
+      'Reads and writes in your Google Calendar',
+      'Works alongside what your team adds',
+      'Per provider and per location',
+    ],
+    row1ImgAlt: 'A synced weekly calendar: appointments with deposit paid, confirmed, and open slots re-offered.',
+    row2Eyebrow: 'Cares for every appointment',
+    row2Title: "Collects, reminds <em class='text-pine-dark'>and confirms.</em>",
+    row2Body:
+      'Every appointment that comes in is protected: Sara can ask for the deposit at booking, remind the day before and request confirmation, so the calendar arrives full on the day.',
+    row2Points: [
+      'Deposit at booking, the best no-show filter',
+      'Automatic reminders and confirmation',
+      'The calendar arrives full, no surprises',
+    ],
+    demo2: [
+      { who: 'out', text: "Hi Paula! Just a reminder about your appointment tomorrow at 2:00 pm. Can you confirm you're coming? Reply YES to confirm 🙌", t: '18:00' },
+      { who: 'in', text: "Yes! I'll be there", t: '19:12' },
+      { who: 'out', text: 'Great! Your appointment is confirmed. See you then!', t: '19:12' },
+    ],
+    row3Eyebrow: 'And fills it again',
+    row3Title: "The slot that opens up <em class='text-pine-dark'>doesn't stay empty.</em>",
+    row3Body:
+      "If an appointment falls through, Sara offers that time to the waitlist. And she reaches out one by one to the patients who haven't returned in months to bring them back.",
+    row3Points: [
+      'A waitlist that moves on its own',
+      'Win-back for inactive patients',
+      "The calendar doesn't depend on anyone pushing it",
+    ],
+    demo3: [
+      { who: 'out', text: "Hi Juli! Your appointment is still pending and I didn't want you to miss it. I have Wednesday 7:30 pm or 8:00 pm. Does either work for you?", t: '10:03' },
+      { who: 'in', text: '7:30 pm works for me', t: '18:22' },
+      { who: 'out', text: 'Done! Wednesday 7:30 pm booked ✅', t: '18:22' },
+    ],
+    ctaInline1: 'Stop letting your calendar depend on someone&nbsp;pushing it.',
+    formasH2: 'Five ways to keep a slot from sitting&nbsp;empty.',
+    items: [
+      { t: 'Deposit or consult at booking', b: "Whoever pays, shows up. It's the most effective no-show filter there is." },
+      { t: 'Reminders and confirmation', b: 'Automatic, without anyone at the front desk picking up the phone.' },
+      { t: 'Active waitlist', b: 'An appointment cancels and Sara re-offers it instantly.' },
+      { t: 'Win-back for inactive patients', b: "The ones who haven't returned in months, reached one by one." },
+      { t: 'Post-treatment follow-up', b: 'Check-ups and touch-ups booked at just the right time, without you chasing them.' },
+    ],
+    accentQuote: 'Whoever pays, shows up.',
+    faqs: [
+      { q: 'Does it integrate with the calendar I already use?', a: 'Yes. Sara reads and writes in your Google Calendar. You migrate nothing and switch nothing, and your team keeps seeing it just like always.' },
+      { q: "What if I don't use Google Calendar (Flowww, AgendaPro, Doctoralia…)?", a: "Today Sara books on Google Calendar. If your clinic uses another calendar, we'll look at it in the demo: for most, connecting a Google account to your operation is enough, and we help you get it ready. Tell us what you use and we'll let you know if it fits before you start." },
+      { q: 'Can it book two patients in the same time slot?', a: 'No. It books only on real availability and blocks instantly, so there are no double bookings.' },
+      { q: 'Can my team keep adding appointments by hand?', a: 'Of course. Sara works alongside your team: whatever the front desk adds is reflected and cared for too.' },
+      { q: 'Does it work if I have several providers or locations?', a: "Yes. It's set up per calendar and per location, so every appointment lands where it belongs." },
+      { q: 'Does it touch my medical records?', a: 'No. No medical history or clinical information is stored. Sara works on the calendar; that stays exactly where it is today.' },
+    ],
+  },
+}[lang];
+
+const { steps, items, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/agenda-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={900}
+      lang={lang}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.comoKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.comoH2} />
+          <p class="mt-5 text-lg text-salvia" set:html={dict.comoLead} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={dict.demo1}
+            lang={lang}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.tiemposH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <img
+            src="/img/agenda.jpg"
+            width="1200"
+            height="900"
+            alt={dict.row1ImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <div id="recordatorios" class="scroll-mt-24">
+          <FeatureRow
+            flip
+            eyebrow={dict.row2Eyebrow}
+            title={dict.row2Title}
+            body={dict.row2Body}
+            points={dict.row2Points}
+          >
+            <ConversationDemo
+              channel="whatsapp"
+              bubbles={dict.demo2}
+              lang={lang}
+            />
+          </FeatureRow>
+        </div>
+
+        <FeatureRow
+          eyebrow={dict.row3Eyebrow}
+          title={dict.row3Title}
+          body={dict.row3Body}
+          points={dict.row3Points}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={dict.demo3}
+            lang={lang}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline1} lang={lang} />
+
+    <!-- ══════════ 5 FORMAS ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.formasH2} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {
+            items.map((d) => (
+              <div class="flex flex-col rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold">{d.t}</h3>
+                <p class="mt-2 text-salvia">{d.b}</p>
+              </div>
+            ))
+          }
+          <div class="flex items-center rounded-xl border border-pine/25 bg-mint/[0.08] p-7">
+            <p class="font-accent text-xl italic text-pine-dark">{dict.accentQuote}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

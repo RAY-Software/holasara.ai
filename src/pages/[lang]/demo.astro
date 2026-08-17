@@ -1,88 +1,198 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import SaraSelect from '../components/SaraSelect.astro';
-import PlacesAutocomplete from '../components/PlacesAutocomplete.astro';
-import ClientsStrip from '../components/ClientsStrip.astro';
-import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, whatsappLink } from '../lib/whatsapp';
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SaraSelect from '../../components/SaraSelect.astro';
+import PlacesAutocomplete from '../../components/PlacesAutocomplete.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
+import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, whatsappLink } from '../../lib/whatsapp';
 
 // Endpoint opcional para el lead (Zapier/Make catch hook). Si no está seteado,
 // el formulario hace handoff a WhatsApp con un resumen prellenado, así siempre
 // funciona sin backend. Cuando quieras CRM, setea PUBLIC_DEMO_ENDPOINT en Vercel.
 const DEMO_ENDPOINT = import.meta.env.PUBLIC_DEMO_ENDPOINT ?? '';
 
-const roleOptions = [
-  { value: 'Dueño/a', label: 'Dueño/a de la clínica' },
-  { value: 'Director/a médico', label: 'Director/a médico' },
-  { value: 'Gerencia/Administración', label: 'Gerencia o administración' },
-  { value: 'Recepción', label: 'Recepción' },
-  { value: 'Otro', label: 'Otro' },
-];
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Pide tu demo · Sara',
+    metaDescription:
+      'Agenda una demo de Sara con tu propia clínica: mira cómo atiende WhatsApp e Instagram, agenda y cobra el anticipo, en vivo.',
+    back: 'Volver al inicio',
+    kicker: 'Pide tu demo',
+    h1: 'Mira a Sara atender <em class="text-pine-dark">tu</em> clínica.',
+    heroSub:
+      'No es una presentación con diapositivas. Cargamos tus tratamientos y pruebas una consulta real: Sara responde, agenda y cobra el anticipo frente a ti.',
+    proofBadge: 'Ya trabaja aquí',
+    stat1: 'consultas atendidas sin recepción',
+    stat2: 'citas agendadas por Sara',
+    roleLabel: '¿Cuál es tu rol?',
+    roleOptions: [
+      { value: 'Dueño/a', label: 'Dueño/a de la clínica' },
+      { value: 'Director/a médico', label: 'Director/a médico' },
+      { value: 'Gerencia/Administración', label: 'Gerencia o administración' },
+      { value: 'Recepción', label: 'Recepción' },
+      { value: 'Otro', label: 'Otro' },
+    ],
+    // Estos cuatro venden a Sara, no a la demo. La demo ya está vendida arriba, en el H1
+    // y la bajada: quien llega desde un anuncio no conoce el producto y no le sirve que
+    // le expliquemos cómo es la reunión antes de saber qué hace ella.
+    benefits: [
+      {
+        t: 'Contesta la consulta de las 23:41',
+        b: 'Responde en el momento por WhatsApp, Instagram y el chat de tu web. De noche, los fines de semana y en los picos. La clínica que responde primero se queda con el paciente.',
+      },
+      {
+        t: 'Informa y aconseja, no da botones',
+        b: 'Explica tratamientos, da precios reales y arma la propuesta que conviene, con el tono de tu clínica. Nunca inventa nada.',
+      },
+      {
+        t: 'Agenda y cobra en la misma conversación',
+        b: 'Reserva sobre tu disponibilidad real, sin dobles reservas, y toma el anticipo con un link de pago seguro. Después recuerda, confirma y reofrece los huecos que se liberan.',
+      },
+      {
+        t: 'Se suma sin que cambies nada',
+        b: 'Trabaja sobre tu WhatsApp y el Google Calendar que ya usas. No migras datos ni toca tu historia clínica.',
+      },
+    ],
+    formTitle: 'Cuéntanos de tu clínica',
+    formSub: 'Te escribimos el mismo día para coordinar. Sin compromiso.',
+    nameLabel: 'Nombre y apellido',
+    clinicLabel: 'Nombre de la clínica',
+    clinicHint: 'Empieza a escribir y elígela de la lista.',
+    phoneLabel: 'WhatsApp',
+    phonePlaceholder: '+52 …',
+    emailLabel: 'Email',
+    emailOptional: '(opcional)',
+    consent: 'Acepto que Sara me contacte por WhatsApp o email para coordinar la demo.',
+    submit: 'Pedir mi demo',
+    waPrompt: '¿Prefieres escribir ahora?',
+    waLink: 'Habla con Sara por WhatsApp',
+    waFallbackMsg: 'Hola Sara, quiero una demo para mi clínica.',
+    successTitle: 'Listo, lo recibimos.',
+    successBody: 'Te escribimos hoy mismo por WhatsApp para coordinar la demo con tu clínica.',
+    script: {
+      sending: 'Enviando…',
+      errRequired: 'Completa los campos requeridos para pedir tu demo.',
+      errEmail: 'Revisa el email: no parece válido.',
+      errConsent: 'Necesitamos tu OK para contactarte y coordinar la demo.',
+      waIntro: 'Hola Sara, quiero una demo para mi clínica.',
+      labelClinic: 'Clínica',
+      labelName: 'Nombre',
+      labelRole: 'Rol',
+    },
+  },
+  en: {
+    metaTitle: 'Book your demo · Sara',
+    metaDescription:
+      'Book a Sara demo with your own clinic: see how she handles WhatsApp and Instagram, books and collects the deposit, live.',
+    back: 'Back to home',
+    kicker: 'Book a demo',
+    h1: 'Watch Sara handle <em class="text-pine-dark">your</em> clinic.',
+    heroSub:
+      "This isn't a slideshow. We load your treatments and run a real enquiry: Sara replies, books and collects the deposit right in front of you.",
+    proofBadge: 'Already working here',
+    stat1: 'enquiries handled without a front desk',
+    stat2: 'appointments booked by Sara',
+    roleLabel: "What's your role?",
+    roleOptions: [
+      { value: 'Owner', label: 'Clinic owner' },
+      { value: 'Medical director', label: 'Medical director' },
+      { value: 'Management/Admin', label: 'Management or admin' },
+      { value: 'Front desk', label: 'Front desk' },
+      { value: 'Other', label: 'Other' },
+    ],
+    benefits: [
+      {
+        t: 'Answers the 11:41 pm enquiry',
+        b: 'Replies instantly on WhatsApp, Instagram and your website chat. At night, on weekends and during peak hours. The clinic that answers first keeps the patient.',
+      },
+      {
+        t: 'Informs and advises, no buttons',
+        b: "Explains treatments, gives real prices and puts together the right proposal, in your clinic's tone. She never makes anything up.",
+      },
+      {
+        t: 'Books and charges in the same conversation',
+        b: 'Books on your real availability, with no double bookings, and takes the deposit through a secure payment link. Then she reminds, confirms and re-offers the slots that open up.',
+      },
+      {
+        t: 'Fits in without you changing a thing',
+        b: 'She works on your WhatsApp and the Google Calendar you already use. You migrate no data and she never touches your medical records.',
+      },
+    ],
+    formTitle: 'Tell us about your clinic',
+    formSub: 'We write you the same day to set it up. No commitment.',
+    nameLabel: 'Full name',
+    clinicLabel: 'Clinic name',
+    clinicHint: 'Start typing and pick it from the list.',
+    phoneLabel: 'WhatsApp',
+    phonePlaceholder: '+52 …',
+    emailLabel: 'Email',
+    emailOptional: '(optional)',
+    consent: 'I agree to let Sara contact me by WhatsApp or email to set up the demo.',
+    submit: 'Book my demo',
+    waPrompt: 'Prefer to write now?',
+    waLink: 'Talk to Sara on WhatsApp',
+    waFallbackMsg: 'Hi Sara, I want a demo for my clinic.',
+    successTitle: 'Done, we got it.',
+    successBody: "We'll write you today on WhatsApp to set up the demo with your clinic.",
+    script: {
+      sending: 'Sending…',
+      errRequired: 'Please complete the required fields to book your demo.',
+      errEmail: "Check the email: it doesn't look valid.",
+      errConsent: 'We need your OK to contact you and set up the demo.',
+      waIntro: 'Hi Sara, I want a demo for my clinic.',
+      labelClinic: 'Clinic',
+      labelName: 'Name',
+      labelRole: 'Role',
+    },
+  },
+}[lang];
 
-// Estos cuatro venden a Sara, no a la demo. La demo ya está vendida arriba, en el H1 y
-// la bajada: quien llega desde un anuncio no conoce el producto y no le sirve que le
-// expliquemos cómo es la reunión antes de saber qué hace ella.
-const benefits = [
-  {
-    t: 'Contesta la consulta de las 23:41',
-    b: 'Responde en el momento por WhatsApp, Instagram y el chat de tu web. De noche, los fines de semana y en los picos. La clínica que responde primero se queda con el paciente.',
-  },
-  {
-    t: 'Informa y aconseja, no da botones',
-    b: 'Explica tratamientos, da precios reales y arma la propuesta que conviene, con el tono de tu clínica. Nunca inventa nada.',
-  },
-  {
-    t: 'Agenda y cobra en la misma conversación',
-    b: 'Reserva sobre tu disponibilidad real, sin dobles reservas, y toma el anticipo con un link de pago seguro. Después recuerda, confirma y reofrece los huecos que se liberan.',
-  },
-  {
-    t: 'Se suma sin que cambies nada',
-    b: 'Trabaja sobre tu WhatsApp y el Google Calendar que ya usas. No migras datos ni toca tu historia clínica.',
-  },
-];
+const roleOptions = dict.roleOptions;
+const benefits = dict.benefits;
 ---
 
-<Layout
-  title="Pide tu demo · Sara"
-  description="Agenda una demo de Sara con tu propia clínica: mira cómo atiende WhatsApp e Instagram, agenda y cobra el anticipo, en vivo."
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
 >
-  <Header />
+  <Header lang={lang} />
 
   <main class="bg-paper">
     <div class="mx-auto max-w-6xl px-5 py-14 md:py-20">
-      <a href="/" class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
-        <span aria-hidden="true">←</span> Volver al inicio
+      <a href={L('/')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+        <span aria-hidden="true">←</span> {dict.back}
       </a>
 
       <div class="grid gap-12 md:grid-cols-[0.95fr_1.05fr] md:gap-16 md:items-start">
         <!-- ─── Izquierda: por qué + prueba real ─── -->
         <div>
           <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
-            <span class="dot h-2 w-2"></span> Pide tu demo
+            <span class="dot h-2 w-2"></span> {dict.kicker}
           </p>
-          <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl">
-            Mira a Sara atender <em class="text-pine-dark">tu</em> clínica.
-          </h1>
-          <p class="mt-6 max-w-xl text-lg text-salvia">
-            No es una presentación con diapositivas. Cargamos tus tratamientos y pruebas una
-            consulta real: Sara responde, agenda y cobra el anticipo frente a ti.
-          </p>
+          <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl" set:html={dict.h1} />
+          <p class="mt-6 max-w-xl text-lg text-salvia">{dict.heroSub}</p>
 
           <!-- Prueba real: ViaLaser (no inventamos testimonios) -->
           <div class="mt-10 rounded-xl border border-line bg-cream p-7">
             <div class="flex items-center gap-3">
               <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="h-7 w-auto" loading="lazy" />
-              <span class="text-sm font-medium text-salvia">Ya trabaja aquí</span>
+              <span class="text-sm font-medium text-salvia">{dict.proofBadge}</span>
             </div>
             <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">114</p>
-                <p class="mt-1 text-xs leading-tight text-salvia">consultas atendidas sin recepción</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat1}</p>
               </div>
               <div>
                 <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">7/10</p>
-                <p class="mt-1 text-xs leading-tight text-salvia">citas agendadas por Sara</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat2}</p>
               </div>
             </div>
           </div>
@@ -101,19 +211,19 @@ const benefits = [
 
         <!-- ─── Derecha: formulario ─── -->
         <div class="rounded-2xl border border-line bg-cream p-7 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] md:p-9">
-          <h2 class="font-serif text-2xl font-black text-ink">Cuéntanos de tu clínica</h2>
-          <p class="mt-2 text-sm text-salvia">Te escribimos el mismo día para coordinar. Sin compromiso.</p>
+          <h2 class="font-serif text-2xl font-black text-ink">{dict.formTitle}</h2>
+          <p class="mt-2 text-sm text-salvia">{dict.formSub}</p>
 
           <form id="demo-form" class="mt-7 flex flex-col gap-5" novalidate data-endpoint={DEMO_ENDPOINT}>
-            <SaraSelect name="role" label="¿Cuál es tu rol?" options={roleOptions} required />
+            <SaraSelect name="role" label={dict.roleLabel} options={roleOptions} required lang={lang} />
 
             <div>
-              <label for="name" class="mb-1.5 block text-sm font-medium text-ink">Nombre y apellido</label>
+              <label for="name" class="mb-1.5 block text-sm font-medium text-ink">{dict.nameLabel}</label>
               <input id="name" name="name" type="text" autocomplete="name" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
             </div>
 
             <div>
-              <label for="clinic" class="mb-1.5 block text-sm font-medium text-ink">Nombre de la clínica</label>
+              <label for="clinic" class="mb-1.5 block text-sm font-medium text-ink">{dict.clinicLabel}</label>
               <input
                 id="clinic"
                 name="clinic"
@@ -127,19 +237,19 @@ const benefits = [
                 data-target-address="clinic_address"
                 class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25"
               />
-              <p id="clinic-hint" class="mt-1 hidden text-xs text-salvia">Empieza a escribir y elígela de la lista.</p>
+              <p id="clinic-hint" class="mt-1 hidden text-xs text-salvia">{dict.clinicHint}</p>
               <input type="hidden" name="clinic_place_id" id="clinic_place_id" />
               <input type="hidden" name="clinic_address" id="clinic_address" />
             </div>
 
             <div>
-              <label for="phone" class="mb-1.5 block text-sm font-medium text-ink">WhatsApp</label>
-              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+52 …" required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              <label for="phone" class="mb-1.5 block text-sm font-medium text-ink">{dict.phoneLabel}</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder={dict.phonePlaceholder} required class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
             </div>
 
             <div>
               <label for="email" class="mb-1.5 block text-sm font-medium text-ink">
-                Email <span class="font-normal text-salvia">(opcional)</span>
+                {dict.emailLabel} <span class="font-normal text-salvia">{dict.emailOptional}</span>
               </label>
               <input id="email" name="email" type="email" autocomplete="email" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
             </div>
@@ -152,7 +262,7 @@ const benefits = [
 
             <label class="flex items-start gap-3 text-sm text-salvia">
               <input type="checkbox" name="consent" required class="mt-1 h-4 w-4 shrink-0 rounded border-line text-pine focus:ring-pine/25" />
-              <span>Acepto que Sara me contacte por WhatsApp o email para coordinar la demo.</span>
+              <span>{dict.consent}</span>
             </label>
 
             <p id="demo-error" class="hidden rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700"></p>
@@ -162,11 +272,11 @@ const benefits = [
               id="demo-submit"
               class="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-pine px-6 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-pine-dark disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Pedir mi demo
+              {dict.submit}
             </button>
 
             <p class="text-center text-xs text-salvia">
-              ¿Prefieres escribir ahora? <a href={whatsappLink('Hola Sara, quiero una demo para mi clínica.')} data-wa-fallback class="font-semibold text-pine-dark underline">Habla con Sara por WhatsApp</a>.
+              {dict.waPrompt} <a href={whatsappLink(dict.waFallbackMsg)} data-wa-fallback class="font-semibold text-pine-dark underline">{dict.waLink}</a>.
             </p>
           </form>
 
@@ -178,8 +288,8 @@ const benefits = [
                   <path d="M5 13l4 4L19 7" stroke="#14261F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
               </span>
-              <h2 class="mt-5 font-serif text-2xl font-black text-ink">Listo, lo recibimos.</h2>
-              <p class="mt-2 max-w-sm text-salvia">Te escribimos hoy mismo por WhatsApp para coordinar la demo con tu clínica.</p>
+              <h2 class="mt-5 font-serif text-2xl font-black text-ink">{dict.successTitle}</h2>
+              <p class="mt-2 max-w-sm text-salvia">{dict.successBody}</p>
             </div>
           </div>
         </div>
@@ -187,11 +297,11 @@ const benefits = [
     </div>
   </main>
 
-  <ClientsStrip />
+  <ClientsStrip lang={lang} />
 
-  <Footer />
+  <Footer lang={lang} />
 
-  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG }}>
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, T: dict.script }}>
     (function () {
       var form = document.getElementById('demo-form');
       if (!form) return;
@@ -319,10 +429,10 @@ const benefits = [
 
       function waHandoff(data, token) {
         var msg =
-          'Hola Sara, quiero una demo para mi clínica.\n' +
-          '• Clínica: ' + (data.clinic || '-') + '\n' +
-          '• Nombre: ' + (data.name || '-') + '\n' +
-          '• Rol: ' + (data.role || '-');
+          T.waIntro + '\n' +
+          '• ' + T.labelClinic + ': ' + (data.clinic || '-') + '\n' +
+          '• ' + T.labelName + ': ' + (data.name || '-') + '\n' +
+          '• ' + T.labelRole + ': ' + (data.role || '-');
         msg += '\n' + SRC_TAG + (token || '');
         return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
       }
@@ -333,7 +443,7 @@ const benefits = [
       if (fb)
         fb.setAttribute(
           'href',
-          'https://wa.me/' + WA + '?text=' + encodeURIComponent('Hola Sara, quiero una demo para mi clínica. ' + SRC_TAG)
+          'https://wa.me/' + WA + '?text=' + encodeURIComponent(T.waIntro + ' ' + SRC_TAG)
         );
 
       form.addEventListener('submit', function (ev) {
@@ -352,17 +462,17 @@ const benefits = [
 
         // Validación mínima. Email es opcional, pero si lo escriben tiene que ser válido.
         if (!data.role || !data.name || !data.phone || !data.clinic) {
-          return showError('Completa los campos requeridos para pedir tu demo.');
+          return showError(T.errRequired);
         }
         if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(data.email))) {
-          return showError('Revisa el email: no parece válido.');
+          return showError(T.errEmail);
         }
         if (!fd.get('consent')) {
-          return showError('Necesitamos tu OK para contactarte y coordinar la demo.');
+          return showError(T.errConsent);
         }
 
         btn.disabled = true;
-        btn.textContent = 'Enviando…';
+        btn.textContent = T.sending;
 
         var token = clickToken(ids);
 

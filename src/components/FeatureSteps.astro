@@ -4,13 +4,16 @@ interface Step {
   title: string;
   body: string;
 }
+import { defaultLocale, type Locale } from '../i18n/config';
 interface Props {
   eyebrow?: string;
   title: string; // admite &nbsp; / <em>
   steps: Step[];
   dark?: boolean;
+  lang?: Locale;
 }
-const { eyebrow = 'Cómo funciona', title, steps, dark = false } = Astro.props;
+const { lang = defaultLocale, title, steps, dark = false } = Astro.props;
+const { eyebrow = lang === 'en' ? 'How it works' : 'Cómo funciona' } = Astro.props;
 const wrap = dark ? 'bg-ink text-cream' : 'bg-paper';
 const eyebrowCls = dark ? 'text-mint' : 'text-pine-dark';
 const bodyCls = dark ? 'text-cream/65' : 'text-salvia';

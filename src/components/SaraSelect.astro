@@ -6,14 +6,17 @@ interface Option {
   value: string;
   label: string;
 }
+import { defaultLocale, type Locale } from '../i18n/config';
 interface Props {
   name: string;
   label: string;
   placeholder?: string;
   options: Option[];
   required?: boolean;
+  lang?: Locale;
 }
-const { name, label, placeholder = 'Elige una opción', options, required = false } = Astro.props;
+const { name, label, placeholder, options, required = false, lang = defaultLocale } = Astro.props;
+const resolvedPlaceholder = placeholder ?? (lang === 'en' ? 'Choose an option' : 'Elige una opción');
 const labelId = `${name}-label`;
 ---
 
@@ -27,7 +30,7 @@ const labelId = `${name}-label`;
       aria-expanded="false"
       aria-labelledby={labelId}
     >
-      <span class="sara-select-value truncate text-salvia" data-placeholder={placeholder}>{placeholder}</span>
+      <span class="sara-select-value truncate text-salvia" data-placeholder={resolvedPlaceholder}>{resolvedPlaceholder}</span>
       <svg class="sara-select-chevron h-4 w-4 shrink-0 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
       </svg>

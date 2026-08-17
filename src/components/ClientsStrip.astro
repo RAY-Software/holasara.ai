@@ -3,20 +3,57 @@
 // fotos reales de cada clínica (bajadas de sus sitios en prod) + nombre y rubro,
 // sin métricas inventadas (las métricas reales de ViaLaser viven en /caso).
 // Marquee suave estilo tira de casos, pausa al hover, respeta reduced-motion.
+import { defaultLocale, type Locale } from '../i18n/config';
 interface Props {
   label?: string;
   tone?: 'light' | 'paper';
+  lang?: Locale;
 }
-const { label = 'Clínicas que ya trabajan con Sara', tone = 'paper' } = Astro.props;
+const { lang = defaultLocale, tone = 'paper' } = Astro.props;
+const { label = lang === 'en' ? 'Clinics already working with Sara' : 'Clínicas que ya trabajan con Sara' } = Astro.props;
 
 type Client = { name: string; tag: string; img: string; alt: string };
 
+const tags =
+  lang === 'en'
+    ? {
+        laser: 'Laser hair removal',
+        facial: 'Facial aesthetics',
+        rhino: 'Rhinoplasty',
+        physio: 'Physiotherapy',
+        surgery: 'Plastic & aesthetic surgery',
+      }
+    : {
+        laser: 'Depilación láser',
+        facial: 'Estética facial',
+        rhino: 'Rinoplastia',
+        physio: 'Fisioterapia',
+        surgery: 'Cirugía plástica y estética',
+      };
+
+const alts =
+  lang === 'en'
+    ? {
+        vialaser: 'Front desk of the ViaLaser laser hair removal center',
+        faceup: 'Facial treatment at the FaceUp clinic',
+        drreyes: 'Facial profile illustrating rhinoplasty at DrReyes',
+        physiup: 'Physiup, physiotherapy and movement center',
+        sorace: 'Consultation at Dres. Sorace & Mendoza, plastic surgery',
+      }
+    : {
+        vialaser: 'Recepción del centro de depilación láser ViaLaser',
+        faceup: 'Tratamiento facial en la clínica FaceUp',
+        drreyes: 'Perfil facial que ilustra la rinoplastia en DrReyes',
+        physiup: 'Physiup, centro de fisioterapia y movimiento',
+        sorace: 'Consulta en Dres. Sorace & Mendoza, cirugía plástica',
+      };
+
 const clients: Client[] = [
-  { name: 'ViaLaser', tag: 'Depilación láser', img: '/img/tenants/vialaser.jpg', alt: 'Recepción del centro de depilación láser ViaLaser' },
-  { name: 'FaceUp', tag: 'Estética facial', img: '/img/tenants/faceup.jpg', alt: 'Tratamiento facial en la clínica FaceUp' },
-  { name: 'DrReyes', tag: 'Rinoplastia', img: '/img/tenants/drreyes.jpg', alt: 'Perfil facial que ilustra la rinoplastia en DrReyes' },
-  { name: 'Physiup', tag: 'Fisioterapia', img: '/img/tenants/physiup.jpg', alt: 'Physiup, centro de fisioterapia y movimiento' },
-  { name: 'Sorace & Mendoza', tag: 'Cirugía plástica y estética', img: '/img/tenants/sorace.jpg', alt: 'Consulta en Dres. Sorace & Mendoza, cirugía plástica' },
+  { name: 'ViaLaser', tag: tags.laser, img: '/img/tenants/vialaser.jpg', alt: alts.vialaser },
+  { name: 'FaceUp', tag: tags.facial, img: '/img/tenants/faceup.jpg', alt: alts.faceup },
+  { name: 'DrReyes', tag: tags.rhino, img: '/img/tenants/drreyes.jpg', alt: alts.drreyes },
+  { name: 'Physiup', tag: tags.physio, img: '/img/tenants/physiup.jpg', alt: alts.physiup },
+  { name: 'Sorace & Mendoza', tag: tags.surgery, img: '/img/tenants/sorace.jpg', alt: alts.sorace },
 ];
 // Duplicamos para un loop continuo sin cortes.
 const loop = [...clients, ...clients];

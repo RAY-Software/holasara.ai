@@ -1,0 +1,332 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'WhatsApp e Instagram 24/7 · Sara',
+    metaDescription:
+      'Sara atiende WhatsApp, Instagram y el chat de tu web las 24 horas: informa, agenda y cobra en la misma conversación. Hasta los comentarios terminan en una cita, atribuida a su canal.',
+    heroEyebrow: 'Atiende · WhatsApp e Instagram 24/7',
+    heroTitle: "Responde donde te escriben. <em class='text-pine-dark'>A cualquier hora.</em>",
+    heroLead:
+      'El primer contacto entra por WhatsApp, Instagram o el chat de tu web, y casi nunca en horario de oficina. Sara es la misma en todos: contesta en el momento, informa de verdad y deja la cita agendada.',
+    heroImageAlt:
+      'Un teléfono en un mostrador de clínica, de noche: Sara responde por WhatsApp, Instagram y la web a cualquier hora.',
+    webChatLabel: 'Chat web',
+    strip: [
+      { t: 'WhatsApp', b: 'Sobre tu línea de WhatsApp Business, sin cambiar de número.' },
+      { t: 'Instagram', b: 'Mensajes directos y hasta los comentarios de tus posts.' },
+      { t: 'Chat web y formulario', b: 'En tu sitio, 24/7. La misma Sara, el mismo criterio.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'La consulta de las 23:41 no espera a&nbsp;mañana.',
+    howP:
+      'La clínica que responde primero se queda con el paciente. Sara contesta en el momento en que te escriben, informa de verdad y deja la cita agendada antes de que se enfríe el&nbsp;interés.',
+    howBubbles: [
+      { who: 'in', text: 'Hola! Vi que hacen limpieza facial, ¿tienen cita esta semana?', t: '21:15' },
+      { who: 'out', text: '¡Hola! Sí, hacemos limpieza facial profunda. Tengo miércoles 16:00 o jueves 11:00. ¿Cuál te queda mejor? La reserva se confirma con un anticipo.', t: '21:15' },
+      { who: 'in', text: 'Miércoles', t: '21:16' },
+      { who: 'out', text: '¡Listo! Miércoles 16:00 reservado ✅ Te paso el link del anticipo y te llega el recordatorio un día antes.', t: '21:16' },
+    ],
+    stepsH2: 'Del mensaje a la cita, sin que recepción&nbsp;intervenga.',
+    steps: [
+      { n: '01', title: 'Llega el mensaje', body: 'Por WhatsApp, Instagram o el chat de tu web, casi siempre fuera del horario de recepción.' },
+      { n: '02', title: 'Sara responde al instante', body: 'Informa tratamientos, precios y la disponibilidad real de tu agenda, con el tono de tu clínica.' },
+      { n: '03', title: 'Agenda y cobra ahí mismo', body: 'Reserva la cita y toma el anticipo sin salir de la conversación. Y queda atribuida al canal que la trajo.' },
+    ],
+    row1Eyebrow: 'Instagram',
+    row1Title: "Hasta un comentario <em class='text-pine-dark'>termina en una cita.</em>",
+    row1Body:
+      'Cuando alguien comenta una publicación, Sara le escribe por mensaje directo, sigue la conversación en privado y la lleva a agendar. El interés que generó tu contenido no se pierde en los comentarios.',
+    row1Points: [
+      'Responde comentarios por mensaje directo',
+      'Atiende los DM como en WhatsApp',
+      'Del post a la reserva, sin cortar el hilo',
+    ],
+    row1Bubbles: [
+      { who: 'out', text: '¡Hola! Vi tu comentario en la publicación 🙌 Te escribo por aquí para ayudarte. ¿Qué zona te interesa?', t: '19:40' },
+      { who: 'in', text: 'Hola! quería saber el precio de axilas', t: '19:52' },
+      { who: 'out', text: '¡Genial! El pack de 6 sesiones de axilas está $1,900, y la primera es de regalo para que pruebes. ¿Te agendo la de prueba?', t: '19:52' },
+    ],
+    row2Eyebrow: 'Con tu equipo',
+    row2Title: "Y cuando hace falta una persona, <em class='text-pine-dark'>te pasa la posta.</em>",
+    row2Body:
+      'Si una consulta necesita a alguien de tu equipo, Sara no improvisa: avisa con todo el contexto de la charla, así la persona retoma sin pedirle al paciente que repita nada.',
+    row2Points: [
+      'Deriva a tu equipo con el historial completo',
+      'El paciente no empieza de cero',
+      'Sara vuelve a tomar el hilo después',
+    ],
+    row2Bubbles: [
+      { who: 'in', text: 'Necesito factura a nombre de mi empresa, ¿se puede?', t: '10:08' },
+      { who: 'out', text: '¡Buena pregunta! Eso lo maneja el equipo directamente. Ya les paso tu consulta con el detalle para que te ayuden. En un momento te escriben 🙌', t: '10:08' },
+    ],
+    row3Eyebrow: 'Atribución',
+    row3Title: "Y sabes qué canal <em class='text-pine-dark'>te trae las citas.</em>",
+    row3Body:
+      'Cada cita queda atribuida al canal que la originó: WhatsApp, Instagram o la web. Dejas de adivinar dónde invertir: los números te lo dicen.',
+    row3Points: [
+      'Citas por canal, mes a mes',
+      'Valor generado por cada canal',
+      'Todo en el panel, sin planillas',
+    ],
+    row3ImgAlt: 'Panel con las citas por canal: WhatsApp, Instagram y web, con el valor generado por cada uno.',
+    ctaInline: 'La consulta de las 23:41 no tiene por qué&nbsp;esperar.',
+    faqs: [
+      { q: '¿Usa mi número de WhatsApp actual?', a: 'Sara atiende sobre una línea de WhatsApp Business conectada a tu clínica. Coordinamos el número en la implementación; no tienes que cambiar de teléfono personal.' },
+      { q: '¿Responde los comentarios de Instagram?', a: 'Cuando alguien comenta una publicación, Sara le escribe por mensaje directo para seguir la conversación en privado y llevarla a una cita. El comentario público no se usa para datos sensibles.' },
+      { q: '¿Pierde el hilo si el paciente cambia de canal?', a: 'No. Sara mantiene el historial de esa persona, así retoma la conversación con contexto aunque haya empezado en Instagram y siga por WhatsApp.' },
+      { q: '¿Qué pasa si le preguntan algo que no sabe?', a: 'Si una consulta excede lo que puede resolver, la deriva a tu equipo con el contexto completo de la charla, así nadie empieza de cero.' },
+      { q: '¿Se nota que es una IA?', a: 'Sara se presenta con naturalidad y responde con el tono de tu clínica. El paciente siente que lo atiende alguien que sabe, no un bot con botones.' },
+    ],
+  },
+  en: {
+    metaTitle: 'WhatsApp and Instagram 24/7 · Sara',
+    metaDescription:
+      'Sara handles WhatsApp, Instagram and your website chat around the clock: she informs, books and gets paid in the same conversation. Even comments end in an appointment, attributed to its channel.',
+    heroEyebrow: 'Answers · WhatsApp and Instagram 24/7',
+    heroTitle: "Answers wherever they message. <em class='text-pine-dark'>At any hour.</em>",
+    heroLead:
+      'First contact comes in over WhatsApp, Instagram or your website chat, and almost never during office hours. Sara is the same across all of them: she replies right away, informs for real and leaves the appointment booked.',
+    heroImageAlt:
+      'A phone on a clinic counter at night: Sara answers over WhatsApp, Instagram and the web at any hour.',
+    webChatLabel: 'Web chat',
+    strip: [
+      { t: 'WhatsApp', b: 'On your WhatsApp Business line, without changing your number.' },
+      { t: 'Instagram', b: 'Direct messages and even the comments on your posts.' },
+      { t: 'Web chat and form', b: 'On your site, 24/7. The same Sara, the same judgment.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: "The 11:41 pm enquiry doesn't wait until&nbsp;tomorrow.",
+    howP:
+      'The clinic that answers first keeps the patient. Sara replies the moment they message, informs for real and leaves the appointment booked before the interest&nbsp;cools.',
+    howBubbles: [
+      { who: 'in', text: 'Hi! I saw you do facials, any openings this week?', t: '9:15 pm' },
+      { who: 'out', text: 'Hi there! Yes, we do deep-cleansing facials. I have Wednesday at 4:00 pm or Thursday at 11:00 am. Which works better for you? The booking is confirmed with a deposit.', t: '9:15 pm' },
+      { who: 'in', text: 'Wednesday', t: '9:16 pm' },
+      { who: 'out', text: "Done! Wednesday at 4:00 pm booked ✅ I'll send you the deposit link and you'll get a reminder the day before.", t: '9:16 pm' },
+    ],
+    stepsH2: 'From message to appointment, with no front desk&nbsp;involved.',
+    steps: [
+      { n: '01', title: 'The message arrives', body: 'Over WhatsApp, Instagram or your website chat, almost always outside front-desk hours.' },
+      { n: '02', title: 'Sara replies instantly', body: "She shares treatments, prices and your calendar's real availability, in your clinic's tone." },
+      { n: '03', title: 'Books and gets paid right there', body: "She books the appointment and takes the deposit without leaving the conversation. And it's attributed to the channel that brought it." },
+    ],
+    row1Eyebrow: 'Instagram',
+    row1Title: "Even a comment <em class='text-pine-dark'>ends in an appointment.</em>",
+    row1Body:
+      "When someone comments on a post, Sara messages them directly, continues the conversation in private and carries it to a booking. The interest your content sparked doesn't get lost in the comments.",
+    row1Points: [
+      'Answers comments via direct message',
+      'Handles DMs just like on WhatsApp',
+      'From post to booking, without breaking the thread',
+    ],
+    row1Bubbles: [
+      { who: 'out', text: "Hi! I saw your comment on the post 🙌 I'm reaching out here to help. Which area are you interested in?", t: '7:40 pm' },
+      { who: 'in', text: 'Hi! I wanted to know the price for underarms', t: '7:52 pm' },
+      { who: 'out', text: 'Great! The 6-session underarm pack is $1,900, and the first one is free so you can try it. Want me to book your trial session?', t: '7:52 pm' },
+    ],
+    row2Eyebrow: 'With your team',
+    row2Title: "And when a person is needed, <em class='text-pine-dark'>she hands off to you.</em>",
+    row2Body:
+      "If an enquiry needs someone on your team, Sara doesn't improvise: she flags it with the full context of the chat, so the person picks up without asking the patient to repeat anything.",
+    row2Points: [
+      'Hands off to your team with the full history',
+      "The patient doesn't start from scratch",
+      'Sara picks the thread back up afterward',
+    ],
+    row2Bubbles: [
+      { who: 'in', text: 'I need an invoice under my company name, is that possible?', t: '10:08 am' },
+      { who: 'out', text: "Good question! The team handles that directly. I'm passing your request along with the details so they can help. They'll be in touch shortly 🙌", t: '10:08 am' },
+    ],
+    row3Eyebrow: 'Attribution',
+    row3Title: "And you know which channel <em class='text-pine-dark'>brings you the appointments.</em>",
+    row3Body:
+      'Every appointment is attributed to the channel that started it: WhatsApp, Instagram or the web. You stop guessing where to invest: the numbers tell you.',
+    row3Points: [
+      'Appointments by channel, month over month',
+      'Value generated by each channel',
+      'All in the dashboard, no spreadsheets',
+    ],
+    row3ImgAlt: 'Dashboard with appointments by channel: WhatsApp, Instagram and web, with the value generated by each.',
+    ctaInline: "The 11:41 pm enquiry doesn't have to&nbsp;wait.",
+    faqs: [
+      { q: 'Does she use my current WhatsApp number?', a: "Sara works over a WhatsApp Business line connected to your clinic. We sort out the number during onboarding; you don't have to change your personal phone." },
+      { q: 'Does she reply to Instagram comments?', a: "When someone comments on a post, Sara messages them directly to continue the conversation in private and carry it to an appointment. The public comment isn't used for sensitive data." },
+      { q: 'Does she lose the thread if the patient switches channels?', a: "No. Sara keeps that person's history, so she picks the conversation back up with context even if it started on Instagram and continues on WhatsApp." },
+      { q: "What if they ask her something she doesn't know?", a: 'If an enquiry is beyond what she can handle, she hands it to your team with the full context of the chat, so no one starts from scratch.' },
+      { q: "Can people tell it's an AI?", a: "Sara introduces herself naturally and replies in your clinic's tone. Patients feel they're talking to someone who knows their stuff, not a bot with buttons." },
+    ],
+  },
+}[lang];
+
+const { steps, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/canales-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={900}
+    >
+      <div
+        slot="image-overlay"
+        class="absolute -bottom-5 left-4 flex items-center gap-2 rounded-2xl border border-line bg-white/95 px-3 py-2.5 shadow-[0_12px_34px_-16px_rgba(20,38,31,0.45)] backdrop-blur-sm md:left-6"
+      >
+        <span class="grid h-9 w-9 place-items-center rounded-full" style="background:#25D366" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="#fff" aria-hidden="true">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.13c-.24.68-1.42 1.31-1.96 1.36-.5.05-.99.23-3.34-.7-2.83-1.11-4.62-4-4.76-4.19-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07.99-2.35.26-.28.57-.35.76-.35l.55.01c.18 0 .42-.07.65.5.24.58.81 1.99.88 2.13.07.14.12.3.02.5-.09.19-.14.31-.28.47l-.42.5c-.14.14-.29.3-.12.6.17.29.76 1.25 1.63 2.03 1.12 1 2.06 1.31 2.35 1.45.29.14.46.12.63-.07.17-.19.73-.85.92-1.14.19-.28.39-.24.65-.14.26.09 1.67.79 1.96.93.29.14.48.21.55.33.07.12.07.68-.17 1.36Z" />
+          </svg>
+        </span>
+        <span class="grid h-9 w-9 place-items-center rounded-[10px]" style="background:linear-gradient(45deg,#f9ce34,#ee2a7b 55%,#6228d7)" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2" aria-hidden="true">
+            <rect x="4" y="4" width="16" height="16" rx="5" />
+            <circle cx="12" cy="12" r="3.6" />
+            <circle cx="16.8" cy="7.2" r="1.1" fill="#fff" stroke="none" />
+          </svg>
+        </span>
+        <span class="grid h-9 w-9 place-items-center rounded-full bg-pine" aria-label={dict.webChatLabel}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#F7F5EF" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M3 12h18M12 3c2.5 2.4 2.5 15.6 0 18M12 3c-2.5 2.4-2.5 15.6 0 18" />
+          </svg>
+        </span>
+      </div>
+    </PageHero>
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia" set:html={dict.howP} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.howBubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="instagram"
+            bubbles={dict.row1Bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row2Eyebrow}
+          title={dict.row2Title}
+          body={dict.row2Body}
+          points={dict.row2Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.row2Bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.row3Eyebrow}
+          title={dict.row3Title}
+          body={dict.row3Body}
+          points={dict.row3Points}
+        >
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1130"
+            height="944"
+            alt={dict.row3ImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

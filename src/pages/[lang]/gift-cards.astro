@@ -1,0 +1,245 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Gift cards · Sara',
+    metaDescription:
+      'Vende tratamientos por adelantado con gift cards desde tu propia web. Cobras hoy y ganas un paciente nuevo que llega por recomendación, y Sara la valida al agendar.',
+    heroEyebrow: 'Cobros · Gift cards',
+    heroTitle: "Cobra hoy. Y ganas un paciente <em class='text-pine-dark'>que no te conocía.</em>",
+    heroLead:
+      'Tu paciente le regala un tratamiento a alguien de confianza. Cobras por adelantado y sumas un paciente nuevo, sin gastar en publicidad.',
+    heroImageAlt: 'Una gift card de clínica con un lazo de lino sobre un plato con eucalipto.',
+    strip: [
+      { t: 'Se vende en tu web', b: 'Con tu marca, sin apps de terceros ni comisiones.' },
+      { t: 'Cobras hoy', b: 'Ingreso adelantado, aunque la usen en semanas.' },
+      { t: 'Trae un paciente nuevo', b: 'Que llega recomendado por alguien que ya confía en ti.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'El regalo llega, y se transforma en una&nbsp;cita.',
+    howBody:
+      'La gift card no queda en un cajón. Cuando el destinatario escribe, Sara la valida y agenda la primera cita ahí mismo. Ese paciente nuevo entra sin que gastes en&nbsp;publicidad.',
+    waBubbles: [
+      { who: 'in', text: 'Hola! Me regalaron una gift card de la clínica, ¿cómo la uso?', t: '15:40' },
+      { who: 'out', text: '¡Hola! Qué lindo regalo 🎁 Ya la validé en el sistema. ¿Para qué tratamiento la quieres usar? Te busco una cita.', t: '15:40' },
+      { who: 'in', text: 'Limpieza facial. ¿Tienen esta semana?', t: '15:41' },
+      { who: 'out', text: '¡Sí! Tengo jueves 16:00 o viernes 11:00. La gift card cubre la sesión, así que ya quedaría reservada. ¿Cuál te queda mejor?', t: '15:41' },
+    ],
+    tiemposH2: 'Un regalo que te deja caja y un paciente&nbsp;nuevo.',
+    steps: [
+      { n: '01', title: 'Alguien compra una gift card', body: 'Desde tu web, con tu marca, para regalar un tratamiento a otra persona.' },
+      { n: '02', title: 'Cobras al instante', body: 'El pago entra hoy (por Stripe), aunque el tratamiento sea dentro de semanas.' },
+      { n: '03', title: 'Llega un paciente nuevo', body: 'El destinatario agenda con Sara y conoce tu clínica por primera vez, por recomendación.' },
+    ],
+    row1Eyebrow: 'En tu web, con tu marca',
+    row1Title: "Se compran en tu sitio, <em class='text-pine-dark'>no en un marketplace.</em>",
+    row1Body:
+      'La gift card se vende desde tu propia web, con tu identidad, y el pago se procesa por Stripe. Sin apps de terceros que se queden con una comisión de cada regalo.',
+    row1Points: ['Tu sitio, tu marca, tu logo', 'Pago seguro por Stripe', 'Sin comisiones de marketplace'],
+    row1ImageAlt: 'Panel con las gift cards vendidas y cobradas por la plataforma.',
+    row2Eyebrow: 'Sara acompaña',
+    row2Title: "Guía la compra <em class='text-pine-dark'>y agenda al que la recibe.</em>",
+    row2Body:
+      'Sara responde las dudas de quien compra, ayuda con el pago y, cuando el destinatario quiere usar su regalo, lo valida y le agenda la primera cita. El círculo se cierra solo.',
+    row2Points: ['Responde dudas y guía el pago', 'Valida la gift card al agendar', 'Convierte el regalo en un paciente que vuelve'],
+    igBubbles: [
+      { who: 'in', text: 'Hola, quiero regalar una gift card, ¿cómo hago?', t: '20:10' },
+      { who: 'out', text: '¡Hola! Súper fácil. Entras a nuestra web, eliges el monto o el tratamiento y pagas. Te llega la gift card para reenviar a quien quieras 🎁 ¿Te paso el link?', t: '20:10' },
+      { who: 'in', text: 'Sí, gracias!', t: '20:11' },
+    ],
+    ctaInline: 'Convierte a tus pacientes en tu mejor&nbsp;publicidad.',
+    faqs: [
+      { q: '¿Dónde se venden las gift cards?', a: 'En tu propio sitio web, con la marca de tu clínica. El pago se procesa de forma segura por Stripe; no dependes de una app externa ni pagas comisión de marketplace.' },
+      { q: '¿Sirve para cualquier tratamiento?', a: 'Defines qué montos o tratamientos se pueden regalar. Es flexible según lo que ofrezca tu clínica.' },
+      { q: '¿Cómo se usa la gift card?', a: 'El destinatario escribe por WhatsApp o entra a la web, y Sara la valida al agendar la cita.' },
+      { q: '¿Por qué conviene?', a: 'Es de los pocos ingresos que además te traen un paciente nuevo que no te costó publicidad: llega por recomendación de alguien que ya te eligió.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Gift cards · Sara',
+    metaDescription:
+      'Sell treatments in advance with gift cards from your own website. You get paid today and gain a new patient who arrives by referral, and Sara validates it at booking.',
+    heroEyebrow: 'Payments · Gift cards',
+    heroTitle: "Get paid today. And gain a patient <em class='text-pine-dark'>who didn’t know you.</em>",
+    heroLead:
+      'Your patient gifts a treatment to someone they trust. You get paid in advance and add a new patient, without spending on advertising.',
+    heroImageAlt: 'A clinic gift card with a linen ribbon on a plate with eucalyptus.',
+    strip: [
+      { t: 'Sold on your website', b: 'With your brand, no third-party apps and no commissions.' },
+      { t: 'You get paid today', b: 'Revenue up front, even if they use it weeks later.' },
+      { t: 'Brings a new patient', b: 'Who arrives referred by someone who already trusts you.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: 'The gift arrives, and turns into an&nbsp;appointment.',
+    howBody:
+      'The gift card doesn’t sit in a drawer. When the recipient messages, Sara validates it and books the first appointment right there. That new patient comes in without you spending on&nbsp;advertising.',
+    waBubbles: [
+      { who: 'in', text: 'Hi! I was given a clinic gift card, how do I use it?', t: '3:40 pm' },
+      { who: 'out', text: 'Hi! What a lovely gift 🎁 I’ve already validated it in the system. Which treatment would you like to use it for? Let me find you an appointment.', t: '3:40 pm' },
+      { who: 'in', text: 'A facial. Do you have anything this week?', t: '3:41 pm' },
+      { who: 'out', text: 'Yes! I have Thursday at 4:00 pm or Friday at 11:00 am. The gift card covers the session, so it would be booked right away. Which works best for you?', t: '3:41 pm' },
+    ],
+    tiemposH2: 'A gift that leaves you cash and a new&nbsp;patient.',
+    steps: [
+      { n: '01', title: 'Someone buys a gift card', body: 'From your website, with your brand, to gift a treatment to another person.' },
+      { n: '02', title: 'You get paid instantly', body: 'The payment lands today (through Stripe), even if the treatment is weeks away.' },
+      { n: '03', title: 'A new patient arrives', body: 'The recipient books with Sara and discovers your clinic for the first time, by referral.' },
+    ],
+    row1Eyebrow: 'On your website, with your brand',
+    row1Title: "Bought on your site, <em class='text-pine-dark'>not on a marketplace.</em>",
+    row1Body:
+      'The gift card is sold from your own website, with your identity, and payment is processed through Stripe. No third-party apps taking a commission from every gift.',
+    row1Points: ['Your site, your brand, your logo', 'Secure payment through Stripe', 'No marketplace commissions'],
+    row1ImageAlt: 'Dashboard with the gift cards sold and collected by the platform.',
+    row2Eyebrow: 'Sara guides the way',
+    row2Title: "She guides the purchase <em class='text-pine-dark'>and books whoever receives it.</em>",
+    row2Body:
+      'Sara answers the buyer’s questions, helps with payment and, when the recipient wants to use their gift, validates it and books the first appointment. The loop closes on its own.',
+    row2Points: ['Answers questions and guides payment', 'Validates the gift card at booking', 'Turns the gift into a patient who returns'],
+    igBubbles: [
+      { who: 'in', text: 'Hi, I want to gift a gift card, how do I do it?', t: '8:10 pm' },
+      { who: 'out', text: 'Hi! Super easy. Go to our website, pick the amount or the treatment and pay. You’ll get the gift card to forward to whoever you like 🎁 Want me to send you the link?', t: '8:10 pm' },
+      { who: 'in', text: 'Yes, thanks!', t: '8:11 pm' },
+    ],
+    ctaInline: 'Turn your patients into your best&nbsp;advertising.',
+    faqs: [
+      { q: 'Where are the gift cards sold?', a: 'On your own website, with your clinic’s brand. Payment is processed securely through Stripe; you don’t depend on an external app or pay a marketplace commission.' },
+      { q: 'Does it work for any treatment?', a: 'You define which amounts or treatments can be gifted. It’s flexible based on what your clinic offers.' },
+      { q: 'How is the gift card used?', a: 'The recipient messages on WhatsApp or visits the website, and Sara validates it when booking the appointment.' },
+      { q: 'Why is it worth it?', a: 'It’s one of the few revenue streams that also brings you a new patient who cost you no advertising: they arrive by referral from someone who already chose you.' },
+    ],
+  },
+}[lang];
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/gift-cards-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={900}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia" set:html={dict.howBody} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.waBubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.tiemposH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            dict.steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <img
+            src="/img/cobros.jpg"
+            width="1200"
+            height="1186"
+            alt={dict.row1ImageAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row2Eyebrow}
+          title={dict.row2Title}
+          body={dict.row2Body}
+          points={dict.row2Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="instagram"
+            bubbles={dict.igBubbles}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <FeatureFaq items={dict.faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

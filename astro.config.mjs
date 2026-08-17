@@ -9,8 +9,10 @@ export default defineConfig({
   site: 'https://holasara.ai',
   // /recordatorios se colapsó dentro de /agenda (la historia de recordar y
   // confirmar vive completa ahí). Mantenemos la URL viva apuntando al ancla.
+  // El idioma se resuelve por prefijo (/es, /en). En prod, el Edge Middleware
+  // (middleware.ts) redirige las URLs sin prefijo al idioma detectado (301).
   redirects: {
-    '/recordatorios': '/agenda#recordatorios',
+    '/recordatorios': '/es/agenda#recordatorios',
   },
   // La /agent es la vista para LLMs (noindex) → fuera del sitemap.
   integrations: [sitemap({ filter: (page) => !page.includes('/agent') })],

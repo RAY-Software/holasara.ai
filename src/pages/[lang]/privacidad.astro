@@ -1,0 +1,263 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+// Entidad/legales alineados con RAY-Website (misma empresa): responsable
+// BotBit, Inc. (marca RAY), email info@rayapp.io, ley de EE. UU., cláusula de
+// Uso Limitado de las APIs de Google (Sara conecta Google Calendar).
+// ⚠️ PENDIENTE de confirmar: estado/foro de EE. UU. para la cláusula de ley
+// aplicable (hoy queda a nivel "Estados Unidos"), domicilio fiscal, y que la
+// lista de terceros esté completa. Base honesta, NO reemplaza revisión legal.
+import LegalLayout from '../../components/LegalLayout.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    title: 'Política de privacidad',
+    description:
+      'Cómo Sara (BotBit, Inc.) trata los datos de las clínicas que usan el producto y de los pacientes que conversan con Sara.',
+    updated: '17 de agosto de 2026',
+    lead: 'Qué datos tratamos, para qué, con quién los compartimos y qué control tienes sobre ellos.',
+    body: `
+  <h2>Quiénes somos</h2>
+  <p>
+    Sara es un producto de <strong>BotBit, Inc.</strong> (bajo su marca “RAY”; en adelante, “Sara”,
+    “nosotros”). Sara es la secretaria con IA que las clínicas usan para atender WhatsApp e Instagram,
+    agendar citas y cobrar anticipos. El responsable del tratamiento de tus datos es BotBit, Inc. Para
+    cualquier tema de privacidad puedes escribirnos a <a href="mailto:info@rayapp.io">info@rayapp.io</a>.
+  </p>
+
+  <h2>Nuestro rol frente a tus pacientes</h2>
+  <p>
+    Cuando una clínica contrata a Sara, <strong>la clínica es la responsable</strong> de los datos de
+    sus pacientes, y Sara actúa como <strong>encargada</strong> que los trata siguiendo sus
+    instrucciones: responder mensajes, agendar y gestionar recordatorios. La clínica decide qué
+    tratamientos ofrece, qué precios comunica y cómo se atiende a cada persona.
+  </p>
+
+  <h2>Qué datos tratamos</h2>
+  <h3>De las clínicas y sus equipos</h3>
+  <ul>
+    <li>Datos de contacto que dejas al pedir una demo: nombre, rol, nombre de la clínica y el medio por el que te contactamos.</li>
+    <li>Autorización de acceso a tu Google Calendar, para leer tu disponibilidad y escribir las citas.</li>
+    <li>Configuración de tu cuenta: agendas, sucursales, profesionales y preferencias de atención.</li>
+  </ul>
+  <h3>De los pacientes que conversan con Sara</h3>
+  <ul>
+    <li>El contenido de la conversación por WhatsApp, Instagram o el chat de la web, para poder responder y agendar.</li>
+    <li>Datos de la cita: fecha, hora, tratamiento consultado y estado (confirmada, reprogramada, cancelada).</li>
+    <li>Datos de pago del anticipo, cuando aplica, procesados por nuestro proveedor de pagos.</li>
+  </ul>
+  <p>
+    <strong>Sara no almacena la historia clínica ni información médica sensible de tus pacientes.</strong>
+    Eso queda donde ya está hoy, en los sistemas de la clínica.
+  </p>
+
+  <h2>Para qué usamos los datos</h2>
+  <ul>
+    <li>Prestar el servicio: atender, agendar, recordar, confirmar, cobrar el anticipo y reactivar pacientes.</li>
+    <li>Mejorar la calidad de las respuestas y la seguridad del producto.</li>
+    <li>Comunicarnos contigo sobre tu cuenta, soporte y novedades relevantes.</li>
+    <li>Cumplir obligaciones legales y prevenir usos abusivos o fraudulentos.</li>
+  </ul>
+
+  <h2>Con quién los compartimos</h2>
+  <p>
+    Trabajamos con proveedores que nos ayudan a operar, bajo acuerdos que los obligan a proteger la
+    información y usarla solo para prestar su servicio:
+  </p>
+  <ul>
+    <li><strong>Google</strong>, para la integración con Google Calendar.</li>
+    <li><strong>Meta / WhatsApp</strong> y nuestro proveedor de mensajería, para enviar y recibir los mensajes.</li>
+    <li><strong>Proveedor de pagos</strong>, para procesar los anticipos y cobros.</li>
+    <li><strong>Herramientas de analítica</strong>, para entender el uso del sitio y de nuestras campañas.</li>
+  </ul>
+  <p>No vendemos tus datos ni los de tus pacientes.</p>
+
+  <h2>Datos de las APIs de Google (Uso Limitado)</h2>
+  <p>
+    El uso y la transferencia por parte de BotBit, Inc. de la información recibida de las APIs de
+    Google se ajusta a la <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Política de Datos de Usuario de los Servicios de la API de Google</a>,
+    incluidos sus requisitos de Uso Limitado (Limited Use).
+  </p>
+  <p>
+    Cuando conectas tu cuenta de Google (por ejemplo, Google Calendar), accedemos únicamente a los
+    datos necesarios para prestar las funciones que solicitas: leer tu disponibilidad y escribir las
+    citas. No usamos esos datos con fines publicitarios, no los vendemos y no los transferimos a
+    terceros salvo que sea necesario para operar el Servicio, cumplir con la ley o contar con tu
+    consentimiento. Tampoco usamos datos de las APIs de Google para desarrollar, mejorar o entrenar
+    modelos generalizados de inteligencia artificial. Puedes revocar nuestro acceso en cualquier
+    momento desde la configuración de seguridad de tu cuenta de Google.
+  </p>
+
+  <h2>Cookies y analítica</h2>
+  <p>
+    Nuestro sitio usa cookies propias y de terceros para medir el tráfico y la efectividad de las
+    campañas (por ejemplo, analítica web y píxeles de publicidad). Puedes gestionar las cookies desde
+    la configuración de tu navegador.
+  </p>
+
+  <h2>Cuánto tiempo los conservamos</h2>
+  <p>
+    Conservamos los datos mientras la clínica use el servicio y durante el tiempo necesario para
+    cumplir obligaciones legales. Cuando dejan de ser necesarios, los eliminamos o anonimizamos.
+  </p>
+
+  <h2>Tus derechos</h2>
+  <p>
+    Puedes solicitar acceder, rectificar, cancelar u oponerte al tratamiento de tus datos, así como
+    limitarlo o portarlos, según la ley aplicable. Si eres paciente de una clínica que usa Sara,
+    normalmente el camino más rápido es contactar a la clínica; también puedes escribirnos a
+    <a href="mailto:info@rayapp.io">info@rayapp.io</a> y lo canalizamos.
+  </p>
+
+  <h2>Seguridad</h2>
+  <p>
+    Aplicamos medidas técnicas y organizativas razonables para proteger la información contra accesos
+    no autorizados, pérdida o alteración. Ningún sistema es infalible, pero tratamos la seguridad como
+    parte central del producto.
+  </p>
+
+  <h2>Cambios a esta política</h2>
+  <p>
+    Podemos actualizar esta política para reflejar cambios en el producto o en la ley. Publicaremos la
+    versión vigente en esta página, con su fecha de última actualización.
+  </p>
+
+  <h2>Contacto</h2>
+  <p>
+    Dudas sobre privacidad: <a href="mailto:info@rayapp.io">info@rayapp.io</a>. Esta política se
+    rige por las leyes de los Estados Unidos aplicables en materia de protección de datos personales.
+  </p>
+`,
+  },
+  en: {
+    title: 'Privacy policy',
+    description:
+      'How Sara (BotBit, Inc.) processes the data of the clinics that use the product and of the patients who chat with Sara.',
+    updated: 'August 17, 2026',
+    lead: 'What data we process, what for, who we share it with and what control you have over it.',
+    body: `
+  <h2>Who we are</h2>
+  <p>
+    Sara is a product of <strong>BotBit, Inc.</strong> (under its “RAY” brand; hereinafter, “Sara”,
+    “we”). Sara is the AI receptionist that clinics use to handle WhatsApp and Instagram,
+    book appointments and collect deposits. The controller of your data is BotBit, Inc. For
+    any privacy matter you can write to us at <a href="mailto:info@rayapp.io">info@rayapp.io</a>.
+  </p>
+
+  <h2>Our role toward your patients</h2>
+  <p>
+    When a clinic hires Sara, <strong>the clinic is the controller</strong> of its
+    patients’ data, and Sara acts as a <strong>processor</strong> that handles it following its
+    instructions: replying to messages, booking and managing reminders. The clinic decides which
+    treatments it offers, which prices it communicates and how each person is attended to.
+  </p>
+
+  <h2>What data we process</h2>
+  <h3>About clinics and their teams</h3>
+  <ul>
+    <li>Contact details you leave when requesting a demo: name, role, clinic name and the channel through which we contact you.</li>
+    <li>Authorization to access your Google Calendar, to read your availability and write the appointments.</li>
+    <li>Your account settings: calendars, locations, professionals and service preferences.</li>
+  </ul>
+  <h3>About the patients who chat with Sara</h3>
+  <ul>
+    <li>The content of the conversation over WhatsApp, Instagram or the website chat, so we can reply and book.</li>
+    <li>Appointment data: date, time, treatment enquired about and status (confirmed, rescheduled, canceled).</li>
+    <li>Deposit payment data, when applicable, processed by our payment provider.</li>
+  </ul>
+  <p>
+    <strong>Sara does not store your patients’ medical records or sensitive medical information.</strong>
+    That stays where it already is today, in the clinic’s systems.
+  </p>
+
+  <h2>What we use the data for</h2>
+  <ul>
+    <li>Providing the service: answering, booking, reminding, confirming, collecting the deposit and winning back patients.</li>
+    <li>Improving the quality of the responses and the security of the product.</li>
+    <li>Communicating with you about your account, support and relevant updates.</li>
+    <li>Meeting legal obligations and preventing abusive or fraudulent use.</li>
+  </ul>
+
+  <h2>Who we share it with</h2>
+  <p>
+    We work with providers who help us operate, under agreements that require them to protect the
+    information and use it only to provide their service:
+  </p>
+  <ul>
+    <li><strong>Google</strong>, for the integration with Google Calendar.</li>
+    <li><strong>Meta / WhatsApp</strong> and our messaging provider, to send and receive the messages.</li>
+    <li><strong>Payment provider</strong>, to process the deposits and payments.</li>
+    <li><strong>Analytics tools</strong>, to understand the use of the website and of our campaigns.</li>
+  </ul>
+  <p>We do not sell your data or that of your patients.</p>
+
+  <h2>Google APIs data (Limited Use)</h2>
+  <p>
+    BotBit, Inc.’s use and transfer of information received from Google
+    APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>,
+    including its Limited Use requirements.
+  </p>
+  <p>
+    When you connect your Google account (for example, Google Calendar), we access only the
+    data needed to provide the functions you request: reading your availability and writing the
+    appointments. We do not use that data for advertising purposes, we do not sell it and we do not transfer it to
+    third parties unless it is necessary to operate the Service, comply with the law or with your
+    consent. Nor do we use Google APIs data to develop, improve or train generalized
+    artificial intelligence models. You can revoke our access at any
+    time from the security settings of your Google account.
+  </p>
+
+  <h2>Cookies and analytics</h2>
+  <p>
+    Our website uses first-party and third-party cookies to measure traffic and the effectiveness of
+    campaigns (for example, web analytics and advertising pixels). You can manage cookies from
+    your browser settings.
+  </p>
+
+  <h2>How long we keep it</h2>
+  <p>
+    We keep the data for as long as the clinic uses the service and for the time necessary to
+    meet legal obligations. When it is no longer needed, we delete or anonymize it.
+  </p>
+
+  <h2>Your rights</h2>
+  <p>
+    You can request to access, rectify, cancel or object to the processing of your data, as well as
+    to restrict or port it, under applicable law. If you are a patient of a clinic that uses Sara,
+    the fastest route is usually to contact the clinic; you can also write to us at
+    <a href="mailto:info@rayapp.io">info@rayapp.io</a> and we will channel it.
+  </p>
+
+  <h2>Security</h2>
+  <p>
+    We apply reasonable technical and organizational measures to protect the information against
+    unauthorized access, loss or alteration. No system is infallible, but we treat security as
+    a central part of the product.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    We may update this policy to reflect changes in the product or in the law. We will publish the
+    current version on this page, with its last-updated date.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Privacy questions: <a href="mailto:info@rayapp.io">info@rayapp.io</a>. This policy is
+    governed by the laws of the United States applicable to personal data protection.
+  </p>
+`,
+  },
+}[lang];
+---
+
+<LegalLayout lang={lang}
+  title={dict.title}
+  description={dict.description}
+  updated={dict.updated}
+  lead={dict.lead}
+>
+  <Fragment set:html={dict.body} />
+</LegalLayout>

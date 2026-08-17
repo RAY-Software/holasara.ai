@@ -1,0 +1,215 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Cómo funciona · Te dejamos todo listo y Sara te guía',
+    metaDescription:
+      'Consigues la línea de WhatsApp y tu dominio con nosotros, y Sara te acompaña por WhatsApp para configurar todo. Conectas tu Google Calendar en un clic, sin migraciones.',
+    heroEyebrow: 'Cómo funciona',
+    heroTitle: "Arrancar es más fácil <em class='text-pine-dark'>de lo que crees.</em>",
+    heroLead:
+      'Ya no resuelves la parte técnica solo. Consigues con nosotros la línea de WhatsApp y tu dominio, y Sara te escribe por WhatsApp para ir configurando todo, paso a paso, y responder tus dudas.',
+    heroBubbles: [
+      { who: 'out', text: '¡Hola, Dani! Soy Sara. Vamos a dejar todo listo. ¿Arrancamos conectando tu Google Calendar? Es un solo clic 👇', t: '10:02' },
+      { who: 'in', text: 'Dale', t: '10:05' },
+      { who: 'out', text: '¡Listo, quedó conectado! ¿La línea de WhatsApp y el dominio los consigues con nosotros?', t: '10:05' },
+      { who: 'in', text: 'Sí, los dos', t: '10:07' },
+      { who: 'out', text: '¡Hecho! Te los dejo listos hoy. Cualquier duda mientras configuras, escríbeme por aquí y te ayudo 🙌', t: '10:07' },
+    ],
+    setupKicker: 'El setup',
+    setupH2: 'La parte difícil, <em class="font-accent not-italic text-pine-dark">la hacemos nosotros.</em>',
+    setupP:
+      'Tu sitio en línea, la línea de WhatsApp, el dominio y el calendario quedan listos de nuestro lado. Tú solo terminas de darle tu tono, y ves el avance en un&nbsp;checklist.',
+    setupImgAlt: 'Checklist de configuración de la clínica en el panel, con la parte técnica ya lista.',
+    domainEyebrow: 'Tu dominio',
+    domainTitle: "Tu dominio <em class='text-pine-dark'>en internet.</em>",
+    domainBody:
+      'Si te falta un dominio, lo consigues con nosotros: buscas el nombre, lo eliges y lo dejamos configurado apuntando a tu web de reservas. El precio es por el primer año e incluye la configuración.',
+    domainPoints: [
+      'Buscas el nombre y lo eliges en el momento',
+      'Incluye la configuración: no tocas DNS ni nada técnico',
+      '¿Ya tienes uno? Lo conectas igual',
+    ],
+    domainImgAlt: 'Buscador de dominio en el panel, con opciones disponibles y su precio por el primer año.',
+    lineEyebrow: 'Tu línea',
+    lineTitle: "Tu línea de WhatsApp, <em class='text-pine-dark'>lista para atender.</em>",
+    lineBody:
+      'Te damos una línea de WhatsApp Business para tu clínica, o migramos la que ya usas. La dejamos verificada como cuenta de empresa y conectada a Sara, sin que hagas trámites con la operadora.',
+    linePoints: [
+      'Línea nueva para tu clínica, o migramos la tuya',
+      'Verificada como cuenta de empresa',
+      'Conectada a Sara desde el primer día',
+    ],
+    lineImgAlt: 'Panel mostrando la línea de WhatsApp Business de la clínica, verificada y conectada a Sara.',
+    needsH2: 'Lo que pones tú <em class="font-accent not-italic text-pine-dark">es mínimo.</em>',
+    needs: [
+      { t: 'Tu Google Calendar', b: 'El mismo que ya usas. Autorizas el acceso en un clic y Sara empieza a leer y escribir ahí.' },
+      { t: 'Tu forma de trabajar', b: 'Nos cuentas tus tratamientos, precios y disponibilidad, y Sara aprende a atender como tu clínica.' },
+      { t: 'Tus datos clínicos, donde están', b: 'No se almacena historia clínica ni información médica en Sara. Eso queda donde está hoy.' },
+    ],
+    faqs: [
+      { q: '¿Cuánto tarda en estar funcionando?', a: 'Poco. La parte técnica la resolvemos nosotros y Sara te acompaña por WhatsApp mientras configuras. Autorizar el calendario es un clic; el resto es cargar tu información y afinar el tono.' },
+      { q: '¿Tengo que conseguir la línea de WhatsApp por mi cuenta?', a: 'No hace falta. Puedes conseguir la línea de WhatsApp Business con nosotros y te la dejamos lista y conectada a Sara. Si prefieres usar un número que ya tienes, también se puede: lo vemos en la demo.' },
+      { q: '¿Y el dominio para mi web de reservas?', a: 'Puedes conseguirlo con nosotros: buscas el nombre, lo eliges y lo dejamos configurado apuntando a tu web de reservas. El precio es por el primer año e incluye la configuración. Si ya tienes uno, lo conectas igual. Es opcional, solo si te falta.' },
+      { q: '¿Cómo me ayuda Sara a configurar?', a: 'Te escribe por WhatsApp y te va llevando paso a paso por cada parte del setup, a tu ritmo. Cualquier duda que tengas mientras avanzas, se la preguntas ahí mismo y te responde.' },
+      { q: '¿Tengo que cambiar de sistema?', a: 'No. Sara trabaja sobre tu Google Calendar y tu WhatsApp. No migras datos ni aprendes una herramienta nueva.' },
+      { q: '¿Y si hoy no uso Google Calendar (Flowww, AgendaPro, Doctoralia…)?', a: 'Hoy Sara agenda sobre Google Calendar. Si tu clínica usa otra agenda, en la demo vemos tu caso: en la mayoría alcanza con conectar una cuenta de Google a tu operación, y te ayudamos a dejarla lista. Cuéntanos qué usas y te decimos si encaja antes de arrancar.' },
+      { q: '¿Mi equipo tiene que aprender a usarla?', a: 'Casi nada: Sara atiende sola y tu equipo le habla por WhatsApp como a una persona más. Sin pantallas nuevas.' },
+    ],
+    ctaTitle: 'Te dejamos todo listo. Sara hace el&nbsp;resto.',
+    ctaSub:
+      'Consigues la línea y el dominio con nosotros, conectas tu calendario y Sara empieza a atender. Te acompañamos en cada paso.',
+  },
+  en: {
+    metaTitle: 'How it works · We set everything up and Sara guides you',
+    metaDescription:
+      'You get your WhatsApp line and your domain through us, and Sara walks you through the setup over WhatsApp. Connect your Google Calendar in one click, no migrations.',
+    heroEyebrow: 'How it works',
+    heroTitle: "Getting started is easier <em class='text-pine-dark'>than you think.</em>",
+    heroLead:
+      'You no longer sort out the technical part alone. You get your WhatsApp line and your domain through us, and Sara messages you on WhatsApp to set everything up, step by step, and answer your questions.',
+    heroBubbles: [
+      { who: 'out', text: 'Hi Dani! I’m Sara. Let’s get everything ready. Shall we start by connecting your Google Calendar? It’s a single click 👇', t: '10:02 am' },
+      { who: 'in', text: 'Sure', t: '10:05 am' },
+      { who: 'out', text: 'Done, it’s connected! Are you getting the WhatsApp line and the domain through us?', t: '10:05 am' },
+      { who: 'in', text: 'Yes, both', t: '10:07 am' },
+      { who: 'out', text: 'Great! I’ll have them ready for you today. Any questions while you set up, message me right here and I’ll help 🙌', t: '10:07 am' },
+    ],
+    setupKicker: 'The setup',
+    setupH2: 'The hard part, <em class="font-accent not-italic text-pine-dark">we handle it.</em>',
+    setupP:
+      'Your online site, the WhatsApp line, the domain and the calendar are left ready on our side. You just finish giving it your tone, and you track the progress on a&nbsp;checklist.',
+    setupImgAlt: 'The clinic’s setup checklist in the dashboard, with the technical part already done.',
+    domainEyebrow: 'Your domain',
+    domainTitle: "Your domain <em class='text-pine-dark'>on the internet.</em>",
+    domainBody:
+      'If you’re missing a domain, you get it through us: you search the name, pick it, and we leave it configured pointing to your booking site. The price is for the first year and includes the setup.',
+    domainPoints: [
+      'Search the name and pick it on the spot',
+      'Setup included: you don’t touch DNS or anything technical',
+      'Already have one? You connect it just the same',
+    ],
+    domainImgAlt: 'Domain search in the dashboard, with available options and their first-year price.',
+    lineEyebrow: 'Your line',
+    lineTitle: "Your WhatsApp line, <em class='text-pine-dark'>ready to answer.</em>",
+    lineBody:
+      'We give you a WhatsApp Business line for your clinic, or we migrate the one you already use. We leave it verified as a business account and connected to Sara, without you dealing with the carrier.',
+    linePoints: [
+      'A new line for your clinic, or we migrate yours',
+      'Verified as a business account',
+      'Connected to Sara from day one',
+    ],
+    lineImgAlt: 'Dashboard showing the clinic’s WhatsApp Business line, verified and connected to Sara.',
+    needsH2: 'What you bring <em class="font-accent not-italic text-pine-dark">is minimal.</em>',
+    needs: [
+      { t: 'Your Google Calendar', b: 'The same one you already use. You authorize access in one click and Sara starts reading and writing there.' },
+      { t: 'How you work', b: 'You tell us your treatments, prices and availability, and Sara learns to answer like your clinic.' },
+      { t: 'Your clinical data, where it lives', b: 'No medical history or clinical information is stored in Sara. That stays exactly where it is today.' },
+    ],
+    faqs: [
+      { q: 'How long until it’s up and running?', a: 'Not long. We handle the technical part and Sara walks you through it on WhatsApp while you set up. Authorizing the calendar is one click; the rest is loading your information and fine-tuning the tone.' },
+      { q: 'Do I have to get the WhatsApp line on my own?', a: 'No need. You can get the WhatsApp Business line through us and we leave it ready and connected to Sara. If you’d rather use a number you already have, that works too: we’ll go over it in the demo.' },
+      { q: 'What about the domain for my booking site?', a: 'You can get it through us: you search the name, pick it, and we leave it configured pointing to your booking site. The price is for the first year and includes the setup. If you already have one, you connect it just the same. It’s optional, only if you’re missing one.' },
+      { q: 'How does Sara help me set up?', a: 'She messages you on WhatsApp and walks you step by step through each part of the setup, at your pace. Any question that comes up as you go, you ask her right there and she answers.' },
+      { q: 'Do I have to switch systems?', a: 'No. Sara works on top of your Google Calendar and your WhatsApp. You don’t migrate data or learn a new tool.' },
+      { q: 'What if I don’t use Google Calendar today (Flowww, AgendaPro, Doctoralia…)?', a: 'Today Sara books on Google Calendar. If your clinic uses another calendar, we’ll look at your case in the demo: for most, connecting a Google account to your operation is enough, and we help you get it ready. Tell us what you use and we’ll say whether it fits before you start.' },
+      { q: 'Does my team have to learn how to use it?', a: 'Almost nothing: Sara answers on her own and your team talks to her over WhatsApp like one more person. No new screens.' },
+    ],
+    ctaTitle: 'We set everything up. Sara does the&nbsp;rest.',
+    ctaSub:
+      'You get the line and the domain through us, you connect your calendar and Sara starts answering. We’re with you every step.',
+  },
+}[lang];
+
+const { needs, faqs } = dict;
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <PageHero lang={lang} eyebrow={dict.heroEyebrow} title={dict.heroTitle} lead={dict.heroLead}>
+      <ConversationDemo slot="visual" channel="whatsapp" lang={lang} bubbles={dict.heroBubbles} />
+    </PageHero>
+
+    <!-- ══════════ EL SETUP · checklist (parte técnica hecha por nosotros) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="reveal mx-auto max-w-5xl px-5 py-24 text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.setupKicker}</p>
+        <h2 class="mx-auto max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.setupH2} />
+        <p class="mx-auto mt-5 max-w-2xl text-lg text-salvia" set:html={dict.setupP} />
+        <img
+          src="/img/setup-onboarding.jpg"
+          width="1200"
+          height="678"
+          alt={dict.setupImgAlt}
+          loading="lazy"
+          decoding="async"
+          class="mx-auto mt-12 w-full rounded-xl border border-line shadow-[0_18px_40px_-24px_rgba(20,38,31,0.32)]"
+        />
+      </div>
+    </section>
+
+    <!-- ══════════ DOMINIO + LÍNEA · filas alternadas ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow eyebrow={dict.domainEyebrow} title={dict.domainTitle} body={dict.domainBody} points={dict.domainPoints}>
+          <img
+            src="/img/domain-comprar.jpg"
+            width="1200"
+            height="590"
+            alt={dict.domainImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow flip eyebrow={dict.lineEyebrow} title={dict.lineTitle} body={dict.lineBody} points={dict.linePoints}>
+          <img
+            src="/img/linea-whatsapp.jpg"
+            width="1200"
+            height="489"
+            alt={dict.lineImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <!-- ══════════ LO QUE PONES TÚ ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.needsH2} />
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          {
+            needs.map((n) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{n.t}</h3>
+                <p class="mt-2 text-salvia">{n.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} title={dict.ctaTitle} sub={dict.ctaSub} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

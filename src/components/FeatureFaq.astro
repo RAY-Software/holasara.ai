@@ -4,11 +4,14 @@ interface QA {
   q: string;
   a: string;
 }
+import { defaultLocale, type Locale } from '../i18n/config';
 interface Props {
   title?: string;
   items: QA[];
+  lang?: Locale;
 }
-const { title = 'Preguntas frecuentes', items } = Astro.props;
+const { lang = defaultLocale, items } = Astro.props;
+const { title = lang === 'en' ? 'Frequently asked questions' : 'Preguntas frecuentes' } = Astro.props;
 ---
 
 <section class="border-t border-line">

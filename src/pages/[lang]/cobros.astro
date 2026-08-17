@@ -1,0 +1,282 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Cobros · Cobra antes de atender',
+    metaDescription:
+      'Tres formas de que entre dinero sin que nadie lo persiga: anticipo al reservar, consulta por adelantado y gift cards. Cobrado por Stripe, dentro del mismo chat.',
+    heroEyebrow: 'Cobros · Anticipo y consulta',
+    heroTitle: "Cobra <em class='text-pine-dark'>antes</em> de atender.",
+    heroLead:
+      'Tres formas de que entre dinero sin que nadie lo persiga. El anticipo baja las ausencias y adelanta la caja desde el primer mes, todo dentro de la misma conversación.',
+    heroImageAlt: 'Un teléfono muestra un pago confirmado junto a una tarjeta, en un ambiente de spa.',
+    strip: [
+      { t: 'Anticipo al reservar', b: 'La seña que compromete la cita y baja la ausencia.' },
+      { t: 'Link de pago en el chat', b: 'Seguro, por Stripe. El paciente paga desde su teléfono.' },
+      { t: 'Sin recepción', b: 'Nadie maneja dinero ni persigue un pago.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'La reserva y el pago, en el mismo&nbsp;chat.',
+    howP:
+      'No hay un “después te paso los datos para la seña”. Sara agenda y cobra en la misma conversación, así la cita queda firme antes de&nbsp;cortar.',
+    howBubbles: [
+      { who: 'out', text: '¡Genial! Te dejo el jueves 17:30. Para confirmar la reserva va un anticipo, te paso el link 👇', t: '18:22' },
+      { who: 'out', text: 'pagos.tu-clinica.com/seña', t: '18:22' },
+      { who: 'in', text: 'Listo, ya pagué', t: '18:25' },
+      { who: 'out', text: '¡Reservado! ✅ Recibimos tu anticipo. Te llega el recordatorio un día antes. ¡Nos vemos!', t: '18:25' },
+    ],
+    stepsH2: 'Del sí del paciente al pago, sin&nbsp;fricción.',
+    steps: [
+      { n: '01', title: 'El paciente agenda', body: 'Por WhatsApp, Instagram o tu web, en la conversación con Sara.' },
+      { n: '02', title: 'Paga en el momento', body: 'Anticipo o consulta, con un link de pago seguro (Stripe) dentro del mismo chat.' },
+      { n: '03', title: 'La cita queda firme', body: 'El que paga, viene: menos ausencias y caja adelantada desde el primer mes.' },
+    ],
+    row1Eyebrow: 'El mejor filtro de ausencias',
+    row1Title: "El que paga, <em class='text-pine-dark'>viene.</em>",
+    row1Body:
+      'Un paciente que dejó una seña casi no falta. El anticipo no es solo caja adelantada: es la forma más efectiva de que la agenda del día llegue completa.',
+    row1Points: [
+      'Anticipo o consulta, tú decides cuál',
+      'Menos ausencias desde el primer mes',
+      'Caja que entra hoy, no cuando atiendes',
+    ],
+    row1ImgAlt: 'Panel de cobros: anticipos, consultas y gift cards cobrados por Sara, todos sin recepción.',
+    row2Eyebrow: 'Gift cards',
+    row2Title: "Y vende tratamientos <em class='text-pine-dark'>por adelantado.</em>",
+    row2Body:
+      'Tus pacientes regalan tratamientos a gente que todavía no te conoce. Cobras hoy y ganas un paciente nuevo que llega por recomendación, sin gastar en publicidad.',
+    row2Points: [
+      'Se venden desde tu propia web, con tu marca',
+      'Cobras hoy, atiendes cuando la usan',
+      'Un paciente nuevo que no te costó publicidad',
+    ],
+    methods: [
+      { t: 'Anticipo al reservar' },
+      { t: 'Consulta por adelantado' },
+      { t: 'Gift cards' },
+    ],
+    row2Link: 'Ver las gift cards',
+    ctaInline: 'Que tu hora deje de ser&nbsp;gratis.',
+    faqs: [
+      { q: '¿Cómo cobra Sara?', a: 'Con un link de pago seguro (procesado por Stripe) dentro de la conversación. El paciente paga desde su teléfono, sin fricción y sin que recepción maneje dinero.' },
+      { q: '¿Puedo elegir qué cobrar?', a: 'Sí. Defines si pides anticipo, consulta completa o ambos, y para qué tratamientos aplica.' },
+      { q: '¿El anticipo baja las ausencias de verdad?', a: 'Es el filtro más efectivo que existe: quien deja dinero comprometido, aparece. Se nota desde el primer mes.' },
+      { q: '¿Y si el paciente prefiere pagar en la clínica?', a: 'Puedes seguir aceptando el pago presencial. El cobro online es para asegurar la cita y adelantar la caja, no para reemplazar tu forma de trabajar.' },
+      { q: '¿Queda registrado cuánto entró?', a: 'Sí. En el panel ves lo cobrado por Stripe (anticipos, consultas y gift cards) y a qué cita corresponde cada pago.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Payments · Get paid before the appointment',
+    metaDescription:
+      'Three ways to bring money in without anyone chasing it: deposit at booking, consult paid in advance and gift cards. Collected by Stripe, inside the same chat.',
+    heroEyebrow: 'Payments · Deposit and consult',
+    heroTitle: "Get paid <em class='text-pine-dark'>before</em> the appointment.",
+    heroLead:
+      'Three ways to bring money in without anyone chasing it. The deposit cuts no-shows and brings cash flow forward from the first month, all inside the same conversation.',
+    heroImageAlt: 'A phone shows a confirmed payment next to a card, in a spa setting.',
+    strip: [
+      { t: 'Deposit at booking', b: 'The deposit that commits the appointment and cuts no-shows.' },
+      { t: 'Payment link in the chat', b: 'Secure, by Stripe. The patient pays from their phone.' },
+      { t: 'No front desk', b: 'No one handles cash or chases a payment.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: 'The booking and the payment, in the same&nbsp;chat.',
+    howP:
+      "There's no “I'll send you the deposit details later.” Sara books and collects in the same conversation, so the appointment is firm before you hang&nbsp;up.",
+    howBubbles: [
+      { who: 'out', text: "Great! I'll set you for Thursday at 5:30 pm. To confirm the booking there's a deposit, here's the link 👇", t: '6:22 pm' },
+      { who: 'out', text: 'payments.your-clinic.com/deposit', t: '6:22 pm' },
+      { who: 'in', text: 'Done, I paid', t: '6:25 pm' },
+      { who: 'out', text: "Booked! ✅ We got your deposit. You'll get a reminder the day before. See you then!", t: '6:25 pm' },
+    ],
+    stepsH2: "From the patient's yes to the payment, without&nbsp;friction.",
+    steps: [
+      { n: '01', title: 'The patient books', body: 'Over WhatsApp, Instagram or your website, in the conversation with Sara.' },
+      { n: '02', title: 'Pays on the spot', body: 'Deposit or consult, with a secure payment link (Stripe) inside the same chat.' },
+      { n: '03', title: 'The appointment is firm', body: 'Whoever pays, shows up: fewer no-shows and cash flow brought forward from the first month.' },
+    ],
+    row1Eyebrow: 'The best no-show filter',
+    row1Title: "Whoever pays, <em class='text-pine-dark'>shows up.</em>",
+    row1Body:
+      "A patient who left a deposit almost never misses. The deposit isn't just cash brought forward: it's the most effective way to make the day's schedule arrive full.",
+    row1Points: [
+      'Deposit or consult, you decide which',
+      'Fewer no-shows from the first month',
+      'Cash that comes in today, not when you treat',
+    ],
+    row1ImgAlt: 'Payments dashboard: deposits, consults and gift cards collected by Sara, all without a front desk.',
+    row2Eyebrow: 'Gift cards',
+    row2Title: "And sell treatments <em class='text-pine-dark'>in advance.</em>",
+    row2Body:
+      "Your patients gift treatments to people who don't know you yet. You get paid today and gain a new patient who arrives by referral, without spending on advertising.",
+    row2Points: [
+      'Sold from your own website, with your brand',
+      'You get paid today, treat when they redeem',
+      'A new patient that cost you no advertising',
+    ],
+    methods: [
+      { t: 'Deposit at booking' },
+      { t: 'Consult in advance' },
+      { t: 'Gift cards' },
+    ],
+    row2Link: 'See the gift cards',
+    ctaInline: 'Make your time stop being&nbsp;free.',
+    faqs: [
+      { q: 'How does Sara collect payment?', a: 'With a secure payment link (processed by Stripe) inside the conversation. The patient pays from their phone, with no friction and without the front desk handling cash.' },
+      { q: 'Can I choose what to charge?', a: 'Yes. You decide whether to ask for a deposit, the full consult or both, and which treatments it applies to.' },
+      { q: 'Does the deposit really cut no-shows?', a: "It's the most effective filter there is: whoever commits money shows up. You notice it from the first month." },
+      { q: 'What if the patient prefers to pay at the clinic?', a: 'You can keep accepting in-person payment. Online payment is there to secure the appointment and bring cash forward, not to replace how you work.' },
+      { q: 'Is there a record of what came in?', a: 'Yes. In the dashboard you see everything collected through Stripe (deposits, consults and gift cards) and which appointment each payment belongs to.' },
+    ],
+  },
+}[lang];
+
+const { steps, methods, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/cobros-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={900}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia" set:html={dict.howP} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.howBubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <img
+            src="/img/cobros.jpg"
+            width="1200"
+            height="1186"
+            alt={dict.row1ImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row2Eyebrow}
+          title={dict.row2Title}
+          body={dict.row2Body}
+          points={dict.row2Points}
+        >
+          <div class="w-full">
+            <div class="grid gap-4 sm:grid-cols-3">
+              {
+                methods.map((m, i) => (
+                  <div class="rounded-xl border border-line bg-cream p-5">
+                    <span class="font-accent text-xl italic text-pine-dark">{`0${i + 1}`}</span>
+                    <h3 class="mt-2 text-base font-semibold">{m.t}</h3>
+                  </div>
+                ))
+              }
+            </div>
+            <a
+              href={L('/gift-cards')}
+              class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+            >
+              {dict.row2Link} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

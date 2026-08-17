@@ -1,7 +1,8 @@
 ---
-import { whatsappLink } from '../lib/whatsapp';
+import { whatsappLink, whatsappText } from '../lib/whatsapp';
 import { SHOW_GRADER_CTA } from '../lib/flags';
 import ClientsStrip from './ClientsStrip.astro';
+import { defaultLocale, localePath, type Locale } from '../i18n/config';
 
 interface Props {
   eyebrow: string;
@@ -11,8 +12,13 @@ interface Props {
   imageAlt?: string;
   imageW?: number;
   imageH?: number;
+  lang?: Locale;
 }
-const { eyebrow, title, lead, image, imageAlt = '', imageW, imageH } = Astro.props;
+const { eyebrow, title, lead, image, imageAlt = '', imageW, imageH, lang = defaultLocale } = Astro.props;
+const t =
+  lang === 'en'
+    ? { back: 'Back to home', demo: 'Book a demo', scan: 'Scan my business', talk: 'Talk to Sara' }
+    : { back: 'Volver al inicio', demo: 'Pedir demo', scan: 'Escanear mi negocio', talk: 'Habla con Sara' };
 // CTA secundario del hero: "Escanear mi negocio" (al grader) en todas las
 // páginas. Cae a "Habla con Sara" (WhatsApp) si se apaga el flag del grader.
 const showScan = SHOW_GRADER_CTA;
@@ -25,8 +31,8 @@ const hasMedia = Boolean(image) || hasVisual;
 <section class="border-b border-line">
   <div class={`mx-auto max-w-6xl px-5 pb-20 pt-14 ${hasMedia ? 'grid gap-14 md:grid-cols-[1.05fr_0.95fr] md:items-center' : ''}`}>
     <div>
-      <a href="/" class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
-        <span aria-hidden="true">←</span> Volver al inicio
+      <a href={localePath('/', lang)} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+        <span aria-hidden="true">←</span> {t.back}
       </a>
       <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
         <span class="dot h-2 w-2"></span>{eyebrow}
@@ -35,10 +41,10 @@ const hasMedia = Boolean(image) || hasVisual;
       <p class="mt-6 max-w-xl text-lg text-salvia">{lead}</p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
-          href="/demo"
+          href={localePath('/demo', lang)}
           class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
         >
-          Pedir demo
+          {t.demo}
         </a>
         {
           showScan ? (
@@ -46,16 +52,16 @@ const hasMedia = Boolean(image) || hasVisual;
               href="https://grader.rayapp.ai/?product=servicios&utm_source=hero&utm_medium=website&utm_campaign=holasara"
               class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
             >
-              Escanear mi negocio
+              {t.scan}
             </a>
           ) : (
             <a
-              href={whatsappLink()}
+              href={whatsappLink(whatsappText(lang))}
               target="_blank"
               rel="noopener"
               class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
             >
-              Habla con Sara
+              {t.talk}
             </a>
           )
         }
@@ -88,4 +94,4 @@ const hasMedia = Boolean(image) || hasVisual;
   </div>
 </section>
 
-<ClientsStrip />
+<ClientsStrip lang={lang} />
