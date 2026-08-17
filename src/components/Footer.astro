@@ -19,14 +19,25 @@ const year = new Date().getFullYear();
           Habla con Sara
         </a>
       </div>
-      <div class="text-sm text-cream/60">
-        <p>La secretaria con IA de tu clínica.</p>
-        <p class="mt-1">WhatsApp · Instagram · Agenda · Cobros</p>
-      </div>
+      <nav class="text-sm text-cream/70" aria-label="Enlaces de la empresa">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Sara</p>
+        <ul class="flex flex-col gap-2.5">
+          <li><a href="/nosotros" class="transition-colors hover:text-cream">Nosotros</a></li>
+          <li><a href="/caso" class="transition-colors hover:text-cream">Casos</a></li>
+          <li><a href="/precios" class="transition-colors hover:text-cream">Precios</a></li>
+          <li><a href="/terminos" class="transition-colors hover:text-cream">Términos y condiciones</a></li>
+          <li><a href="/privacidad" class="transition-colors hover:text-cream">Política de privacidad</a></li>
+        </ul>
+      </nav>
     </div>
 
     <div class="mt-14 flex flex-col gap-2 border-t border-cream/10 pt-6 text-xs text-cream/45 md:flex-row md:justify-between">
-      <p>© {year} Sara. Todos los derechos reservados.</p>
+      <p>© {year} Sara, un producto de RAY Software. Todos los derechos reservados.</p>
+      <p class="flex flex-wrap gap-x-4 gap-y-1">
+        <a href="/terminos" class="transition-colors hover:text-cream/80">Términos</a>
+        <a href="/privacidad" class="transition-colors hover:text-cream/80">Privacidad</a>
+        <a href="mailto:hola@holasara.ai" class="transition-colors hover:text-cream/80">hola@holasara.ai</a>
+      </p>
     </div>
   </div>
 </footer>

@@ -1,0 +1,88 @@
+---
+// Envoltorio para páginas de texto legal (privacidad, términos). Prosa sobria,
+// legible, con los tokens de marca. El contenido va como children.
+import Layout from '../layouts/Layout.astro';
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  updated: string; // fecha legible, ej: "17 de agosto de 2026"
+  lead?: string;
+}
+const { title, description, updated, lead } = Astro.props;
+---
+
+<Layout title={`${title} · Sara`} description={description}>
+  <Header />
+  <main>
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-3xl px-5 pb-14 pt-14">
+        <a href="/" class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+          <span aria-hidden="true">←</span> Volver al inicio
+        </a>
+        <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl">{title}</h1>
+        {lead && <p class="mt-6 max-w-2xl text-lg text-salvia">{lead}</p>}
+        <p class="mt-6 text-sm text-salvia">Última actualización: {updated}</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="legal-prose mx-auto max-w-3xl px-5 py-16">
+        <slot />
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style is:global>
+  .legal-prose {
+    color: var(--color-salvia, #4b5a54);
+  }
+  .legal-prose h2 {
+    margin-top: 2.75rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-serif, ui-serif, Georgia, serif);
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-ink, #14261f);
+  }
+  .legal-prose h2:first-child {
+    margin-top: 0;
+  }
+  .legal-prose h3 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-ink, #14261f);
+  }
+  .legal-prose p {
+    margin-top: 0.85rem;
+    line-height: 1.7;
+  }
+  .legal-prose ul {
+    margin-top: 0.85rem;
+    margin-bottom: 0.85rem;
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+  .legal-prose li {
+    margin-top: 0.35rem;
+    line-height: 1.65;
+  }
+  .legal-prose a {
+    color: var(--color-pine-dark, #1f5540);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .legal-prose strong {
+    color: var(--color-ink, #14261f);
+    font-weight: 700;
+  }
+</style>
