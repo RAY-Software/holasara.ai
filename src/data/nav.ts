@@ -64,6 +64,6 @@ export const sizeLinks: FeatureLink[] = [
 // Ítems top-level del nav (además de los mega menús "Producto" y "Negocios").
 export const topLinks: FeatureLink[] = [
   { name: 'Casos', href: '/caso', desc: 'Clínicas reales con Sara.' },
-  { name: 'Implementación', href: '/implementacion', desc: 'Conectas tu calendario y listo.' },
+  { name: 'Cómo funciona', href: '/implementacion', desc: 'Conectas tu calendario y listo.' },
   { name: 'Precios', href: '/precios', desc: 'Planes por país.' },
 ];
