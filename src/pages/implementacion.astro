@@ -3,67 +3,129 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PageHero from '../components/PageHero.astro';
+import FeatureRow from '../components/FeatureRow.astro';
+import ConversationDemo from '../components/ConversationDemo.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
-import CtaInline from '../components/CtaInline.astro';
 import CtaBand from '../components/CtaBand.astro';
 
+// Lo que pone la clínica es mínimo.
 const needs = [
   { t: 'Tu Google Calendar', b: 'El mismo que ya usas. Autorizas el acceso en un clic y Sara empieza a leer y escribir ahí.' },
-  { t: 'Una línea de WhatsApp', b: 'Conectamos una línea de WhatsApp Business para tu clínica. Coordinamos el número contigo.' },
   { t: 'Tu forma de trabajar', b: 'Nos cuentas tus tratamientos, precios y disponibilidad, y Sara aprende a atender como tu clínica.' },
+  { t: 'Tus datos clínicos, donde están', b: 'No se almacena historia clínica ni información médica en Sara. Eso queda donde está hoy.' },
 ];
 
 const faqs = [
-  { q: '¿Cuánto tarda en estar funcionando?', a: 'Poco. Autorizar el calendario es un clic; el resto es cargar tu información y afinar el tono. Lo hacemos contigo.' },
+  { q: '¿Cuánto tarda en estar funcionando?', a: 'Poco. La parte técnica la resolvemos nosotros y Sara te acompaña por WhatsApp mientras configuras. Autorizar el calendario es un clic; el resto es cargar tu información y afinar el tono.' },
+  { q: '¿Tengo que conseguir la línea de WhatsApp por mi cuenta?', a: 'No hace falta. Puedes conseguir la línea de WhatsApp Business con nosotros y te la dejamos lista y conectada a Sara. Si prefieres usar un número que ya tienes, también se puede: lo vemos en la demo.' },
+  { q: '¿Y el dominio para mi web de reservas?', a: 'Puedes conseguirlo con nosotros: buscas el nombre, lo eliges y lo dejamos configurado apuntando a tu web de reservas. El precio es por el primer año e incluye la configuración. Si ya tienes uno, lo conectas igual. Es opcional, solo si te falta.' },
+  { q: '¿Cómo me ayuda Sara a configurar?', a: 'Te escribe por WhatsApp y te va llevando paso a paso por cada parte del setup, a tu ritmo. Cualquier duda que tengas mientras avanzas, se la preguntas ahí mismo y te responde.' },
   { q: '¿Tengo que cambiar de sistema?', a: 'No. Sara trabaja sobre tu Google Calendar y tu WhatsApp. No migras datos ni aprendes una herramienta nueva.' },
   { q: '¿Y si hoy no uso Google Calendar (Flowww, AgendaPro, Doctoralia…)?', a: 'Hoy Sara agenda sobre Google Calendar. Si tu clínica usa otra agenda, en la demo vemos tu caso: en la mayoría alcanza con conectar una cuenta de Google a tu operación, y te ayudamos a dejarla lista. Cuéntanos qué usas y te decimos si encaja antes de arrancar.' },
-  { q: '¿Qué pasa con la historia clínica de mis pacientes?', a: 'No se almacena historia clínica ni información médica en Sara. Eso queda donde está hoy.' },
   { q: '¿Mi equipo tiene que aprender a usarla?', a: 'Casi nada: Sara atiende sola y tu equipo le habla por WhatsApp como a una persona más. Sin pantallas nuevas.' },
-];
-
-const steps = [
-  { t: 'Un clic y listo', b: 'Autorizas tu cuenta de Google y Sara empieza a leer y escribir en el calendario que ya usas. No migras nada, no cambias de herramienta.' },
-  { t: 'Ve tu disponibilidad real', b: 'Agenda solo en los espacios libres, bloquea al instante y todo aparece en el calendario de tu equipo. Sin dobles reservas.' },
-  { t: 'Tus datos clínicos no pasan por aquí', b: 'No se almacena historia clínica ni información médica de tus pacientes. Eso queda donde está hoy.' },
 ];
 ---
 
 <Layout
-  title="Implementación · Conecta tu Google Calendar y ya está"
-  description="Autorizas tu Google Calendar y Sara empieza a agendar en tus espacios libres, sin dobles reservas. No migras nada y tus datos clínicos no pasan por aquí."
+  title="Cómo funciona · Te dejamos todo listo y Sara te guía"
+  description="Consigues la línea de WhatsApp y tu dominio con nosotros, y Sara te acompaña por WhatsApp para configurar todo. Conectas tu Google Calendar en un clic, sin migraciones."
 >
   <Header />
   <main>
     <PageHero
-      eyebrow="Implementación"
-      title="Conecta tu Google Calendar y <em class='text-pine-dark'>ya está.</em>"
-      lead="Sin migraciones ni herramientas nuevas. Sara trabaja sobre el calendario que ya usas y respeta tu disponibilidad real."
-      image="/img/implementacion.jpg"
-      imageAlt="Sara sincronizada con Google Calendar, agendando solo en los espacios libres del consultorio."
-      imageW={1200}
-      imageH={1186}
-    />
+      eyebrow="Cómo funciona"
+      title="Arrancar es más fácil <em class='text-pine-dark'>de lo que crees.</em>"
+      lead="Ya no resuelves la parte técnica solo. Consigues con nosotros la línea de WhatsApp y tu dominio, y Sara te escribe por WhatsApp para ir configurando todo, paso a paso, y responder tus dudas."
+    >
+      <ConversationDemo
+        slot="visual"
+        channel="whatsapp"
+        bubbles={[
+          { who: 'out', text: '¡Hola, Dani! Soy Sara. Vamos a dejar todo listo. ¿Arrancamos conectando tu Google Calendar? Es un solo clic 👇', t: '10:02' },
+          { who: 'in', text: 'Dale', t: '10:05' },
+          { who: 'out', text: '¡Listo, quedó conectado! ¿La línea de WhatsApp y el dominio los consigues con nosotros?', t: '10:05' },
+          { who: 'in', text: 'Sí, los dos', t: '10:07' },
+          { who: 'out', text: '¡Hecho! Te los dejo listos hoy. Cualquier duda mientras configuras, escríbeme por aquí y te ayudo 🙌', t: '10:07' },
+        ]}
+      />
+    </PageHero>
 
+    <!-- ══════════ EL SETUP · checklist (parte técnica hecha por nosotros) ══════════ -->
     <section class="border-b border-line bg-paper">
-      <div class="mx-auto max-w-6xl px-5 py-24">
-        <div class="grid gap-6 md:grid-cols-3">
-          {
-            steps.map((s, i) => (
-              <div class="rounded-xl border border-line bg-cream p-8">
-                <span class="font-accent text-2xl italic text-pine-dark">{`0${i + 1}`}</span>
-                <h3 class="mt-3 text-xl font-semibold">{s.t}</h3>
-                <p class="mt-2 text-salvia">{s.b}</p>
-              </div>
-            ))
-          }
-        </div>
+      <div class="reveal mx-auto max-w-5xl px-5 py-24 text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">El setup</p>
+        <h2 class="mx-auto max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          La parte difícil, <em class="font-accent not-italic text-pine-dark">la hacemos nosotros.</em>
+        </h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg text-salvia">
+          Tu sitio en línea, la línea de WhatsApp, el dominio y el calendario quedan listos de nuestro lado.
+          Tú solo terminas de darle tu tono, y ves el avance en un&nbsp;checklist.
+        </p>
+        <img
+          src="/img/setup-onboarding.jpg"
+          width="1200"
+          height="678"
+          alt="Checklist de configuración de la clínica en el panel, con la parte técnica ya lista."
+          loading="lazy"
+          decoding="async"
+          class="mx-auto mt-12 w-full rounded-xl border border-line shadow-[0_18px_40px_-24px_rgba(20,38,31,0.32)]"
+        />
       </div>
     </section>
 
+    <!-- ══════════ DOMINIO + LÍNEA · filas alternadas ══════════ -->
     <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="Tu dominio"
+          title="Tu dominio <em class='text-pine-dark'>en internet.</em>"
+          body="Si te falta un dominio, lo consigues con nosotros: buscas el nombre, lo eliges y lo dejamos configurado apuntando a tu web de reservas. El precio es por el primer año e incluye la configuración."
+          points={[
+            'Buscas el nombre y lo eliges en el momento',
+            'Incluye la configuración: no tocas DNS ni nada técnico',
+            '¿Ya tienes uno? Lo conectas igual',
+          ]}
+        >
+          <img
+            src="/img/domain-comprar.jpg"
+            width="1200"
+            height="590"
+            alt="Buscador de dominio en el panel, con opciones disponibles y su precio por el primer año."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Tu línea"
+          title="Tu línea de WhatsApp, <em class='text-pine-dark'>lista para atender.</em>"
+          body="Te damos una línea de WhatsApp Business para tu clínica, o migramos la que ya usas. La dejamos verificada como cuenta de empresa y conectada a Sara, sin que hagas trámites con la operadora."
+          points={[
+            'Línea nueva para tu clínica, o migramos la tuya',
+            'Verificada como cuenta de empresa',
+            'Conectada a Sara desde el primer día',
+          ]}
+        >
+          <img
+            src="/img/linea-whatsapp.jpg"
+            width="1200"
+            height="489"
+            alt="Panel mostrando la línea de WhatsApp Business de la clínica, verificada y conectada a Sara."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <!-- ══════════ LO QUE PONES TÚ ══════════ -->
+    <section class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
-          Lo único que necesitas para&nbsp;arrancar.
+          Lo que pones tú <em class="font-accent not-italic text-pine-dark">es mínimo.</em>
         </h2>
         <div class="mt-12 grid gap-6 md:grid-cols-3">
           {
@@ -78,11 +140,13 @@ const steps = [
       </div>
     </section>
 
-    <CtaInline title="Conectas el calendario hoy y Sara empieza a&nbsp;atender." />
-
     <FeatureFaq items={faqs} />
 
-    <CtaBand />
+    <CtaBand
+      title="Te dejamos todo listo. Sara hace el&nbsp;resto."
+      sub="Consigues la línea y el dominio con nosotros, conectas tu calendario y Sara empieza a atender. Te acompañamos en cada paso."
+    />
   </main>
   <Footer />
 </Layout>
+</content>
