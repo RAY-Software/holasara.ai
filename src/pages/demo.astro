@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import SaraSelect from '../components/SaraSelect.astro';
 import PlacesAutocomplete from '../components/PlacesAutocomplete.astro';
 import ClientsStrip from '../components/ClientsStrip.astro';
-import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
+import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, whatsappLink } from '../lib/whatsapp';
 
 // Endpoint opcional para el lead (Zapier/Make catch hook). Si no está seteado,
 // el formulario hace handoff a WhatsApp con un resumen prellenado, así siempre
@@ -75,7 +75,7 @@ const benefits = [
               <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="h-7 w-auto" loading="lazy" />
               <span class="text-sm font-medium text-salvia">Ya trabaja aquí</span>
             </div>
-            <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">114</p>
                 <p class="mt-1 text-xs leading-tight text-salvia">consultas atendidas sin recepción</p>
@@ -83,10 +83,6 @@ const benefits = [
               <div>
                 <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">7/10</p>
                 <p class="mt-1 text-xs leading-tight text-salvia">citas agendadas por Sara</p>
-              </div>
-              <div>
-                <p class="font-serif text-3xl font-black text-pine-dark tabular-nums md:text-4xl">US$1.071</p>
-                <p class="mt-1 text-xs leading-tight text-salvia">en citas, atribuidas por canal</p>
               </div>
             </div>
           </div>
@@ -170,7 +166,7 @@ const benefits = [
             </button>
 
             <p class="text-center text-xs text-salvia">
-              ¿Prefieres escribir ahora? <a href="/" data-wa-fallback class="font-semibold text-pine-dark underline">Habla con Sara por WhatsApp</a>.
+              ¿Prefieres escribir ahora? <a href={whatsappLink('Hola Sara, quiero una demo para mi clínica.')} data-wa-fallback class="font-semibold text-pine-dark underline">Habla con Sara por WhatsApp</a>.
             </p>
           </form>
 

@@ -1,0 +1,113 @@
+---
+// ⚠️ REVISAR ANTES DE PUBLICAR (facts a confirmar con Franco / legal):
+//   1. Entidad operadora y domicilio fiscal (hoy: "RAY Software, operado por Botbit Inc.").
+//   2. Email de contacto de privacidad (hoy: hola@holasara.ai).
+//   3. Ley y jurisdicción aplicables (hoy: México, LFPDPPP). Ajustar si el
+//      contrato con las clínicas define otra.
+//   4. Lista de sub-encargados / terceros (Google, Meta/WhatsApp, YCloud, Stripe,
+//      analytics): confirmar que está completa y vigente.
+// Este texto es una base honesta y estructurada, NO reemplaza revisión legal.
+import LegalLayout from '../components/LegalLayout.astro';
+---
+
+<LegalLayout
+  title="Política de privacidad"
+  description="Cómo Sara (RAY Software) trata los datos de las clínicas que usan el producto y de los pacientes que conversan con Sara."
+  updated="17 de agosto de 2026"
+  lead="Qué datos tratamos, para qué, con quién los compartimos y qué control tienes sobre ellos."
+>
+  <h2>Quiénes somos</h2>
+  <p>
+    Sara es un producto de <strong>RAY Software</strong>, operado por Botbit Inc. (en adelante,
+    “Sara”, “nosotros”). Sara es la secretaria con IA que las clínicas usan para atender WhatsApp e
+    Instagram, agendar citas y cobrar anticipos. Para cualquier tema de privacidad puedes escribirnos
+    a <a href="mailto:hola@holasara.ai">hola@holasara.ai</a>.
+  </p>
+
+  <h2>Nuestro rol frente a tus pacientes</h2>
+  <p>
+    Cuando una clínica contrata a Sara, <strong>la clínica es la responsable</strong> de los datos de
+    sus pacientes, y Sara actúa como <strong>encargada</strong> que los trata siguiendo sus
+    instrucciones: responder mensajes, agendar y gestionar recordatorios. La clínica decide qué
+    tratamientos ofrece, qué precios comunica y cómo se atiende a cada persona.
+  </p>
+
+  <h2>Qué datos tratamos</h2>
+  <h3>De las clínicas y sus equipos</h3>
+  <ul>
+    <li>Datos de contacto que dejas al pedir una demo: nombre, rol, nombre de la clínica y el medio por el que te contactamos.</li>
+    <li>Autorización de acceso a tu Google Calendar, para leer tu disponibilidad y escribir las citas.</li>
+    <li>Configuración de tu cuenta: agendas, sucursales, profesionales y preferencias de atención.</li>
+  </ul>
+  <h3>De los pacientes que conversan con Sara</h3>
+  <ul>
+    <li>El contenido de la conversación por WhatsApp, Instagram o el chat de la web, para poder responder y agendar.</li>
+    <li>Datos de la cita: fecha, hora, tratamiento consultado y estado (confirmada, reprogramada, cancelada).</li>
+    <li>Datos de pago del anticipo, cuando aplica, procesados por nuestro proveedor de pagos.</li>
+  </ul>
+  <p>
+    <strong>Sara no almacena la historia clínica ni información médica sensible de tus pacientes.</strong>
+    Eso queda donde ya está hoy, en los sistemas de la clínica.
+  </p>
+
+  <h2>Para qué usamos los datos</h2>
+  <ul>
+    <li>Prestar el servicio: atender, agendar, recordar, confirmar, cobrar el anticipo y reactivar pacientes.</li>
+    <li>Mejorar la calidad de las respuestas y la seguridad del producto.</li>
+    <li>Comunicarnos contigo sobre tu cuenta, soporte y novedades relevantes.</li>
+    <li>Cumplir obligaciones legales y prevenir usos abusivos o fraudulentos.</li>
+  </ul>
+
+  <h2>Con quién los compartimos</h2>
+  <p>
+    Trabajamos con proveedores que nos ayudan a operar, bajo acuerdos que los obligan a proteger la
+    información y usarla solo para prestar su servicio:
+  </p>
+  <ul>
+    <li><strong>Google</strong>, para la integración con Google Calendar.</li>
+    <li><strong>Meta / WhatsApp</strong> y nuestro proveedor de mensajería, para enviar y recibir los mensajes.</li>
+    <li><strong>Proveedor de pagos</strong>, para procesar los anticipos y cobros.</li>
+    <li><strong>Herramientas de analítica</strong>, para entender el uso del sitio y de nuestras campañas.</li>
+  </ul>
+  <p>No vendemos tus datos ni los de tus pacientes.</p>
+
+  <h2>Cookies y analítica</h2>
+  <p>
+    Nuestro sitio usa cookies propias y de terceros para medir el tráfico y la efectividad de las
+    campañas (por ejemplo, analítica web y píxeles de publicidad). Puedes gestionar las cookies desde
+    la configuración de tu navegador.
+  </p>
+
+  <h2>Cuánto tiempo los conservamos</h2>
+  <p>
+    Conservamos los datos mientras la clínica use el servicio y durante el tiempo necesario para
+    cumplir obligaciones legales. Cuando dejan de ser necesarios, los eliminamos o anonimizamos.
+  </p>
+
+  <h2>Tus derechos</h2>
+  <p>
+    Puedes solicitar acceder, rectificar, cancelar u oponerte al tratamiento de tus datos, así como
+    limitarlo o portarlos, según la ley aplicable. Si eres paciente de una clínica que usa Sara,
+    normalmente el camino más rápido es contactar a la clínica; también puedes escribirnos a
+    <a href="mailto:hola@holasara.ai">hola@holasara.ai</a> y lo canalizamos.
+  </p>
+
+  <h2>Seguridad</h2>
+  <p>
+    Aplicamos medidas técnicas y organizativas razonables para proteger la información contra accesos
+    no autorizados, pérdida o alteración. Ningún sistema es infalible, pero tratamos la seguridad como
+    parte central del producto.
+  </p>
+
+  <h2>Cambios a esta política</h2>
+  <p>
+    Podemos actualizar esta política para reflejar cambios en el producto o en la ley. Publicaremos la
+    versión vigente en esta página, con su fecha de última actualización.
+  </p>
+
+  <h2>Contacto</h2>
+  <p>
+    Dudas sobre privacidad: <a href="mailto:hola@holasara.ai">hola@holasara.ai</a>. Esta política se
+    rige por la legislación aplicable en México en materia de protección de datos personales.
+  </p>
+</LegalLayout>
