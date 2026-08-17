@@ -1,6 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { productGroups, topLinks } from '../data/nav';
+import { productGroups, industryLinks, sizeLinks, topLinks } from '../data/nav';
 import { SHOW_GRADER_CTA } from '../lib/flags';
 ---
 
@@ -65,6 +65,81 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
               <div class="relative mt-auto p-5">
                 <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">Caso real</p>
                 <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">ViaLaser ya trabaja con Sara.</p>
+                <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
+                  Ver el caso <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Negocios (mega menú: para quién es Sara, por industria y por tamaño) -->
+      <div class="group" data-mega>
+        <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
+          aria-haspopup="true"
+        >
+          Negocios
+          <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <div
+          class="mega-panel invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
+        >
+          <div class="mx-auto grid w-[min(96vw,880px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_1fr_280px]">
+            <div>
+              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Por industria</p>
+              <ul class="flex flex-col gap-6">
+                {
+                  industryLinks.map((it) => (
+                    <li>
+                      <a href={it.href} class="group/link block">
+                        <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
+                          {it.name}
+                        </span>
+                        <span class="mt-1 block text-xs leading-snug text-salvia">{it.desc}</span>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+
+            <div>
+              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Por tamaño</p>
+              <ul class="flex flex-col gap-6">
+                {
+                  sizeLinks.map((it) => (
+                    <li>
+                      <a href={it.href} class="group/link block">
+                        <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
+                          {it.name}
+                        </span>
+                        <span class="mt-1 block text-xs leading-snug text-salvia">{it.desc}</span>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+
+            <!-- Promo: caso real ViaLaser (misma imagen que el panel de Producto) -->
+            <a href="/caso" class="group/case relative flex min-h-[240px] overflow-hidden rounded-xl bg-ink">
+              <img
+                src="/img/vialaser-chart.jpg"
+                alt="Resultados reales de ViaLaser con Sara"
+                class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-300 group-hover/case:scale-[1.04]"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/5"></div>
+              <div class="relative mt-auto p-5">
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">Caso real</p>
+                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">Una cadena de láser ya trabaja con Sara.</p>
                 <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
                   Ver el caso <span aria-hidden="true">→</span>
                 </span>
@@ -140,6 +215,34 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
           </div>
         ))
       }
+      <div>
+        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Negocios · por industria</p>
+        <ul class="flex flex-col">
+          {
+            industryLinks.map((it) => (
+              <li>
+                <a href={it.href} class="block border-b border-line/70 py-2.5 text-ink">
+                  {it.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Negocios · por tamaño</p>
+        <ul class="flex flex-col">
+          {
+            sizeLinks.map((it) => (
+              <li>
+                <a href={it.href} class="block border-b border-line/70 py-2.5 text-ink">
+                  {it.name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
       <div>
         <ul class="flex flex-col">
           {

@@ -1,0 +1,332 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// Por qué trabajar solo cambia el problema.
+const steps = [
+  {
+    n: '01',
+    title: 'No puedes atender y responder a la vez',
+    body: 'Mientras estás con un paciente, el teléfono suena solo. No vas a cortar la sesión para contestar un WhatsApp, y esa consulta queda esperando.',
+  },
+  {
+    n: '02',
+    title: 'Cada mensaje sin responder es un turno que se va',
+    body: 'La reserva se enfría en minutos. Para cuando terminas y miras el teléfono, esa persona ya buscó a otro.',
+  },
+  {
+    n: '03',
+    title: 'La agenda la llevas tú, entre todo lo demás',
+    body: 'Recordar, confirmar y recontactar queda para después, y después no llega. El trabajo administrativo se come tu tiempo libre.',
+  },
+];
+
+const estados = [
+  { tag: '📨 Seguimiento', desc: 'Sara retomó una consulta que te llegó mientras estabas trabajando. El contador (×3) muestra cuántas veces insistió.' },
+  { tag: 'Reservó', desc: 'Agendó el turno sin que tuvieras que parar lo que estabas haciendo.' },
+  { tag: '💳 Anticipo cobrado', desc: 'El anticipo entró solo, sin que tuvieras que pedirlo.' },
+  { tag: '✅ Confirmado', desc: 'El paciente confirmó su turno. Tu día queda ordenado sin que muevas un dedo.' },
+];
+
+const faqs = [
+  {
+    q: '¿Sara me sirve si trabajo sola?',
+    a: 'Sobre todo si trabajas sola. Sara es tu recepción: atiende, agenda y cobra mientras estás con un paciente, así no pierdes reservas por no poder contestar en el momento.',
+  },
+  {
+    q: '¿Contesta mientras estoy atendiendo?',
+    a: 'Sí. Responde por WhatsApp e Instagram al instante, a cualquier hora, sin que tengas que interrumpir tu trabajo. Cuando terminas, la reserva ya está hecha.',
+  },
+  {
+    q: '¿Cobra el anticipo por mí?',
+    a: 'Sí. Sara pide el anticipo en el mismo chat, con link de pago, antes de bloquear tu agenda. Así no te faltan a último momento y no tienes que perseguir a nadie para cobrar.',
+  },
+  {
+    q: '¿Me ayuda a que no me falten?',
+    a: 'Sí. Recuerda el turno el día antes, pide confirmación y, si alguien no puede, libera la hora y se la ofrece a quien estaba esperando. Menos ausencias, sin que tengas que llamar a nadie.',
+  },
+  {
+    q: '¿No termina molestando a mis clientes?',
+    a: 'No hace envíos masivos. Escribe cuando hay un motivo real, como un turno pendiente o un hueco que se abrió, reintenta con mesura y respeta a quien pide no seguir recibiendo mensajes.',
+  },
+  {
+    q: '¿Es complicada de configurar?',
+    a: 'No. Conectas tu calendario, cargamos tus servicios y precios, y Sara empieza a atender. La implementación la hacemos contigo, pensada para que no tengas que aprender nada raro.',
+  },
+];
+---
+
+<Layout
+  title="Software para profesionales independientes · Sara"
+  description="Sara atiende, agenda y cobra el anticipo por WhatsApp e Instagram mientras estás con un paciente. La recepción que un profesional independiente no puede tener, sin sumar a nadie."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Negocios · Profesional independiente"
+      title="Atiende mientras <em class='text-pine-dark'>estás con un paciente.</em>"
+      lead="Cuando trabajas solo, no puedes cortar para contestar y cada mensaje sin responder es un turno que se va. Sara es tu recepción: atiende, agenda y cobra el anticipo mientras estás atendiendo."
+      image="/img/hero/independiente-hero.jpg"
+      imageAlt="Profesional independiente preparando su estación de trabajo en su propio estudio."
+      imageW={1200}
+      imageH={896}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">Atiende mientras trabajas</p>
+          <p class="mt-1 text-salvia">No cortas la sesión para responder un mensaje.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Agenda y cobra sola</p>
+          <p class="mt-1 text-salvia">La reserva se cierra con el anticipo, sin que pares.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Nunca pierdes un mensaje</p>
+          <p class="mt-1 text-salvia">Responde al instante, a cualquier hora del día.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cómo lo hace Sara</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            Un turno reservado mientras estabas con&nbsp;alguien.
+          </h2>
+          <p class="mt-5 text-lg text-salvia">
+            Esta es una reserva real, que entró justo cuando estabas atendiendo. Sara respondió, propuso horario y
+            dejó el turno agendado con el anticipo pagado, sin que soltaras lo que estabas haciendo.
+          </p>
+          <p class="mt-4 text-salvia">
+            Cuando terminas la sesión y miras el teléfono, la reserva ya está hecha. No perdiste el turno por no
+            poder contestar a&nbsp;tiempo.
+          </p>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="instagram"
+            bubbles={[
+              { who: 'in', text: 'Hola! atiendes hoy? quería un turno', t: '15:12' },
+              { who: 'out', text: '¡Hola! Hoy ya no tengo lugar, pero te agendo para esta semana. ¿Qué te gustaría hacerte?', t: '15:12' },
+              { who: 'in', text: 'Una sesión, lo que tengas antes', t: '15:14' },
+              { who: 'out', text: 'Tengo jueves 17:00 o viernes 11:00. ¿Cuál prefieres?', t: '15:14' },
+              { who: 'in', text: 'Jueves 17 🙌', t: '15:15' },
+              { who: 'out', text: '¡Listo! Jueves 17:00. Para dejarlo confirmado va un anticipo, te paso el link 👇', t: '15:15' },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ POR QUÉ ES DISTINTO · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">Por qué trabajar solo es distinto</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Tu tiempo está en atender, no en perseguir el&nbsp;teléfono.
+        </h2>
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="Atiende por ti"
+          title="Responde al instante, <em class='text-pine-dark'>aunque estés ocupado.</em>"
+          body="No tienes que elegir entre atender bien a quien tienes enfrente y no perder al que escribe. Sara contesta por WhatsApp e Instagram en el momento, mientras estás con un paciente, y deja la reserva lista."
+          points={[
+            'Responde mientras trabajas, sin interrumpirte',
+            'WhatsApp, Instagram y el chat de tu web',
+            'La consulta no se enfría esperando tu respuesta',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'in', text: 'Hola, cuánto sale una sesión?', t: '16:20' },
+              { who: 'out', text: '¡Hola! La sesión está $690. ¿Quieres que te agende un turno?', t: '16:20' },
+              { who: 'in', text: 'Dale, para la semana que viene', t: '16:22' },
+              { who: 'out', text: 'Tengo lunes 18:00 o miércoles 10:30. ¿Cuál te viene mejor?', t: '16:22' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Cobra el anticipo"
+          title="Cierra la reserva <em class='text-pine-dark'>con el anticipo pagado.</em>"
+          body="Trabajando solo, una ausencia es una hora entera perdida. Sara pide el anticipo en el mismo chat, con link de pago, antes de bloquear tu agenda. El turno queda ocupado de verdad y no te faltan a último momento."
+          points={[
+            'Link de pago en la misma conversación',
+            'El turno se bloquea recién con el anticipo',
+            'Menos ausencias, sin perseguir a nadie para cobrar',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Te dejo el turno el jueves 17:00. Para confirmarlo va un anticipo que se descuenta del total 🙂', t: '15:02' },
+              { who: 'out', text: 'Link 👉 pago.holasara.ai/tu-estudio', t: '15:02' },
+              { who: 'in', text: 'Listo, pagué', t: '15:09' },
+              { who: 'out', text: '¡Confirmado! ✅ Jueves 17:00. Te espero.', t: '15:09' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Recuerda y confirma"
+          title="Ordena tu día <em class='text-pine-dark'>sin que muevas un dedo.</em>"
+          body="El día antes, Sara recuerda el turno y pide confirmación. Si alguien no puede, libera la hora y se la ofrece a quien estaba esperando. Tu agenda se acomoda sola mientras te ocupas de atender."
+          points={[
+            'Recordatorio y confirmación automáticos',
+            'Si se cae un turno, lo ofrece a la lista de espera',
+            'Menos huecos y menos ausencias en tu día',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Sol! Te recuerdo tu turno de mañana a las 17:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+              { who: 'in', text: 'Sí! ahí voy', t: '19:20' },
+              { who: 'out', text: '¡Perfecto! Queda confirmado para mañana a las 17:00. ¡Te espero!', t: '19:20' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Reactiva"
+          title="Trae de vuelta <em class='text-pine-dark'>al que dejó de venir.</em>"
+          body="Llevar tú la agenda hace que recontactar a los que no vuelven quede siempre para después. Sara lo hace por ti: detecta a quien hace tiempo no reserva y le escribe en el momento justo para volver a agendar."
+          points={[
+            'Detecta a quien hace tiempo no vuelve',
+            'Escribe en la ventana justa para reactivar',
+            'Recupera clientes sin que tengas que acordarte',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Cami! Hace un tiempo que no nos vemos, ¿quieres que te reserve un turno para esta semana? 🌿 Tengo viernes 16:00 o sábado 12:30.', t: '10:30' },
+              { who: 'in', text: 'Uy sí! el viernes me viene bien', t: '13:41' },
+              { who: 'out', text: '¡Genial! Viernes 16:00 agendado. Te paso el link del anticipo para confirmarlo 👇', t: '13:41' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Pide la reseña"
+          title="Y al terminar, <em class='text-pine-dark'>pide la reseña.</em>"
+          body="Cuando el cliente sale contento, Sara le pide la reseña en Google en el momento justo, con el link directo. Trabajando por tu cuenta, tu reputación es tu mejor vendedora, y cada reseña de 5 estrellas te trae al próximo."
+          points={[
+            'La pide en la ventana en que sí responden',
+            'Link directo a tu Google, un solo clic',
+            'Tu reputación trabaja para conseguirte clientes',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Lu! ¿Cómo te sentiste hoy? Si quedaste conforme, me ayudarías un montón con una reseña en Google 🙏', t: '17:40' },
+              { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-estudio', t: '17:40' },
+              { who: 'in', text: 'Listo! ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+              { who: 'out', text: '¡Mil gracias, Lu! Me ayuda muchísimo 🙌', t: '20:12' },
+            ]}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title="Que atender no te cueste perder&nbsp;reservas." />
+
+    <!-- ══════════ CASO REAL · placeholder, reemplazar por testimonial propio ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Caso real</p>
+          <blockquote class="font-serif text-2xl font-black leading-snug text-ink text-balance md:text-3xl">
+            “Trabajo sola y antes perdía turnos por no poder contestar. Ahora Sara agenda mientras estoy atendiendo
+            y no se me escapa&nbsp;nadie.”
+          </blockquote>
+          <p class="mt-6 text-salvia">Una profesional independiente que ya trabaja con Sara todos los días.</p>
+          <a href="/caso" class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            Ver el caso completo <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div>
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt="Resultados reales de una profesional independiente trabajando con Sara."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Así se ve en tu panel</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Lo que Sara resolvió por ti deja&nbsp;rastro.
+        </h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">
+          En la bandeja de Chats, cada conversación muestra en qué estado está. Cuando terminas de atender, de un
+          vistazo ves qué agendó Sara, qué anticipo entró y quién&nbsp;confirmó.
+        </p>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} />
+
+    <CtaBand
+      title="La recepción que un profesional solo no puede&nbsp;tener."
+      sub="Pon a Sara a atender, agendar y cobrar el anticipo hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar."
+    />
+  </main>
+  <Footer />
+</Layout>
+</content>

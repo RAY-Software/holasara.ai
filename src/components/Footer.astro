@@ -1,13 +1,14 @@
 ---
 import Wordmark from './Wordmark.astro';
 import { whatsappLink } from '../lib/whatsapp';
+import { industryLinks, sizeLinks } from '../data/nav';
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-line-dark bg-ink text-cream">
   <div class="mx-auto max-w-6xl px-5 py-16">
-    <div class="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-      <div class="max-w-md">
+    <div class="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
+      <div class="max-w-sm">
         <Wordmark class="text-3xl" dark />
         <p class="mt-4 text-lg text-cream/70">La recepción que nunca cierra.</p>
         <a
@@ -19,16 +20,42 @@ const year = new Date().getFullYear();
           Habla con Sara
         </a>
       </div>
-      <nav class="text-sm text-cream/70" aria-label="Enlaces de la empresa">
-        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Sara</p>
-        <ul class="flex flex-col gap-2.5">
-          <li><a href="/nosotros" class="transition-colors hover:text-cream">Nosotros</a></li>
-          <li><a href="/caso" class="transition-colors hover:text-cream">Casos</a></li>
-          <li><a href="/precios" class="transition-colors hover:text-cream">Precios</a></li>
-          <li><a href="/terminos" class="transition-colors hover:text-cream">Términos y condiciones</a></li>
-          <li><a href="/privacidad" class="transition-colors hover:text-cream">Política de privacidad</a></li>
-        </ul>
-      </nav>
+      <div class="grid grid-cols-2 gap-10 text-sm text-cream/70 sm:grid-cols-3">
+        <nav aria-label="Negocios por industria">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Negocios</p>
+          <ul class="flex flex-col gap-2.5">
+            {
+              industryLinks.map((it) => (
+                <li>
+                  <a href={it.href} class="transition-colors hover:text-cream">{it.name}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav aria-label="Negocios por tamaño">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Por tamaño</p>
+          <ul class="flex flex-col gap-2.5">
+            {
+              sizeLinks.map((it) => (
+                <li>
+                  <a href={it.href} class="transition-colors hover:text-cream">{it.name}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <nav aria-label="Enlaces de la empresa">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">Sara</p>
+          <ul class="flex flex-col gap-2.5">
+            <li><a href="/nosotros" class="transition-colors hover:text-cream">Nosotros</a></li>
+            <li><a href="/caso" class="transition-colors hover:text-cream">Casos</a></li>
+            <li><a href="/precios" class="transition-colors hover:text-cream">Precios</a></li>
+            <li><a href="/terminos" class="transition-colors hover:text-cream">Términos y condiciones</a></li>
+            <li><a href="/privacidad" class="transition-colors hover:text-cream">Política de privacidad</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
 
     <div class="mt-14 flex flex-col gap-2 border-t border-cream/10 pt-6 text-xs text-cream/45 md:flex-row md:justify-between">
