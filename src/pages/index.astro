@@ -7,6 +7,7 @@ import CtaInline from '../components/CtaInline.astro';
 import ClientsStrip from '../components/ClientsStrip.astro';
 import FeatureFaq from '../components/FeatureFaq.astro';
 import { whatsappLink } from '../lib/whatsapp';
+import { SHOW_GRADER_CTA } from '../lib/flags';
 
 const faqs = [
   { q: '¿Se nota que es una inteligencia artificial?', a: 'Sara se presenta con naturalidad y responde con el tono de tu clínica. El paciente siente que lo atiende alguien que sabe, no un bot con botones.' },
@@ -123,14 +124,28 @@ const loop = [
             >
               Pedir demo
             </a>
-            <a
-              href={whatsappLink()}
-              target="_blank"
-              rel="noopener"
-              class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
-            >
-              Habla con Sara
-            </a>
+            {/* CTA secundario del hero. Cuando el flag está ON → "Escanear mi
+                negocio" (grader.rayapp.ai, product=servicios). Mientras corren
+                las campañas de Ads (flag OFF) cae a "Habla con Sara" para no
+                filtrar tráfico pago a un embudo sin el tag de Ads — ver
+                src/lib/flags.ts (SHOW_GRADER_CTA). NO quitar el param product. */}
+            {SHOW_GRADER_CTA ? (
+              <a
+                href="https://grader.rayapp.ai/?product=servicios&utm_source=hero&utm_medium=website&utm_campaign=holasara"
+                class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+              >
+                Escanear mi negocio
+              </a>
+            ) : (
+              <a
+                href={whatsappLink()}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+              >
+                Habla con Sara
+              </a>
+            )}
           </div>
         </div>
 
