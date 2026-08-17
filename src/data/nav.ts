@@ -170,7 +170,7 @@ const topLinksRaw: RawLink[] = [
   },
   {
     href: '/implementacion',
-    name: { es: 'Implementación', en: 'Onboarding' },
+    name: { es: 'Cómo funciona', en: 'How it works' },
     desc: { es: 'Conectas tu calendario y listo.', en: 'Connect your calendar and you are set.' },
   },
   {

@@ -22,10 +22,14 @@ const t =
 // CTA secundario del hero: "Escanear mi negocio" (al grader) en todas las
 // páginas. Cae a "Habla con Sara" (WhatsApp) si se apaga el flag del grader.
 const showScan = SHOW_GRADER_CTA;
+// Slot "visual": permite poner un componente (p. ej. una conversación) en la
+// columna derecha en vez de una imagen. Si está, reemplaza al <img>.
+const hasVisual = Astro.slots.has('visual');
+const hasMedia = Boolean(image) || hasVisual;
 ---
 
 <section class="border-b border-line">
-  <div class={`mx-auto max-w-6xl px-5 pb-20 pt-14 ${image ? 'grid gap-14 md:grid-cols-[1.05fr_0.95fr] md:items-center' : ''}`}>
+  <div class={`mx-auto max-w-6xl px-5 pb-20 pt-14 ${hasMedia ? 'grid gap-14 md:grid-cols-[1.05fr_0.95fr] md:items-center' : ''}`}>
     <div>
       <a href={localePath('/', lang)} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
         <span aria-hidden="true">←</span> {t.back}
@@ -65,20 +69,26 @@ const showScan = SHOW_GRADER_CTA;
     </div>
 
     {
-      image && (
-        <div class="flex justify-center md:justify-center">
-          <div class="relative inline-block">
-            <img
-              src={image}
-              width={imageW}
-              height={imageH}
-              alt={imageAlt}
-              class="block h-auto max-h-[520px] w-auto max-w-full rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
-              fetchpriority="high"
-            />
-            <slot name="image-overlay" />
-          </div>
+      hasVisual ? (
+        <div class="flex w-full justify-center md:justify-end">
+          <slot name="visual" />
         </div>
+      ) : (
+        image && (
+          <div class="flex justify-center md:justify-center">
+            <div class="relative inline-block">
+              <img
+                src={image}
+                width={imageW}
+                height={imageH}
+                alt={imageAlt}
+                class="block h-auto max-h-[520px] w-auto max-w-full rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
+                fetchpriority="high"
+              />
+              <slot name="image-overlay" />
+            </div>
+          </div>
+        )
       )
     }
   </div>
