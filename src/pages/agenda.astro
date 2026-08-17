@@ -141,26 +141,28 @@ const faqs = [
           />
         </FeatureRow>
 
-        <FeatureRow
-          flip
-          eyebrow="Cuida cada cita"
-          title="Cobra, recuerda <em class='text-pine-dark'>y confirma.</em>"
-          body="Cada cita que entra queda protegida: Sara puede pedir el anticipo al reservar, recordar el día antes y pedir confirmación, para que la agenda llegue llena al día."
-          points={[
-            'Anticipo al reservar, el mejor filtro de ausencias',
-            'Recordatorio y confirmación automáticos',
-            'La agenda llega llena, sin sorpresas',
-          ]}
-        >
-          <ConversationDemo
-            channel="whatsapp"
-            bubbles={[
-              { who: 'out', text: 'Hola, Paula! Te recuerdo tu cita de mañana a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
-              { who: 'in', text: 'Sí! ahí voy', t: '19:12' },
-              { who: 'out', text: '¡Genial! Queda confirmada tu asistencia. ¡Te esperamos!', t: '19:12' },
+        <div id="recordatorios" class="scroll-mt-24">
+          <FeatureRow
+            flip
+            eyebrow="Cuida cada cita"
+            title="Cobra, recuerda <em class='text-pine-dark'>y confirma.</em>"
+            body="Cada cita que entra queda protegida: Sara puede pedir el anticipo al reservar, recordar el día antes y pedir confirmación, para que la agenda llegue llena al día."
+            points={[
+              'Anticipo al reservar, el mejor filtro de ausencias',
+              'Recordatorio y confirmación automáticos',
+              'La agenda llega llena, sin sorpresas',
             ]}
-          />
-        </FeatureRow>
+          >
+            <ConversationDemo
+              channel="whatsapp"
+              bubbles={[
+                { who: 'out', text: 'Hola, Paula! Te recuerdo tu cita de mañana a las 14:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+                { who: 'in', text: 'Sí! ahí voy', t: '19:12' },
+                { who: 'out', text: '¡Genial! Queda confirmada tu asistencia. ¡Te esperamos!', t: '19:12' },
+              ]}
+            />
+          </FeatureRow>
+        </div>
 
         <FeatureRow
           eyebrow="Y la vuelve a llenar"
