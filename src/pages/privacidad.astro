@@ -1,27 +1,25 @@
 ---
-// ⚠️ REVISAR ANTES DE PUBLICAR (facts a confirmar con Franco / legal):
-//   1. Entidad operadora y domicilio fiscal (hoy: "RAY Software, operado por Botbit Inc.").
-//   2. Email de contacto de privacidad (hoy: hola@holasara.ai).
-//   3. Ley y jurisdicción aplicables (hoy: México, LFPDPPP). Ajustar si el
-//      contrato con las clínicas define otra.
-//   4. Lista de sub-encargados / terceros (Google, Meta/WhatsApp, YCloud, Stripe,
-//      analytics): confirmar que está completa y vigente.
-// Este texto es una base honesta y estructurada, NO reemplaza revisión legal.
+// Entidad/legales alineados con RAY-Website (misma empresa): responsable
+// BotBit, Inc. (marca RAY), email info@rayapp.io, ley de EE. UU., cláusula de
+// Uso Limitado de las APIs de Google (Sara conecta Google Calendar).
+// ⚠️ PENDIENTE de confirmar: estado/foro de EE. UU. para la cláusula de ley
+// aplicable (hoy queda a nivel "Estados Unidos"), domicilio fiscal, y que la
+// lista de terceros esté completa. Base honesta, NO reemplaza revisión legal.
 import LegalLayout from '../components/LegalLayout.astro';
 ---
 
 <LegalLayout
   title="Política de privacidad"
-  description="Cómo Sara (RAY Software) trata los datos de las clínicas que usan el producto y de los pacientes que conversan con Sara."
+  description="Cómo Sara (BotBit, Inc.) trata los datos de las clínicas que usan el producto y de los pacientes que conversan con Sara."
   updated="17 de agosto de 2026"
   lead="Qué datos tratamos, para qué, con quién los compartimos y qué control tienes sobre ellos."
 >
   <h2>Quiénes somos</h2>
   <p>
-    Sara es un producto de <strong>RAY Software</strong>, operado por Botbit Inc. (en adelante,
-    “Sara”, “nosotros”). Sara es la secretaria con IA que las clínicas usan para atender WhatsApp e
-    Instagram, agendar citas y cobrar anticipos. Para cualquier tema de privacidad puedes escribirnos
-    a <a href="mailto:hola@holasara.ai">hola@holasara.ai</a>.
+    Sara es un producto de <strong>BotBit, Inc.</strong> (bajo su marca “RAY”; en adelante, “Sara”,
+    “nosotros”). Sara es la secretaria con IA que las clínicas usan para atender WhatsApp e Instagram,
+    agendar citas y cobrar anticipos. El responsable del tratamiento de tus datos es BotBit, Inc. Para
+    cualquier tema de privacidad puedes escribirnos a <a href="mailto:info@rayapp.io">info@rayapp.io</a>.
   </p>
 
   <h2>Nuestro rol frente a tus pacientes</h2>
@@ -71,6 +69,22 @@ import LegalLayout from '../components/LegalLayout.astro';
   </ul>
   <p>No vendemos tus datos ni los de tus pacientes.</p>
 
+  <h2>Datos de las APIs de Google (Uso Limitado)</h2>
+  <p>
+    El uso y la transferencia por parte de BotBit, Inc. de la información recibida de las APIs de
+    Google se ajusta a la <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Política de Datos de Usuario de los Servicios de la API de Google</a>,
+    incluidos sus requisitos de Uso Limitado (Limited Use).
+  </p>
+  <p>
+    Cuando conectas tu cuenta de Google (por ejemplo, Google Calendar), accedemos únicamente a los
+    datos necesarios para prestar las funciones que solicitas: leer tu disponibilidad y escribir las
+    citas. No usamos esos datos con fines publicitarios, no los vendemos y no los transferimos a
+    terceros salvo que sea necesario para operar el Servicio, cumplir con la ley o contar con tu
+    consentimiento. Tampoco usamos datos de las APIs de Google para desarrollar, mejorar o entrenar
+    modelos generalizados de inteligencia artificial. Puedes revocar nuestro acceso en cualquier
+    momento desde la configuración de seguridad de tu cuenta de Google.
+  </p>
+
   <h2>Cookies y analítica</h2>
   <p>
     Nuestro sitio usa cookies propias y de terceros para medir el tráfico y la efectividad de las
@@ -89,7 +103,7 @@ import LegalLayout from '../components/LegalLayout.astro';
     Puedes solicitar acceder, rectificar, cancelar u oponerte al tratamiento de tus datos, así como
     limitarlo o portarlos, según la ley aplicable. Si eres paciente de una clínica que usa Sara,
     normalmente el camino más rápido es contactar a la clínica; también puedes escribirnos a
-    <a href="mailto:hola@holasara.ai">hola@holasara.ai</a> y lo canalizamos.
+    <a href="mailto:info@rayapp.io">info@rayapp.io</a> y lo canalizamos.
   </p>
 
   <h2>Seguridad</h2>
@@ -107,7 +121,7 @@ import LegalLayout from '../components/LegalLayout.astro';
 
   <h2>Contacto</h2>
   <p>
-    Dudas sobre privacidad: <a href="mailto:hola@holasara.ai">hola@holasara.ai</a>. Esta política se
-    rige por la legislación aplicable en México en materia de protección de datos personales.
+    Dudas sobre privacidad: <a href="mailto:info@rayapp.io">info@rayapp.io</a>. Esta política se
+    rige por las leyes de los Estados Unidos aplicables en materia de protección de datos personales.
   </p>
 </LegalLayout>
