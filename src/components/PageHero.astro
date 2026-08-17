@@ -1,5 +1,6 @@
 ---
 import { whatsappLink } from '../lib/whatsapp';
+import { SHOW_GRADER_CTA } from '../lib/flags';
 import ClientsStrip from './ClientsStrip.astro';
 
 interface Props {
@@ -12,6 +13,9 @@ interface Props {
   imageH?: number;
 }
 const { eyebrow, title, lead, image, imageAlt = '', imageW, imageH } = Astro.props;
+// CTA secundario del hero: "Escanear mi negocio" (al grader) en todas las
+// páginas. Cae a "Habla con Sara" (WhatsApp) si se apaga el flag del grader.
+const showScan = SHOW_GRADER_CTA;
 ---
 
 <section class="border-b border-line">
@@ -32,14 +36,25 @@ const { eyebrow, title, lead, image, imageAlt = '', imageW, imageH } = Astro.pro
         >
           Pedir demo
         </a>
-        <a
-          href={whatsappLink()}
-          target="_blank"
-          rel="noopener"
-          class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
-        >
-          Habla con Sara
-        </a>
+        {
+          showScan ? (
+            <a
+              href="https://grader.rayapp.ai/?product=servicios&utm_source=hero&utm_medium=website&utm_campaign=holasara"
+              class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+            >
+              Escanear mi negocio
+            </a>
+          ) : (
+            <a
+              href={whatsappLink()}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+            >
+              Habla con Sara
+            </a>
+          )
+        }
       </div>
     </div>
 

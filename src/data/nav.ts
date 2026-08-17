@@ -45,7 +45,23 @@ export const productGroups: FeatureGroup[] = [
   },
 ];
 
-// Ítems top-level del nav (además del mega menú "Producto").
+// Mega menú "Negocios": para quién es Sara. Dos ejes, por industria y por
+// tamaño (como GlossGenius). Piloto vivo: /negocios/depilacion-laser. El resto
+// apunta a /demo hasta que se construya su página propia (ver TODO).
+export const industryLinks: FeatureLink[] = [
+  { name: 'Depilación láser', href: '/negocios/depilacion-laser', desc: 'La agenda llena entre sesiones, sin ausencias.' },
+  { name: 'Medicina estética', href: '/negocios/medicina-estetica', desc: 'Consultas y tratamientos, cobrados por adelantado.' },
+  { name: 'Odontología', href: '/negocios/odontologia', desc: 'Turnos que se confirman solos, sin recepción saturada.' },
+  { name: 'Estética y spa', href: '/negocios/estetica-spa', desc: 'Reservas 24/7 por WhatsApp e Instagram.' },
+];
+
+export const sizeLinks: FeatureLink[] = [
+  { name: 'Multi-local', href: '/negocios/multi-local', desc: 'Varias sedes, una sola Sara y todo en un panel.' },
+  { name: 'Local único', href: '/negocios/local-unico', desc: 'Tu recepción, disponible las 24 horas.' },
+  { name: 'Profesional independiente', href: '/negocios/independiente', desc: 'Atiende y agenda mientras estás con un paciente.' },
+];
+
+// Ítems top-level del nav (además de los mega menús "Producto" y "Negocios").
 export const topLinks: FeatureLink[] = [
   { name: 'Casos', href: '/caso', desc: 'Clínicas reales con Sara.' },
   { name: 'Implementación', href: '/implementacion', desc: 'Conectas tu calendario y listo.' },

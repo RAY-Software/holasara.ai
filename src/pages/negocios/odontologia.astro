@@ -1,0 +1,331 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// Por qué la odontología es distinta a cualquier otro turno.
+const steps = [
+  {
+    n: '01',
+    title: 'El tratamiento son muchas visitas',
+    body: 'Ortodoncia, conducto, implantes: el paciente vuelve una y otra vez. Entre una visita y la siguiente se enfría, y el tratamiento queda a medias.',
+  },
+  {
+    n: '02',
+    title: 'El control que nadie agenda',
+    body: 'La limpieza cada seis meses no se agenda sola. Si nadie la recuerda, el paciente no vuelve hasta que algo le duele.',
+  },
+  {
+    n: '03',
+    title: 'La urgencia llega fuera de hora',
+    body: 'Un dolor de muela a la noche busca turno ya. Si no respondes en el momento, esa persona llama al consultorio de al lado.',
+  },
+];
+
+const estados = [
+  { tag: '📨 Seguimiento', desc: 'Sara recontactó a un paciente que dejó el tratamiento a medias. El contador (×3) muestra cuántas veces insistió.' },
+  { tag: 'Reservó', desc: 'Agendó la siguiente visita del tratamiento desde la conversación.' },
+  { tag: '⏰ Control', desc: 'Sara recordó la limpieza semestral y agendó el control antes de que el paciente se olvide.' },
+  { tag: '✅ Confirmado', desc: 'El paciente confirmó que viene. El sillón no queda vacío.' },
+];
+
+const faqs = [
+  {
+    q: '¿Sara entiende que un tratamiento son varias visitas?',
+    a: 'Sí. En la implementación cargamos tus tratamientos y la secuencia de visitas de cada uno. Sara sabe quién quedó a mitad de la ortodoncia o del implante y le escribe para agendar la siguiente sesión.',
+  },
+  {
+    q: '¿Recuerda los controles semestrales?',
+    a: 'Sí. Sara lleva la cuenta de cada paciente y le escribe cuando toca la limpieza o el control, sin que nadie tenga que revisar una planilla. Es la diferencia entre un paciente que vuelve cada seis meses y uno que desaparece.',
+  },
+  {
+    q: '¿Atiende las urgencias fuera de horario?',
+    a: 'Sí. Responde por WhatsApp e Instagram a cualquier hora, ofrece el primer turno disponible y lo agenda. La urgencia de las once de la noche no se va a otro consultorio.',
+  },
+  {
+    q: '¿Cobra el anticipo del turno?',
+    a: 'Sí. Sara puede pedir el anticipo en el mismo chat, con link de pago, para asegurar el turno. En tratamientos largos, ayuda a que el paciente no falte y el sillón no quede vacío.',
+  },
+  {
+    q: '¿No termina molestando a los pacientes?',
+    a: 'No hace envíos masivos. Escribe cuando hay un motivo real, como un control que toca o una visita pendiente del tratamiento, reintenta con mesura y respeta a quien pide no seguir recibiendo mensajes.',
+  },
+  {
+    q: '¿Sirve si tengo varios consultorios?',
+    a: 'Sí. Sara maneja la agenda de cada sede y deriva a cada paciente al consultorio que le queda cómodo, todo en un solo panel. Si trabajas con varias sucursales, escríbenos y te mostramos cómo lo resolvemos.',
+  },
+];
+---
+
+<Layout
+  title="Software para odontología · Sara"
+  description="Sara atiende, agenda y confirma por WhatsApp e Instagram para consultorios y clínicas dentales. Recupera tratamientos a medias, recuerda los controles y responde las urgencias fuera de hora."
+>
+  <Header />
+  <main>
+    <PageHero
+      eyebrow="Negocios · Odontología"
+      title="Turnos que se confirman <em class='text-pine-dark'>solos.</em>"
+      lead="En odontología, la agenda se llena de controles, tratamientos largos y urgencias que llegan a cualquier hora. Sara atiende, agenda y confirma por WhatsApp, para que ninguna hora del sillón quede vacía."
+      image="/img/hero/odontologia-hero.jpg"
+      imageAlt="Odontóloga recibiendo a una paciente en una clínica dental luminosa y moderna."
+      imageW={1200}
+      imageH={896}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">Contesta la urgencia de las 22:00</p>
+          <p class="mt-1 text-salvia">Por WhatsApp e Instagram, cuando el consultorio ya cerró.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Agenda y confirma el control</p>
+          <p class="mt-1 text-salvia">Recuerda la limpieza semestral y evita el no-show.</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">Recupera el tratamiento a medias</p>
+          <p class="mt-1 text-salvia">Vuelve a buscar al que quedó a mitad de la ortodoncia.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Cómo lo hace Sara</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            Una urgencia de la noche, con turno para&nbsp;mañana.
+          </h2>
+          <p class="mt-5 text-lg text-salvia">
+            Esta es una consulta real, tal cual llega por WhatsApp. Sara responde a la persona con dolor, le ofrece
+            el primer turno disponible y lo deja agendado, sin que nadie del consultorio esté despierto.
+          </p>
+          <p class="mt-4 text-salvia">
+            Llegó a las once de la noche. La urgencia que no esperaba a mañana, atendida en el momento y sin que
+            se fuera a otro&nbsp;consultorio.
+          </p>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'in', text: 'Hola, me está doliendo mucho una muela, tienen turno mañana?', t: '23:11' },
+              { who: 'out', text: 'Hola! Lamento el dolor. Sí, tengo un turno de urgencia mañana a las 9:30 o a las 12:00. ¿Cuál te queda mejor?', t: '23:11' },
+              { who: 'in', text: '9:30 por favor', t: '23:13' },
+              { who: 'out', text: '¡Listo! Mañana 9:30. Te espero. Si el dolor es muy fuerte, puedes tomar un analgésico común hasta la consulta 🙌', t: '23:13' },
+              { who: 'in', text: 'Gracias!!', t: '23:14' },
+              { who: 'out', text: 'Un gusto. ¡Mañana te vemos y lo resolvemos!', t: '23:14' },
+            ]}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ POR QUÉ ES DISTINTO · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">Por qué la odontología es distinta</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Tu agenda no se llena con un turno. Se llena con el&nbsp;que vuelve.
+        </h2>
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow="Atiende 24/7"
+          title="La urgencia de la noche, <em class='text-pine-dark'>con turno al instante.</em>"
+          body="El dolor de muela no espera al horario de atención. Sara responde por WhatsApp e Instagram a cualquier hora, ofrece el primer turno disponible y lo agenda. La consulta que llega de noche no se va a otro lado."
+          points={[
+            'WhatsApp, Instagram y el chat de tu web',
+            'Ofrece el primer turno de urgencia disponible',
+            'De la consulta al turno, sin cambiar de app',
+          ]}
+        >
+          <ConversationDemo
+            channel="instagram"
+            bubbles={[
+              { who: 'in', text: 'Hola! atienden con seguro? necesito una consulta', t: '21:02' },
+              { who: 'out', text: '¡Hola! Sí, atendemos. ¿Quieres que te agende una primera consulta para revisarte? Ahí vemos todo con la doctora.', t: '21:02' },
+              { who: 'in', text: 'Dale', t: '21:04' },
+              { who: 'out', text: 'Tengo miércoles 15:00 o jueves 11:30. ¿Cuál prefieres?', t: '21:04' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Recuerda el control"
+          title="La limpieza de cada seis meses, <em class='text-pine-dark'>agendada a tiempo.</em>"
+          body="El control no se agenda solo, y el paciente que no vuelve por seis meses termina volviendo por una urgencia. Sara lleva la cuenta de cada uno y le escribe cuando toca, para que el consultorio se llene de controles y no solo de dolores."
+          points={[
+            'Sabe a quién le toca el control y cuándo',
+            'Escribe en el momento, sin planillas ni recordatorios tuyos',
+            'Más controles agendados, agenda más previsible',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Marce! Ya pasaron 6 meses de tu última limpieza, toca el control 🦷 Tengo lunes 10:00 o miércoles 18:30.', t: '10:30' },
+              { who: 'in', text: 'Cierto! el miércoles me viene bien', t: '13:41' },
+              { who: 'out', text: '¡Genial! Miércoles 18:30 agendado. Te mando el recordatorio un día antes 🙌', t: '13:41' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Completa el tratamiento"
+          title="Al que quedó a mitad, <em class='text-pine-dark'>lo trae de vuelta.</em>"
+          body="La ortodoncia y los implantes se cortan cuando el paciente no agenda la siguiente visita. Sara ve quién quedó a medias y le escribe para reservar la próxima sesión, en la ventana que corresponde a su tratamiento. El tratamiento se termina, y tu facturación también."
+          points={[
+            'Sabe quién quedó a mitad del tratamiento',
+            'Escribe en la ventana justa entre visitas',
+            'Recupera tratamientos largos que se iban a abandonar',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Nico! Toca el ajuste de tu ortodoncia, ya pasó el mes de la última visita 😁 Tengo viernes 16:00 o sábado 12:30.', t: '10:30' },
+              { who: 'in', text: 'Uy sí, se me pasó! el viernes', t: '13:41' },
+              { who: 'out', text: '¡Perfecto! Viernes 16:00 agendado. Te espero 🙌', t: '13:41' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow="Confirma"
+          title="Y el día antes, <em class='text-pine-dark'>confirma que vienes.</em>"
+          body="Agendar el turno es la mitad; que no se caiga es la otra. El día antes, Sara pide confirmación para evitar la ausencia. Y si el paciente no puede, libera el sillón y se lo ofrece a quien estaba en lista de espera."
+          points={[
+            'Recordatorio y confirmación automáticos',
+            'Menos sillones vacíos, sin llamar a nadie',
+            'Si se cae, la hora pasa a la lista de espera',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Lu! Te recuerdo tu turno de mañana jueves a las 15:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+              { who: 'in', text: 'Sí! ahí voy', t: '19:20' },
+              { who: 'out', text: '¡Perfecto! Queda confirmado para mañana a las 15:00. ¡Te esperamos!', t: '19:20' },
+            ]}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow="Pide la reseña"
+          title="Y después de la visita, <em class='text-pine-dark'>pide la reseña.</em>"
+          body="Cuando el paciente sale contento, Sara le pide la reseña en Google en el momento justo, con el link directo. En odontología, donde la confianza lo es todo, cada reseña de 5 estrellas te trae al próximo paciente."
+          points={[
+            'La pide en la ventana en que sí responden',
+            'Link directo a tu Google, un solo clic',
+            'Mejor reputación, más pacientes nuevos',
+          ]}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={[
+              { who: 'out', text: 'Hola, Juan! ¿Cómo saliste de la consulta de hoy? Si quedaste conforme, nos ayudarías un montón con una reseña en Google 🙏', t: '17:40' },
+              { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-consultorio', t: '17:40' },
+              { who: 'in', text: 'Listo, ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+              { who: 'out', text: '¡Mil gracias, Juan! Nos ayuda muchísimo 🙌', t: '20:12' },
+            ]}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title="Que ninguna hora del sillón quede&nbsp;vacía." />
+
+    <!-- ══════════ CASO REAL · placeholder, reemplazar por testimonial propio ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Caso real</p>
+          <blockquote class="font-serif text-2xl font-black leading-snug text-ink text-balance md:text-3xl">
+            “Sara atiende las urgencias de la noche y recuerda los controles sola. La agenda dejó de depender de
+            que alguien esté al teléfono&nbsp;todo el día.”
+          </blockquote>
+          <p class="mt-6 text-salvia">Un consultorio odontológico que ya trabaja con Sara todos los días.</p>
+          <a href="/caso" class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            Ver el caso completo <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div>
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt="Resultados reales de un consultorio odontológico trabajando con Sara."
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">Así se ve en tu panel</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+          Cada control y cada tratamiento deja&nbsp;rastro.
+        </h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">
+          En la bandeja de Chats, cada conversación muestra en qué estado está. De un vistazo sabes qué control
+          está recordando Sara, qué tratamiento retomó y quién confirmó su&nbsp;turno.
+        </p>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} />
+
+    <CtaBand
+      title="Que la urgencia de las 23:00 no se vaya a otro&nbsp;consultorio."
+      sub="Pon a Sara a atender, agendar y confirmar hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar."
+    />
+  </main>
+  <Footer />
+</Layout>
+</content>
