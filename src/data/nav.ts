@@ -121,6 +121,14 @@ const industryLinksRaw: RawLink[] = [
     },
   },
   {
+    href: '/negocios/implante-capilar',
+    name: { es: 'Implante capilar', en: 'Hair transplant' },
+    desc: {
+      es: 'Diagnósticos agendados y fechas aseguradas con anticipo.',
+      en: 'Assessments booked and dates secured with a deposit.',
+    },
+  },
+  {
     href: '/negocios/odontologia',
     name: { es: 'Odontología', en: 'Dentistry' },
     desc: {
