@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import SaraSelect from '../components/SaraSelect.astro';
 import PlacesAutocomplete from '../components/PlacesAutocomplete.astro';
 import ClientsStrip from '../components/ClientsStrip.astro';
-import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
+import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, whatsappLink } from '../lib/whatsapp';
 
 // Endpoint opcional para el lead (Zapier/Make catch hook). Si no está seteado,
 // el formulario hace handoff a WhatsApp con un resumen prellenado, así siempre
@@ -167,7 +167,7 @@ const benefits = [
             </button>
 
             <p class="text-center text-xs text-salvia">
-              ¿Prefieres escribir ahora? <a href="/" data-wa-fallback class="font-semibold text-pine-dark underline">Habla con Sara por WhatsApp</a>.
+              ¿Prefieres escribir ahora? <a href={whatsappLink('Hola Sara, quiero una demo para mi clínica.')} data-wa-fallback class="font-semibold text-pine-dark underline">Habla con Sara por WhatsApp</a>.
             </p>
           </form>
 
