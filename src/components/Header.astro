@@ -1,6 +1,7 @@
 ---
 import Wordmark from './Wordmark.astro';
 import { productGroups, topLinks } from '../data/nav';
+import { SHOW_GRADER_CTA } from '../lib/flags';
 ---
 
 <header class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
@@ -86,12 +87,14 @@ import { productGroups, topLinks } from '../data/nav';
     <div class="hidden items-center gap-2.5 lg:flex">
       {/* CTA al grader — `product=servicios` activa la variante Sara
           (cookie + CTAs de demo a holasara.ai/demo). NO quitar el param. */}
-      <a
-        href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
-        class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
-      >
-        Escanear mi negocio
-      </a>
+      {SHOW_GRADER_CTA && (
+        <a
+          href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
+          class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
+        >
+          Escanear mi negocio
+        </a>
+      )}
       <a
         href="/demo"
         class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
@@ -154,12 +157,14 @@ import { productGroups, topLinks } from '../data/nav';
         <a href="/demo" class="inline-flex items-center justify-center rounded-full bg-pine px-5 py-3 text-base font-semibold text-cream">
           Pedir demo
         </a>
-        <a
-          href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
-          class="inline-flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-base font-semibold text-ink"
-        >
-          Escanear mi negocio
-        </a>
+        {SHOW_GRADER_CTA && (
+          <a
+            href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
+            class="inline-flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-base font-semibold text-ink"
+          >
+            Escanear mi negocio
+          </a>
+        )}
       </div>
     </div>
   </div>
