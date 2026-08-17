@@ -6,6 +6,7 @@ const lang = toLocale(Astro.params.lang);
 const L = (p) => localePath(p, lang);
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
+import ResultsChart from '../../../components/mocks/ResultsChart.astro';
 import Footer from '../../../components/Footer.astro';
 import PageHero from '../../../components/PageHero.astro';
 import FeatureRow from '../../../components/FeatureRow.astro';
@@ -547,15 +548,7 @@ const { mech, steps, caps, estados, faqs } = dict;
           </a>
         </div>
         <div>
-          <img
-            src="/img/vialaser-chart.jpg"
-            width="1200"
-            height="900"
-            alt={dict.caseImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <ResultsChart lang={lang} class="w-full max-w-full" />
         </div>
       </div>
     </section>

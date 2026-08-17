@@ -1,0 +1,47 @@
+---
+// Post de Instagram compacto (reemplaza /img/post-*.jpg). Chrome de IG bilingüe
+// + foto real (reusa una imagen del sitio). Contenido por props.
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  img: string;
+  caption: string; // permite <b> para el handle en negrita
+  likes: string;
+  comment?: string; // opcional: un comentario destacado (con <b>handle</b>)
+  class?: string;
+}
+const { lang = defaultLocale, img, caption, likes, comment, class: cls = '' } = Astro.props;
+const en = lang === 'en';
+const t = {
+  likes: en ? 'likes' : 'Me gusta',
+  add: en ? 'Add a comment…' : 'Añade un comentario…',
+};
+---
+
+<figure class={`overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] ${cls}`}>
+  <!-- header -->
+  <div class="flex items-center gap-2.5 px-3 py-2.5">
+    <span class="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] p-[2px]">
+      <span class="grid h-full w-full place-items-center rounded-full bg-white text-[10px] font-black text-ink">CA</span>
+    </span>
+    <span class="text-sm font-semibold text-ink">clinicaaurora</span>
+    <span class="ml-auto text-salvia" aria-hidden="true">•••</span>
+  </div>
+  <!-- photo -->
+  <img src={img} alt="" class="aspect-square w-full object-cover" loading="lazy" decoding="async" />
+  <!-- actions -->
+  <div class="flex items-center gap-4 px-3 pt-2.5 text-ink">
+    <svg viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="M12 21s-7-4.35-7-9a4 4 0 017-2.65A4 4 0 0119 12c0 4.65-7 9-7 9z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="M21 11.5a8.5 8.5 0 01-11.7 7.9L4 21l1.6-4.3A8.5 8.5 0 1121 11.5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" class="h-6 w-6"><path d="M22 3L11 14M22 3l-7 19-4-8-8-4 19-7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" class="ml-auto h-6 w-6"><path d="M6 4h12v17l-6-4-6 4V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+  </div>
+  <!-- likes + caption -->
+  <div class="px-3 pb-3 pt-2 text-sm leading-snug text-ink">
+    <p class="font-semibold">{likes} {t.likes}</p>
+    <p class="mt-1" set:html={caption} />
+    {comment && <p class="mt-1 text-salvia" set:html={comment} />}
+  </div>
+  <div class="border-t border-line px-3 py-2 text-xs text-salvia">{t.add}</div>
+</figure>

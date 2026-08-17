@@ -1,0 +1,164 @@
+---
+// Mock del panel de resultados de Sara (reemplaza /img/vialaser-chart.jpg).
+// HTML/SVG nítido y bilingüe: donut "Turnos por canal" + barras "Conversaciones
+// por semana". Datos fieles al mockup original (ViaLaser). Paleta azul de data-viz.
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+
+const t =
+  lang === 'en'
+    ? {
+        byChannel: 'APPOINTMENTS BY CHANNEL',
+        appts: 'APPTS',
+        perWeek: 'CONVERSATIONS PER WEEK',
+      }
+    : {
+        byChannel: 'TURNOS POR CANAL',
+        appts: 'TURNOS',
+        perWeek: 'CONVERSACIONES POR SEMANA',
+      };
+
+// Donut · 4 canales. Nombres iguales en ES/EN (marcas de producto).
+const channels = [
+  { name: 'Sara WhatsApp', n: 7, pct: 32, usd: 285, c: '#2f4fd6' },
+  { name: 'Form Web', n: 6, pct: 27, usd: 269, c: '#4f6fe4' },
+  { name: 'Sara Website', n: 5, pct: 23, usd: 320, c: '#8aa0ef' },
+  { name: 'Sara Instagram', n: 4, pct: 18, usd: 196, c: '#c3cff8' },
+];
+const totalAppts = channels.reduce((s, c) => s + c.n, 0);
+
+// Geometría del donut (stroke-dasharray sobre un círculo r=42, C≈263.9).
+const R = 42;
+const C = 2 * Math.PI * R;
+let acc = 0;
+const arcs = channels.map((ch) => {
+  const frac = ch.n / totalAppts;
+  const seg = { c: ch.c, dash: frac * C, gap: C - frac * C, offset: -acc * C };
+  acc += frac;
+  return seg;
+});
+
+// Barras · conversaciones por semana (4 series apiladas). Fiel a la curva del
+// mockup: arranca en cero y despega en las últimas semanas (total 114).
+const weeks = [
+  { label: lang === 'en' ? 'Apr 27' : '27-abr.', v: [0, 0, 0, 0] },
+  { label: lang === 'en' ? 'May 11' : '11-may.', v: [0, 0, 0, 0] },
+  { label: lang === 'en' ? 'May 25' : '25-may.', v: [0, 0, 0, 0] },
+  { label: lang === 'en' ? 'Jun 8' : '08-jun.', v: [3, 2, 1, 1] },
+  { label: lang === 'en' ? 'Jun 22' : '22-jun.', v: [5, 4, 3, 2] },
+  { label: lang === 'en' ? 'Jul 6' : '06-jul.', v: [4, 4, 2, 2] },
+  { label: lang === 'en' ? 'Jul 20' : '20-jul.', v: [8, 7, 8, 5] },
+  { label: lang === 'en' ? 'Jul 27' : '27-jul.', v: [9, 8, 10, 6] },
+];
+const series = [
+  { name: 'WhatsApp', c: '#2f4fd6' },
+  { name: 'Web', c: '#4f6fe4' },
+  { name: 'Instagram', c: '#8aa0ef' },
+  { name: 'Form Web', c: '#c3cff8' },
+];
+const yMax = 33;
+const totalConv = weeks.reduce((s, w) => s + w.v.reduce((a, b) => a + b, 0), 0);
+// layout de barras
+const bw = 46; // ancho de columna
+const gap = 22;
+const chartH = 190;
+const chartW = weeks.length * bw + (weeks.length - 1) * gap;
+---
+
+<figure class={`w-full max-w-xl rounded-2xl border border-line bg-white p-5 shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)] ${cls}`}>
+  <!-- ── Donut: turnos por canal ── -->
+  <div class="rounded-xl border border-line/70 p-5">
+    <p class="mb-4 text-xs font-semibold uppercase tracking-[0.14em] text-salvia">{t.byChannel}</p>
+    <div class="flex items-center gap-6">
+      <div class="relative shrink-0" style="width:120px;height:120px">
+        <svg viewBox="0 0 100 100" class="h-[120px] w-[120px] -rotate-90">
+          <circle cx="50" cy="50" r={R} fill="none" stroke="#eef1f9" stroke-width="12" />
+          {
+            arcs.map((a) => (
+              <circle
+                cx="50"
+                cy="50"
+                r={R}
+                fill="none"
+                stroke={a.c}
+                stroke-width="12"
+                stroke-dasharray={`${a.dash} ${a.gap}`}
+                stroke-dashoffset={a.offset}
+              />
+            ))
+          }
+        </svg>
+        <div class="absolute inset-0 grid place-content-center text-center">
+          <span class="font-serif text-2xl font-black leading-none text-ink tabular-nums">{totalAppts}</span>
+          <span class="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-salvia">{t.appts}</span>
+        </div>
+      </div>
+      <ul class="flex-1 space-y-2.5">
+        {
+          channels.map((ch) => (
+            <li class="flex items-center gap-2.5 text-sm">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-full" style={`background:${ch.c}`} />
+              <span class="flex-1 truncate text-ink">{ch.name}</span>
+              <span class="font-semibold text-ink tabular-nums">{ch.n}</span>
+              <span class="w-9 text-right text-salvia tabular-nums">{ch.pct}%</span>
+              <span class="w-16 text-right text-salvia tabular-nums">{ch.usd} US$</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── Barras: conversaciones por semana ── -->
+  <div class="mt-4 rounded-xl border border-line/70 p-5">
+    <div class="mb-3 flex items-center justify-between">
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-salvia">{t.perWeek}</p>
+      <span class="text-xs font-semibold text-salvia tabular-nums">· {totalConv}</span>
+    </div>
+    <ul class="mb-4 flex flex-wrap gap-x-4 gap-y-1.5">
+      {
+        series.map((s) => (
+          <li class="flex items-center gap-1.5 text-xs text-salvia">
+            <span class="h-2.5 w-2.5 rounded-full" style={`background:${s.c}`} />
+            {s.name}
+          </li>
+        ))
+      }
+    </ul>
+    <svg viewBox={`0 0 ${chartW} ${chartH + 28}`} class="w-full" role="img" aria-label={t.perWeek}>
+      <!-- gridlines + labels y (0,17,33) -->
+      {
+        [0, 17, 33].map((gy) => {
+          const y = chartH - (gy / yMax) * chartH;
+          return (
+            <g>
+              <line x1="0" y1={y} x2={chartW} y2={y} stroke="#eef1f9" stroke-width="1" stroke-dasharray="3 4" />
+              <text x="0" y={y - 3} font-size="11" fill="#94a3b8">{gy}</text>
+            </g>
+          );
+        })
+      }
+      {
+        weeks.map((w, i) => {
+          const x = i * (bw + gap);
+          let cursor = chartH;
+          return (
+            <g>
+              {w.v.map((val, si) => {
+                const h = (val / yMax) * chartH;
+                cursor -= h;
+                return h > 0 ? <rect x={x} y={cursor} width={bw} height={h} fill={series[si].c} rx="2" /> : null;
+              })}
+              <text x={x + bw / 2} y={chartH + 18} font-size="11" fill="#94a3b8" text-anchor="middle">{w.label}</text>
+            </g>
+          );
+        })
+      }
+    </svg>
+  </div>
+</figure>

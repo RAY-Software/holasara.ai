@@ -10,6 +10,7 @@ import Footer from '../../components/Footer.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import CtaInline from '../../components/CtaInline.astro';
 import ClientsStrip from '../../components/ClientsStrip.astro';
+import ResultsChart from '../../components/mocks/ResultsChart.astro';
 import { whatsappLink, whatsappText } from '../../lib/whatsapp';
 
 // ── Copy por idioma. EN es traducción, no calco. ──
@@ -92,13 +93,7 @@ const dict = {
           <p class="mt-3 text-sm text-salvia" set:html={dict.liveNote} />
         </div>
         <div class="flex justify-center md:justify-end">
-          <img
-            src="/img/vialaser-chart.jpg"
-            width="1130"
-            height="944"
-            alt={dict.chartAlt}
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <ResultsChart lang={lang} class="max-w-full" />
         </div>
       </div>
     </section>
