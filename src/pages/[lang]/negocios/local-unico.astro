@@ -1,0 +1,591 @@
+---
+import { getStaticPaths, toLocale } from '../../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+import { localePath } from '../../../i18n/config';
+const L = (p) => localePath(p, lang);
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import PageHero from '../../../components/PageHero.astro';
+import FeatureRow from '../../../components/FeatureRow.astro';
+import ConversationDemo from '../../../components/ConversationDemo.astro';
+import FeatureFaq from '../../../components/FeatureFaq.astro';
+import CtaInline from '../../../components/CtaInline.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Software para un solo local · Sara',
+    metaDesc:
+      'Sara atiende, agenda y cobra por WhatsApp e Instagram para negocios de un solo local. Tu recepción disponible las 24 horas, sin sumar personal, capturando cada consulta.',
+
+    heroEyebrow: 'Negocios · Local único',
+    heroTitle: "Tu recepción, <em class='text-pine-dark'>siempre disponible.</em>",
+    heroLead:
+      'Con un solo local, cada consulta cuenta y una sola recepción no da abasto. Sara atiende cuando tu equipo no puede, agenda, cobra y confirma, sin que sumes personal.',
+    heroImageAlt: 'Recepcionista recibiendo a una clienta en el mostrador de un local único.',
+
+    mecanica: [
+      { title: 'Atiende cuando recepción no puede', desc: 'El mostrador y el WhatsApp, respondidos a la vez.' },
+      { title: 'Nunca cierra', desc: 'La consulta de la noche y del domingo, agendada igual.' },
+      { title: 'Sin sumar personal', desc: 'Una recepción que no pesa en la planilla.' },
+    ],
+
+    comoKicker: 'Cómo lo hace Sara',
+    comoH2: 'La consulta de la noche, agendada sin que nadie&nbsp;abra el local.',
+    comoP1:
+      'Esta es una reserva real, tal cual llega con el local cerrado. Sara responde, propone horario y deja el turno agendado con el anticipo pagado, sin que tu recepción esté.',
+    comoP2:
+      'Mientras nadie contesta el teléfono, Sara ya cerró la reserva. La consulta que se perdía fuera de horario ahora queda&nbsp;adentro.',
+    demoHero: [
+      { who: 'in', text: 'Hola, están abiertos? quería sacar un turno', t: '22:38' },
+      { who: 'out', text: '¡Hola! Ahora estamos cerrados, pero te agendo yo sin problema. ¿Qué te gustaría hacerte?', t: '22:38' },
+      { who: 'in', text: 'Una consulta, tienen esta semana?', t: '22:40' },
+      { who: 'out', text: 'Sí. Tengo miércoles 16:00 o viernes 11:30. ¿Cuál te viene mejor?', t: '22:40' },
+      { who: 'in', text: 'Viernes 11:30', t: '22:41' },
+      { who: 'out', text: '¡Listo! Viernes 11:30. Para dejarlo confirmado va un anticipo, te paso el link 👇', t: '22:41' },
+    ],
+
+    porqueKicker: 'Por qué con un local cada consulta cuenta',
+    porqueH2: 'No necesitas más personal. Necesitas no perder&nbsp;consultas.',
+    steps: [
+      {
+        n: '01',
+        title: 'Una recepción no puede con todo',
+        body: 'Atiende al que está en el mostrador, cobra, ordena la agenda, y mientras tanto el WhatsApp queda esperando. Cada mensaje sin responder es un turno que se enfría.',
+      },
+      {
+        n: '02',
+        title: 'Fuera de horario no hay nadie',
+        body: 'La consulta de la noche o del domingo llega cuando el local está cerrado. Si nadie contesta, esa persona reserva en otro lado.',
+      },
+      {
+        n: '03',
+        title: 'Sumar personal es caro',
+        body: 'Un puesto más de recepción no siempre se justifica, y aun así el trabajo repetitivo no para de crecer.',
+      },
+    ],
+
+    r1Eyebrow: 'Cuando recepción no da',
+    r1Title: "Contesta lo que el mostrador <em class='text-pine-dark'>no llega a responder.</em>",
+    r1Body:
+      'Mientras tu recepción atiende a quien está en el local, Sara responde el WhatsApp y el Instagram en paralelo. Nadie queda esperando y ninguna consulta se enfría por falta de manos.',
+    r1Points: [
+      'Responde en paralelo al trabajo del mostrador',
+      'WhatsApp, Instagram y el chat de tu web',
+      'Ninguna consulta queda sin contestar',
+    ],
+    demoIg: [
+      { who: 'in', text: 'Hola! cuánto sale la consulta?', t: '13:04' },
+      { who: 'out', text: '¡Hola! La consulta está $500. ¿Quieres que te agende un turno?', t: '13:04' },
+      { who: 'in', text: 'Sí, para esta semana', t: '13:06' },
+      { who: 'out', text: 'Tengo jueves 15:00 o viernes 10:00. ¿Cuál prefieres?', t: '13:06' },
+    ],
+
+    r2Eyebrow: 'Nunca cierra',
+    r2Title: "Agenda de noche, <em class='text-pine-dark'>los domingos y feriados.</em>",
+    r2Body:
+      'El local cierra, Sara no. Sigue atendiendo, agendando y cobrando el anticipo cuando no hay nadie, para que la consulta que llega fuera de horario deje de perderse.',
+    r2Points: [
+      'Atiende 24/7, también fin de semana y feriados',
+      'Deja el turno agendado con el anticipo pagado',
+      'La consulta nocturna no se va a la competencia',
+    ],
+    demoSat: [
+      { who: 'in', text: 'Buenas, trabajan los sábados?', t: 'Dom 21:10' },
+      { who: 'out', text: '¡Hola! Sí, atendemos los sábados de 9 a 14. ¿Te agendo un turno?', t: 'Dom 21:10' },
+      { who: 'in', text: 'Dale, el próximo sábado', t: 'Dom 21:12' },
+      { who: 'out', text: 'Tengo sábado 10:00 o 12:30. ¿Cuál te viene mejor?', t: 'Dom 21:12' },
+    ],
+
+    r3Eyebrow: 'Llena la agenda',
+    r3Title: "Reactiva y llena <em class='text-pine-dark'>los huecos del día.</em>",
+    r3Body:
+      'Una cancelación no tiene por qué ser un hueco vacío. Sara trae de vuelta a quien no vuelve hace tiempo y ofrece el horario que se libera a la lista de espera. La agenda se mueve sola.',
+    r3Points: [
+      'Recupera a los que dejaron de venir',
+      'Ofrece el hueco liberado a la lista de espera',
+      'Menos horas muertas en el día',
+    ],
+    demoReact: [
+      { who: 'out', text: 'Hola, Meli! Se liberó un lugar mañana a las 16:00, que era el horario que querías. ¿Lo tomas?', t: '11:12' },
+      { who: 'in', text: '¡Sí! lo quiero 🙌', t: '11:15' },
+      { who: 'out', text: '¡Listo! Mañana 16:00 reservado. Te paso el link del anticipo para confirmarlo.', t: '11:15' },
+    ],
+
+    r4Eyebrow: 'Libera a tu equipo',
+    r4Title: "Le saca lo repetitivo <em class='text-pine-dark'>a tu recepción.</em>",
+    r4Body:
+      'Responder lo mismo, recordar, confirmar y cobrar el anticipo deja de comerse el día de tu equipo. Sara se ocupa de todo eso y tu recepción queda para atender bien a quien tiene enfrente.',
+    r4Points: [
+      'Recordatorios y confirmaciones automáticos',
+      'Cobro del anticipo sin pedirlo a mano',
+      'Tu equipo atiende mejor a quien está en el local',
+    ],
+    demoRemind: [
+      { who: 'out', text: 'Hola, Pau! Te recuerdo tu turno de mañana a las 15:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+      { who: 'in', text: 'Sí! ahí voy', t: '19:20' },
+      { who: 'out', text: '¡Perfecto! Queda confirmado para mañana a las 15:00. ¡Te esperamos!', t: '19:20' },
+    ],
+
+    r5Eyebrow: 'Pide la reseña',
+    r5Title: "Y después del turno, <em class='text-pine-dark'>pide la reseña.</em>",
+    r5Body:
+      'Cuando el cliente sale contento, Sara le pide la reseña en Google en el momento justo, con el link directo. Para un local único, cada reseña de 5 estrellas es la mejor publicidad del barrio.',
+    r5Points: [
+      'La pide en la ventana en que sí responden',
+      'Link directo a tu Google, un solo clic',
+      'Mejor reputación, más clientes del barrio',
+    ],
+    demoReview: [
+      { who: 'out', text: 'Hola, Juan! ¿Cómo saliste hoy? Si quedaste conforme, nos ayudarías un montón con una reseña en Google 🙏', t: '17:40' },
+      { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-local', t: '17:40' },
+      { who: 'in', text: 'Listo, ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+      { who: 'out', text: '¡Mil gracias, Juan! Nos ayuda muchísimo 🙌', t: '20:12' },
+    ],
+
+    ctaInline1: 'Que ninguna consulta se pierda por no&nbsp;contestar.',
+
+    casoKicker: 'Caso real',
+    casoQuote:
+      '“Somos un local chico y no dábamos abasto con el WhatsApp. Sara contesta y agenda sola, y recepción por fin respira.”',
+    casoAttr: 'Un local único que ya trabaja con Sara todos los días.',
+    casoMore: 'Ver el caso completo',
+    casoImgAlt: 'Resultados reales de un local único trabajando con Sara.',
+
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Todo lo que Sara resuelve deja&nbsp;rastro.',
+    panelSub:
+      'En la bandeja de Chats, cada conversación muestra en qué estado está. De un vistazo sabes qué contestó Sara mientras recepción estaba ocupada, qué anticipo entró y quién&nbsp;confirmó.',
+    estados: [
+      { tag: '📨 Seguimiento', desc: 'Sara retomó una consulta que había quedado sin responder. El contador (×3) muestra cuántas veces insistió.' },
+      { tag: 'Reservó', desc: 'Agendó el turno mientras recepción estaba con otra persona.' },
+      { tag: '💳 Anticipo cobrado', desc: 'El anticipo entró sin que nadie tuviera que pedirlo a mano.' },
+      { tag: '✅ Confirmado', desc: 'El paciente confirmó su turno. El local no queda con huecos.' },
+    ],
+
+    faqs: [
+      {
+        q: '¿Sara reemplaza a mi recepción?',
+        a: 'No la reemplaza, la potencia. Sara se encarga de lo repetitivo (responder, agendar, cobrar el anticipo, recordar y confirmar) para que tu recepción atienda mejor a quien está en el local, sin vivir apagando incendios.',
+      },
+      {
+        q: '¿Qué pasa cuando el local está cerrado?',
+        a: 'Sara sigue atendiendo. Responde por WhatsApp e Instagram de noche, los domingos y los feriados, y deja el turno agendado con el anticipo pagado. La consulta que llegaba fuera de horario deja de perderse.',
+      },
+      {
+        q: '¿Necesito sumar personal para usarla?',
+        a: 'No. Esa es la idea: Sara te da una recepción disponible las 24 horas sin sumar un puesto. Tu equipo actual queda liberado del trabajo repetitivo.',
+      },
+      {
+        q: '¿Cobra el anticipo por mí?',
+        a: 'Sí. Sara pide el anticipo en el mismo chat, con link de pago, antes de bloquear la agenda. El turno queda ocupado de verdad y las ausencias bajan.',
+      },
+      {
+        q: '¿No termina molestando a los pacientes?',
+        a: 'No hace envíos masivos. Escribe cuando hay un motivo real, como un turno pendiente o un hueco que se abrió, reintenta con mesura y respeta a quien pide no seguir recibiendo mensajes.',
+      },
+      {
+        q: '¿Es difícil ponerla a andar?',
+        a: 'No. Conectas tu calendario, cargamos tus servicios y precios, y Sara empieza a atender. La implementación la hacemos contigo, no te dejamos solo con una herramienta vacía.',
+      },
+    ],
+
+    ctaBandTitle: 'Una recepción que nunca cierra, sin sumar&nbsp;personal.',
+    ctaBandSub: 'Pon a Sara a atender, agendar y cobrar hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
+  },
+  en: {
+    metaTitle: 'Software for a single location · Sara',
+    metaDesc:
+      'Sara answers, books and collects over WhatsApp and Instagram for single-location businesses. Your front desk available around the clock, without adding staff, capturing every enquiry.',
+
+    heroEyebrow: 'Businesses · Single location',
+    heroTitle: "Your front desk, <em class='text-pine-dark'>always available.</em>",
+    heroLead:
+      'With a single location, every enquiry counts and one front desk can’t keep up. Sara answers when your team can’t, books, collects and confirms, without you adding staff.',
+    heroImageAlt: 'A receptionist welcoming a client at the counter of a single-location business.',
+
+    mecanica: [
+      { title: 'Answers when the front desk can’t', desc: 'The counter and WhatsApp, handled at the same time.' },
+      { title: 'Never closes', desc: 'The night or Sunday enquiry, booked all the same.' },
+      { title: 'No extra staff', desc: 'A front desk that doesn’t weigh on payroll.' },
+    ],
+
+    comoKicker: 'How Sara does it',
+    comoH2: 'The late-night enquiry, booked without anyone opening the&nbsp;store.',
+    comoP1:
+      'This is a real booking, exactly as it arrives with the store closed. Sara replies, offers a time and leaves the appointment booked with the deposit paid, without your front desk there.',
+    comoP2:
+      'While no one is answering the phone, Sara has already closed the booking. The enquiry that used to slip away after hours now stays&nbsp;in.',
+    demoHero: [
+      { who: 'in', text: 'Hi, are you open? I wanted to book an appointment', t: '22:38' },
+      { who: 'out', text: 'Hi! We’re closed right now, but I can book you no problem. What would you like to have done?', t: '22:38' },
+      { who: 'in', text: 'A consult, do you have any time this week?', t: '22:40' },
+      { who: 'out', text: 'Yes. I have Wednesday 16:00 or Friday 11:30. Which works better for you?', t: '22:40' },
+      { who: 'in', text: 'Friday 11:30', t: '22:41' },
+      { who: 'out', text: 'Done! Friday 11:30. To lock it in there’s a deposit, here’s the link 👇', t: '22:41' },
+    ],
+
+    porqueKicker: 'Why every enquiry counts with one location',
+    porqueH2: 'You don’t need more staff. You need to stop losing&nbsp;enquiries.',
+    steps: [
+      {
+        n: '01',
+        title: 'One front desk can’t do it all',
+        body: 'It helps the person at the counter, takes payment, keeps the calendar in order, and meanwhile WhatsApp sits waiting. Every unanswered message is an appointment going cold.',
+      },
+      {
+        n: '02',
+        title: 'After hours, no one’s there',
+        body: 'The night or Sunday enquiry arrives when the store is closed. If no one answers, that person books somewhere else.',
+      },
+      {
+        n: '03',
+        title: 'Adding staff is expensive',
+        body: 'One more front-desk role isn’t always worth it, and even so the repetitive work keeps growing.',
+      },
+    ],
+
+    r1Eyebrow: 'When the front desk can’t keep up',
+    r1Title: "Answers what the counter <em class='text-pine-dark'>can’t get to.</em>",
+    r1Body:
+      'While your front desk helps whoever is in the store, Sara answers WhatsApp and Instagram in parallel. No one is left waiting and no enquiry goes cold for lack of hands.',
+    r1Points: [
+      'Answers in parallel with the counter’s work',
+      'WhatsApp, Instagram and your website chat',
+      'No enquiry goes unanswered',
+    ],
+    demoIg: [
+      { who: 'in', text: 'Hi! how much is a consult?', t: '13:04' },
+      { who: 'out', text: 'Hi! A consult is $500. Want me to book you an appointment?', t: '13:04' },
+      { who: 'in', text: 'Yes, for this week', t: '13:06' },
+      { who: 'out', text: 'I have Thursday 15:00 or Friday 10:00. Which do you prefer?', t: '13:06' },
+    ],
+
+    r2Eyebrow: 'Never closes',
+    r2Title: "Books at night, <em class='text-pine-dark'>on Sundays and holidays.</em>",
+    r2Body:
+      'The store closes, Sara doesn’t. She keeps answering, booking and collecting the deposit when no one is around, so the after-hours enquiry stops getting lost.',
+    r2Points: [
+      'Available 24/7, weekends and holidays included',
+      'Leaves the appointment booked with the deposit paid',
+      'The late-night enquiry doesn’t go to a competitor',
+    ],
+    demoSat: [
+      { who: 'in', text: 'Hi, are you open on Saturdays?', t: 'Sun 21:10' },
+      { who: 'out', text: 'Hi! Yes, we’re open Saturdays from 9 to 14. Shall I book you an appointment?', t: 'Sun 21:10' },
+      { who: 'in', text: 'Sure, next Saturday', t: 'Sun 21:12' },
+      { who: 'out', text: 'I have Saturday 10:00 or 12:30. Which works better for you?', t: 'Sun 21:12' },
+    ],
+
+    r3Eyebrow: 'Fills the calendar',
+    r3Title: "Wins people back and fills <em class='text-pine-dark'>the day’s gaps.</em>",
+    r3Body:
+      'A cancellation doesn’t have to be an empty slot. Sara brings back people who haven’t returned in a while and offers the freed-up time to the waitlist. The calendar moves on its own.',
+    r3Points: [
+      'Recovers the ones who stopped coming',
+      'Offers the freed-up slot to the waitlist',
+      'Fewer dead hours in the day',
+    ],
+    demoReact: [
+      { who: 'out', text: 'Hi Meli! A spot opened up tomorrow at 16:00, the time you wanted. Want it?', t: '11:12' },
+      { who: 'in', text: 'Yes! I want it 🙌', t: '11:15' },
+      { who: 'out', text: 'Done! Tomorrow at 16:00 is booked. Here’s the deposit link to confirm it.', t: '11:15' },
+    ],
+
+    r4Eyebrow: 'Frees up your team',
+    r4Title: "Takes the repetitive work <em class='text-pine-dark'>off your front desk.</em>",
+    r4Body:
+      'Answering the same questions, reminding, confirming and collecting the deposit stops eating up your team’s day. Sara handles all of it, so your front desk is free to take good care of whoever is in front of them.',
+    r4Points: [
+      'Automatic reminders and confirmations',
+      'Collects the deposit without asking by hand',
+      'Your team takes better care of whoever is in the store',
+    ],
+    demoRemind: [
+      { who: 'out', text: 'Hi Pau! A reminder about your appointment tomorrow at 15:00. Can you confirm you’re coming? Reply YES to confirm 🙌', t: '18:00' },
+      { who: 'in', text: 'Yes! on my way', t: '19:20' },
+      { who: 'out', text: 'Perfect! Confirmed for tomorrow at 15:00. See you then!', t: '19:20' },
+    ],
+
+    r5Eyebrow: 'Asks for the review',
+    r5Title: "And after the appointment, <em class='text-pine-dark'>asks for the review.</em>",
+    r5Body:
+      'When the customer leaves happy, Sara asks for the Google review at just the right moment, with the direct link. For a single location, every 5-star review is the best advertising in the neighborhood.',
+    r5Points: [
+      'Asks in the window when people actually reply',
+      'Direct link to your Google, a single click',
+      'Better reputation, more local customers',
+    ],
+    demoReview: [
+      { who: 'out', text: 'Hi Juan! How did it go today? If you’re happy, a Google review would help us a ton 🙏', t: '17:40' },
+      { who: 'out', text: 'Here’s the direct link, just one click 👉 g.page/tu-local', t: '17:40' },
+      { who: 'in', text: 'Done, just left it ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+      { who: 'out', text: 'Thank you so much, Juan! It helps us a lot 🙌', t: '20:12' },
+    ],
+
+    ctaInline1: 'Don’t let a single enquiry slip away for lack of a&nbsp;reply.',
+
+    casoKicker: 'Real case',
+    casoQuote:
+      '“We’re a small store and couldn’t keep up with WhatsApp. Sara answers and books on her own, and the front desk can finally breathe.”',
+    casoAttr: 'A single-location business already working with Sara every day.',
+    casoMore: 'See the full case',
+    casoImgAlt: 'Real results from a single-location business working with Sara.',
+
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Everything Sara handles leaves a&nbsp;trail.',
+    panelSub:
+      'In the Chats inbox, every conversation shows its status. At a glance you know what Sara answered while the front desk was busy, which deposit came in and who&nbsp;confirmed.',
+    estados: [
+      { tag: '📨 Follow-up', desc: 'Sara picked up an enquiry that had gone unanswered. The counter (×3) shows how many times she followed up.' },
+      { tag: 'Booked', desc: 'She booked the appointment while the front desk was with someone else.' },
+      { tag: '💳 Deposit collected', desc: 'The deposit came in without anyone having to ask for it by hand.' },
+      { tag: '✅ Confirmed', desc: 'The patient confirmed their appointment. The store isn’t left with gaps.' },
+    ],
+
+    faqs: [
+      {
+        q: 'Does Sara replace my front desk?',
+        a: 'She doesn’t replace it, she boosts it. Sara handles the repetitive part (answering, booking, collecting the deposit, reminding and confirming) so your front desk can take better care of whoever is in the store, without constantly putting out fires.',
+      },
+      {
+        q: 'What happens when the store is closed?',
+        a: 'Sara keeps answering. She replies over WhatsApp and Instagram at night, on Sundays and on holidays, and leaves the appointment booked with the deposit paid. The enquiry that used to arrive after hours stops getting lost.',
+      },
+      {
+        q: 'Do I need to add staff to use it?',
+        a: 'No. That’s the whole idea: Sara gives you a front desk available around the clock without adding a role. Your current team is freed from the repetitive work.',
+      },
+      {
+        q: 'Does she collect the deposit for me?',
+        a: 'Yes. Sara asks for the deposit right in the chat, with a payment link, before blocking the calendar. The appointment is truly taken and no-shows drop.',
+      },
+      {
+        q: 'Won’t she end up bothering patients?',
+        a: 'She doesn’t send mass messages. She writes when there’s a real reason, like a pending appointment or a slot that opened up, follows up in moderation and respects anyone who asks to stop receiving messages.',
+      },
+      {
+        q: 'Is it hard to get up and running?',
+        a: 'No. You connect your calendar, we load your services and prices, and Sara starts answering. We handle onboarding with you; we don’t leave you alone with an empty tool.',
+      },
+    ],
+
+    ctaBandTitle: 'A front desk that never closes, without adding&nbsp;staff.',
+    ctaBandSub: 'Put Sara to work answering, booking and collecting today. Without changing your calendar or the way you work.',
+  },
+}[lang];
+
+const { mecanica, steps, estados, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDesc}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/local-unico-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={896}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{mecanica[0].title}</p>
+          <p class="mt-1 text-salvia">{mecanica[0].desc}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{mecanica[1].title}</p>
+          <p class="mt-1 text-salvia">{mecanica[1].desc}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{mecanica[2].title}</p>
+          <p class="mt-1 text-salvia">{mecanica[2].desc}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.comoKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.comoH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.comoP1}</p>
+          <p class="mt-4 text-salvia" set:html={dict.comoP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            lang={lang}
+            bubbles={dict.demoHero}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ POR QUÉ ES DISTINTO · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{dict.porqueKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.porqueH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.r1Eyebrow}
+          title={dict.r1Title}
+          body={dict.r1Body}
+          points={dict.r1Points}
+        >
+          <ConversationDemo
+            channel="instagram"
+            lang={lang}
+            bubbles={dict.demoIg}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.r2Eyebrow}
+          title={dict.r2Title}
+          body={dict.r2Body}
+          points={dict.r2Points}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            lang={lang}
+            bubbles={dict.demoSat}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.r3Eyebrow}
+          title={dict.r3Title}
+          body={dict.r3Body}
+          points={dict.r3Points}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            lang={lang}
+            bubbles={dict.demoReact}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.r4Eyebrow}
+          title={dict.r4Title}
+          body={dict.r4Body}
+          points={dict.r4Points}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            lang={lang}
+            bubbles={dict.demoRemind}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.r5Eyebrow}
+          title={dict.r5Title}
+          body={dict.r5Body}
+          points={dict.r5Points}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            lang={lang}
+            bubbles={dict.demoReview}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline1} lang={lang} />
+
+    <!-- ══════════ CASO REAL · placeholder, reemplazar por testimonial propio ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.casoKicker}</p>
+          <blockquote class="font-serif text-2xl font-black leading-snug text-ink text-balance md:text-3xl">
+            {dict.casoQuote}
+          </blockquote>
+          <p class="mt-6 text-salvia">{dict.casoAttr}</p>
+          <a href={L('/caso')} class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            {dict.casoMore} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div>
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt={dict.casoImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelSub} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand
+      lang={lang}
+      title={dict.ctaBandTitle}
+      sub={dict.ctaBandSub}
+    />
+  </main>
+  <Footer lang={lang} />
+</Layout>

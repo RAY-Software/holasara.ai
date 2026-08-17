@@ -4,27 +4,31 @@
 import Layout from '../layouts/Layout.astro';
 import Header from './Header.astro';
 import Footer from './Footer.astro';
+import { defaultLocale, localePath, type Locale } from '../i18n/config';
 
 interface Props {
   title: string;
   description: string;
   updated: string; // fecha legible, ej: "17 de agosto de 2026"
   lead?: string;
+  lang?: Locale;
 }
-const { title, description, updated, lead } = Astro.props;
+const { title, description, updated, lead, lang = defaultLocale } = Astro.props;
+const back = lang === 'en' ? 'Back to home' : 'Volver al inicio';
+const updatedLabel = lang === 'en' ? 'Last updated' : 'Última actualización';
 ---
 
-<Layout title={`${title} · Sara`} description={description}>
-  <Header />
+<Layout title={`${title} · Sara`} description={description} lang={lang}>
+  <Header lang={lang} />
   <main>
     <section class="border-b border-line bg-paper">
       <div class="mx-auto max-w-3xl px-5 pb-14 pt-14">
-        <a href="/" class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
-          <span aria-hidden="true">←</span> Volver al inicio
+        <a href={localePath('/', lang)} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+          <span aria-hidden="true">←</span> {back}
         </a>
         <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl">{title}</h1>
         {lead && <p class="mt-6 max-w-2xl text-lg text-salvia">{lead}</p>}
-        <p class="mt-6 text-sm text-salvia">Última actualización: {updated}</p>
+        <p class="mt-6 text-sm text-salvia">{updatedLabel}: {updated}</p>
       </div>
     </section>
 
@@ -34,7 +38,7 @@ const { title, description, updated, lead } = Astro.props;
       </div>
     </section>
   </main>
-  <Footer />
+  <Footer lang={lang} />
 </Layout>
 
 <style is:global>

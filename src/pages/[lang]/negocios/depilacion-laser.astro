@@ -1,0 +1,595 @@
+---
+import { getStaticPaths, toLocale } from '../../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import PageHero from '../../../components/PageHero.astro';
+import FeatureRow from '../../../components/FeatureRow.astro';
+import ConversationDemo from '../../../components/ConversationDemo.astro';
+import FeatureFaq from '../../../components/FeatureFaq.astro';
+import CtaInline from '../../../components/CtaInline.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción natural, no calco. ──
+const dict = {
+  es: {
+    meta: {
+      title: 'Software para depilación láser · Sara',
+      description: 'Sara atiende, agenda y cobra por WhatsApp e Instagram para clínicas de depilación láser. Llena las cabinas, completa los paquetes de sesiones y baja las ausencias, con el anticipo cobrado por adelantado.',
+    },
+    hero: {
+      eyebrow: 'Negocios · Depilación láser',
+      title: "Cabinas llenas, <em class='text-pine-dark'>paquetes completos.</em>",
+      lead: 'En láser, la plata no está en el primer turno: está en que el paciente vuelva sesión tras sesión. Sara atiende, agenda y cobra el anticipo por WhatsApp e Instagram, y persigue cada paquete que quedó a medias.',
+      imageAlt: 'Esteticista aplicando depilación láser a una clienta en una cabina luminosa y cálida.',
+    },
+    mechanics: [
+      { title: 'Contesta la consulta de las 23:00', body: 'Por WhatsApp e Instagram, cuando la recepción ya cerró.' },
+      { title: 'Cobra el anticipo por adelantado', body: 'La cabina queda ocupada y pagada, no reservada de palabra.' },
+      { title: 'Completa el paquete de sesiones', body: 'Vuelve a buscar al que quedó a mitad del tratamiento.' },
+    ],
+    demo: {
+      eyebrow: 'Cómo lo hace Sara',
+      title: 'Una consulta de Instagram, reservada y&nbsp;cobrada.',
+      p1: 'Esta es una reserva real de láser, tal cual sale por chat. Sara responde la duda de precio, propone horario y deja la sesión agendada con el anticipo pagado, sin que recepción toque nada.',
+      p2: 'Llegó un domingo a la noche, el horario en que más consultan y menos gente hay para responder. Sara no la dejó&nbsp;enfriar.',
+      bubbles: [
+        { who: 'in', text: 'Hola! Cuánto sale la sesión de piernas completas? 😊', t: '22:47' },
+        { who: 'out', text: '¡Hola! Piernas completas está $1,190 la sesión, y el paquete de 8 sale con descuento. ¿Quieres que te agende una primera sesión para evaluarte?', t: '22:47' },
+        { who: 'in', text: 'Dale, tienes algo esta semana?', t: '22:49' },
+        { who: 'out', text: 'Tengo jueves 17:30 o sábado 11:00. ¿Cuál te viene mejor?', t: '22:49' },
+        { who: 'in', text: 'Sábado 11 🙌', t: '22:50' },
+        { who: 'out', text: '¡Listo! Sábado 11:00 reservado. Para dejarlo confirmado va un anticipo, te paso el link 👇', t: '22:50' },
+        { who: 'in', text: 'Ya pagué', t: '22:53' },
+        { who: 'out', text: '¡Reservado! ✅ Te llega el recordatorio un día antes. ¡Nos vemos el sábado!', t: '22:53' },
+      ],
+    },
+    why: {
+      eyebrow: 'Por qué el láser es distinto',
+      title: 'Tu negocio no vive del primer turno. Vive del&nbsp;paquete.',
+    },
+    steps: [
+      {
+        n: '01',
+        title: 'El tratamiento son varias sesiones',
+        body: 'Un paquete de láser son seis, ocho o diez sesiones espaciadas. Entre una y otra pasan semanas, y ahí es donde el paciente se enfría y no vuelve a agendar.',
+      },
+      {
+        n: '02',
+        title: 'Cada hueco cuesta caro',
+        body: 'Una ausencia no es solo un turno perdido: es tiempo de máquina, de cabina y de personal que ya estaba reservado. En láser, el no-show duele el doble.',
+      },
+      {
+        n: '03',
+        title: 'La reserva llega de noche',
+        body: 'Te escriben por Instagram un domingo o a las once de la noche, cuando nadie contesta. Si no respondes en el momento, esa consulta se va a la clínica de al lado.',
+      },
+    ],
+    features: [
+      {
+        eyebrow: 'Atiende 24/7',
+        title: "Responde la duda de precio <em class='text-pine-dark'>al instante.</em>",
+        body: 'La consulta de láser casi siempre arranca con un cuánto sale. Sara responde precio, zonas y paquetes por WhatsApp e Instagram a cualquier hora, y en la misma conversación agenda la evaluación. Nadie se va a preguntar en otro lado.',
+        points: [
+          'WhatsApp, Instagram y el chat de tu web',
+          'Precios y paquetes que cargas una sola vez',
+          'De la duda a la reserva, sin cambiar de app',
+        ],
+        bubbles: [
+          { who: 'in', text: 'Hola, hacen axilas y rostro? cuánto queda el combo', t: '20:14' },
+          { who: 'out', text: '¡Hola! Sí, hacemos las dos zonas. Axilas + rostro queda $740 la sesión. ¿Te agendo una evaluación sin costo?', t: '20:14' },
+          { who: 'in', text: 'Buenísimo, sí', t: '20:16' },
+          { who: 'out', text: 'Tengo martes 18:00 o miércoles 10:30. ¿Cuál prefieres?', t: '20:16' },
+        ],
+      },
+      {
+        eyebrow: 'Cobra el anticipo',
+        title: "La cabina se reserva <em class='text-pine-dark'>con el anticipo pagado.</em>",
+        body: 'En láser, un turno sin anticipo es un turno que se cae. Sara pide el anticipo en el mismo chat, con link de pago, antes de bloquear la cabina. La hora queda ocupada de verdad, y las ausencias bajan solas.',
+        points: [
+          'Link de pago en la misma conversación',
+          'La cabina se bloquea recién con el anticipo',
+          'Menos no-shows, menos tiempo de máquina perdido',
+        ],
+        bubbles: [
+          { who: 'out', text: 'Te dejo la sesión el jueves 17:30. Para confirmarla va un anticipo de $300 que se descuenta del total 🙂', t: '15:02' },
+          { who: 'out', text: 'Link 👉 pago.holasara.ai/tu-clinica', t: '15:02' },
+          { who: 'in', text: 'Listo, pagué', t: '15:09' },
+          { who: 'out', text: '¡Confirmado! ✅ Jueves 17:30. Te espero.', t: '15:09' },
+        ],
+      },
+      {
+        eyebrow: 'Completa el paquete',
+        title: "Al que va por la sesión 3 de 8, <em class='text-pine-dark'>lo trae de vuelta.</em>",
+        body: 'El paquete se corta cuando el paciente no agenda la próxima. Sara ve quién quedó a mitad del tratamiento y le escribe para reservar la siguiente sesión, en la ventana correcta según su piel y su plan. El tratamiento se termina, y tu facturación también.',
+        points: [
+          'Sabe quién quedó a mitad del paquete',
+          'Escribe en la ventana justa entre sesiones',
+          'Recupera tratamientos que se iban a abandonar',
+        ],
+        bubbles: [
+          { who: 'out', text: 'Hola, Cami! Ya pasaron las 4 semanas de tu última sesión de piernas. Toca la sesión 5 de tu paquete 💪 Tengo viernes 16:00 o sábado 12:30.', t: '10:30' },
+          { who: 'in', text: 'Uy cierto! el viernes me sirve', t: '13:41' },
+          { who: 'out', text: '¡Genial! Viernes 16:00 agendado. Te paso el link del anticipo para dejarlo confirmado 👇', t: '13:41' },
+        ],
+      },
+      {
+        eyebrow: 'Confirma',
+        title: "Y el día antes, <em class='text-pine-dark'>confirma que vienes.</em>",
+        body: 'Reservar la sesión es la mitad; que no se caiga es la otra. El día antes, Sara pide confirmación para evitar la ausencia. Y si el paciente no puede, libera la cabina y se la ofrece a quien estaba en lista de espera.',
+        points: [
+          'Recordatorio y confirmación automáticos',
+          'Menos cabinas vacías, sin llamar a nadie',
+          'Si se cae, la hora pasa a la lista de espera',
+        ],
+        bubbles: [
+          { who: 'out', text: 'Hola, Flor! Te recuerdo tu sesión de mañana jueves a las 16:00. ¿Nos confirmas que vienes? Responde SÍ para confirmar 🙌', t: '18:00' },
+          { who: 'in', text: 'Sí! ahí voy', t: '19:20' },
+          { who: 'out', text: '¡Perfecto! Queda confirmada para mañana a las 16:00. ¡Te esperamos!', t: '19:20' },
+        ],
+      },
+      {
+        eyebrow: 'Pide la reseña',
+        title: "Y al terminar la sesión, <em class='text-pine-dark'>pide la reseña.</em>",
+        body: 'Cuando el paciente sale contento, Sara le pide la reseña en Google en el momento justo, con el link directo. En láser, donde todo se elige por reputación, cada reseña de 5 estrellas te trae al próximo paciente.',
+        points: [
+          'La pide en la ventana en que sí responden',
+          'Link directo a tu Google, un solo clic',
+          'Mejor reputación, más consultas nuevas',
+        ],
+        bubbles: [
+          { who: 'out', text: 'Hola, Sofi! ¿Cómo saliste de la sesión de hoy? Si quedaste conforme, nos ayudarías un montón con una reseña en Google 🙏', t: '17:40' },
+          { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-clinica', t: '17:40' },
+          { who: 'in', text: 'Listo! ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+          { who: 'out', text: '¡Mil gracias, Sofi! Nos ayuda muchísimo 🙌', t: '20:12' },
+        ],
+      },
+    ],
+    ctaInline: 'Que ninguna cabina de tu clínica quede&nbsp;vacía.',
+    caso: {
+      eyebrow: 'Caso real',
+      quote: '“Sara nos contesta las consultas de Instagram a la madrugada y agenda sola. Dejamos de perder turnos por no llegar a&nbsp;responder.”',
+      attribution: 'Una cadena de depilación láser que ya trabaja con Sara todos los días.',
+      link: 'Ver el caso completo',
+      imageAlt: 'Resultados reales de una cadena de depilación láser trabajando con Sara.',
+    },
+    panel: {
+      eyebrow: 'Así se ve en tu panel',
+      title: 'Cada sesión recuperada deja&nbsp;rastro.',
+      lead: 'En la bandeja de Chats, cada conversación muestra en qué estado está. De un vistazo sabes qué paquete está persiguiendo Sara, qué anticipo ya entró y quién confirmó su&nbsp;sesión.',
+    },
+    estados: [
+      { tag: '📨 Seguimiento', desc: 'Sara retomó a un paciente que quedó a mitad del paquete. El contador (×3) muestra cuántas veces insistió.' },
+      { tag: 'Reservó', desc: 'Volvió a agendar la siguiente sesión de láser desde la reactivación.' },
+      { tag: '💳 Anticipo cobrado', desc: 'El anticipo entró antes de la sesión. La hora quedó confirmada de verdad, no de palabra.' },
+      { tag: '✅ Confirmado', desc: 'El paciente confirmó que viene. La cabina no queda vacía.' },
+    ],
+    faqs: [
+      {
+        q: '¿Sara entiende que el láser es por paquetes de varias sesiones?',
+        a: 'Sí. En la implementación cargamos tus tratamientos y la cantidad de sesiones de cada uno. Sara sabe quién va por la sesión tres de ocho y quién todavía no agendó la siguiente, y sale a buscar a cada uno en el momento justo.',
+      },
+      {
+        q: '¿Cobra el anticipo antes de la sesión?',
+        a: 'Sí. Cuando alguien reserva, Sara puede pedir el anticipo en la misma conversación con un link de pago. La cabina queda ocupada y ya pagada, que es lo que baja de verdad las ausencias en láser.',
+      },
+      {
+        q: '¿Responde por Instagram además de WhatsApp?',
+        a: 'Por los dos, y también por el chat de tu web. Es la misma Sara en los tres canales, con el historial de cada paciente. La mayoría de las consultas de láser llegan por Instagram fuera de horario, y ahí es donde contesta al instante.',
+      },
+      {
+        q: '¿No termina molestando a los pacientes?',
+        a: 'No hace envíos masivos. Escribe cuando hay un motivo real, como una sesión pendiente del paquete o un hueco que se abrió, reintenta con mesura y respeta a quien pide no seguir recibiendo mensajes. El objetivo es completar tratamientos, no incomodar.',
+      },
+      {
+        q: '¿Sirve si tengo varias sedes?',
+        a: 'Sí. Sara maneja la agenda de cada local y deriva a cada paciente a la sede que le queda cómoda. Todo lo ves en un solo panel. Si trabajas con varias sucursales, escríbenos y te mostramos cómo lo resolvemos.',
+      },
+      {
+        q: '¿Cuánto tarda en estar funcionando?',
+        a: 'Conectas tu calendario, cargamos tus tratamientos y precios, y Sara empieza a atender. La implementación la hacemos contigo, no te dejamos solo con una herramienta vacía.',
+      },
+    ],
+    ctaBand: {
+      title: 'Que la consulta de láser de las 23:00 no se te&nbsp;escape.',
+      sub: 'Pon a Sara a atender, agendar y cobrar el anticipo hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
+    },
+  },
+  en: {
+    meta: {
+      title: 'Software for laser hair removal · Sara',
+      description: 'Sara answers, books and collects deposits over WhatsApp and Instagram for laser hair removal clinics. She fills your rooms, completes session packages and cuts no-shows, with the deposit paid up front.',
+    },
+    hero: {
+      eyebrow: 'Businesses · Laser hair removal',
+      title: "Full rooms, <em class='text-pine-dark'>complete packages.</em>",
+      lead: 'In laser, the money is not in the first appointment: it is in the patient coming back session after session. Sara answers, books and collects the deposit over WhatsApp and Instagram, and chases every package that was left halfway.',
+      imageAlt: 'Aesthetician performing laser hair removal on a client in a bright, warm room.',
+    },
+    mechanics: [
+      { title: 'Answers the 11 p.m. question', body: 'Over WhatsApp and Instagram, once the front desk has closed.' },
+      { title: 'Collects the deposit up front', body: 'The room is taken and paid, not held on someone’s word.' },
+      { title: 'Completes the session package', body: 'Goes back for the patient who stopped halfway through treatment.' },
+    ],
+    demo: {
+      eyebrow: 'How Sara does it',
+      title: 'An Instagram question, booked and&nbsp;paid.',
+      p1: 'This is a real laser booking, exactly as it comes in over chat. Sara answers the price question, offers a time and leaves the session booked with the deposit paid, without the front desk touching a thing.',
+      p2: 'It came in on a Sunday night, the hours with the most questions and the fewest people to answer them. Sara did not let it go&nbsp;cold.',
+      bubbles: [
+        { who: 'in', text: 'Hi! How much is a full-legs session? 😊', t: '22:47' },
+        { who: 'out', text: 'Hi! Full legs is $1,190 per session, and the 8-session package comes with a discount. Would you like me to book a first session to assess you?', t: '22:47' },
+        { who: 'in', text: 'Sure, do you have anything this week?', t: '22:49' },
+        { who: 'out', text: 'I have Thursday 5:30 p.m. or Saturday 11:00 a.m. Which works better for you?', t: '22:49' },
+        { who: 'in', text: 'Saturday 11 🙌', t: '22:50' },
+        { who: 'out', text: 'Done! Saturday 11:00 a.m. is booked. To confirm it there’s a deposit, I’ll send you the link 👇', t: '22:50' },
+        { who: 'in', text: 'Just paid', t: '22:53' },
+        { who: 'out', text: 'Booked! ✅ You’ll get a reminder the day before. See you Saturday!', t: '22:53' },
+      ],
+    },
+    why: {
+      eyebrow: 'Why laser is different',
+      title: 'Your business does not live off the first appointment. It lives off the&nbsp;package.',
+    },
+    steps: [
+      {
+        n: '01',
+        title: 'The treatment is several sessions',
+        body: 'A laser package is six, eight or ten sessions spaced apart. Weeks go by between them, and that is where the patient cools off and never books again.',
+      },
+      {
+        n: '02',
+        title: 'Every empty slot costs you',
+        body: 'A no-show is not just a lost appointment: it is machine time, room time and staff time that were already reserved. In laser, a no-show hurts twice as much.',
+      },
+      {
+        n: '03',
+        title: 'The booking comes in at night',
+        body: 'They message you on Instagram on a Sunday or at eleven at night, when no one is answering. If you do not reply right then, that lead goes to the clinic next door.',
+      },
+    ],
+    features: [
+      {
+        eyebrow: 'Answers 24/7',
+        title: "Answers the price question <em class='text-pine-dark'>instantly.</em>",
+        body: 'A laser inquiry almost always starts with a how much. Sara answers price, areas and packages over WhatsApp and Instagram at any hour, and books the assessment in the same conversation. No one leaves to ask somewhere else.',
+        points: [
+          'WhatsApp, Instagram and your website chat',
+          'Prices and packages you load just once',
+          'From question to booking, without switching apps',
+        ],
+        bubbles: [
+          { who: 'in', text: 'Hi, do you do underarms and face? how much is the combo', t: '20:14' },
+          { who: 'out', text: 'Hi! Yes, we do both areas. Underarms + face is $740 per session. Shall I book you a free assessment?', t: '20:14' },
+          { who: 'in', text: 'Great, yes', t: '20:16' },
+          { who: 'out', text: 'I have Tuesday 6:00 p.m. or Wednesday 10:30 a.m. Which do you prefer?', t: '20:16' },
+        ],
+      },
+      {
+        eyebrow: 'Collects the deposit',
+        title: "The room is booked <em class='text-pine-dark'>with the deposit paid.</em>",
+        body: 'In laser, an appointment without a deposit is an appointment that falls through. Sara asks for the deposit in the same chat, with a payment link, before blocking the room. The time is truly taken, and no-shows drop on their own.',
+        points: [
+          'Payment link in the same conversation',
+          'The room is only blocked once the deposit is in',
+          'Fewer no-shows, less machine time wasted',
+        ],
+        bubbles: [
+          { who: 'out', text: 'I’ll hold Thursday 5:30 p.m. for you. To confirm it there’s a $300 deposit that comes off the total 🙂', t: '15:02' },
+          { who: 'out', text: 'Link 👉 pago.holasara.ai/tu-clinica', t: '15:02' },
+          { who: 'in', text: 'Done, paid', t: '15:09' },
+          { who: 'out', text: 'Confirmed! ✅ Thursday 5:30 p.m. See you then.', t: '15:09' },
+        ],
+      },
+      {
+        eyebrow: 'Completes the package',
+        title: "The patient on session 3 of 8, <em class='text-pine-dark'>she brings back.</em>",
+        body: 'The package breaks when the patient does not book the next one. Sara sees who stopped halfway through treatment and messages them to book the next session, in the right window for their skin and their plan. The treatment gets finished, and so does your revenue.',
+        points: [
+          'Knows who stopped halfway through the package',
+          'Messages in the right window between sessions',
+          'Recovers treatments that were about to be dropped',
+        ],
+        bubbles: [
+          { who: 'out', text: 'Hi Cami! It’s been 4 weeks since your last legs session. Session 5 of your package is due 💪 I have Friday 4:00 p.m. or Saturday 12:30 p.m.', t: '10:30' },
+          { who: 'in', text: 'Oh right! Friday works for me', t: '13:41' },
+          { who: 'out', text: 'Great! Friday 4:00 p.m. is booked. I’ll send you the deposit link to confirm it 👇', t: '13:41' },
+        ],
+      },
+      {
+        eyebrow: 'Confirms',
+        title: "And the day before, <em class='text-pine-dark'>she confirms you’re coming.</em>",
+        body: 'Booking the session is half of it; keeping it from falling through is the other half. The day before, Sara asks for confirmation to prevent the no-show. And if the patient can’t make it, she frees the room and offers it to whoever was on the waitlist.',
+        points: [
+          'Automatic reminder and confirmation',
+          'Fewer empty rooms, without calling anyone',
+          'If it falls through, the slot goes to the waitlist',
+        ],
+        bubbles: [
+          { who: 'out', text: 'Hi Flor! Just a reminder about your session tomorrow, Thursday at 4:00 p.m. Can you confirm you’re coming? Reply YES to confirm 🙌', t: '18:00' },
+          { who: 'in', text: 'Yes! I’ll be there', t: '19:20' },
+          { who: 'out', text: 'Perfect! You’re confirmed for tomorrow at 4:00 p.m. See you then!', t: '19:20' },
+        ],
+      },
+      {
+        eyebrow: 'Asks for the review',
+        title: "And when the session ends, <em class='text-pine-dark'>she asks for the review.</em>",
+        body: 'When the patient leaves happy, Sara asks for the Google review at just the right moment, with the direct link. In laser, where everything is chosen by reputation, every 5-star review brings you the next patient.',
+        points: [
+          'Asks in the window when people actually reply',
+          'Direct link to your Google, one single click',
+          'Better reputation, more new inquiries',
+        ],
+        bubbles: [
+          { who: 'out', text: 'Hi Sofi! How did today’s session go? If you were happy with it, a Google review would help us a ton 🙏', t: '17:40' },
+          { who: 'out', text: 'Here’s the direct link, just one click 👉 g.page/tu-clinica', t: '17:40' },
+          { who: 'in', text: 'Done! Left it already ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+          { who: 'out', text: 'Thank you so much, Sofi! It really helps us 🙌', t: '20:12' },
+        ],
+      },
+    ],
+    ctaInline: 'So not a single room in your clinic sits&nbsp;empty.',
+    caso: {
+      eyebrow: 'Real case',
+      quote: '“Sara answers our Instagram inquiries in the middle of the night and books on her own. We stopped losing appointments because we couldn’t get to&nbsp;them.”',
+      attribution: 'A laser hair removal chain that already works with Sara every day.',
+      link: 'See the full case',
+      imageAlt: 'Real results from a laser hair removal chain working with Sara.',
+    },
+    panel: {
+      eyebrow: 'How it looks in your dashboard',
+      title: 'Every recovered session leaves a&nbsp;trace.',
+      lead: 'In the Chats inbox, every conversation shows what state it’s in. At a glance you know which package Sara is chasing, which deposit has come in and who confirmed their&nbsp;session.',
+    },
+    estados: [
+      { tag: '📨 Follow-up', desc: 'Sara went back to a patient who stopped halfway through the package. The counter (×3) shows how many times she followed up.' },
+      { tag: 'Booked', desc: 'Booked the next laser session again after the reactivation.' },
+      { tag: '💳 Deposit collected', desc: 'The deposit came in before the session. The time is truly confirmed, not just on someone’s word.' },
+      { tag: '✅ Confirmed', desc: 'The patient confirmed they’re coming. The room won’t sit empty.' },
+    ],
+    faqs: [
+      {
+        q: 'Does Sara understand that laser works in packages of several sessions?',
+        a: 'Yes. During setup we load your treatments and how many sessions each one has. Sara knows who’s on session three of eight and who hasn’t booked the next one yet, and goes after each patient at just the right moment.',
+      },
+      {
+        q: 'Does she collect the deposit before the session?',
+        a: 'Yes. When someone books, Sara can ask for the deposit in the same conversation with a payment link. The room is taken and already paid, which is what really cuts no-shows in laser.',
+      },
+      {
+        q: 'Does she reply on Instagram as well as WhatsApp?',
+        a: 'On both, and on your website chat too. It’s the same Sara across all three channels, with each patient’s history. Most laser inquiries come in over Instagram after hours, and that’s exactly where she replies instantly.',
+      },
+      {
+        q: 'Doesn’t she end up bothering patients?',
+        a: 'She doesn’t send mass blasts. She writes when there’s a real reason, like a pending session in the package or a slot that opened up, follows up in moderation and respects anyone who asks to stop receiving messages. The goal is to complete treatments, not to be a nuisance.',
+      },
+      {
+        q: 'Does it work if I have several locations?',
+        a: 'Yes. Sara manages the calendar for each location and directs each patient to the one that’s convenient for them. You see it all in a single dashboard. If you run several branches, message us and we’ll show you how we handle it.',
+      },
+      {
+        q: 'How long does it take to be up and running?',
+        a: 'You connect your calendar, we load your treatments and prices, and Sara starts working. We handle the setup with you; we don’t leave you alone with an empty tool.',
+      },
+    ],
+    ctaBand: {
+      title: 'So the 11 p.m. laser inquiry doesn’t slip&nbsp;away.',
+      sub: 'Put Sara to work answering, booking and collecting the deposit today. Without changing your calendar or the way you work.',
+    },
+  },
+}[lang];
+
+const { hero, mechanics, demo, why, steps, features, caso, panel, estados, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.meta.title}
+  description={dict.meta.description}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={hero.eyebrow}
+      title={hero.title}
+      lead={hero.lead}
+      image="/img/hero/depilacion-laser-hero.jpg"
+      imageAlt={hero.imageAlt}
+      imageW={1200}
+      imageH={900}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA (qué hace, no stats inventadas) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{mechanics[0].title}</p>
+          <p class="mt-1 text-salvia">{mechanics[0].body}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{mechanics[1].title}</p>
+          <p class="mt-1 text-salvia">{mechanics[1].body}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{mechanics[2].title}</p>
+          <p class="mt-1 text-salvia">{mechanics[2].body}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{demo.eyebrow}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={demo.title} />
+          <p class="mt-5 text-lg text-salvia" set:html={demo.p1} />
+          <p class="mt-4 text-salvia" set:html={demo.p2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="instagram"
+            bubbles={demo.bubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ POR QUÉ EL LÁSER ES DISTINTO · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{why.eyebrow}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={why.title} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES · filas alternadas ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={features[0].eyebrow}
+          title={features[0].title}
+          body={features[0].body}
+          points={features[0].points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={features[0].bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={features[1].eyebrow}
+          title={features[1].title}
+          body={features[1].body}
+          points={features[1].points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={features[1].bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={features[2].eyebrow}
+          title={features[2].title}
+          body={features[2].body}
+          points={features[2].points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={features[2].bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={features[3].eyebrow}
+          title={features[3].title}
+          body={features[3].body}
+          points={features[3].points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={features[3].bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={features[4].eyebrow}
+          title={features[4].title}
+          body={features[4].body}
+          points={features[4].points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={features[4].bubbles}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline lang={lang} title={dict.ctaInline} />
+
+    <!-- ══════════ CASO REAL · ViaLaser ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{caso.eyebrow}</p>
+          <blockquote class="font-serif text-2xl font-black leading-snug text-ink text-balance md:text-3xl" set:html={caso.quote} />
+          <p class="mt-6 text-salvia">{caso.attribution}</p>
+          <a href={L('/caso')} class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            {caso.link} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div>
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt={caso.imageAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{panel.eyebrow}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={panel.title} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={panel.lead} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand
+      lang={lang}
+      title={dict.ctaBand.title}
+      sub={dict.ctaBand.sub}
+    />
+  </main>
+  <Footer lang={lang} />
+</Layout>

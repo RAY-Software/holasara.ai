@@ -1,0 +1,492 @@
+---
+import { getStaticPaths, toLocale } from '../../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p) => localePath(p, lang);
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import PageHero from '../../../components/PageHero.astro';
+import FeatureRow from '../../../components/FeatureRow.astro';
+import ConversationDemo from '../../../components/ConversationDemo.astro';
+import FeatureFaq from '../../../components/FeatureFaq.astro';
+import CtaInline from '../../../components/CtaInline.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Software para negocios con varias sedes · Sara',
+    metaDesc: 'Sara atiende, agenda y cobra por WhatsApp e Instagram para negocios con varias sedes. Misma atención en cada local, deriva a cada paciente a la sede que le queda y te deja todo en un solo panel.',
+    heroEyebrow: 'Negocios · Multi-local',
+    heroTitle: "Varias sedes, <em class='text-pine-dark'>una sola Sara.</em>",
+    heroLead: 'Cuando tienes más de un local, la atención deja de ser pareja y el paciente se pierde entre sedes. Sara atiende igual en todas, deriva a cada uno a la sede que le queda y te deja todo en un solo panel.',
+    heroImageAlt: 'Dueña de una clínica revisando una tablet en la recepción de uno de sus locales.',
+    strip: [
+      { title: 'Misma atención en cada sede', body: 'Mismo tono y mismos horarios, 24/7, en todos tus locales.' },
+      { title: 'Deriva a la sede correcta', body: 'Por zona y disponibilidad, sin que el paciente adivine.' },
+      { title: 'Todo en un solo panel', body: 'Cada agenda, cada chat y cada cobro, en un mismo lugar.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'Una consulta, derivada a la sede que le&nbsp;queda.',
+    howP1: 'Esta es una reserva real. El paciente escribe sin saber a qué local ir, y Sara lo deriva a la sede más cercana con turno disponible, sin que se pierda entre sucursales.',
+    howP2: 'La misma Sara atiende para todas tus sedes, con la agenda real de cada una. El paciente nunca queda esperando una respuesta que no&nbsp;llega.',
+    demo1: [
+      { who: 'in', text: 'Hola! quería sacar un turno, están en el centro?', t: '19:22' },
+      { who: 'out', text: '¡Hola! Tenemos sede en el Centro y otra en Zona Norte. ¿Cuál te queda más cómoda?', t: '19:22' },
+      { who: 'in', text: 'Estoy más cerca de Norte', t: '19:24' },
+      { who: 'out', text: 'En la sede Norte tengo jueves 17:30 o sábado 11:00. ¿Cuál prefieres?', t: '19:24' },
+      { who: 'in', text: 'Jueves 17:30', t: '19:25' },
+      { who: 'out', text: '¡Listo! Jueves 17:30 en la sede Norte (Av. Libertad 1240). Te paso el link del anticipo para confirmar 👇', t: '19:25' },
+    ],
+    whyKicker: 'Por qué crecer en sedes es distinto',
+    whyH2: 'Más locales no tendrían que significar más&nbsp;desorden.',
+    steps: [
+      { n: '01', title: 'Cada sede es una recepción distinta', body: 'La calidad de la atención depende de quién esté ese día en cada local. Lo que en una sede se responde en un minuto, en otra queda sin contestar.' },
+      { n: '02', title: 'El paciente no sabe a qué sede ir', body: 'Pregunta por una, le queda otra más cerca, y termina perdido entre canales. Cada duda sin resolver es un turno que no se agenda.' },
+      { n: '03', title: 'No tienes la foto del todo', body: 'Cada local con su agenda, sus chats y sus cobros. Armar el panorama completo del negocio se vuelve un rompecabezas.' },
+    ],
+    features: [
+      {
+        eyebrow: 'Una sola Sara',
+        title: "La misma atención <em class='text-pine-dark'>en todas tus sedes.</em>",
+        body: 'No dependes de quién esté en recepción en cada local. Sara responde con el mismo tono, los mismos criterios y la misma disponibilidad real, 24/7, en todas tus sucursales a la vez.',
+        points: [
+          'Mismo nivel de atención en cada local',
+          'WhatsApp, Instagram y el chat de tu web',
+          'Disponible siempre, aunque una sede esté a full',
+        ],
+      },
+      {
+        eyebrow: 'Deriva bien',
+        title: "A cada paciente, <em class='text-pine-dark'>a la sede que le queda.</em>",
+        body: 'Sara toma la zona del paciente, la disponibilidad de cada local y lo que pide, y lo deriva a la sede correcta. En lugar de perder la reserva porque una sede está llena, la reubica en otra con turno.',
+        points: [
+          'Deriva por zona, disponibilidad y servicio',
+          'Reubica en otra sede antes de perder la reserva',
+          'El paciente nunca queda en la sede equivocada',
+        ],
+      },
+      {
+        eyebrow: 'Un solo panel',
+        title: "Todo el negocio, <em class='text-pine-dark'>en una sola pantalla.</em>",
+        body: 'Cada sede tiene su agenda, pero tú ves el conjunto. En un solo panel están todos los chats, turnos y cobros, con filtro por local. Entras a una sede puntual o miras el negocio completo, sin saltar entre herramientas.',
+        points: [
+          'Chats, agendas y cobros de todas las sedes juntos',
+          'Filtro por local cuando quieres entrar al detalle',
+          'Sin planillas separadas por sucursal',
+        ],
+        imgAlt: 'Panel único con la actividad de varias sedes.',
+      },
+      {
+        eyebrow: 'Cobra y confirma igual',
+        title: "Los mismos criterios, <em class='text-pine-dark'>en cada local.</em>",
+        body: 'El anticipo, los recordatorios y las confirmaciones funcionan igual en todas las sedes, sin depender de quién atienda ese día. La forma de trabajar deja de cambiar de local en local.',
+        points: [
+          'Mismo criterio de anticipo en todas las sedes',
+          'Recordatorios y confirmaciones automáticos en cada una',
+          'Menos ausencias, parejo en todo el negocio',
+        ],
+      },
+      {
+        eyebrow: 'Mira los números',
+        title: "Qué sede y qué canal <em class='text-pine-dark'>te traen más.</em>",
+        body: 'Sara atribuye cada reserva a la sede y al canal que la trajo. Ves qué local rinde, qué canal convierte y dónde se están perdiendo turnos, con datos y no con intuición.',
+        points: [
+          'Reservas atribuidas por sede y por canal',
+          'Comparas el rendimiento de cada local',
+          'Decisiones con datos, no a ojo',
+        ],
+        imgAlt: 'Reservas atribuidas por sede y canal.',
+      },
+    ],
+    demo2: [
+      { who: 'in', text: 'Hacen tratamientos en las dos sucursales?', t: '20:14' },
+      { who: 'out', text: '¡Sí! Los hacemos en las dos. ¿En qué zona te queda mejor y qué te gustaría hacerte?', t: '20:14' },
+      { who: 'in', text: 'Zona sur, una limpieza', t: '20:16' },
+      { who: 'out', text: 'En la sede Sur tengo martes 18:00 o miércoles 10:30. ¿Cuál prefieres?', t: '20:16' },
+    ],
+    demo3: [
+      { who: 'in', text: 'Quería turno esta semana en el centro pero no veo lugar', t: '11:02' },
+      { who: 'out', text: 'En el Centro no me queda lugar esta semana, pero en la sede Palermo (a 12 cuadras) tengo jueves 16:00. ¿Te sirve?', t: '11:02' },
+      { who: 'in', text: 'Ah dale, me sirve igual 🙌', t: '11:05' },
+    ],
+    demo4: [
+      { who: 'out', text: 'Te dejo el turno en la sede Norte el jueves 17:30. Para confirmarlo va un anticipo, te paso el link 🙂', t: '15:02' },
+      { who: 'in', text: 'Listo, pagué', t: '15:09' },
+      { who: 'out', text: '¡Confirmado! ✅ Jueves 17:30, sede Norte. Te espero.', t: '15:09' },
+    ],
+    ctaInline1: 'Que crecer en sedes no te cueste el&nbsp;control.',
+    caseKicker: 'Caso real',
+    caseQuote: '“Con varias sucursales, Sara nos ordenó la atención. Deriva a cada paciente a la sede que le queda y vemos todo en un solo&nbsp;lugar.”',
+    casePara: 'Una cadena de depilación láser que ya trabaja con Sara en todas sus sedes.',
+    caseLink: 'Ver el caso completo',
+    caseImgAlt: 'Resultados reales de una cadena con varias sedes trabajando con Sara.',
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada reserva sabe a qué sede&nbsp;pertenece.',
+    panelSub: 'En la bandeja de Chats, cada conversación muestra la sede y el estado. De un vistazo sabes a dónde derivó Sara, qué anticipo entró y quién confirmó, en cualquiera de tus&nbsp;locales.',
+    estados: [
+      { tag: '📍 Derivada', desc: 'Sara mandó al paciente a la sede que le quedaba más cerca, sin que tuviera que adivinar.' },
+      { tag: 'Reservó', desc: 'Agendó en la sede correcta, con la disponibilidad real de ese local.' },
+      { tag: '💳 Anticipo cobrado', desc: 'Mismo criterio de anticipo en todas las sedes, sin depender de quién atienda.' },
+      { tag: '✅ Confirmado', desc: 'El paciente confirmó su turno, en el local que sea.' },
+    ],
+    faqs: [
+      { q: '¿Sara maneja todas mis sedes a la vez?', a: 'Sí. Atiende con la misma calidad en todos tus locales y trabaja con el esquema que ya uses, con un número central o uno por sede. La configuración de cada local la definimos juntos en la implementación.' },
+      { q: '¿Cómo decide a qué sede mandar al paciente?', a: 'Por la zona del paciente, la disponibilidad de cada local y el servicio que pide. Si alguien está más cerca de otra sede o esa tiene turno antes, Sara lo deriva ahí en lugar de perder la reserva.' },
+      { q: '¿Veo todo junto o separado por sede?', a: 'Todo en un solo panel, con filtro por sede. Puedes ver el conjunto del negocio o entrar a un local puntual, sin saltar entre herramientas ni planillas.' },
+      { q: '¿Cada sede puede tener sus horarios, precios y servicios?', a: 'Sí. Cada local tiene su agenda, sus horarios y su lista de servicios. Sara respeta la configuración de cada sede al responder y agendar.' },
+      { q: '¿Puedo ver los números por sede y por canal?', a: 'Sí. Sara atribuye cada reserva a la sede y al canal que la trajo, así ves qué local y qué canal te están funcionando mejor.' },
+      { q: '¿Es difícil sumar una sede nueva?', a: 'No. Cargamos el local nuevo, sus horarios y servicios, y Sara empieza a atenderlo como a los demás. Crecer no significa rearmar todo de cero.' },
+    ],
+    ctaBandTitle: 'Una sola Sara para todas tus&nbsp;sedes.',
+    ctaBandSub: 'Pon a Sara a atender, derivar y cobrar en todos tus locales hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
+  },
+  en: {
+    metaTitle: 'Software for multi-location businesses · Sara',
+    metaDesc: 'Sara answers, books and collects payments over WhatsApp and Instagram for multi-location businesses. The same care at every location, routes each patient to the location that suits them, and keeps everything in one dashboard.',
+    heroEyebrow: 'Businesses · Multi-location',
+    heroTitle: "Many locations, <em class='text-pine-dark'>one single Sara.</em>",
+    heroLead: 'Once you have more than one location, the service stops being consistent and patients get lost between them. Sara answers the same way at every one, routes each patient to the location that suits them, and keeps everything in one dashboard.',
+    heroImageAlt: 'Clinic owner checking a tablet at the front desk of one of her locations.',
+    strip: [
+      { title: 'The same care at every location', body: 'Same tone and same hours, 24/7, across all your locations.' },
+      { title: 'Routes to the right location', body: 'By area and availability, with no guessing for the patient.' },
+      { title: 'Everything in one dashboard', body: 'Every calendar, every chat and every payment, all in one place.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: 'One enquiry, routed to the location that&nbsp;fits.',
+    howP1: 'This is a real booking. The patient messages without knowing which location to go to, and Sara routes them to the nearest one with an open appointment, so they never get lost between locations.',
+    howP2: "The same Sara answers for all your locations, with each one's real calendar. The patient is never left waiting for a reply that never&nbsp;comes.",
+    demo1: [
+      { who: 'in', text: 'Hi! I wanted to book an appointment, are you downtown?', t: '19:22' },
+      { who: 'out', text: 'Hi there! We have a downtown location and one on the North side. Which is more convenient for you?', t: '19:22' },
+      { who: 'in', text: "I'm closer to the North one", t: '19:24' },
+      { who: 'out', text: 'At the North location I have Thursday 5:30 pm or Saturday 11:00 am. Which do you prefer?', t: '19:24' },
+      { who: 'in', text: 'Thursday 5:30 pm', t: '19:25' },
+      { who: 'out', text: "All set! Thursday 5:30 pm at the North location (1240 Libertad Ave). Here's the deposit link to confirm 👇", t: '19:25' },
+    ],
+    whyKicker: 'Why growing by location is different',
+    whyH2: "More locations shouldn't mean more&nbsp;chaos.",
+    steps: [
+      { n: '01', title: 'Each location is a different front desk', body: "The quality of service depends on who's working that day at each location. What one location answers in a minute goes unanswered at another." },
+      { n: '02', title: "Patients don't know which location to go to", body: 'They ask about one, another is closer, and they end up lost across channels. Every unanswered question is an appointment that never gets booked.' },
+      { n: '03', title: "You don't have the full picture", body: 'Each location with its own calendar, chats and payments. Piecing together the whole business becomes a puzzle.' },
+    ],
+    features: [
+      {
+        eyebrow: 'One single Sara',
+        title: "The same care <em class='text-pine-dark'>at every location.</em>",
+        body: "You don't depend on who's at the front desk at each location. Sara replies with the same tone, the same criteria and the same real availability, 24/7, across all your locations at once.",
+        points: [
+          'Same level of service at every location',
+          'WhatsApp, Instagram and your website chat',
+          'Always available, even when one location is slammed',
+        ],
+      },
+      {
+        eyebrow: 'Routes it right',
+        title: "Each patient, <em class='text-pine-dark'>to the location that suits them.</em>",
+        body: "Sara takes the patient's area, each location's availability and what they need, and routes them to the right one. Instead of losing the booking because one location is full, she moves it to another with an open slot.",
+        points: [
+          'Routes by area, availability and service',
+          'Moves to another location before losing the booking',
+          'Patients never end up at the wrong location',
+        ],
+      },
+      {
+        eyebrow: 'One dashboard',
+        title: "Your whole business, <em class='text-pine-dark'>on one screen.</em>",
+        body: 'Each location has its own calendar, but you see the whole. One dashboard holds every chat, appointment and payment, with a filter by location. Drill into a single location or view the entire business, without jumping between tools.',
+        points: [
+          'Chats, calendars and payments from every location together',
+          'Filter by location when you want the detail',
+          'No separate spreadsheets per location',
+        ],
+        imgAlt: 'A single dashboard with the activity of several locations.',
+      },
+      {
+        eyebrow: 'Collects and confirms the same',
+        title: "The same rules, <em class='text-pine-dark'>at every location.</em>",
+        body: "Deposits, reminders and confirmations work the same at every location, no matter who's working that day. The way you operate stops changing from one location to the next.",
+        points: [
+          'Same deposit rule at every location',
+          'Automatic reminders and confirmations at each one',
+          'Fewer no-shows, evenly across the whole business',
+        ],
+      },
+      {
+        eyebrow: 'See the numbers',
+        title: "Which location and which channel <em class='text-pine-dark'>bring you the most.</em>",
+        body: 'Sara attributes every booking to the location and channel that brought it. You see which location performs, which channel converts and where appointments are slipping away, with data instead of guesswork.',
+        points: [
+          'Bookings attributed by location and channel',
+          'Compare how each location performs',
+          'Decisions from data, not gut feel',
+        ],
+        imgAlt: 'Bookings attributed by location and channel.',
+      },
+    ],
+    demo2: [
+      { who: 'in', text: 'Do you do treatments at both locations?', t: '20:14' },
+      { who: 'out', text: 'Yes! We do them at both. Which area works best for you, and what would you like to get done?', t: '20:14' },
+      { who: 'in', text: 'South side, a cleaning', t: '20:16' },
+      { who: 'out', text: 'At the South location I have Tuesday 6:00 pm or Wednesday 10:30 am. Which do you prefer?', t: '20:16' },
+    ],
+    demo3: [
+      { who: 'in', text: "I wanted an appointment downtown this week but I don't see any openings", t: '11:02' },
+      { who: 'out', text: 'Downtown is full this week, but at the Palermo location (12 blocks away) I have Thursday 4:00 pm. Does that work?', t: '11:02' },
+      { who: 'in', text: 'Oh great, that works for me 🙌', t: '11:05' },
+    ],
+    demo4: [
+      { who: 'out', text: "I've set your appointment at the North location for Thursday 5:30 pm. To confirm it there's a deposit, here's the link 🙂", t: '15:02' },
+      { who: 'in', text: 'Done, I paid', t: '15:09' },
+      { who: 'out', text: 'Confirmed! ✅ Thursday 5:30 pm, North location. See you then.', t: '15:09' },
+    ],
+    ctaInline1: "Don't let growing by location cost you&nbsp;control.",
+    caseKicker: 'Real case',
+    caseQuote: '“With several locations, Sara brought order to how we answer. She routes each patient to the location that suits them and we see everything in one&nbsp;place.”',
+    casePara: 'A laser hair-removal chain that already works with Sara across all its locations.',
+    caseLink: 'See the full case',
+    caseImgAlt: 'Real results from a multi-location chain working with Sara.',
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every booking knows which location it&nbsp;belongs to.',
+    panelSub: 'In the Chats inbox, every conversation shows the location and the status. At a glance you know where Sara routed, which deposit came in and who confirmed, at any of your&nbsp;locations.',
+    estados: [
+      { tag: '📍 Routed', desc: 'Sara sent the patient to the nearest location, with no guessing on their part.' },
+      { tag: 'Booked', desc: "Booked at the right location, with that location's real availability." },
+      { tag: '💳 Deposit collected', desc: "The same deposit rule at every location, no matter who's answering." },
+      { tag: '✅ Confirmed', desc: 'The patient confirmed their appointment, whichever location it is.' },
+    ],
+    faqs: [
+      { q: 'Does Sara handle all my locations at once?', a: 'Yes. She answers with the same quality at every location and works with whatever setup you already use, whether a central number or one per location. We define each location’s configuration together during onboarding.' },
+      { q: 'How does she decide which location to send the patient to?', a: "By the patient's area, each location's availability and the service they ask for. If someone is closer to another location or that one has an earlier opening, Sara routes them there instead of losing the booking." },
+      { q: 'Do I see everything together or split by location?', a: 'Everything in one dashboard, with a filter by location. You can view the whole business or drill into a single location, without jumping between tools or spreadsheets.' },
+      { q: 'Can each location have its own hours, prices and services?', a: "Yes. Each location has its own calendar, hours and service list. Sara respects each location's configuration when answering and booking." },
+      { q: 'Can I see the numbers by location and by channel?', a: 'Yes. Sara attributes every booking to the location and channel that brought it, so you see which location and which channel are working best for you.' },
+      { q: 'Is it hard to add a new location?', a: "No. We load the new location, its hours and services, and Sara starts answering for it just like the rest. Growing doesn't mean rebuilding everything from scratch." },
+    ],
+    ctaBandTitle: 'One single Sara for all your&nbsp;locations.',
+    ctaBandSub: 'Put Sara to answer, route and collect across all your locations today. Without changing your calendar or the way you work.',
+  },
+}[lang];
+
+const { strip, steps, features, estados, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDesc}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/multi-local-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={896}
+      lang={lang}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{strip[0].title}</p>
+          <p class="mt-1 text-salvia">{strip[0].body}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{strip[1].title}</p>
+          <p class="mt-1 text-salvia">{strip[1].body}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{strip[2].title}</p>
+          <p class="mt-1 text-salvia">{strip[2].body}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.howP1}</p>
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={dict.demo1}
+            lang={lang}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ POR QUÉ ES DISTINTO · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{dict.whyKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.whyH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={features[0].eyebrow}
+          title={features[0].title}
+          body={features[0].body}
+          points={features[0].points}
+        >
+          <ConversationDemo
+            channel="instagram"
+            bubbles={dict.demo2}
+            lang={lang}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={features[1].eyebrow}
+          title={features[1].title}
+          body={features[1].body}
+          points={features[1].points}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={dict.demo3}
+            lang={lang}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={features[2].eyebrow}
+          title={features[2].title}
+          body={features[2].body}
+          points={features[2].points}
+        >
+          <!-- GEMINI: idealmente un mock de panel con selector de sede. Placeholder: gráfico existente. -->
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt={features[2].imgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={features[3].eyebrow}
+          title={features[3].title}
+          body={features[3].body}
+          points={features[3].points}
+        >
+          <ConversationDemo
+            channel="whatsapp"
+            bubbles={dict.demo4}
+            lang={lang}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={features[4].eyebrow}
+          title={features[4].title}
+          body={features[4].body}
+          points={features[4].points}
+        >
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt={features[4].imgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline1} lang={lang} />
+
+    <!-- ══════════ CASO REAL ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.caseKicker}</p>
+          <blockquote class="font-serif text-2xl font-black leading-snug text-ink text-balance md:text-3xl" set:html={dict.caseQuote} />
+          <p class="mt-6 text-salvia">{dict.casePara}</p>
+          <a href={L('/caso')} class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            {dict.caseLink} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div>
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1200"
+            height="900"
+            alt={dict.caseImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelSub} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand
+      title={dict.ctaBandTitle}
+      sub={dict.ctaBandSub}
+      lang={lang}
+    />
+  </main>
+  <Footer lang={lang} />
+</Layout>

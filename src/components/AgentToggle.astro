@@ -3,23 +3,29 @@
 // Presente en las dos vistas para que una persona o un LLM descubran la alternativa.
 // Los hrefs se corrigen en runtime desde location (el rewrite de ?mode=agent preserva
 // el path), así funciona igual en cualquier página sin lógica server-side.
+import { defaultLocale, type Locale } from '../i18n/config';
 interface Props {
   active?: 'human' | 'agent';
+  lang?: Locale;
 }
-const { active = 'human' } = Astro.props;
+const { active = 'human', lang = defaultLocale } = Astro.props;
 const path = Astro.url.pathname === '/agent' ? '/' : Astro.url.pathname;
 const humanHref = path;
 const agentHref = `${path}?mode=agent`;
+const tt =
+  lang === 'en'
+    ? { nav: 'Switch between human and agent view', human: 'Human view', agent: 'Agent view (Markdown for AI)', agentShort: 'Agent view' }
+    : { nav: 'Cambiar entre vista humana y de agente', human: 'Vista humana', agent: 'Vista de agente (Markdown para IA)', agentShort: 'Vista de agente' };
 ---
 
-<nav class="agent-toggle" aria-label="Cambiar entre vista humana y de agente">
+<nav class="agent-toggle" aria-label={tt.nav}>
   <a
     class="agent-toggle__opt"
     data-role="human"
     href={humanHref}
     rel="nofollow"
-    title="Vista humana"
-    aria-label="Vista humana"
+    title={tt.human}
+    aria-label={tt.human}
     aria-current={active === 'human' ? 'true' : undefined}
   >
     <svg class="agent-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -32,8 +38,8 @@ const agentHref = `${path}?mode=agent`;
     data-role="agent"
     href={agentHref}
     rel="nofollow"
-    title="Vista de agente (Markdown para IA)"
-    aria-label="Vista de agente"
+    title={tt.agent}
+    aria-label={tt.agentShort}
     aria-current={active === 'agent' ? 'true' : undefined}
   >
     <svg class="agent-toggle__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

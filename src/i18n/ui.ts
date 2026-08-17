@@ -1,0 +1,101 @@
+// Diccionario de la "chrome" compartida del sitio: header, footer, CTAs comunes
+// y los defaults de <Layout>. El copy específico de cada página vive en su propio
+// módulo (src/i18n/pages/*). Una entrada por idioma; EN es traducción, no calco.
+
+import type { Locale } from './config';
+
+export const ui = {
+  es: {
+    // Layout / meta
+    'meta.title': 'Sara · La recepción que nunca cierra',
+    'meta.description':
+      'Sara es la secretaria con IA de tu clínica: atiende WhatsApp e Instagram las 24 horas, agenda, cobra el anticipo y baja las ausencias. Más pacientes, más facturación, todo automático.',
+
+    // Header
+    'nav.product': 'Producto',
+    'nav.business': 'Negocios',
+    'nav.byIndustry': 'Por industria',
+    'nav.bySize': 'Por tamaño',
+    'header.scanCta': 'Escanear mi negocio',
+    'header.demoCta': 'Pedir demo',
+    'header.openMenu': 'Abrir menú',
+    'header.homeAria': 'Sara, inicio',
+    'header.caseKicker': 'Caso real',
+    'header.caseTitleProduct': 'ViaLaser ya trabaja con Sara.',
+    'header.caseTitleBusiness': 'Una cadena de láser ya trabaja con Sara.',
+    'header.caseCta': 'Ver el caso',
+    'header.caseImgAlt': 'Resultados reales de ViaLaser con Sara',
+
+    // Footer
+    'footer.tagline': 'La recepción que nunca cierra.',
+    'footer.talkToSara': 'Habla con Sara',
+    'footer.business': 'Negocios',
+    'footer.bySize': 'Por tamaño',
+    'footer.company': 'Sara',
+    'footer.about': 'Nosotros',
+    'footer.cases': 'Casos',
+    'footer.pricing': 'Precios',
+    'footer.terms': 'Términos y condiciones',
+    'footer.privacy': 'Política de privacidad',
+    'footer.termsShort': 'Términos',
+    'footer.privacyShort': 'Privacidad',
+    'footer.rights': 'Todos los derechos reservados.',
+    'footer.productOf': 'un producto de BotBit, Inc. (RAY).',
+
+    // Language switcher
+    'lang.switch': 'Idioma',
+    'lang.es': 'Español',
+    'lang.en': 'English',
+  },
+  en: {
+    // Layout / meta
+    'meta.title': 'Sara · The front desk that never closes',
+    'meta.description':
+      "Sara is your clinic's AI receptionist: she handles WhatsApp and Instagram 24/7, books appointments, collects the deposit and cuts no-shows. More patients, more revenue, all on autopilot.",
+
+    // Header
+    'nav.product': 'Product',
+    'nav.business': 'Businesses',
+    'nav.byIndustry': 'By industry',
+    'nav.bySize': 'By size',
+    'header.scanCta': 'Scan my business',
+    'header.demoCta': 'Book a demo',
+    'header.openMenu': 'Open menu',
+    'header.homeAria': 'Sara, home',
+    'header.caseKicker': 'Real case',
+    'header.caseTitleProduct': 'ViaLaser already works with Sara.',
+    'header.caseTitleBusiness': 'A laser-clinic chain already works with Sara.',
+    'header.caseCta': 'See the case',
+    'header.caseImgAlt': 'Real results from ViaLaser with Sara',
+
+    // Footer
+    'footer.tagline': 'The front desk that never closes.',
+    'footer.talkToSara': 'Talk to Sara',
+    'footer.business': 'Businesses',
+    'footer.bySize': 'By size',
+    'footer.company': 'Sara',
+    'footer.about': 'About us',
+    'footer.cases': 'Cases',
+    'footer.pricing': 'Pricing',
+    'footer.terms': 'Terms & conditions',
+    'footer.privacy': 'Privacy policy',
+    'footer.termsShort': 'Terms',
+    'footer.privacyShort': 'Privacy',
+    'footer.rights': 'All rights reserved.',
+    'footer.productOf': 'a product of BotBit, Inc. (RAY).',
+
+    // Language switcher
+    'lang.switch': 'Language',
+    'lang.es': 'Español',
+    'lang.en': 'English',
+  },
+} as const;
+
+export type UIKey = keyof (typeof ui)['es'];
+
+/** Devuelve la función de traducción t() para un idioma, con fallback a ES. */
+export function useTranslations(lang: Locale) {
+  return function t(key: UIKey): string {
+    return ui[lang][key] ?? ui.es[key];
+  };
+}

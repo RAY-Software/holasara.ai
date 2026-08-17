@@ -1,0 +1,676 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import { whatsappLink, whatsappText } from '../../lib/whatsapp';
+import { SHOW_GRADER_CTA } from '../../lib/flags';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    faqs: [
+      { q: '¿Se nota que es una inteligencia artificial?', a: 'Sara se presenta con naturalidad y responde con el tono de tu clínica. El paciente siente que lo atiende alguien que sabe, no un bot con botones.' },
+      { q: '¿Usa mi número de WhatsApp actual?', a: 'Sara atiende sobre una línea de WhatsApp Business conectada a tu clínica. Coordinamos el número en la implementación; no tienes que cambiar de teléfono personal.' },
+      { q: '¿Reemplaza a mi recepción?', a: 'La libera de lo repetitivo: responder lo mismo, confirmar citas, perseguir pagos. Tu equipo se dedica al paciente que está en la clínica.' },
+      { q: '¿Toca mi historia clínica?', a: 'No. No se almacena historia clínica ni información médica de tus pacientes. Eso queda donde está hoy.' },
+      { q: '¿Qué necesito para empezar?', a: 'Conectar tu Google Calendar y una línea de WhatsApp. La implementación la hacemos contigo; no migras datos ni cambias de sistema.' },
+    ],
+    saraDoes: [
+      'Responde en el momento, en WhatsApp e Instagram.',
+      'Informa tratamientos, precios y disponibilidad real.',
+      'Agenda la cita y cobra la consulta o el anticipo.',
+      'Recuerda, confirma y reprograma sin que nadie intervenga.',
+      'Reactiva pacientes que no vuelven hace meses.',
+    ],
+    context: [
+      { n: '01', title: 'Escriben, no llaman', body: 'El primer contacto entra por WhatsApp o Instagram, y casi siempre fuera del horario de recepción.' },
+      { n: '02', title: 'Esperan minutos, no horas', body: 'Si la respuesta llega al día siguiente, el interés ya se enfrió y la decisión ya se tomó.' },
+      { n: '03', title: 'Agendan con el primero', body: 'Comparan pocas opciones y reservan en la clínica que responde antes.' },
+    ],
+    payments: [
+      { title: 'Anticipo en línea al reservar', body: 'Compromete la cita y adelanta el flujo de caja. Baja la ausencia desde el primer mes.' },
+      { title: 'Consulta cobrada por adelantado', body: 'El paciente paga cuando agenda, no cuando llega. Tu hora deja de ser gratis.' },
+      { title: 'Gift cards', body: 'Tu paciente le regala un tratamiento a alguien que no te conoce. Cobras hoy y ganas un paciente nuevo que no te costó publicidad.' },
+    ],
+    marketing: [
+      { title: 'Publicaciones listas para salir', body: 'Sara escribe el texto, elige la imagen y arma el calendario con la marca de tu clínica. Tú solo apruebas.' },
+      { title: 'El post termina en una cita', body: 'Quien comenta o escribe por una publicación, Sara lo atiende y lo agenda. Sin que el interés se enfríe.' },
+      { title: 'Sabes qué funcionó', body: 'Cada mes, en español claro: qué publicación trajo más consultas y cuánto facturaste. Sin planillas.' },
+    ],
+    posts: [
+      { src: '/img/post-1.jpg', step: '1 · Sara publica', body: 'Una publicación de tu clínica sale en Instagram.' },
+      { src: '/img/post-2.jpg', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
+      { src: '/img/post-3.jpg', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
+    ],
+    loop: ['Te encuentran', 'Chatean', 'Agenda', 'Cobra la seña', 'Dejan Google Review'],
+    spotlightQuotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'],
+    impl: [
+      { title: 'Un clic y listo', body: 'Autorizas tu cuenta de Google y Sara empieza a leer y escribir en el calendario que ya usas. No migras nada.' },
+      { title: 'Ve tu disponibilidad real', body: 'Agenda solo en los espacios libres, bloquea al instante y todo aparece en el calendario de tu equipo. Sin dobles reservas.' },
+      { title: 'Tus datos clínicos no pasan por aquí', body: 'No se almacena historia clínica ni información médica de tus pacientes. Eso queda donde está hoy.' },
+    ],
+    heroKicker: 'La secretaria con IA de tu clínica',
+    heroH1: ['Más pacientes.', 'Más facturación.', 'Todo automático,', 'las 24 horas.'],
+    heroSub: 'Sara atiende WhatsApp e Instagram, agenda, cobra el anticipo y baja las ausencias. Sin cambiar tu agenda ni tocar tu historia&nbsp;clínica.',
+    demoCta: 'Pedir demo',
+    scanCta: 'Escanear mi negocio',
+    talkCta: 'Habla con Sara',
+    videoKicker: 'En acción',
+    videoH2: 'Mira a Sara en 60&nbsp;segundos.',
+    videoAlt: 'Video: Sara en acción, en 60 segundos',
+    videoPlay: 'Reproducir el video de Sara',
+    ctxKicker: 'El contexto',
+    ctxH2: 'Tu paciente ya decidió <em class="text-mint">cómo</em> quiere&nbsp;agendar.',
+    ctxSub: 'Espera lo mismo que en cualquier otro servicio: respuesta inmediata. La clínica que responde primero se queda con el&nbsp;paciente.',
+    saraKicker: 'Conoce a Sara',
+    saraH2: '23:41 entra una&nbsp;consulta.<br /><em class="text-pine-dark">23:43 está pagada y&nbsp;agendada.</em>',
+    saraSub: 'Trabaja de noche, los fines de semana y en los picos. Sin sumar una persona más a recepción.',
+    saraMore: 'Conoce más sobre Sara',
+    saraImgAlt: 'Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo.',
+    mktKicker: 'Marketing',
+    mktH2: 'Sara también lleva tu&nbsp;Instagram.',
+    mktSub: 'Crea las publicaciones de tu clínica y atiende a quien responde, hasta agendar. Tu marketing y tu agenda, por fin&nbsp;conectados.',
+    mktMore: 'Ver cómo Sara lleva tu Instagram',
+    mktImgAlt: 'Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir.',
+    postsKicker: 'Del post a la cita, paso a paso',
+    postsClose: 'Instagram, el chat y el cobro, en un mismo lugar. Nadie más cierra ese&nbsp;círculo.',
+    spotKicker: 'Spotlight · Sara',
+    spotH2: 'Además de atender y vender, <em class="text-pine-dark">Sara es tu&nbsp;secretaria.</em>',
+    spotBody: 'Gestiona la agenda entera y notifica a cada paciente. Las 24 horas.',
+    spotImgAlt: 'Sara gestiona la agenda de la semana y reprograma todas las citas del martes, avisando a cada paciente.',
+    ctaInline1: 'Cada consulta que no respondes a tiempo, agenda en&nbsp;otra clínica.',
+    cobrosKicker: 'Cobros',
+    cobrosH2: 'Cobra antes de&nbsp;atender.',
+    cobrosSub: 'Tres formas de que entre dinero sin que nadie lo persiga.',
+    cobrosMore: 'Ver todas las formas de cobrar',
+    cobrosImgAlt: 'Panel de cobros: anticipos, consultas y gift cards cobrados por Sara, todos sin recepción.',
+    ctaInline2: 'Ve a Sara atendiendo tu clínica, en vivo.',
+    ctaInline2Cta: 'Pedir mi demo',
+    implKicker: 'Implementación',
+    implH2: 'Conectas tu Google Calendar y ya está funcionando.',
+    implMore: 'Ver cómo se conecta',
+    implImgAlt: 'Sara sincronizada con Google Calendar, agendando solo en los espacios libres del consultorio.',
+    caseKicker: 'Caso de éxito',
+    caseH2: 'Ya está funcionando en clínicas&nbsp;reales.',
+    caseStat1: 'conversaciones atendidas por Sara, sin que recepción tocara nada.',
+    caseStat2Num: '7 de 10',
+    caseStat2: 'citas agendadas por Sara en WhatsApp, Instagram y la web.',
+    caseMore: 'Ver el caso de ViaLaser',
+    caseImgAlt: 'Citas de ViaLaser por canal y conversaciones por semana atendidas por Sara.',
+  },
+  en: {
+    faqs: [
+      { q: 'Can people tell it’s an AI?', a: 'Sara introduces herself naturally and replies in your clinic’s tone. Patients feel they’re talking to someone who knows their stuff, not a bot with buttons.' },
+      { q: 'Does she use my current WhatsApp number?', a: 'Sara works over a WhatsApp Business line connected to your clinic. We sort out the number during onboarding; you don’t have to change your personal phone.' },
+      { q: 'Does she replace my front desk?', a: 'She frees it from the repetitive part: answering the same questions, confirming appointments, chasing payments. Your team focuses on the patient who’s in the clinic.' },
+      { q: 'Does she touch my medical records?', a: 'No. No medical history or clinical information about your patients is stored. That stays exactly where it is today.' },
+      { q: 'What do I need to get started?', a: 'Connect your Google Calendar and a WhatsApp line. We handle onboarding with you; you don’t migrate data or switch systems.' },
+    ],
+    saraDoes: [
+      'Replies instantly, on WhatsApp and Instagram.',
+      'Explains treatments, prices and real availability.',
+      'Books the appointment and collects the consult fee or deposit.',
+      'Reminds, confirms and reschedules with no one stepping in.',
+      'Wins back patients who haven’t returned in months.',
+    ],
+    context: [
+      { n: '01', title: 'They message, they don’t call', body: 'First contact comes in over WhatsApp or Instagram, almost always outside front-desk hours.' },
+      { n: '02', title: 'They wait minutes, not hours', body: 'If the reply lands the next day, the interest has cooled and the decision is already made.' },
+      { n: '03', title: 'They book with whoever answers first', body: 'They compare a handful of options and book at the clinic that replies soonest.' },
+    ],
+    payments: [
+      { title: 'Online deposit at booking', body: 'Commits the appointment and brings cash flow forward. Cuts no-shows from the first month.' },
+      { title: 'Consult paid in advance', body: 'The patient pays when they book, not when they arrive. Your time stops being free.' },
+      { title: 'Gift cards', body: 'Your patient gifts a treatment to someone who doesn’t know you yet. You get paid today and gain a new patient that cost you no advertising.' },
+    ],
+    marketing: [
+      { title: 'Posts ready to publish', body: 'Sara writes the copy, picks the image and builds the calendar with your clinic’s brand. You just approve.' },
+      { title: 'The post ends in an appointment', body: 'Whoever comments or messages a post, Sara answers and books them. Before the interest cools.' },
+      { title: 'You know what worked', body: 'Every month, in plain English: which post brought the most enquiries and how much you billed. No spreadsheets.' },
+    ],
+    posts: [
+      { src: '/img/post-1.jpg', step: '1 · Sara posts', body: 'A post from your clinic goes live on Instagram.' },
+      { src: '/img/post-2.jpg', step: '2 · Someone replies', body: 'They comment or message, and Sara answers instantly.' },
+      { src: '/img/post-3.jpg', step: '3 · They book and pay', body: 'She books the appointment and takes the deposit. Confirmed.' },
+    ],
+    loop: ['They find you', 'They chat', 'Books', 'Takes deposit', 'Google review'],
+    spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
+    impl: [
+      { title: 'One click and done', body: 'You authorize your Google account and Sara starts reading and writing in the calendar you already use. You migrate nothing.' },
+      { title: 'Sees your real availability', body: 'She books only in open slots, blocks instantly, and everything shows up in your team’s calendar. No double bookings.' },
+      { title: 'Your clinical data never comes through here', body: 'No medical history or clinical information about your patients is stored. That stays exactly where it is today.' },
+    ],
+    heroKicker: 'Your clinic’s AI receptionist',
+    heroH1: ['More patients.', 'More revenue.', 'All automatic,', 'around the clock.'],
+    heroSub: 'Sara handles WhatsApp and Instagram, books, collects the deposit and cuts no-shows. Without changing your calendar or touching your medical&nbsp;records.',
+    demoCta: 'Book a demo',
+    scanCta: 'Scan my business',
+    talkCta: 'Talk to Sara',
+    videoKicker: 'In action',
+    videoH2: 'See Sara in 60&nbsp;seconds.',
+    videoAlt: 'Video: Sara in action, in 60 seconds',
+    videoPlay: 'Play the Sara video',
+    ctxKicker: 'The context',
+    ctxH2: 'Your patient has already decided <em class="text-mint">how</em> they want to&nbsp;book.',
+    ctxSub: 'They expect what they get everywhere else: an instant reply. The clinic that answers first keeps the&nbsp;patient.',
+    saraKicker: 'Meet Sara',
+    saraH2: '11:41 pm an enquiry comes&nbsp;in.<br /><em class="text-pine-dark">11:43 pm it’s paid and&nbsp;booked.</em>',
+    saraSub: 'She works nights, weekends and peak hours. Without adding one more person to the front desk.',
+    saraMore: 'Learn more about Sara',
+    saraImgAlt: 'WhatsApp conversation: a patient enquires in the middle of the night and Sara replies, books and collects the deposit.',
+    mktKicker: 'Marketing',
+    mktH2: 'Sara runs your Instagram,&nbsp;too.',
+    mktSub: 'She creates your clinic’s posts and answers whoever replies, all the way to booking. Your marketing and your calendar, finally&nbsp;connected.',
+    mktMore: 'See how Sara runs your Instagram',
+    mktImgAlt: 'A clinic’s AI-generated Instagram feed: on-brand posts, ready to publish.',
+    postsKicker: 'From post to appointment, step by step',
+    postsClose: 'Instagram, the chat and the payment, all in one place. No one else closes that&nbsp;loop.',
+    spotKicker: 'Spotlight · Sara',
+    spotH2: 'Beyond answering and selling, <em class="text-pine-dark">Sara is your&nbsp;secretary.</em>',
+    spotBody: 'She manages the entire calendar and notifies every patient. Around the clock.',
+    spotImgAlt: 'Sara manages the week’s calendar and reschedules every Tuesday appointment, notifying each patient.',
+    ctaInline1: 'Every enquiry you don’t answer in time books at&nbsp;another clinic.',
+    cobrosKicker: 'Payments',
+    cobrosH2: 'Get paid before the&nbsp;appointment.',
+    cobrosSub: 'Three ways to bring money in without anyone chasing it.',
+    cobrosMore: 'See all the ways to get paid',
+    cobrosImgAlt: 'Payments dashboard: deposits, consults and gift cards collected by Sara, all without a front desk.',
+    ctaInline2: 'See Sara running your clinic, live.',
+    ctaInline2Cta: 'Book my demo',
+    implKicker: 'Onboarding',
+    implH2: 'Connect your Google Calendar and it’s already running.',
+    implMore: 'See how it connects',
+    implImgAlt: 'Sara synced with Google Calendar, booking only in the open slots of the practice.',
+    caseKicker: 'Success story',
+    caseH2: 'It’s already running in real&nbsp;clinics.',
+    caseStat1: 'conversations handled by Sara, without the front desk touching a thing.',
+    caseStat2Num: '7 of 10',
+    caseStat2: 'appointments booked by Sara across WhatsApp, Instagram and the web.',
+    caseMore: 'See the ViaLaser case',
+    caseImgAlt: 'ViaLaser appointments by channel and conversations per week handled by Sara.',
+  },
+}[lang];
+
+const { faqs, saraDoes, context, payments, marketing, posts, impl } = dict;
+
+// Overlay del hero: el circuito de Sara, sin recepción. Con logos reales de plataformas.
+const dot = 'inline-block h-6 w-6 shrink-0';
+const gWA = `<img src="/img/logos/whatsapp.svg" class="${dot}" alt="WhatsApp" loading="eager" decoding="async" />`;
+const gIG = `<img src="/img/logos/instagram.svg" class="${dot}" alt="Instagram" loading="eager" decoding="async" />`;
+const gG = `<img src="/img/logos/google.svg" class="${dot}" alt="Google" loading="eager" decoding="async" />`;
+const svgAgenda =
+  '<svg class="h-7 w-7 text-pine" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+const svgSena =
+  '<svg class="h-7 w-7 text-pine" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 9.8h19" stroke="currentColor" stroke-width="1.8"/></svg>';
+const svgResena =
+  '<svg class="h-7 w-7" viewBox="0 0 24 24" fill="#f5b50a" aria-hidden="true"><path d="M12 3.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L12 16.8 6.8 19.52l.99-5.8-4.21-4.1 5.82-.85z"/></svg>';
+
+// Los 5 pasos, en anillo. Etiquetas cortas + logo real. Posición sobre un círculo (radio 34%).
+const loop = [
+  { icon: `<span class="flex items-center gap-1">${gG}${gIG}</span>`, t: dict.loop[0] },
+  { icon: `<span class="flex items-center gap-1">${gWA}${gIG}</span>`, t: dict.loop[1] },
+  { icon: svgAgenda, t: dict.loop[2] },
+  { icon: svgSena, t: dict.loop[3] },
+  { icon: svgResena, t: dict.loop[4] },
+].map((s, i) => {
+  const a = ((-90 + i * 72) * Math.PI) / 180;
+  return { ...s, x: 50 + 34 * Math.cos(a), y: 50 + 34 * Math.sin(a) };
+});
+---
+
+<Layout lang={lang}>
+  <Header lang={lang} />
+
+  <main>
+    <!-- ══════════ HERO ══════════ -->
+    <section class="relative overflow-hidden">
+      <div
+        class="pointer-events-none absolute -right-32 -top-40 h-[520px] w-[520px] rounded-full opacity-60 blur-3xl"
+        style="background: radial-gradient(circle, color-mix(in srgb, var(--color-mint) 40%, transparent), transparent 70%);"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-20 md:grid-cols-[1.05fr_0.95fr] md:py-24">
+        <div>
+          <p class="mb-6 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+            <span class="dot h-2 w-2"></span>
+            {dict.heroKicker}
+          </p>
+          <h1 class="font-serif font-black leading-[1.05] tracking-tight text-[clamp(1.5rem,8vw,3.75rem)]">
+            <span class="block whitespace-nowrap">{dict.heroH1[0]}</span>
+            <span class="block whitespace-nowrap">{dict.heroH1[1]}</span>
+            <span class="block whitespace-nowrap text-pine-dark">{dict.heroH1[2]}</span>
+            <span class="block whitespace-nowrap text-pine-dark">{dict.heroH1[3]}</span>
+          </h1>
+          <p class="mt-7 max-w-xl text-lg text-salvia" set:html={dict.heroSub} />
+
+          <div class="mt-9 flex flex-wrap items-center gap-3">
+            <a
+              href={L('/demo')}
+              class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+            >
+              {dict.demoCta}
+            </a>
+            {/* CTA secundario del hero. Cuando el flag está ON → "Escanear mi
+                negocio" (grader.rayapp.ai, product=servicios). Mientras corren
+                las campañas de Ads (flag OFF) cae a "Habla con Sara" para no
+                filtrar tráfico pago a un embudo sin el tag de Ads — ver
+                src/lib/flags.ts (SHOW_GRADER_CTA). NO quitar el param product. */}
+            {SHOW_GRADER_CTA ? (
+              <a
+                href="https://grader.rayapp.ai/?product=servicios&utm_source=hero&utm_medium=website&utm_campaign=holasara"
+                class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+              >
+                {dict.scanCta}
+              </a>
+            ) : (
+              <a
+                href={whatsappLink(whatsappText(lang))}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+              >
+                {dict.talkCta}
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div class="flex justify-center md:justify-end">
+          <div class="relative w-full max-w-lg rounded-3xl border border-line bg-gradient-to-br from-cream to-mint/40 p-7 shadow-[0_24px_60px_-30px_rgba(20,38,31,0.4)] sm:p-8">
+            <div class="relative mx-auto aspect-square w-full max-w-[19rem]">
+              <!-- Anillo del loop: círculo punteado con flecha, gira y vuelve al paso 1 -->
+              <svg class="pointer-events-none absolute inset-0 h-full w-full text-pine/40" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+                <defs>
+                  <marker id="loopArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+                    <path d="M0 0 10 5 0 10z" fill="currentColor" />
+                  </marker>
+                </defs>
+                <path d="M62.7 18.5 A34 34 0 1 1 37.3 18.5" stroke="currentColor" stroke-width="1.2" stroke-dasharray="1.4 3" stroke-linecap="round" marker-end="url(#loopArrow)" />
+              </svg>
+              <!-- Centro: el thumb de Sara (el mismo del webchat), eje de su circuito -->
+              <div class="absolute inset-0 grid place-items-center">
+                <img
+                  src="/agents/sara-thumb.png"
+                  width="280"
+                  height="280"
+                  alt="Sara"
+                  class="h-[5.5rem] w-[5.5rem] rounded-full border-2 border-cream object-cover shadow-[0_6px_18px_-8px_rgba(20,38,31,0.5)]"
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+              {
+                loop.map((n, i) => (
+                  <div class="absolute -translate-x-1/2 -translate-y-1/2" style={`left:${n.x}%;top:${n.y}%`}>
+                    <div class="relative grid h-16 w-16 place-items-center rounded-full border border-line bg-cream shadow-[0_6px_16px_-8px_rgba(20,38,31,0.45)]">
+                      <span class="absolute -left-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full bg-pine text-[11px] font-bold text-cream tabular-nums">{i + 1}</span>
+                      <span class="flex items-center" set:html={n.icon} />
+                    </div>
+                    <span
+                      class:list={[
+                        'absolute w-max text-[13px] font-semibold leading-tight text-ink',
+                        i === 0 && 'bottom-full left-1/2 mb-2 max-w-[6.5rem] -translate-x-1/2 text-center',
+                        i === 1 && 'left-full top-1/2 ml-2 max-w-[5rem] -translate-y-1/2 text-left',
+                        i === 4 && 'right-full top-1/2 mr-2 max-w-[5rem] -translate-y-1/2 text-right',
+                        (i === 2 || i === 3) && 'left-1/2 top-full mt-2 max-w-[6.5rem] -translate-x-1/2 text-center',
+                      ]}
+                    >
+                      {n.t}
+                    </span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <ClientsStrip tone="paper" lang={lang} />
+
+    <!-- ══════════ VIDEO ══════════ -->
+    <section id="video" class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-5xl px-5 py-24 text-center">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.videoKicker}</p>
+        <h2 class="mx-auto max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.videoH2} />
+
+        <!-- Video demo: portada liviana (thumbnail YouTube); el iframe se carga recién al clic -->
+        <div
+          id="video-embed"
+          data-yt="-HAjxKXeltI"
+          class="group relative mt-10 aspect-video cursor-pointer overflow-hidden rounded-2xl border border-line bg-ink shadow-[0_16px_40px_-26px_rgba(20,38,31,0.38)]"
+        >
+          <img
+            src="https://img.youtube.com/vi/-HAjxKXeltI/maxresdefault.jpg"
+            alt={dict.videoAlt}
+            class="absolute inset-0 h-full w-full object-cover opacity-95 transition group-hover:opacity-100"
+            loading="lazy"
+            decoding="async"
+          />
+          <button
+            type="button"
+            class="absolute inset-0 flex items-center justify-center bg-ink/25 transition group-hover:bg-ink/15"
+            aria-label={dict.videoPlay}
+          >
+            <span class="grid h-20 w-20 place-items-center rounded-full bg-mint shadow-lg transition-transform duration-300 group-hover:scale-110">
+              <svg width="26" height="30" viewBox="0 0 26 30" fill="none" aria-hidden="true">
+                <path d="M25 13.27a2 2 0 0 1 0 3.46L3 29.32A2 2 0 0 1 0 27.6V2.4A2 2 0 0 1 3 .68l22 12.6Z" fill="#14261F" />
+              </svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <script is:inline>
+      (function () {
+        var el = document.getElementById('video-embed');
+        if (!el) return;
+        el.addEventListener('click', function () {
+          var id = el.getAttribute('data-yt');
+          el.innerHTML =
+            '<iframe class="absolute inset-0 h-full w-full" src="https://www.youtube-nocookie.com/embed/' +
+            id +
+            '?autoplay=1&rel=0" title="Sara" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+        });
+      })();
+    </script>
+
+    <!-- ══════════ EL CONTEXTO (banda oscura) ══════════ -->
+    <section class="bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24 md:py-28">
+        <div class="max-w-3xl">
+          <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-mint">
+            <span class="h-2 w-2 rounded-full bg-mint"></span>{dict.ctxKicker}
+          </p>
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.ctxH2} />
+          <p class="mt-5 text-lg text-cream/70" set:html={dict.ctxSub} />
+        </div>
+
+        <div class="mt-16 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            context.map((c) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{c.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{c.title}</h3>
+                <p class="mt-2 text-cream/65">{c.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CONOCE A SARA ══════════ -->
+    <section id="sara" class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.saraKicker}</p>
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.saraH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.saraSub}</p>
+          <ul class="mt-8 flex flex-col gap-3.5">
+            {
+              saraDoes.map((item) => (
+                <li class="flex items-start gap-3">
+                  <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint" />
+                  <span class="text-ink">{item}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <a
+            href={L('/sara')}
+            class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+          >
+            {dict.saraMore} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div class="flex justify-center md:justify-end">
+          <img
+            src="/img/chat-whatsapp.jpg"
+            width="945"
+            height="2045"
+            alt={dict.saraImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full max-w-sm rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ MARKETING ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.mktKicker}</p>
+        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.mktH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.mktSub} />
+        <a
+          href={L('/instagram')}
+          class="mt-5 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+        >
+          {dict.mktMore} <span aria-hidden="true">→</span>
+        </a>
+
+        <div class="mt-14 grid gap-14 md:grid-cols-[0.85fr_1.15fr] md:items-stretch">
+          <div class="flex h-full flex-col gap-6">
+            {
+              marketing.map((m) => (
+                <div class="flex flex-1 flex-col justify-center rounded-xl border border-line bg-cream p-7">
+                  <h3 class="text-xl font-semibold">{m.title}</h3>
+                  <p class="mt-2 text-salvia">{m.body}</p>
+                </div>
+              ))
+            }
+          </div>
+          <div class="flex justify-center md:justify-end">
+            <img
+              src="/img/instagram.jpg"
+              width="1200"
+              height="1242"
+              alt={dict.mktImgAlt}
+              loading="lazy"
+              decoding="async"
+              class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+            />
+          </div>
+        </div>
+
+        <div class="mt-14">
+          <p class="text-sm font-semibold uppercase tracking-wide text-pine-dark">{dict.postsKicker}</p>
+          <div class="mt-6 grid gap-6 sm:grid-cols-3">
+            {
+              posts.map((p) => (
+                <div>
+                  <div class="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
+                    <img src={p.src} alt={p.step} loading="lazy" decoding="async" class="w-full" />
+                  </div>
+                  <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
+                  <p class="text-salvia">{p.body}</p>
+                </div>
+              ))
+            }
+          </div>
+          <p class="mt-8 text-lg text-salvia" set:html={dict.postsClose} />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ SPOTLIGHT · OPERADORA ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[1.15fr_0.85fr] md:items-center">
+        <div class="order-2 md:order-1 flex justify-center md:justify-start">
+          <img
+            src="/img/operador.jpg"
+            width="1200"
+            height="1087"
+            alt={dict.spotImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
+          />
+        </div>
+        <div class="order-1 md:order-2">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.spotKicker}</p>
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.spotH2} />
+          <div class="mt-8 flex flex-col gap-3">
+            {
+              dict.spotlightQuotes.map((q) => (
+                <div class="rounded-xl border border-line bg-paper px-4 py-3 font-accent text-lg italic text-pine-dark">
+                  {q}
+                </div>
+              ))
+            }
+          </div>
+          <p class="mt-6 text-salvia">{dict.spotBody}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA intercalado -->
+    <CtaInline title={dict.ctaInline1} lang={lang} />
+
+    <!-- ══════════ COBROS ══════════ -->
+    <section id="cobros" class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.cobrosKicker}</p>
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.cobrosSub}</p>
+          <div class="mt-8 flex flex-col gap-5">
+            {
+              payments.map((p, i) => (
+                <div class="flex gap-4">
+                  <span class="font-accent text-xl italic text-pine-dark">{`0${i + 1}`}</span>
+                  <div>
+                    <h3 class="text-lg font-semibold">{p.title}</h3>
+                    <p class="mt-1 text-salvia">{p.body}</p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <a
+            href={L('/cobros')}
+            class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+          >
+            {dict.cobrosMore} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <img
+            src="/img/cobros.jpg"
+            width="1200"
+            height="1186"
+            alt={dict.cobrosImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA intercalado -->
+    <CtaInline title={dict.ctaInline2} cta={dict.ctaInline2Cta} lang={lang} />
+
+    <!-- ══════════ IMPLEMENTACIÓN ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.implKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+            {dict.implH2}
+          </h2>
+          <div class="mt-8 flex flex-col gap-6">
+            {
+              impl.map((it) => (
+                <div>
+                  <h3 class="text-lg font-semibold">{it.title}</h3>
+                  <p class="mt-1 text-salvia">{it.body}</p>
+                </div>
+              ))
+            }
+          </div>
+          <a
+            href={L('/implementacion')}
+            class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+          >
+            {dict.implMore} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <img
+            src="/img/implementacion.jpg"
+            width="1200"
+            height="1186"
+            alt={dict.implImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CASO REAL ══════════ -->
+    <section id="caso" class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+        <div>
+          <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.caseKicker}</p>
+          <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="mb-6 h-9 w-auto" loading="lazy" />
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.caseH2} />
+          <div class="mt-10 flex flex-col gap-8">
+            <div>
+              <p class="font-serif text-5xl font-black text-pine-dark tabular-nums">114</p>
+              <p class="mt-1 text-salvia">{dict.caseStat1}</p>
+            </div>
+            <div>
+              <p class="font-serif text-5xl font-black text-pine-dark tabular-nums">{dict.caseStat2Num}</p>
+              <p class="mt-1 text-salvia">{dict.caseStat2}</p>
+            </div>
+          </div>
+          <a
+            href={L('/caso')}
+            class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+          >
+            {dict.caseMore} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <img
+            src="/img/vialaser-chart.jpg"
+            width="1130"
+            height="944"
+            alt={dict.caseImgAlt}
+            loading="lazy"
+            decoding="async"
+            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
+          />
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <!-- ══════════ CTA FINAL ══════════ -->
+    <CtaBand lang={lang} />
+  </main>
+
+  <Footer lang={lang} />
+</Layout>

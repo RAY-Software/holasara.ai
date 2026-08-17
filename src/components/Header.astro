@@ -1,12 +1,30 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { productGroups, industryLinks, sizeLinks, topLinks } from '../data/nav';
+import { getProductGroups, getIndustryLinks, getSizeLinks, getTopLinks } from '../data/nav';
 import { SHOW_GRADER_CTA } from '../lib/flags';
+import { defaultLocale, localePath, locales, type Locale } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  lang?: Locale;
+}
+const { lang = defaultLocale } = Astro.props;
+const t = useTranslations(lang);
+
+const productGroups = getProductGroups(lang);
+const industryLinks = getIndustryLinks(lang);
+const sizeLinks = getSizeLinks(lang);
+const topLinks = getTopLinks(lang);
+const L = (p: string) => localePath(p, lang);
+
+// Switcher ES/EN: alterna el segmento de idioma del path actual, preservando la ruta.
+const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
+const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`;
 ---
 
 <header class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
   <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
-    <a href="/" class="flex items-center" aria-label="Sara, inicio">
+    <a href={L('/')} class="flex items-center" aria-label={t('header.homeAria')}>
       <Wordmark class="text-[1.9rem]" />
     </a>
 
@@ -19,7 +37,7 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
           class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
           aria-haspopup="true"
         >
-          Producto
+          {t('nav.product')}
           <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -38,7 +56,7 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
                     <ul class="flex flex-col gap-6">
                       {g.items.map((it) => (
                         <li>
-                          <a href={it.href} class="group/link block">
+                          <a href={L(it.href)} class="group/link block">
                             <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
                               {it.name}
                             </span>
@@ -53,20 +71,20 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
             </div>
 
             <!-- Promo: imagen de ViaLaser (caso real) -->
-            <a href="/caso" class="group/case relative flex min-h-[280px] overflow-hidden rounded-xl bg-ink">
+            <a href={L('/caso')} class="group/case relative flex min-h-[280px] overflow-hidden rounded-xl bg-ink">
               <img
                 src="/img/vialaser-chart.jpg"
-                alt="Resultados reales de ViaLaser con Sara"
+                alt={t('header.caseImgAlt')}
                 class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-300 group-hover/case:scale-[1.04]"
                 loading="lazy"
                 decoding="async"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/5"></div>
               <div class="relative mt-auto p-5">
-                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">Caso real</p>
-                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">ViaLaser ya trabaja con Sara.</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">{t('header.caseKicker')}</p>
+                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">{t('header.caseTitleProduct')}</p>
                 <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
-                  Ver el caso <span aria-hidden="true">→</span>
+                  {t('header.caseCta')} <span aria-hidden="true">→</span>
                 </span>
               </div>
             </a>
@@ -81,7 +99,7 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
           class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
           aria-haspopup="true"
         >
-          Negocios
+          {t('nav.business')}
           <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
             <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -92,12 +110,12 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
         >
           <div class="mx-auto grid w-[min(96vw,880px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_1fr_280px]">
             <div>
-              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Por industria</p>
+              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.byIndustry')}</p>
               <ul class="flex flex-col gap-6">
                 {
                   industryLinks.map((it) => (
                     <li>
-                      <a href={it.href} class="group/link block">
+                      <a href={L(it.href)} class="group/link block">
                         <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
                           {it.name}
                         </span>
@@ -110,12 +128,12 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
             </div>
 
             <div>
-              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Por tamaño</p>
+              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.bySize')}</p>
               <ul class="flex flex-col gap-6">
                 {
                   sizeLinks.map((it) => (
                     <li>
-                      <a href={it.href} class="group/link block">
+                      <a href={L(it.href)} class="group/link block">
                         <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
                           {it.name}
                         </span>
@@ -128,20 +146,20 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
             </div>
 
             <!-- Promo: caso real ViaLaser (misma imagen que el panel de Producto) -->
-            <a href="/caso" class="group/case relative flex min-h-[240px] overflow-hidden rounded-xl bg-ink">
+            <a href={L('/caso')} class="group/case relative flex min-h-[240px] overflow-hidden rounded-xl bg-ink">
               <img
                 src="/img/vialaser-chart.jpg"
-                alt="Resultados reales de ViaLaser con Sara"
+                alt={t('header.caseImgAlt')}
                 class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-300 group-hover/case:scale-[1.04]"
                 loading="lazy"
                 decoding="async"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/5"></div>
               <div class="relative mt-auto p-5">
-                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">Caso real</p>
-                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">Una cadena de láser ya trabaja con Sara.</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">{t('header.caseKicker')}</p>
+                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">{t('header.caseTitleBusiness')}</p>
                 <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
-                  Ver el caso <span aria-hidden="true">→</span>
+                  {t('header.caseCta')} <span aria-hidden="true">→</span>
                 </span>
               </div>
             </a>
@@ -151,7 +169,7 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
 
       {
         topLinks.map((l) => (
-          <a href={l.href} class="rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink">
+          <a href={L(l.href)} class="rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink">
             {l.name}
           </a>
         ))
@@ -160,6 +178,24 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
 
     <!-- ─── CTAs desktop ─── -->
     <div class="hidden items-center gap-2.5 lg:flex">
+      <!-- Switcher ES/EN -->
+      <div class="flex items-center rounded-full border border-line p-0.5 text-xs font-semibold" role="group" aria-label={t('lang.switch')}>
+        {
+          locales.map((l) => (
+            <a
+              href={langHref(l)}
+              data-astro-prefetch={false}
+              class={`rounded-full px-2.5 py-1 uppercase tracking-wide transition-colors ${
+                l === lang ? 'bg-ink text-cream' : 'text-salvia hover:text-ink'
+              }`}
+              aria-current={l === lang ? 'true' : undefined}
+              hreflang={l}
+            >
+              {l}
+            </a>
+          ))
+        }
+      </div>
       {/* CTA al grader — `product=servicios` activa la variante Sara
           (cookie + CTAs de demo a holasara.ai/demo). NO quitar el param. */}
       {SHOW_GRADER_CTA && (
@@ -167,14 +203,14 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
           href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
           class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
         >
-          Escanear mi negocio
+          {t('header.scanCta')}
         </a>
       )}
       <a
-        href="/demo"
+        href={L('/demo')}
         class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
       >
-        Pedir demo
+        {t('header.demoCta')}
       </a>
     </div>
 
@@ -183,7 +219,7 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
       id="nav-toggle"
       type="button"
       class="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink lg:hidden"
-      aria-label="Abrir menú"
+      aria-label={t('header.openMenu')}
       aria-expanded="false"
       aria-controls="mobile-nav"
     >
@@ -206,7 +242,7 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
             <ul class="flex flex-col">
               {g.items.map((it) => (
                 <li>
-                  <a href={it.href} class="block border-b border-line/70 py-2.5 text-ink">
+                  <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
                     {it.name}
                   </a>
                 </li>
@@ -216,12 +252,12 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
         ))
       }
       <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Negocios · por industria</p>
+        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.business')} · {t('nav.byIndustry')}</p>
         <ul class="flex flex-col">
           {
             industryLinks.map((it) => (
               <li>
-                <a href={it.href} class="block border-b border-line/70 py-2.5 text-ink">
+                <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
                   {it.name}
                 </a>
               </li>
@@ -230,12 +266,12 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
         </ul>
       </div>
       <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">Negocios · por tamaño</p>
+        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.business')} · {t('nav.bySize')}</p>
         <ul class="flex flex-col">
           {
             sizeLinks.map((it) => (
               <li>
-                <a href={it.href} class="block border-b border-line/70 py-2.5 text-ink">
+                <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
                   {it.name}
                 </a>
               </li>
@@ -248,7 +284,7 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
           {
             topLinks.map((l) => (
               <li>
-                <a href={l.href} class="block border-b border-line/70 py-2.5 font-semibold text-ink">
+                <a href={L(l.href)} class="block border-b border-line/70 py-2.5 font-semibold text-ink">
                   {l.name}
                 </a>
               </li>
@@ -257,17 +293,35 @@ import { SHOW_GRADER_CTA } from '../lib/flags';
         </ul>
       </div>
       <div class="flex flex-col gap-3 pt-1">
-        <a href="/demo" class="inline-flex items-center justify-center rounded-full bg-pine px-5 py-3 text-base font-semibold text-cream">
-          Pedir demo
+        <a href={L('/demo')} class="inline-flex items-center justify-center rounded-full bg-pine px-5 py-3 text-base font-semibold text-cream">
+          {t('header.demoCta')}
         </a>
         {SHOW_GRADER_CTA && (
           <a
             href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
             class="inline-flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-base font-semibold text-ink"
           >
-            Escanear mi negocio
+            {t('header.scanCta')}
           </a>
         )}
+        <!-- Switcher ES/EN (mobile) -->
+        <div class="flex items-center justify-center gap-1 pt-1 text-sm font-semibold" role="group" aria-label={t('lang.switch')}>
+          {
+            locales.map((l, i) => (
+              <Fragment>
+                {i > 0 && <span class="text-line">·</span>}
+                <a
+                  href={langHref(l)}
+                  class={`px-2 py-1 uppercase tracking-wide ${l === lang ? 'text-ink' : 'text-salvia'}`}
+                  aria-current={l === lang ? 'true' : undefined}
+                  hreflang={l}
+                >
+                  {l}
+                </a>
+              </Fragment>
+            ))
+          }
+        </div>
       </div>
     </div>
   </div>

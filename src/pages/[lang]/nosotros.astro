@@ -1,0 +1,90 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Nosotros · Quién está detrás de Sara',
+    metaDescription:
+      'Sara es la secretaria con IA para clínicas, creada por el equipo de RAY (BotBit, Inc.). Creemos en una IA que atiende con criterio y nunca inventa un precio ni una promesa.',
+    heroEyebrow: 'Nosotros',
+    heroTitle: "Detrás de Sara hay un equipo <em class='text-pine-dark'>obsesionado con tu agenda.</em>",
+    heroLead:
+      'Sara es la secretaria con IA para clínicas de servicios. La construye el equipo de RAY, que lleva años ayudando a negocios locales a que los encuentren y los elijan.',
+    h2a: 'El problema de las 23:41',
+    pa: 'La consulta que decide tu mes no siempre llega en horario de oficina. Llega un domingo a la noche, o un martes a las 23:41, cuando recepción ya cerró. Si nadie contesta en el momento, ese paciente le escribe a la clínica de al lado. Sara nació para que eso no vuelva a pasar.',
+    h2b: 'En qué creemos',
+    pb1: 'Una IA que le habla a tus pacientes tiene que estar a la altura de tu marca. Por eso Sara vende con criterio y <strong>nunca inventa un precio ni una promesa</strong>: si no sabe algo, lo deriva a tu equipo en vez de improvisar. Preferimos una Sara que agende de menos antes que una que prometa de más.',
+    pb2: 'Y creemos en el control del negocio. Sara trabaja sobre el calendario y el WhatsApp que ya usas, no almacena la historia clínica de tus pacientes, y tu equipo puede pedirle o corregirle cosas cuando quiera. La tecnología está para liberar a tu recepción de lo repetitivo, no para reemplazar el trato humano donde de verdad importa.',
+    h2c: 'De dónde venimos',
+    pc: 'RAY empezó ayudando a negocios locales a aparecer en Google y a ganarse las reseñas que los hacen elegibles. Con Sara cerramos el círculo: no solo que te encuentren, también que a quien te escribe lo atiendan, lo agenden y lo cobren, y que quien te visita deje su reseña. Todo el recorrido del paciente, cuidado de punta a punta.',
+    h2d: 'Quiénes somos',
+    pd1: 'Sara es un producto de <strong>BotBit, Inc.</strong>, la empresa detrás de RAY. Trabajamos con clínicas de estética, dermatología, fisioterapia, odontología y consultorios de todo tipo en México y el resto de Latinoamérica.',
+    pd2: `¿Quieres hablar con una persona del equipo? Escríbenos a <a href="mailto:info@rayapp.io">info@rayapp.io</a> o <a href="${L('/demo')}">pide una demo</a> y lo vemos juntos.`,
+  },
+  en: {
+    metaTitle: 'About us · Who’s behind Sara',
+    metaDescription:
+      'Sara is the AI receptionist for clinics, created by the RAY team (BotBit, Inc.). We believe in an AI that answers with judgment and never makes up a price or a promise.',
+    heroEyebrow: 'About us',
+    heroTitle: "Behind Sara is a team <em class='text-pine-dark'>obsessed with your calendar.</em>",
+    heroLead:
+      'Sara is the AI receptionist for service clinics. She’s built by the RAY team, which has spent years helping local businesses get found and get chosen.',
+    h2a: 'The 11:41 pm problem',
+    pa: 'The enquiry that decides your month doesn’t always arrive during office hours. It comes on a Sunday night, or a Tuesday at 11:41 pm, when the front desk has already closed. If no one answers right then, that patient messages the clinic next door. Sara was born so that never happens again.',
+    h2b: 'What we believe',
+    pb1: 'An AI that talks to your patients has to live up to your brand. That’s why Sara sells with judgment and <strong>never makes up a price or a promise</strong>: if she doesn’t know something, she hands it to your team instead of improvising. We prefer a Sara that books too little over one that promises too much.',
+    pb2: 'And we believe in staying in control of your business. Sara works on the calendar and WhatsApp you already use, doesn’t store your patients’ medical records, and your team can ask her or correct her anytime. Technology is here to free your front desk from the repetitive, not to replace the human touch where it truly matters.',
+    h2c: 'Where we come from',
+    pc: 'RAY started by helping local businesses show up on Google and earn the reviews that make them worth choosing. With Sara we close the loop: not only that they find you, but that whoever messages you gets answered, booked and charged, and whoever visits leaves a review. The whole patient journey, cared for end to end.',
+    h2d: 'Who we are',
+    pd1: 'Sara is a product of <strong>BotBit, Inc.</strong>, the company behind RAY. We work with clinics in aesthetics, dermatology, physical therapy, dentistry and practices of every kind across Mexico and the rest of Latin America.',
+    pd2: `Want to talk to someone on the team? Email us at <a href="mailto:info@rayapp.io">info@rayapp.io</a> or <a href="${L('/demo')}">book a demo</a> and we’ll figure it out together.`,
+  },
+}[lang];
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      lang={lang}
+    />
+
+    <section>
+      <div class="legal-prose mx-auto max-w-3xl px-5 py-16">
+        <h2>{dict.h2a}</h2>
+        <p>{dict.pa}</p>
+
+        <h2>{dict.h2b}</h2>
+        <p set:html={dict.pb1} />
+        <p>{dict.pb2}</p>
+
+        <h2>{dict.h2c}</h2>
+        <p>{dict.pc}</p>
+
+        <h2>{dict.h2d}</h2>
+        <p set:html={dict.pd1} />
+        <p set:html={dict.pd2} />
+      </div>
+    </section>
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

@@ -1,0 +1,134 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Implementación · Conecta tu Google Calendar y ya está',
+    metaDescription:
+      'Autorizas tu Google Calendar y Sara empieza a agendar en tus espacios libres, sin dobles reservas. No migras nada y tus datos clínicos no pasan por aquí.',
+    heroEyebrow: 'Implementación',
+    heroTitle: "Conecta tu Google Calendar y <em class='text-pine-dark'>ya está.</em>",
+    heroLead:
+      'Sin migraciones ni herramientas nuevas. Sara trabaja sobre el calendario que ya usas y respeta tu disponibilidad real.',
+    heroImageAlt: 'Sara sincronizada con Google Calendar, agendando solo en los espacios libres del consultorio.',
+    steps: [
+      { t: 'Un clic y listo', b: 'Autorizas tu cuenta de Google y Sara empieza a leer y escribir en el calendario que ya usas. No migras nada, no cambias de herramienta.' },
+      { t: 'Ve tu disponibilidad real', b: 'Agenda solo en los espacios libres, bloquea al instante y todo aparece en el calendario de tu equipo. Sin dobles reservas.' },
+      { t: 'Tus datos clínicos no pasan por aquí', b: 'No se almacena historia clínica ni información médica de tus pacientes. Eso queda donde está hoy.' },
+    ],
+    needsH2: 'Lo único que necesitas para&nbsp;arrancar.',
+    needs: [
+      { t: 'Tu Google Calendar', b: 'El mismo que ya usas. Autorizas el acceso en un clic y Sara empieza a leer y escribir ahí.' },
+      { t: 'Una línea de WhatsApp', b: 'Conectamos una línea de WhatsApp Business para tu clínica. Coordinamos el número contigo.' },
+      { t: 'Tu forma de trabajar', b: 'Nos cuentas tus tratamientos, precios y disponibilidad, y Sara aprende a atender como tu clínica.' },
+    ],
+    ctaInline: 'Conectas el calendario hoy y Sara empieza a&nbsp;atender.',
+    faqs: [
+      { q: '¿Cuánto tarda en estar funcionando?', a: 'Poco. Autorizar el calendario es un clic; el resto es cargar tu información y afinar el tono. Lo hacemos contigo.' },
+      { q: '¿Tengo que cambiar de sistema?', a: 'No. Sara trabaja sobre tu Google Calendar y tu WhatsApp. No migras datos ni aprendes una herramienta nueva.' },
+      { q: '¿Y si hoy no uso Google Calendar (Flowww, AgendaPro, Doctoralia…)?', a: 'Hoy Sara agenda sobre Google Calendar. Si tu clínica usa otra agenda, en la demo vemos tu caso: en la mayoría alcanza con conectar una cuenta de Google a tu operación, y te ayudamos a dejarla lista. Cuéntanos qué usas y te decimos si encaja antes de arrancar.' },
+      { q: '¿Qué pasa con la historia clínica de mis pacientes?', a: 'No se almacena historia clínica ni información médica en Sara. Eso queda donde está hoy.' },
+      { q: '¿Mi equipo tiene que aprender a usarla?', a: 'Casi nada: Sara atiende sola y tu equipo le habla por WhatsApp como a una persona más. Sin pantallas nuevas.' },
+    ],
+  },
+  en: {
+    metaTitle: "Onboarding · Connect your Google Calendar and you're set",
+    metaDescription:
+      'You authorize your Google Calendar and Sara starts booking in your open slots, with no double bookings. You migrate nothing and your clinical data never comes through here.',
+    heroEyebrow: 'Onboarding',
+    heroTitle: "Connect your Google Calendar and <em class='text-pine-dark'>you're set.</em>",
+    heroLead:
+      'No migrations, no new tools. Sara works on the calendar you already use and respects your real availability.',
+    heroImageAlt: 'Sara synced with Google Calendar, booking only in the open slots of the practice.',
+    steps: [
+      { t: 'One click and done', b: 'You authorize your Google account and Sara starts reading and writing in the calendar you already use. You migrate nothing and switch no tools.' },
+      { t: 'Sees your real availability', b: 'She books only in open slots, blocks instantly, and everything shows up in your team’s calendar. No double bookings.' },
+      { t: 'Your clinical data never comes through here', b: 'No medical history or clinical information about your patients is stored. That stays exactly where it is today.' },
+    ],
+    needsH2: 'The only things you need to get&nbsp;started.',
+    needs: [
+      { t: 'Your Google Calendar', b: 'The same one you already use. You authorize access in one click and Sara starts reading and writing there.' },
+      { t: 'A WhatsApp line', b: 'We connect a WhatsApp Business line for your clinic. We coordinate the number with you.' },
+      { t: 'The way you work', b: 'You tell us your treatments, prices and availability, and Sara learns to answer like your clinic.' },
+    ],
+    ctaInline: 'Connect the calendar today and Sara starts&nbsp;answering.',
+    faqs: [
+      { q: 'How long until it’s up and running?', a: 'Not long. Authorizing the calendar is one click; the rest is loading your information and fine-tuning the tone. We do it with you.' },
+      { q: 'Do I have to switch systems?', a: 'No. Sara works on your Google Calendar and your WhatsApp. You migrate no data and learn no new tool.' },
+      { q: 'What if I don’t use Google Calendar today (Flowww, AgendaPro, Doctoralia…)?', a: 'Today Sara books on Google Calendar. If your clinic uses another calendar, we’ll look at your case in the demo: for most, connecting a Google account to your operation is enough, and we help you get it ready. Tell us what you use and we’ll let you know if it fits before you start.' },
+      { q: 'What happens with my patients’ medical records?', a: 'No medical history or clinical information is stored in Sara. That stays exactly where it is today.' },
+      { q: 'Does my team have to learn to use it?', a: 'Almost nothing: Sara works on her own and your team talks to her over WhatsApp like one more person. No new screens.' },
+    ],
+  },
+}[lang];
+
+const { steps, needs, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/implementacion.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={1186}
+      lang={lang}
+    />
+
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-24">
+        <div class="grid gap-6 md:grid-cols-3">
+          {
+            steps.map((s, i) => (
+              <div class="rounded-xl border border-line bg-cream p-8">
+                <span class="font-accent text-2xl italic text-pine-dark">{`0${i + 1}`}</span>
+                <h3 class="mt-3 text-xl font-semibold">{s.t}</h3>
+                <p class="mt-2 text-salvia">{s.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.needsH2} />
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          {
+            needs.map((n) => (
+              <div class="rounded-xl border border-line bg-cream p-7">
+                <h3 class="text-lg font-semibold text-ink">{n.t}</h3>
+                <p class="mt-2 text-salvia">{n.b}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

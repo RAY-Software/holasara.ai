@@ -2,9 +2,17 @@
 // con ruteo por región AR/MX igual que allá. El link se server-renderiza a la línea
 // MX (default) y el script de atribución del Layout lo re-escribe a la AR para
 // visitantes de Argentina (por timezone / idioma). Solo dígitos (formato wa.me).
+import type { Locale } from '../i18n/config';
+
 export const WHATSAPP_AR = '5491150363441';
 export const WHATSAPP_MX = '526144659466'; // default
 export const WHATSAPP_TEXT = 'Hola Sara, quiero saber cómo funciona para mi clínica.';
+export const WHATSAPP_TEXT_EN = 'Hi Sara, I want to know how this works for my clinic.';
+
+/** Texto base del mensaje de WhatsApp según idioma (el sufijo de atribución lo agrega whatsappLink/enhance). */
+export function whatsappText(lang: Locale): string {
+  return lang === 'en' ? WHATSAPP_TEXT_EN : WHATSAPP_TEXT;
+}
 
 // Marcador de marca. Viaja DENTRO del texto del mensaje, igual que los click-ids.
 //

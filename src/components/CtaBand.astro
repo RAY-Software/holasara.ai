@@ -1,37 +1,53 @@
 ---
-import { whatsappLink } from '../lib/whatsapp';
+import { whatsappLink, whatsappText } from '../lib/whatsapp';
+import { defaultLocale, localePath, type Locale } from '../i18n/config';
 
 interface Props {
   title?: string;
   sub?: string;
+  lang?: Locale;
 }
-const {
-  title = 'Que la próxima consulta de las 23:41 no se te&nbsp;escape.',
-  sub = 'Pon a Sara a atender, agendar y cobrar hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
-} = Astro.props;
+const { lang = defaultLocale } = Astro.props;
+const copy = {
+  es: {
+    title: 'Que la próxima consulta de las 23:41 no se te&nbsp;escape.',
+    sub: 'Pon a Sara a atender, agendar y cobrar hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
+    kicker: 'La recepción que nunca cierra',
+    demo: 'Pedir demo',
+    talk: 'Habla con Sara',
+  },
+  en: {
+    title: "Don't let the next 11:41 pm enquiry slip&nbsp;away.",
+    sub: 'Put Sara to answer, book and collect starting today. Without changing your calendar or how you work.',
+    kicker: 'The front desk that never closes',
+    demo: 'Book a demo',
+    talk: 'Talk to Sara',
+  },
+}[lang];
+const { title = copy.title, sub = copy.sub } = Astro.props;
 ---
 
 <section class="bg-pine text-cream">
   <div class="mx-auto max-w-4xl px-5 py-24 text-center">
     <p class="mb-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-cream/90">
-      <span class="h-2 w-2 rounded-full bg-cream"></span> La recepción que nunca cierra
+      <span class="h-2 w-2 rounded-full bg-cream"></span> {copy.kicker}
     </p>
     <h2 class="mx-auto max-w-3xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={title} />
     <p class="mx-auto mt-6 max-w-xl text-lg text-cream/80">{sub}</p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
       <a
-        href="/demo"
+        href={localePath('/demo', lang)}
         class="inline-flex items-center gap-2 rounded-full bg-cream px-8 py-4 text-lg font-semibold text-ink transition-opacity hover:opacity-90"
       >
-        Pedir demo
+        {copy.demo}
       </a>
       <a
-        href={whatsappLink()}
+        href={whatsappLink(whatsappText(lang))}
         target="_blank"
         rel="noopener"
         class="inline-flex items-center gap-2 rounded-full border border-cream/40 px-8 py-4 text-lg font-semibold text-cream transition-colors hover:bg-cream/10"
       >
-        Habla con Sara
+        {copy.talk}
       </a>
     </div>
   </div>

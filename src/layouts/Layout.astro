@@ -4,22 +4,31 @@ import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import AgentToggle from '../components/AgentToggle.astro';
 import { GA4_ID, META_PIXEL_ID, GOOGLE_ADS_ID, saraTrack } from '../lib/tracking';
 import { SRC_TAG } from '../lib/whatsapp';
+import { defaultLocale, locales, type Locale } from '../i18n/config';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   title?: string;
   description?: string;
   schema?: unknown; // JSON-LD extra por página (opcional)
+  lang?: Locale;
 }
 
-const {
-  title = 'Sara · La recepción que nunca cierra',
-  description =
-    'Sara es la secretaria con IA de tu clínica: atiende WhatsApp e Instagram las 24 horas, agenda, cobra el anticipo y baja las ausencias. Más pacientes, más facturación, todo automático.',
-  schema,
-} = Astro.props;
+const { lang = defaultLocale, schema } = Astro.props;
+const t = useTranslations(lang);
+
+const { title = t('meta.title'), description = t('meta.description') } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = (Astro.site?.toString() ?? 'https://holasara.ai/').replace(/\/$/, '');
+
+// hreflang: alterna el segmento de idioma del path actual (/es/foo ↔ /en/foo).
+const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
+const altUrls = locales.map((l) => ({
+  lang: l,
+  href: new URL(`/${l}${stripLocale === '/' ? '' : stripLocale}`, Astro.site).toString(),
+}));
+const ogLocale = lang === 'en' ? 'en_US' : 'es_LA';
 
 // --- Tracking ---
 // Config centralizada en src/lib/tracking.ts (labels separados para form y WhatsApp).
@@ -49,14 +58,16 @@ const baseSchema = {
       url: `${siteUrl}/`,
       logo: `${siteUrl}/brand/sara-mark-512.png`,
       description:
-        'La secretaria con IA para clínicas: atiende WhatsApp e Instagram las 24 horas, agenda y cobra el anticipo.',
+        lang === 'en'
+          ? 'The AI receptionist for clinics: she handles WhatsApp and Instagram 24/7, books appointments and collects the deposit.'
+          : 'La secretaria con IA para clínicas: atiende WhatsApp e Instagram las 24 horas, agenda y cobra el anticipo.',
     },
     {
       '@type': 'WebSite',
       '@id': `${siteUrl}/#website`,
       name: 'Sara',
       url: `${siteUrl}/`,
-      inLanguage: 'es',
+      inLanguage: lang,
       publisher: { '@id': `${siteUrl}/#organization` },
     },
     {
@@ -65,7 +76,9 @@ const baseSchema = {
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       description:
-        'Recepción con IA para clínicas de estética y salud. Atiende, agenda, cobra el anticipo y baja las ausencias en WhatsApp e Instagram.',
+        lang === 'en'
+          ? 'An AI front desk for aesthetic and health clinics. She answers, books, collects the deposit and cuts no-shows on WhatsApp and Instagram.'
+          : 'Recepción con IA para clínicas de estética y salud. Atiende, agenda, cobra el anticipo y baja las ausencias en WhatsApp e Instagram.',
       publisher: { '@id': `${siteUrl}/#organization` },
     },
   ],
@@ -75,7 +88,7 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -97,6 +110,8 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical} />
+    {altUrls.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)}
+    <link rel="alternate" hreflang="x-default" href={altUrls.find((a) => a.lang === defaultLocale)?.href} />
     <title>{title}</title>
     <meta name="description" content={description} />
 
@@ -106,11 +121,11 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Sara" />
-    <meta property="og:locale" content="es_LA" />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:image" content={new URL('/og-image.jpg', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Sara · La recepción que nunca cierra" />
+    <meta property="og:image:alt" content={t('meta.title')} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={new URL('/og-image.jpg', Astro.site)} />
 
@@ -119,8 +134,8 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
   </head>
   <body class="min-h-screen antialiased">
     <slot />
-    <WhatsAppFloat />
-    <AgentToggle active="human" />
+    <WhatsAppFloat lang={lang} />
+    <AgentToggle active="human" lang={lang} />
 
     <script>
       // Scroll reveal

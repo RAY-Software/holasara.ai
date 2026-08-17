@@ -1,10 +1,15 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import PlacesAutocomplete from '../components/PlacesAutocomplete.astro';
-import ClientsStrip from '../components/ClientsStrip.astro';
-import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PlacesAutocomplete from '../../components/PlacesAutocomplete.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
+import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../../lib/whatsapp';
 
 // Base de la app del trial (nuestro backend + el reveal). El form POStea a
 // `${TRIAL_BASE}/api/public/demo` (createDemo) y, con el token, redirige a
@@ -12,72 +17,158 @@ import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../lib/whatsapp';
 // Para full-continuidad (fast-follow) se apunta a https://app.holasara.ai.
 const TRIAL_BASE = (import.meta.env.PUBLIC_TRIAL_BASE ?? 'https://prueba.rayapp.ai').replace(/\/$/, '');
 
-const benefits = [
-  {
-    t: 'Con tu propia marca',
-    b: 'Tomamos el nombre, el color y las fotos de tu negocio. El sitio se ve como tuyo, no como una plantilla.',
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Prueba Sara con tu negocio · gratis, en vivo',
+    metaDescription:
+      'Elige tu negocio y en segundos armamos tu sitio con tu marca y a Sara atendiendo en vivo. Pruébala como si ya trabajara para ti. Gratis, sin tarjeta.',
+    back: 'Volver al inicio',
+    kicker: 'Pruébala gratis',
+    h1: 'Mira tu propio sitio con Sara atendiendo <em class="text-pine-dark">en vivo</em>.',
+    lead: 'Elige tu negocio y en segundos armamos tu sitio con tu marca y a Sara, tu asistente, lista para responder y agendar citas. Pruébala como si ya trabajara para ti.',
+    worksHere: 'Ya trabaja aquí',
+    stat1: 'consultas atendidas sin recepción',
+    stat2: 'citas agendadas por Sara',
+    formH2: 'Arma tu demo',
+    formSub: 'Elige tu negocio y lo ves en vivo en segundos. Gratis, sin tarjeta.',
+    businessLabel: 'Tu negocio',
+    businessPlaceholder: 'Busca tu negocio en Google…',
+    businessHint: 'Empieza a escribir y elígelo de la lista.',
+    emailLabel: 'Tu email',
+    emailPlaceholder: 'tu@tunegocio.com',
+    consent: 'Confirmo que este es mi negocio y acepto que me contacten por WhatsApp o email sobre mi demo.',
+    submit: 'Ver mi sitio con Sara en vivo',
+    formFoot: 'Gratis. Sin tarjeta. Listo en segundos.',
+    loadingH2: 'Armando tu sitio…',
+    loadingBody: 'Estamos preparando tu marca y a Sara. Un segundo.',
+    benefits: [
+      {
+        t: 'Con tu propia marca',
+        b: 'Tomamos el nombre, el color y las fotos de tu negocio. El sitio se ve como tuyo, no como una plantilla.',
+      },
+      {
+        t: 'Sara atiende en vivo',
+        b: 'Escríbele como un paciente: informa, agenda y cobra el anticipo, como si ya trabajara ahí.',
+      },
+      {
+        t: 'Sin instalar nada',
+        b: 'No migras datos ni tocas tu historia clínica. Lo ves funcionando en segundos.',
+      },
+      {
+        t: 'Gratis y sin tarjeta',
+        b: 'Míralo primero. Si te gusta, activas tu prueba de 7 días ahí mismo.',
+      },
+    ],
+    js: {
+      submit: 'Ver mi sitio con Sara en vivo',
+      generating: 'Generando…',
+      errBusiness: 'Elige tu negocio para generar el demo.',
+      errEmail: 'Revisa tu email: no parece válido.',
+      errConsent: 'Necesitamos tu OK para generar el demo.',
+      errGeneric: 'No se pudo generar el demo.',
+      errRetry: 'No se pudo generar el demo. Prueba de nuevo.',
+    },
   },
-  {
-    t: 'Sara atiende en vivo',
-    b: 'Escríbele como un paciente: informa, agenda y cobra el anticipo, como si ya trabajara ahí.',
+  en: {
+    metaTitle: 'Try Sara with your business · free, live',
+    metaDescription:
+      'Choose your business and in seconds we build your site with your brand and Sara answering live. Try her as if she already worked for you. Free, no card.',
+    back: 'Back to home',
+    kicker: 'Try it free',
+    h1: 'See your own site with Sara answering <em class="text-pine-dark">live</em>.',
+    lead: 'Choose your business and in seconds we build your site with your brand and Sara, your assistant, ready to reply and book appointments. Try her as if she already worked for you.',
+    worksHere: 'Already works here',
+    stat1: 'enquiries handled without a front desk',
+    stat2: 'appointments booked by Sara',
+    formH2: 'Build your demo',
+    formSub: 'Choose your business and see it live in seconds. Free, no card.',
+    businessLabel: 'Your business',
+    businessPlaceholder: 'Find your business on Google…',
+    businessHint: 'Start typing and pick it from the list.',
+    emailLabel: 'Your email',
+    emailPlaceholder: 'you@yourbusiness.com',
+    consent: 'I confirm this is my business and I agree to be contacted by WhatsApp or email about my demo.',
+    submit: 'See my site with Sara live',
+    formFoot: 'Free. No card. Ready in seconds.',
+    loadingH2: 'Building your site…',
+    loadingBody: 'We’re preparing your brand and Sara. One second.',
+    benefits: [
+      {
+        t: 'With your own brand',
+        b: 'We take your business’s name, color and photos. The site looks like yours, not like a template.',
+      },
+      {
+        t: 'Sara answers live',
+        b: 'Message her like a patient: she informs, books and collects the deposit, as if she already worked there.',
+      },
+      {
+        t: 'Nothing to install',
+        b: 'You don’t migrate data or touch your medical records. You see it working in seconds.',
+      },
+      {
+        t: 'Free and no card',
+        b: 'See it first. If you like it, you activate your 7-day trial right there.',
+      },
+    ],
+    js: {
+      submit: 'See my site with Sara live',
+      generating: 'Generating…',
+      errBusiness: 'Choose your business to generate the demo.',
+      errEmail: 'Check your email: it doesn’t look valid.',
+      errConsent: 'We need your OK to generate the demo.',
+      errGeneric: 'We couldn’t generate the demo.',
+      errRetry: 'We couldn’t generate the demo. Please try again.',
+    },
   },
-  {
-    t: 'Sin instalar nada',
-    b: 'No migras datos ni tocas tu historia clínica. Lo ves funcionando en segundos.',
-  },
-  {
-    t: 'Gratis y sin tarjeta',
-    b: 'Míralo primero. Si te gusta, activas tu prueba de 7 días ahí mismo.',
-  },
-];
+}[lang];
+
+const T = dict.js;
 ---
 
-<Layout
-  title="Prueba Sara con tu negocio · gratis, en vivo"
-  description="Elige tu negocio y en segundos armamos tu sitio con tu marca y a Sara atendiendo en vivo. Pruébala como si ya trabajara para ti. Gratis, sin tarjeta."
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDescription}
 >
-  <Header />
+  <Header lang={lang} />
 
   <main class="bg-paper">
     <div class="mx-auto max-w-6xl px-5 py-14 md:py-20">
-      <a href="/" class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
-        <span aria-hidden="true">←</span> Volver al inicio
+      <a href={L('/')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+        <span aria-hidden="true">←</span> {dict.back}
       </a>
 
       <div class="grid gap-12 md:grid-cols-[0.95fr_1.05fr] md:gap-16 md:items-start">
         <!-- ─── Izquierda: propuesta ─── -->
         <div>
           <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
-            <span class="dot h-2 w-2"></span> Pruébala gratis
+            <span class="dot h-2 w-2"></span> {dict.kicker}
           </p>
-          <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl">
-            Mira tu propio sitio con Sara atendiendo <em class="text-pine-dark">en vivo</em>.
-          </h1>
+          <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl" set:html={dict.h1} />
           <p class="mt-6 max-w-xl text-lg text-salvia">
-            Elige tu negocio y en segundos armamos tu sitio con tu marca y a Sara, tu asistente,
-            lista para responder y agendar citas. Pruébala como si ya trabajara para ti.
+            {dict.lead}
           </p>
 
           <div class="mt-10 rounded-xl border border-line bg-cream p-7 @container">
             <div class="flex items-center gap-3">
               <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="h-7 w-auto" loading="lazy" />
-              <span class="text-sm font-medium text-salvia">Ya trabaja aquí</span>
+              <span class="text-sm font-medium text-salvia">{dict.worksHere}</span>
             </div>
             <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3">
               <div>
                 <p class="font-serif text-3xl font-black leading-none tracking-tight text-pine-dark tabular-nums md:text-4xl">114</p>
-                <p class="mt-1 text-xs leading-tight text-salvia">consultas atendidas sin recepción</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat1}</p>
               </div>
               <div>
                 <p class="font-serif text-3xl font-black leading-none tracking-tight text-pine-dark tabular-nums md:text-4xl">7/10</p>
-                <p class="mt-1 text-xs leading-tight text-salvia">citas agendadas por Sara</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat2}</p>
               </div>
             </div>
           </div>
 
           <ul class="mt-8 grid gap-5 sm:grid-cols-2">
             {
-              benefits.map((x) => (
+              dict.benefits.map((x) => (
                 <li>
                   <h3 class="text-[15px] font-semibold text-ink">{x.t}</h3>
                   <p class="mt-1 text-sm text-salvia">{x.b}</p>
@@ -89,25 +180,25 @@ const benefits = [
 
         <!-- ─── Derecha: formulario ─── -->
         <div class="rounded-2xl border border-line bg-cream p-7 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] md:p-9">
-          <h2 class="font-serif text-2xl font-black text-ink">Arma tu demo</h2>
-          <p class="mt-2 text-sm text-salvia">Elige tu negocio y lo ves en vivo en segundos. Gratis, sin tarjeta.</p>
+          <h2 class="font-serif text-2xl font-black text-ink">{dict.formH2}</h2>
+          <p class="mt-2 text-sm text-salvia">{dict.formSub}</p>
 
           <form id="trial-form" class="mt-7 flex flex-col gap-5" novalidate data-base={TRIAL_BASE}>
             <div>
-              <label for="business" class="mb-1.5 block text-sm font-medium text-ink">Tu negocio</label>
-              <input id="business" name="business" type="text" autocomplete="off" required placeholder="Busca tu negocio en Google…"
+              <label for="business" class="mb-1.5 block text-sm font-medium text-ink">{dict.businessLabel}</label>
+              <input id="business" name="business" type="text" autocomplete="off" required placeholder={dict.businessPlaceholder}
                 data-places-autocomplete data-hint="business-hint"
                 data-target-place-id="place_id" data-target-address="address" data-target-category="category"
                 class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-              <p id="business-hint" class="mt-1 hidden text-xs text-salvia">Empieza a escribir y elígelo de la lista.</p>
+              <p id="business-hint" class="mt-1 hidden text-xs text-salvia">{dict.businessHint}</p>
               <input type="hidden" name="place_id" id="place_id" />
               <input type="hidden" name="address" id="address" />
               <input type="hidden" name="category" id="category" />
             </div>
 
             <div>
-              <label for="email" class="mb-1.5 block text-sm font-medium text-ink">Tu email</label>
-              <input id="email" name="email" type="email" autocomplete="email" required placeholder="tu@tunegocio.com" class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              <label for="email" class="mb-1.5 block text-sm font-medium text-ink">{dict.emailLabel}</label>
+              <input id="email" name="email" type="email" autocomplete="email" required placeholder={dict.emailPlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
             </div>
 
             <!-- Atribución: se rellenan al enviar, desde la URL o la cookie sara_click -->
@@ -118,7 +209,7 @@ const benefits = [
 
             <label class="flex items-start gap-3 text-sm text-salvia">
               <input type="checkbox" name="consent" required class="mt-1 h-4 w-4 shrink-0 rounded border-line text-pine focus:ring-pine/25" />
-              <span>Confirmo que este es mi negocio y acepto que me contacten por WhatsApp o email sobre mi demo.</span>
+              <span>{dict.consent}</span>
             </label>
 
             <p id="trial-error" class="hidden rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700"></p>
@@ -128,18 +219,18 @@ const benefits = [
               id="trial-submit"
               class="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-pine px-6 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-pine-dark disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Ver mi sitio con Sara en vivo
+              {dict.submit}
             </button>
 
-            <p class="text-center text-xs text-salvia">Gratis. Sin tarjeta. Listo en segundos.</p>
+            <p class="text-center text-xs text-salvia">{dict.formFoot}</p>
           </form>
 
           <!-- Estado de carga mientras genera el demo -->
           <div id="trial-loading" class="hidden">
             <div class="grid place-items-center py-10 text-center">
               <span class="dot h-3 w-3"></span>
-              <h2 class="mt-5 font-serif text-2xl font-black text-ink">Armando tu sitio…</h2>
-              <p class="mt-2 max-w-sm text-salvia">Estamos preparando tu marca y a Sara. Un segundo.</p>
+              <h2 class="mt-5 font-serif text-2xl font-black text-ink">{dict.loadingH2}</h2>
+              <p class="mt-2 max-w-sm text-salvia">{dict.loadingBody}</p>
             </div>
           </div>
         </div>
@@ -147,11 +238,11 @@ const benefits = [
     </div>
   </main>
 
-  <ClientsStrip />
+  <ClientsStrip lang={lang} />
 
-  <Footer />
+  <Footer lang={lang} />
 
-  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG }}>
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, T }}>
     (function () {
       var form = document.getElementById('trial-form');
       if (!form) return;
@@ -221,7 +312,7 @@ const benefits = [
         errBox.textContent = msg;
         errBox.classList.remove('hidden');
         btn.disabled = false;
-        btn.textContent = 'Ver mi sitio con Sara en vivo';
+        btn.textContent = T.submit;
       }
 
       form.addEventListener('submit', function (ev) {
@@ -234,12 +325,12 @@ const benefits = [
         var fd = new FormData(form);
         var email = String(fd.get('email') || '').trim();
         var business = String(fd.get('business') || '').trim();
-        if (!business) return showError('Elige tu negocio para generar el demo.');
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Revisa tu email: no parece válido.');
-        if (!fd.get('consent')) return showError('Necesitamos tu OK para generar el demo.');
+        if (!business) return showError(T.errBusiness);
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError(T.errEmail);
+        if (!fd.get('consent')) return showError(T.errConsent);
 
         btn.disabled = true;
-        btn.textContent = 'Generando…';
+        btn.textContent = T.generating;
 
         // Shape que espera createDemo: { email, gbp: { placeId, name, address, category }, clickIds }.
         var payload = {
@@ -260,7 +351,7 @@ const benefits = [
         })
           .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
           .then(function (res) {
-            if (!res.ok || !res.d || !res.d.token) throw new Error((res.d && res.d.error) || 'No se pudo generar el demo.');
+            if (!res.ok || !res.d || !res.d.token) throw new Error((res.d && res.d.error) || T.errGeneric);
             var token = res.d.token;
             // Estado de carga mientras redirige
             form.classList.add('hidden');
@@ -272,7 +363,7 @@ const benefits = [
             });
           })
           .catch(function (e) {
-            showError((e && e.message) || 'No se pudo generar el demo. Prueba de nuevo.');
+            showError((e && e.message) || T.errRetry);
           });
       });
     })();
