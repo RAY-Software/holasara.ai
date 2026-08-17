@@ -38,7 +38,7 @@ El decisor típico es el dueño/a, el director/a médico o la gerencia de la cl�
 - Es una **suscripción mensual fija**, un solo plan que incluye todo lo que hace Sara.
 - **No hay comisión por cita** ni por transacción.
 - El precio **se ajusta al país y la moneda** de la clínica.
-- En México los planes **empiezan en US$400 por sucursal / mes**. Es un piso, un "desde":
+- En México el plan **empieza en US$400 por sucursal / mes**. Es un piso, un "desde":
   el plan se arma por sucursal, así que el número final depende del tamaño de la clínica.
 - **IMPORTANTE: ese piso es el ÚNICO número publicado.** El precio cerrado se ve en la
   demo. Nunca inventar otro número, ni un rango, ni el precio de un plan puntual.
