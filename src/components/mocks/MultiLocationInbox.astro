@@ -1,0 +1,286 @@
+---
+// Mock del inbox de Chats multisede de Sara (reemplaza /img/panel-multisede.jpg).
+// HTML/CSS nítido y bilingüe, fiel al original: header de marca "PielStudio" con
+// selector "Todas las sedes", sidebar con secciones OPERACIÓN y SARA (IA), fila
+// de filtros por canal (Todos / sin canal / WhatsApp / Instagram) y lista de
+// conversaciones con avatar por canal, preview "Sara: ...", estados por chat
+// (Reservó, Seguimiento, Confirmado, Anticipo cobrado, 1 sin resp.) y tag de sede.
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+
+const en = lang === 'en';
+
+const t = {
+  brandA: 'Piel',
+  brandB: 'Studio',
+  allLocations: en ? 'All locations' : 'Todas las sedes',
+  updated: en ? 'Updated 7:02 pm' : 'Actualizado 07:02 p. m.',
+  version: 'v1.5.113',
+  navOps: en ? 'OPERATION' : 'OPERACIÓN',
+  navSara: en ? 'SARA (AI)' : 'SARA (IA)',
+  ops: [
+    en ? 'Calendar' : 'Agenda',
+    en ? 'Consumers' : 'Consumidores',
+    en ? 'Packages' : 'Paquetes',
+    en ? 'Services' : 'Servicios',
+  ],
+  saraItems: [
+    { label: 'Sara', active: false },
+    { label: 'Chats', active: true },
+    { label: en ? 'FAQs' : 'Preguntas Frecuentes', active: false },
+  ],
+  filters: [
+    { label: en ? 'All' : 'Todos', count: '128', kind: 'all' as const },
+    { label: '', count: '46', kind: 'none' as const },
+    { label: 'WhatsApp', count: '52', kind: 'wa' as const },
+    { label: 'Instagram', count: '30', kind: 'ig' as const },
+  ],
+};
+
+// Estados por conversación. type define el color del pill.
+type StatusType = 'reservo' | 'seguimiento' | 'confirmado' | 'anticipo' | 'noresp';
+const statusLabel: Record<StatusType, string> = {
+  reservo: en ? 'Booked' : 'Reservó',
+  seguimiento: en ? 'Follow-up' : 'Seguimiento',
+  confirmado: en ? 'Confirmed' : 'Confirmado',
+  anticipo: en ? 'Deposit collected' : 'Anticipo cobrado',
+  noresp: en ? '1 no reply' : '1 sin resp.',
+};
+
+// Canal define el color del avatar: wa=verde, ig=rosa, other=gris.
+type Channel = 'wa' | 'ig' | 'other';
+type Row = {
+  name: string;
+  channel: Channel;
+  preview: string;
+  statuses: StatusType[];
+  location: string;
+  when: string;
+};
+
+const loc = {
+  norte: en ? 'North branch' : 'Sede Norte',
+  centro: en ? 'Downtown branch' : 'Sede Centro',
+  sur: en ? 'South branch' : 'Sede Sur',
+};
+
+const rows: Row[] = [
+  {
+    name: 'María Fernández',
+    channel: 'wa',
+    preview: en
+      ? 'Sara: All set! Saturday 11:00 booked. Sending you the deposit link to confirm.'
+      : 'Sara: ¡Listo! Sábado 11:00 reservado. Te paso el link del anticipo para confirmar.',
+    statuses: ['reservo'],
+    location: loc.norte,
+    when: en ? 'Aug 17, 11:12' : '17 ago, 11:12',
+  },
+  {
+    name: 'Camila Ortiz',
+    channel: 'ig',
+    preview: en
+      ? 'Sara: I have Thursday 17:30 for you. To confirm it there is a deposit, sending you the link.'
+      : 'Sara: Te dejo el jueves 17:30. Para confirmarlo va un anticipo, te paso el link.',
+    statuses: ['seguimiento'],
+    location: loc.centro,
+    when: en ? 'Aug 17, 10:41' : '17 ago, 10:41',
+  },
+  {
+    name: '+52 55 1487 2093',
+    channel: 'wa',
+    preview: en
+      ? "Sara: Hi! This is Sara. Your session was left pending and I didn't want you to miss it."
+      : 'Sara: ¡Hola! Soy Sara. Quedó pendiente tu sesión y no quería que se te pase.',
+    statuses: ['seguimiento', 'noresp'],
+    location: loc.sur,
+    when: en ? 'Aug 16, 21:03' : '16 ago, 21:03',
+  },
+  {
+    name: 'Diego Ramírez',
+    channel: 'wa',
+    preview: en
+      ? 'Sara: Confirmed! ✅ Tomorrow 16:00. You will get the reminder a day before.'
+      : 'Sara: ¡Confirmado! ✅ Mañana 16:00. Te llega el recordatorio un día antes.',
+    statuses: ['confirmado'],
+    location: loc.norte,
+    when: en ? 'Aug 16, 18:22' : '16 ago, 18:22',
+  },
+  {
+    name: 'Valentina Cruz',
+    channel: 'other',
+    preview: en
+      ? 'Sara: The deposit came through, your appointment is confirmed. See you Friday!'
+      : 'Sara: El anticipo entró, tu turno quedó confirmado. ¡Nos vemos el viernes!',
+    statuses: ['anticipo'],
+    location: loc.centro,
+    when: en ? 'Aug 16, 16:09' : '16 ago, 16:09',
+  },
+  {
+    name: 'Sofía Herrera',
+    channel: 'ig',
+    preview: en
+      ? 'Sara: Hi! Full legs is $1,190 per session. Shall I book you an evaluation?'
+      : 'Sara: ¡Hola! Piernas completas está $1,190 la sesión. ¿Te agendo una evaluación?',
+    statuses: ['reservo'],
+    location: loc.sur,
+    when: en ? 'Aug 15, 22:47' : '15 ago, 22:47',
+  },
+];
+
+// Estilos de pill de estado por tipo.
+const statusStyle: Record<StatusType, string> = {
+  reservo: 'bg-[#eaf1fe] text-[#2f5bd6]',
+  seguimiento: 'bg-[#eef1f4] text-[#4a5b6b]',
+  confirmado: 'bg-[#e7f6ec] text-[#1f9d55]',
+  anticipo: 'bg-[#f2ecfb] text-[#8250c8]',
+  noresp: 'bg-[#fdeee4] text-[#e0752b]',
+};
+
+// Colores de avatar por canal.
+const avatarStyle: Record<Channel, string> = {
+  wa: 'bg-[#22c55e]',
+  ig: 'bg-[#e1306c]',
+  other: 'bg-[#94a3b8]',
+};
+---
+
+<figure
+  class={`w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_18px_50px_-24px_rgba(20,38,31,0.4)] ${cls}`}
+  aria-label={en ? 'Sara multi-location chat inbox' : 'Inbox de chats multisede de Sara'}
+>
+  <!-- Header de marca -->
+  <div class="flex flex-wrap items-center gap-3 border-b border-line bg-white px-4 py-3 sm:px-6 sm:py-4">
+    <span class="text-lg font-black tracking-tight">
+      <span class="text-[#1d4ed8]">{t.brandA}</span><span class="text-ink">{t.brandB}</span>
+    </span>
+    <span class="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-semibold text-ink shadow-[0_1px_2px_rgba(20,38,31,0.05)]">
+      <span class="h-2 w-2 rotate-45 rounded-[1px] bg-[#6c8cf5]" aria-hidden="true"></span>
+      {t.allLocations}
+      <svg class="h-3 w-3 text-salvia" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="ml-auto flex items-center gap-3">
+      <span class="hidden text-[13px] text-salvia sm:inline">{t.updated}</span>
+      <span class="rounded-md bg-[#e7f6ec] px-2 py-1 text-xs font-semibold text-[#1f9d55]">{t.version}</span>
+    </span>
+  </div>
+
+  <div class="grid sm:grid-cols-[220px_1fr]">
+    <!-- Sidebar -->
+    <nav class="hidden border-r border-line px-4 py-5 sm:block">
+      <p class="px-2 text-[11px] font-bold uppercase tracking-[0.12em] text-salvia/80">{t.navOps}</p>
+      <ul class="mt-2 space-y-0.5">
+        {
+          t.ops.map((item) => (
+            <li>
+              <span class="flex items-center gap-2.5 rounded-lg px-2 py-2 text-[15px] text-ink/80">
+                <span class="h-4 w-4 rounded bg-[#e5e9ee]" aria-hidden="true" />
+                {item}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-5 px-2 text-[11px] font-bold uppercase tracking-[0.12em] text-salvia/80">{t.navSara}</p>
+      <ul class="mt-2 space-y-0.5">
+        {
+          t.saraItems.map((item) => (
+            <li>
+              <span
+                class={`flex items-center gap-2.5 rounded-lg px-2 py-2 text-[15px] ${item.active ? 'bg-[#eef2ff] font-semibold text-[#1d4ed8]' : 'text-ink/80'}`}
+              >
+                <span
+                  class={`h-4 w-4 rounded ${item.active ? 'bg-[#1d4ed8]' : 'bg-[#e5e9ee]'}`}
+                  aria-hidden="true"
+                />
+                {item.label}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Panel principal -->
+    <div class="min-w-0">
+      <!-- Filtros por canal -->
+      <div class="flex flex-wrap items-center gap-2 border-b border-line px-4 py-3 sm:px-6">
+        {
+          t.filters.map((f) => {
+            const dot =
+              f.kind === 'wa'
+                ? 'bg-[#22c55e]'
+                : f.kind === 'ig'
+                  ? 'bg-[#e1306c]'
+                  : 'bg-[#94a3b8]';
+            if (f.kind === 'all') {
+              return (
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-[#2f5bd6] px-3.5 py-1.5 text-sm font-semibold text-white">
+                  {f.label} <span class="tabular-nums opacity-90">{f.count}</span>
+                </span>
+              );
+            }
+            return (
+              <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-medium text-ink/75">
+                <span class={`h-2 w-2 rounded-full ${dot}`} aria-hidden="true" />
+                {f.label && <span>{f.label}</span>}
+                <span class="tabular-nums">{f.count}</span>
+              </span>
+            );
+          })
+        }
+      </div>
+
+      <!-- Lista de conversaciones -->
+      <ul>
+        {
+          rows.map((r, i) => (
+            <li class={`flex items-start gap-3 px-4 py-4 sm:px-6 ${i > 0 ? 'border-t border-line/70' : ''}`}>
+              <span
+                class={`mt-0.5 grid h-9 w-9 shrink-0 place-content-center rounded-full text-white ${avatarStyle[r.channel]}`}
+                aria-hidden="true"
+              >
+                {r.channel === 'wa' && (
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2zm5.3 14.1c-.2.6-1.2 1.1-1.7 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2.1.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1.9 1.9 1.2 2.2 1.3.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.1.1.4 0 .8z"/></svg>
+                )}
+                {r.channel === 'ig' && (
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
+                )}
+                {r.channel === 'other' && (
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v7A2.5 2.5 0 0117.5 16H9l-4 3.5V6.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                )}
+              </span>
+
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-[15px] font-bold text-ink">{r.name}</span>
+                <span class="mt-0.5 block truncate text-[14px] text-salvia">{r.preview}</span>
+                <span class="mt-2 flex flex-wrap items-center gap-2">
+                  {r.statuses.map((s) => (
+                    <span class={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold ${statusStyle[s]}`}>
+                      {s === 'confirmado' && <span aria-hidden="true">✅</span>}
+                      {s === 'anticipo' && <span aria-hidden="true">💳</span>}
+                      {s === 'seguimiento' && (
+                        <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 10L4 15l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15h11a5 5 0 005-5V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      )}
+                      {statusLabel[s]}
+                    </span>
+                  ))}
+                  <span class="inline-flex items-center rounded-md bg-[#f1f3f5] px-2 py-0.5 text-xs font-medium text-[#6b7683]">
+                    {r.location}
+                  </span>
+                </span>
+              </span>
+
+              <span class="shrink-0 whitespace-nowrap pt-0.5 text-[13px] text-salvia tabular-nums">{r.when}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</figure>

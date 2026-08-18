@@ -4,6 +4,9 @@ export { getStaticPaths };
 const lang = toLocale(Astro.params.lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import InstagramShowcase from '../../components/mocks/InstagramShowcase.astro';
+import ResultsChart from '../../components/mocks/ResultsChart.astro';
+import IgPost from '../../components/mocks/IgPost.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
@@ -33,9 +36,9 @@ const dict = {
     howP:
       'La mayoría de las clínicas publica y ahí muere: el que comenta queda sin respuesta. Sara conecta la publicación con la conversación, y la conversación con la&nbsp;agenda.',
     flow: [
-      { src: '/img/post-1.jpg', step: '1 · Sara publica', body: 'Una publicación de tu clínica sale en Instagram, con tu marca.' },
-      { src: '/img/post-2.jpg', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
-      { src: '/img/post-3.jpg', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
+      { img: '/img/tenants/faceup.jpg', likes: '312', caption: '<b>clinicaaurora</b> Ácido hialurónico en labios: qué esperar la primera semana ✨', step: '1 · Sara publica', body: 'Una publicación de tu clínica sale en Instagram, con tu marca.' },
+      { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Desliza para ver el paso a paso 👉', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
+      { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> Te escribimos por mensaje ahora mismo 💬', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
     ],
     row1Eyebrow: 'Contenido',
     row1Title: "Publicaciones listas para salir, <em class='text-pine-dark'>con tu marca.</em>",
@@ -98,9 +101,9 @@ const dict = {
     howP:
       "Most clinics post and that's where it dies: whoever comments gets no reply. Sara connects the post to the conversation, and the conversation to the&nbsp;calendar.",
     flow: [
-      { src: '/img/post-1.jpg', step: '1 · Sara posts', body: 'A post from your clinic goes live on Instagram, with your brand.' },
-      { src: '/img/post-2.jpg', step: '2 · Someone replies', body: 'They comment or message, and Sara answers instantly.' },
-      { src: '/img/post-3.jpg', step: '3 · They book and pay', body: 'She books the appointment and takes the deposit. Confirmed.' },
+      { img: '/img/tenants/faceup.jpg', likes: '312', caption: '<b>clinicaaurora</b> Lip hyaluronic acid: what to expect in week one ✨', step: '1 · Sara posts', body: 'A post from your clinic goes live on Instagram, with your brand.' },
+      { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Swipe to see the step by step 👉', comment: '<b>camifer_</b> How much is the assessment?', step: '2 · Someone replies', body: 'They comment or message, and Sara answers instantly.' },
+      { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> We’re messaging you right now 💬', step: '3 · They book and pay', body: 'She books the appointment and takes the deposit. Confirmed.' },
     ],
     row1Eyebrow: 'Content',
     row1Title: "Posts ready to publish, <em class='text-pine-dark'>with your brand.</em>",
@@ -194,9 +197,7 @@ const { flow, faqs } = dict;
           {
             flow.map((p) => (
               <div>
-                <div class="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
-                  <img src={p.src} alt={p.step} loading="lazy" decoding="async" class="w-full" />
-                </div>
+                <IgPost lang={lang} img={p.img} caption={p.caption} likes={p.likes} comment={p.comment} />
                 <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
                 <p class="text-salvia">{p.body}</p>
               </div>
@@ -215,15 +216,7 @@ const { flow, faqs } = dict;
           body={dict.row1Body}
           points={dict.row1Points}
         >
-          <img
-            src="/img/instagram.jpg"
-            width="1200"
-            height="1242"
-            alt={dict.row1ImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <InstagramShowcase lang={lang} class="w-full" />
         </FeatureRow>
 
         <FeatureRow
@@ -246,15 +239,7 @@ const { flow, faqs } = dict;
           body={dict.row3Body}
           points={dict.row3Points}
         >
-          <img
-            src="/img/vialaser-chart.jpg"
-            width="1130"
-            height="944"
-            alt={dict.row3ImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <ResultsChart lang={lang} class="w-full max-w-full" />
         </FeatureRow>
       </div>
     </section>

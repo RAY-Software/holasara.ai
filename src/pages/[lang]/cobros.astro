@@ -6,6 +6,7 @@ const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import PaymentsPanel from '../../components/mocks/PaymentsPanel.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
@@ -232,15 +233,7 @@ const { steps, methods, faqs } = dict;
           body={dict.row1Body}
           points={dict.row1Points}
         >
-          <img
-            src="/img/cobros.jpg"
-            width="1200"
-            height="1186"
-            alt={dict.row1ImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <PaymentsPanel lang={lang} class="w-full" />
         </FeatureRow>
 
         <FeatureRow

@@ -1,0 +1,93 @@
+---
+// Mock de la línea de WhatsApp de Sara (reemplaza /img/linea-whatsapp.jpg).
+// Ventana estilo macOS: "Tu línea de WhatsApp, lista", tarjeta con el número de
+// empresa conectado a Sara y 3 pasos numerados (01/02/03). Bilingüe ES/EN;
+// número y nombre fieles al mockup (PielStudio · +52 55 8842 1097).
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+const en = lang === 'en';
+
+const t = {
+  win: 'PielStudio · WhatsApp',
+  title: en ? 'Your WhatsApp line, ready' : 'Tu línea de WhatsApp, lista',
+  sub: en
+    ? 'We give you the WhatsApp Business line for your clinic and leave it connected to Sara. No paperwork with the carrier.'
+    : 'Te damos la línea de WhatsApp Business para tu clínica y la dejamos conectada a Sara. Sin trámites con la operadora.',
+  brand: 'PielStudio',
+  badge: en ? 'Business account' : 'Cuenta de empresa',
+  phone: '+52 55 8842 1097',
+  status: en ? 'Connected to Sara' : 'Conectada a Sara',
+  steps: [
+    {
+      n: '01',
+      title: en ? 'We give you the number' : 'Te damos el número',
+      sub: en ? 'A new line for your clinic, or we migrate yours.' : 'Una línea nueva para tu clínica, o migramos la tuya.',
+    },
+    {
+      n: '02',
+      title: en ? 'We set it up' : 'La dejamos lista',
+      sub: en ? 'Verified as a business account and connected to Sara.' : 'Verificada como cuenta de empresa y conectada a Sara.',
+    },
+    {
+      n: '03',
+      title: en ? 'Sara starts' : 'Sara arranca',
+      sub: en ? 'It starts replying and booking the same day.' : 'Empieza a responder y agendar el mismo día.',
+    },
+  ],
+};
+---
+
+<figure
+  class={`w-full max-w-3xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_18px_50px_-24px_rgba(20,38,31,0.4)] ${cls}`}
+  aria-label={en ? 'Sara WhatsApp line' : 'Línea de WhatsApp de Sara'}
+>
+  <!-- Chrome estilo macOS -->
+  <div class="flex items-center gap-3 border-b border-line bg-[#f7f8fa] px-4 py-3">
+    <span class="flex gap-2" aria-hidden="true">
+      <span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
+      <span class="h-3 w-3 rounded-full bg-[#febc2e]"></span>
+      <span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
+    </span>
+    <span class="text-sm font-semibold text-salvia">{t.win}</span>
+  </div>
+
+  <div class="p-4 sm:p-6">
+    <h3 class="text-xl font-bold text-ink">{t.title}</h3>
+    <p class="mt-1.5 max-w-2xl text-sm text-salvia">{t.sub}</p>
+
+    <!-- Tarjeta de línea conectada -->
+    <div class="mt-5 flex flex-wrap items-center gap-4 rounded-2xl border border-[#bfe3c9] bg-[#f2faf4] p-4 sm:p-5">
+      <span class="grid h-14 w-14 shrink-0 place-content-center rounded-2xl bg-[#25c063] text-2xl font-black text-white" aria-hidden="true">◐</span>
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-lg font-bold text-ink">{t.brand}</span>
+          <span class="inline-flex items-center gap-1 rounded-full bg-[#e2f4e8] px-2.5 py-0.5 text-xs font-semibold text-[#1f9d55]">
+            ✓ {t.badge}
+          </span>
+        </div>
+        <p class="mt-0.5 text-[15px] text-salvia tabular-nums">{t.phone}</p>
+      </div>
+      <span class="inline-flex shrink-0 items-center gap-2 text-[15px] font-bold text-[#1f9d55]">
+        <span class="h-2.5 w-2.5 rounded-full bg-[#25c063]" aria-hidden="true"></span>{t.status}
+      </span>
+    </div>
+
+    <!-- Pasos -->
+    <div class="mt-4 grid gap-3 sm:grid-cols-3">
+      {
+        t.steps.map((s) => (
+          <div class="rounded-xl border border-line p-4">
+            <p class="text-sm font-bold text-[#3b6ef2] tabular-nums">{s.n}</p>
+            <p class="mt-2 text-[15px] font-bold text-ink">{s.title}</p>
+            <p class="mt-1 text-sm text-salvia">{s.sub}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</figure>

@@ -1,0 +1,258 @@
+---
+// Mock del chat de WhatsApp de Sara para el Home (reemplaza /img/chat-whatsapp.jpg).
+// HTML nítido y bilingüe, fiel al original: frame de teléfono, Sara en verde a la
+// derecha, card de pago Stripe, pill "Pago recibido", separador de fecha y reseña 5★.
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+
+const en = lang === 'en';
+const t = {
+  online: en ? 'online' : 'en línea',
+  compose: en ? 'Message' : 'Mensaje',
+  payTitle: en ? 'Assessment consult' : 'Consulta de valoración',
+  payReceived: en ? 'Payment received · US$ 45' : 'Pago recibido · US$ 45',
+  dateSep: en ? 'THU · JUL 31' : 'JUEVES 31/7',
+};
+
+// Burbujas. who: 'in' = paciente (blanco, izq) · 'out' = Sara (verde, der).
+// html permitido para <b> y links.
+const bubbles = en
+  ? [
+      { who: 'in', html: 'Hi! Do you do an initial consult for hyaluronic acid?', t: '11:41 pm' },
+      { who: 'out', html: 'Hi! Yes. Assessment with Dr. Ruiz, 30 min, US$ 45 credited toward the treatment 😊', t: '11:41 pm' },
+      { who: 'out', html: 'I have <b>Thu 10:30 am</b>, <b>Thu 4:00 pm</b> or <b>Fri 12:00 pm</b>.', t: '11:41 pm' },
+      { who: 'in', html: 'Thursday at 4', t: '11:42 pm' },
+      { who: 'out', pay: true, lead: 'Perfect, here’s the link:', t: '11:42 pm' },
+      { who: 'out', system: true, html: 'Done, Camila! Appointment <b>confirmed</b>: Thu Jul 31, 4:00 pm with Dr. Ruiz 📍', t: '11:43 pm' },
+      { date: true },
+      { who: 'out', html: 'Good morning, Camila! We’ll see you today at <b>4:00 pm</b>.', t: '9:00 am' },
+      { who: 'out', review: true, html: 'Thanks for coming 💙 Could you leave us a review? <a>g.page/clinica-aurora</a>', t: '6:40 pm' },
+    ]
+  : [
+      { who: 'in', html: 'Hola! ¿Hacen consulta previa para ácido hialurónico?', t: '23:41' },
+      { who: 'out', html: '¡Hola! Sí. Valoración con la Dra. Ruiz, 30 min, US$ 45 que se descuentan del tratamiento 😊', t: '23:41' },
+      { who: 'out', html: 'Tengo <b>jueves 10:30</b>, <b>jueves 16:00</b> o <b>viernes 12:00</b>.', t: '23:41' },
+      { who: 'in', html: 'El jueves a las 16', t: '23:42' },
+      { who: 'out', pay: true, lead: 'Perfecto, te dejo el link:', t: '23:42' },
+      { who: 'out', system: true, html: '¡Listo, Camila! Cita <b>confirmada</b>: jueves 31/7, 16:00 con la Dra. Ruiz 📍', t: '23:43' },
+      { date: true },
+      { who: 'out', html: '¡Buen día, Camila! Te esperamos hoy a las <b>16:00</b>.', t: '09:00' },
+      { who: 'out', review: true, html: 'Gracias por venir 💙 ¿Nos dejas una reseña? <a>g.page/clinica-aurora</a>', t: '18:40' },
+    ];
+
+const tick = '<svg class="wa-tick" viewBox="0 0 18 12" fill="none" aria-hidden="true"><path d="M1 6.6l3.1 3.1L10.4 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.4 9.7L12.7 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+---
+
+<figure class={`wa ${cls}`} aria-label={en ? 'WhatsApp conversation with Sara' : 'Conversación de WhatsApp con Sara'}>
+  <!-- Status bar -->
+  <div class="wa-status">
+    <span class="wa-time">18:41</span>
+    <span class="wa-sys">
+      <svg viewBox="0 0 24 14" fill="currentColor" aria-hidden="true" class="wa-signal"><rect x="0" y="8" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="8" rx="1"/><rect x="10" y="2" width="3" height="11" rx="1"/><rect x="15" y="0" width="3" height="13" rx="1"/></svg>
+      <svg viewBox="0 0 26 13" fill="none" aria-hidden="true" class="wa-batt"><rect x="0.5" y="0.5" width="22" height="12" rx="3" stroke="currentColor"/><rect x="2" y="2" width="17" height="9" rx="1.5" fill="currentColor"/><rect x="23.5" y="4" width="2" height="5" rx="1" fill="currentColor"/></svg>
+    </span>
+  </div>
+
+  <!-- Header -->
+  <div class="wa-head">
+    <svg class="wa-back" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <img class="wa-photo" src="/img/tenants/faceup.jpg" alt="" width="40" height="40" loading="lazy" decoding="async" />
+    <span class="wa-id">
+      <span class="wa-name">Clínica Aurora</span>
+      <span class="wa-sub">{t.online}</span>
+    </span>
+    <span class="wa-icons">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11 11 0 003.5.56 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.56 3.5a1 1 0 01-.24 1l-2.2 2.3z"/></svg>
+    </span>
+  </div>
+
+  <!-- Body -->
+  <div class="wa-body">
+    {
+      bubbles.map((b) =>
+        b.date ? (
+          <div class="wa-date"><span>{t.dateSep}</span></div>
+        ) : (
+          <div class={`wa-msg ${b.who === 'out' ? 'wa-out' : 'wa-in'}`}>
+            {b.system && (
+              <span class="wa-pill">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#25d366"/><path d="M7.5 12.5l3 3 6-6.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {t.payReceived}
+              </span>
+            )}
+            {b.pay && <p class="wa-txt">{b.lead}</p>}
+            {b.pay && (
+              <span class="wa-card">
+                <span class="wa-card-top">stripe</span>
+                <span class="wa-card-body">
+                  <span class="wa-card-title">{t.payTitle}</span>
+                  <span class="wa-card-amount">US$ 45</span>
+                  <span class="wa-card-url">pay.rayhealth.app/c/aurora-4821</span>
+                </span>
+              </span>
+            )}
+            {b.review && <span class="wa-stars">★★★★★</span>}
+            {b.html && <span class="wa-txt" set:html={b.html} />}
+            <span class="wa-meta">
+              {b.t}
+              {b.who === 'out' && <span set:html={tick} />}
+            </span>
+          </div>
+        )
+      )
+    }
+  </div>
+
+  <!-- Compose -->
+  <div class="wa-compose">
+    <svg class="wa-plus" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span class="wa-field">{t.compose}</span>
+    <svg class="wa-cam" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 8h3l2-2h6l2 2h3v11H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="13" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+    <svg class="wa-mic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 003-3V6a3 3 0 00-6 0v6a3 3 0 003 3zM6 12a6 6 0 0012 0M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</figure>
+
+<style>
+  .wa {
+    width: 100%;
+    max-width: 23rem;
+    border-radius: 30px;
+    overflow: hidden;
+    background: #ece5dd;
+    border: 1px solid var(--color-line, #e6e2d9);
+    box-shadow: 0 24px 60px -30px rgba(20, 38, 31, 0.45);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #111b21;
+  }
+  .wa-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1.3rem 0.15rem;
+    background: #f7f4ef;
+  }
+  .wa-time { font-weight: 700; font-size: 0.9rem; }
+  .wa-sys { display: flex; align-items: center; gap: 0.35rem; color: #111b21; }
+  .wa-signal { width: 20px; height: 12px; }
+  .wa-batt { width: 24px; height: 12px; }
+
+  .wa-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.9rem 0.7rem;
+    background: #f7f4ef;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  .wa-back { width: 22px; height: 22px; color: #1c88ff; flex: none; margin-right: -0.2rem; }
+  .wa-photo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
+  .wa-id { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; margin-right: auto; }
+  .wa-name { font-weight: 700; font-size: 1.02rem; }
+  .wa-sub { font-size: 0.78rem; color: #667781; }
+  .wa-icons { display: flex; gap: 1.1rem; color: #1c88ff; }
+  .wa-icons svg { width: 22px; height: 22px; }
+
+  .wa-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.9rem 0.8rem 1.1rem;
+    background-color: #ece5dd;
+    background-image: radial-gradient(rgba(11, 20, 26, 0.045) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  .wa-msg {
+    max-width: 82%;
+    padding: 0.45rem 0.6rem 0.34rem;
+    border-radius: 12px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.92rem;
+    line-height: 1.38;
+    box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+    word-break: break-word;
+  }
+  .wa-in { align-self: flex-start; background: #fff; border-top-left-radius: 2px; }
+  .wa-out { align-self: flex-end; background: #d9fdd3; border-top-right-radius: 2px; }
+  .wa-txt :global(b) { font-weight: 700; }
+  .wa-txt :global(a) { color: #2f6fd1; }
+  .wa-meta {
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.1rem;
+    font-size: 0.66rem;
+    color: #667781;
+  }
+  .wa-meta :global(.wa-tick) { width: 16px; height: 11px; }
+
+  .wa-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: -0.1rem -0.1rem 0.4rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: 8px;
+    background: #d3f3d9;
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: #0a7a35;
+  }
+  .wa-pill svg { width: 18px; height: 18px; flex: none; }
+
+  .wa-card {
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.4rem;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    min-width: 15rem;
+  }
+  .wa-card-top { background: #635bff; color: #fff; font-weight: 700; font-size: 0.82rem; padding: 0.5rem 0.7rem; }
+  .wa-card-body { display: flex; flex-direction: column; gap: 0.1rem; padding: 0.6rem 0.7rem 0.7rem; }
+  .wa-card-title { font-weight: 700; font-size: 0.9rem; }
+  .wa-card-amount { font-weight: 800; font-size: 1.15rem; }
+  .wa-card-url { color: #2f6fd1; font-size: 0.8rem; margin-top: 0.1rem; }
+
+  .wa-stars { color: #f5b50a; letter-spacing: 2px; font-size: 0.95rem; margin-bottom: 0.15rem; }
+
+  .wa-date { display: flex; justify-content: center; margin: 0.3rem 0; }
+  .wa-date span {
+    background: rgba(180, 170, 160, 0.55);
+    color: #4a4038;
+    font-weight: 700;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    padding: 0.25rem 0.7rem;
+    border-radius: 8px;
+  }
+
+  .wa-compose {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.55rem 0.8rem 0.9rem;
+    background: #f7f4ef;
+    color: #8696a0;
+  }
+  .wa-plus { width: 22px; height: 22px; flex: none; }
+  .wa-field {
+    flex: 1;
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.9rem;
+    color: #8696a0;
+  }
+  .wa-cam, .wa-mic { width: 22px; height: 22px; flex: none; }
+</style>

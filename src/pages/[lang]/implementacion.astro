@@ -4,6 +4,9 @@ export { getStaticPaths };
 const lang = toLocale(Astro.params.lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import WhatsAppLinePanel from '../../components/mocks/WhatsAppLinePanel.astro';
+import DomainSearchPanel from '../../components/mocks/DomainSearchPanel.astro';
+import SetupChecklist from '../../components/mocks/SetupChecklist.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
@@ -149,15 +152,7 @@ const { needs, faqs } = dict;
         <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.setupKicker}</p>
         <h2 class="mx-auto max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.setupH2} />
         <p class="mx-auto mt-5 max-w-2xl text-lg text-salvia" set:html={dict.setupP} />
-        <img
-          src="/img/setup-onboarding.jpg"
-          width="1200"
-          height="678"
-          alt={dict.setupImgAlt}
-          loading="lazy"
-          decoding="async"
-          class="mx-auto mt-12 w-full rounded-xl border border-line shadow-[0_18px_40px_-24px_rgba(20,38,31,0.32)]"
-        />
+        <SetupChecklist lang={lang} class="w-full" />
       </div>
     </section>
 
@@ -165,27 +160,11 @@ const { needs, faqs } = dict;
     <section class="border-t border-line">
       <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
         <FeatureRow eyebrow={dict.domainEyebrow} title={dict.domainTitle} body={dict.domainBody} points={dict.domainPoints}>
-          <img
-            src="/img/domain-comprar.jpg"
-            width="1200"
-            height="590"
-            alt={dict.domainImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <DomainSearchPanel lang={lang} class="w-full" />
         </FeatureRow>
 
         <FeatureRow flip eyebrow={dict.lineEyebrow} title={dict.lineTitle} body={dict.lineBody} points={dict.linePoints}>
-          <img
-            src="/img/linea-whatsapp.jpg"
-            width="1200"
-            height="489"
-            alt={dict.lineImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <WhatsAppLinePanel lang={lang} class="w-full" />
         </FeatureRow>
       </div>
     </section>

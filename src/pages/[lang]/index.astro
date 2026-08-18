@@ -6,6 +6,13 @@ const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import InstagramShowcase from '../../components/mocks/InstagramShowcase.astro';
+import SaraChatShowcase from '../../components/mocks/SaraChatShowcase.astro';
+import CalendarSyncPanel from '../../components/mocks/CalendarSyncPanel.astro';
+import OperatorPanel from '../../components/mocks/OperatorPanel.astro';
+import PaymentsPanel from '../../components/mocks/PaymentsPanel.astro';
+import ResultsChart from '../../components/mocks/ResultsChart.astro';
+import IgPost from '../../components/mocks/IgPost.astro';
 import Footer from '../../components/Footer.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import CtaInline from '../../components/CtaInline.astro';
@@ -47,9 +54,9 @@ const dict = {
       { title: 'Sabes qué funcionó', body: 'Cada mes, en español claro: qué publicación trajo más consultas y cuánto facturaste. Sin planillas.' },
     ],
     posts: [
-      { src: '/img/post-1.jpg', step: '1 · Sara publica', body: 'Una publicación de tu clínica sale en Instagram.' },
-      { src: '/img/post-2.jpg', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
-      { src: '/img/post-3.jpg', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
+      { img: '/img/tenants/faceup.jpg', likes: '312', caption: '<b>clinicaaurora</b> Ácido hialurónico en labios: qué esperar la primera semana ✨', step: '1 · Sara publica', body: 'Una publicación de tu clínica sale en Instagram.' },
+      { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Desliza para ver el paso a paso 👉', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
+      { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> Te escribimos por mensaje ahora mismo 💬', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
     ],
     loop: ['Te encuentran', 'Chatean', 'Agenda', 'Cobra la seña', 'Dejan Google Review'],
     spotlightQuotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'],
@@ -138,9 +145,9 @@ const dict = {
       { title: 'You know what worked', body: 'Every month, in plain English: which post brought the most enquiries and how much you billed. No spreadsheets.' },
     ],
     posts: [
-      { src: '/img/post-1.jpg', step: '1 · Sara posts', body: 'A post from your clinic goes live on Instagram.' },
-      { src: '/img/post-2.jpg', step: '2 · Someone replies', body: 'They comment or message, and Sara answers instantly.' },
-      { src: '/img/post-3.jpg', step: '3 · They book and pay', body: 'She books the appointment and takes the deposit. Confirmed.' },
+      { img: '/img/tenants/faceup.jpg', likes: '312', caption: '<b>clinicaaurora</b> Lip hyaluronic acid: what to expect in week one ✨', step: '1 · Sara posts', body: 'A post from your clinic goes live on Instagram.' },
+      { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Swipe to see the step by step 👉', comment: '<b>camifer_</b> How much is the assessment?', step: '2 · Someone replies', body: 'They comment or message, and Sara answers instantly.' },
+      { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> We’re messaging you right now 💬', step: '3 · They book and pay', body: 'She books the appointment and takes the deposit. Confirmed.' },
     ],
     loop: ['They find you', 'They chat', 'Books', 'Takes deposit', 'Google review'],
     spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
@@ -441,15 +448,7 @@ const loop = [
         </div>
 
         <div class="flex justify-center md:justify-end">
-          <img
-            src="/img/chat-whatsapp.jpg"
-            width="945"
-            height="2045"
-            alt={dict.saraImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full max-w-sm rounded-2xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
-          />
+          <SaraChatShowcase lang={lang} class="w-full max-w-sm" />
         </div>
       </div>
     </section>
@@ -479,15 +478,7 @@ const loop = [
             }
           </div>
           <div class="flex justify-center md:justify-end">
-            <img
-              src="/img/instagram.jpg"
-              width="1200"
-              height="1242"
-              alt={dict.mktImgAlt}
-              loading="lazy"
-              decoding="async"
-              class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-            />
+            <InstagramShowcase lang={lang} class="w-full" />
           </div>
         </div>
 
@@ -497,9 +488,7 @@ const loop = [
             {
               posts.map((p) => (
                 <div>
-                  <div class="overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
-                    <img src={p.src} alt={p.step} loading="lazy" decoding="async" class="w-full" />
-                  </div>
+                  <IgPost lang={lang} img={p.img} caption={p.caption} likes={p.likes} comment={p.comment} />
                   <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
                   <p class="text-salvia">{p.body}</p>
                 </div>
@@ -515,15 +504,7 @@ const loop = [
     <section class="border-t border-line">
       <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[1.15fr_0.85fr] md:items-center">
         <div class="order-2 md:order-1 flex justify-center md:justify-start">
-          <img
-            src="/img/operador.jpg"
-            width="1200"
-            height="1087"
-            alt={dict.spotImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.26)]"
-          />
+          <OperatorPanel lang={lang} class="w-full" />
         </div>
         <div class="order-1 md:order-2">
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.spotKicker}</p>
@@ -573,15 +554,7 @@ const loop = [
           </a>
         </div>
         <div class="flex justify-center md:justify-end">
-          <img
-            src="/img/cobros.jpg"
-            width="1200"
-            height="1186"
-            alt={dict.cobrosImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <PaymentsPanel lang={lang} class="w-full" />
         </div>
       </div>
     </section>
@@ -615,15 +588,7 @@ const loop = [
           </a>
         </div>
         <div class="flex justify-center md:justify-end">
-          <img
-            src="/img/implementacion.jpg"
-            width="1200"
-            height="1186"
-            alt={dict.implImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <CalendarSyncPanel lang={lang} class="w-full" />
         </div>
       </div>
     </section>
@@ -653,15 +618,7 @@ const loop = [
           </a>
         </div>
         <div class="flex justify-center md:justify-end">
-          <img
-            src="/img/vialaser-chart.jpg"
-            width="1130"
-            height="944"
-            alt={dict.caseImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <ResultsChart lang={lang} class="w-full max-w-full" />
         </div>
       </div>
     </section>

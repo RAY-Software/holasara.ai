@@ -4,6 +4,7 @@ export { getStaticPaths };
 const lang = toLocale(Astro.params.lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import AgendaPanel from '../../components/mocks/AgendaPanel.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
@@ -340,15 +341,7 @@ const { steps, estados, faqs } = dict;
           points={dict.row1Points}
         >
           <!-- GEMINI: reemplazar por render de una agenda con huecos resaltados que se van llenando. Placeholder: imagen existente. -->
-          <img
-            src="/img/agenda.jpg"
-            width="1200"
-            height="900"
-            alt={dict.row1ImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <AgendaPanel lang={lang} class="w-full" />
         </FeatureRow>
 
         <FeatureRow

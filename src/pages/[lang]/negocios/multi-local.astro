@@ -6,6 +6,8 @@ const lang = toLocale(Astro.params.lang);
 const L = (p) => localePath(p, lang);
 import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
+import MultiLocationInbox from '../../../components/mocks/MultiLocationInbox.astro';
+import ResultsChart from '../../../components/mocks/ResultsChart.astro';
 import Footer from '../../../components/Footer.astro';
 import PageHero from '../../../components/PageHero.astro';
 import FeatureRow from '../../../components/FeatureRow.astro';
@@ -387,15 +389,7 @@ const { strip, steps, features, estados, faqs } = dict;
           body={features[2].body}
           points={features[2].points}
         >
-          <img
-            src="/img/panel-multisede.jpg"
-            width="1200"
-            height="714"
-            alt={features[2].imgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <MultiLocationInbox lang={lang} class="w-full" />
         </FeatureRow>
 
         <FeatureRow
@@ -418,15 +412,7 @@ const { strip, steps, features, estados, faqs } = dict;
           body={features[4].body}
           points={features[4].points}
         >
-          <img
-            src="/img/vialaser-chart.jpg"
-            width="1200"
-            height="900"
-            alt={features[4].imgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <ResultsChart lang={lang} class="w-full max-w-full" />
         </FeatureRow>
       </div>
     </section>
@@ -445,15 +431,7 @@ const { strip, steps, features, estados, faqs } = dict;
           </a>
         </div>
         <div>
-          <img
-            src="/img/vialaser-chart.jpg"
-            width="1200"
-            height="900"
-            alt={dict.caseImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <ResultsChart lang={lang} class="w-full max-w-full" />
         </div>
       </div>
     </section>

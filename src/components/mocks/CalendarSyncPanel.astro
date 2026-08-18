@@ -1,0 +1,131 @@
+---
+// Mock del panel de sincronización con Google Calendar (reemplaza /img/implementacion.jpg).
+// HTML nítido y bilingüe: tarjeta de conexión + grilla de 3 días con eventos
+// (azul = agendado por Sara, gris = tuyo desde Google Calendar).
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+const en = lang === 'en';
+
+const t = {
+  crumb: en ? 'Setup · Calendar' : 'Configuración · Calendario',
+  connLine: en ? 'Google Calendar · Sara can read and write in “Office”' : 'Google Calendar · Sara puede leer y escribir en “Consultorio”',
+  connected: en ? 'Connected' : 'Conectado',
+  title: en ? 'Office · Dr. Ruiz' : 'Consultorio · Dra. Ruiz',
+  synced: en ? 'synced 2 seconds ago' : 'sincronizado hace 2 segundos',
+  legendSara: en ? 'Booked by Sara' : 'Agendado por Sara',
+  legendYou: en ? 'Yours, from Google Calendar' : 'Tuyo, desde Google Calendar',
+};
+
+const days = en ? ['Thu Jul 31', 'Fri Aug 1', 'Sat Aug 2'] : ['Jue 31/7', 'Vie 1/8', 'Sáb 2/8'];
+
+// Tratamientos ES→EN
+const tr = en
+  ? { val: 'Assessment', ah: 'Hyaluronic acid', tox: 'Botox', peel: 'Peeling', meso: 'Mesotherapy', clean: 'Cleansing', ctrl: 'Follow-up', lunch: 'Lunch', congress: 'SEME Congress' }
+  : { val: 'Valoración', ah: 'Ac. hialurónico', tox: 'Toxina', peel: 'Peeling', meso: 'Mesoterapia', clean: 'Limpieza', ctrl: 'Control', lunch: 'Almuerzo', congress: 'Congreso SEME' };
+
+const START = 9; // 09:00
+const END = 17; // 17:00
+const hours = Array.from({ length: END - START + 1 }, (_, i) => START + i);
+const HOUR_H = 58; // px por hora
+const gridH = (END - START) * HOUR_H;
+
+// Eventos por columna. start en horas decimales, dur en horas. sara=azul, else gris.
+type Ev = { start: number; dur: number; time: string; title: string; sub?: string; sara: boolean };
+const cols: Ev[][] = [
+  [
+    { start: 9, dur: 1, time: '09:00', title: 'Camila Ferrer', sub: tr.val, sara: true },
+    { start: 10.5, dur: 1, time: '10:30', title: 'Martín Ocampo', sub: tr.ah, sara: true },
+    { start: 12, dur: 1, time: '12:00', title: tr.lunch, sara: false },
+    { start: 14, dur: 1, time: '14:00', title: 'Lucía Bentancur', sub: tr.tox, sara: true },
+    { start: 16, dur: 1, time: '16:00', title: 'Rocío Silveira', sub: tr.peel, sara: true },
+  ],
+  [
+    { start: 9.75, dur: 1, time: '09:45', title: 'Sofía Márquez', sub: tr.val, sara: true },
+    { start: 11.25, dur: 1, time: '11:15', title: 'Diego Arrieta', sub: tr.meso, sara: true },
+    { start: 13, dur: 1.5, time: '13:00', title: tr.congress, sara: false },
+    { start: 15, dur: 1, time: '15:00', title: 'Ana Cardoso', sub: tr.clean, sara: true },
+  ],
+  [
+    { start: 10, dur: 1, time: '10:00', title: 'Paula Nogueira', sub: tr.peel, sara: true },
+    { start: 11, dur: 1, time: '11:00', title: 'Julián Ferrari', sub: tr.ctrl, sara: true },
+  ],
+];
+const top = (start: number) => (start - START) * HOUR_H;
+const hgt = (dur: number) => dur * HOUR_H - 6;
+---
+
+<figure class={`w-full max-w-2xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_16px_40px_-24px_rgba(20,38,31,0.32)] ${cls}`}>
+  <!-- Topbar -->
+  <div class="flex items-center gap-2.5 border-b border-line px-4 py-3">
+    <span class="grid h-7 w-7 place-items-center rounded-lg bg-[#2f6fe0] text-xs font-black text-white">R</span>
+    <span class="text-sm font-bold text-ink">RAY Health</span>
+    <span class="text-sm text-salvia">· {t.crumb}</span>
+  </div>
+
+  <div class="space-y-4 p-4">
+    <!-- Connection card -->
+    <div class="flex items-center gap-3 rounded-xl border border-line px-4 py-3">
+      <span class="grid h-10 w-10 place-items-center rounded-full border border-line font-serif text-lg font-black text-[#2f6fe0]">G</span>
+      <div class="min-w-0 flex-1">
+        <p class="truncate text-sm font-bold text-ink">dra.ruiz@clinicaaurora.com</p>
+        <p class="truncate text-xs text-salvia">{t.connLine}</p>
+      </div>
+      <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-mint/60 bg-mint/15 px-3 py-1 text-xs font-bold text-pine-dark">
+        <svg viewBox="0 0 24 24" fill="none" class="h-3.5 w-3.5" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#1f9d55"/><path d="M7.5 12.5l3 3 6-6.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        {t.connected}
+      </span>
+    </div>
+
+    <!-- Calendar card -->
+    <div class="rounded-xl border border-line p-4">
+      <div class="mb-3 flex items-baseline justify-between gap-2">
+        <p class="text-sm font-bold text-ink">{t.title}</p>
+        <p class="text-xs text-salvia">{t.synced}</p>
+      </div>
+
+      <div class="grid grid-cols-[36px_repeat(3,1fr)] gap-x-1">
+        <!-- header row -->
+        <div></div>
+        {days.map((d) => <div class="pb-2 text-center text-xs font-semibold text-ink">{d}</div>)}
+
+        <!-- hours column -->
+        <div class="relative" style={`height:${gridH}px`}>
+          {hours.slice(0, -1).map((h, i) => (
+            <span class="absolute -translate-y-1/2 text-[10px] tabular-nums text-salvia" style={`top:${i * HOUR_H}px`}>{`0${h}`.slice(-2)}:00</span>
+          ))}
+        </div>
+
+        <!-- day columns -->
+        {
+          cols.map((events) => (
+            <div class="relative border-l border-line" style={`height:${gridH}px`}>
+              {hours.slice(1).map((_, i) => (
+                <span class="absolute inset-x-0 border-t border-line/60" style={`top:${(i + 1) * HOUR_H}px`} />
+              ))}
+              {events.map((e) => (
+                <div
+                  class={`absolute inset-x-1 overflow-hidden rounded-md border-l-[3px] px-2 py-1 ${e.sara ? 'border-[#2f6fe0] bg-[#eaf0fd]' : 'border-[#9aa3af] bg-[#f1f2f4]'}`}
+                  style={`top:${top(e.start)}px;height:${hgt(e.dur)}px`}
+                >
+                  <p class="text-[10px] font-bold text-ink tabular-nums">{e.time}</p>
+                  <p class="truncate text-[11px] leading-tight text-ink">{e.title}{e.sub ? ` · ${e.sub}` : ''}</p>
+                </div>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- legend -->
+      <div class="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 border-t border-line pt-3">
+        <span class="flex items-center gap-1.5 text-xs text-salvia"><span class="h-2.5 w-2.5 rounded-[3px] bg-[#2f6fe0]"></span>{t.legendSara}</span>
+        <span class="flex items-center gap-1.5 text-xs text-salvia"><span class="h-2.5 w-2.5 rounded-[3px] bg-[#9aa3af]"></span>{t.legendYou}</span>
+      </div>
+    </div>
+  </div>
+</figure>
