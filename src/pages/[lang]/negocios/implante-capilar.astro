@@ -1,0 +1,569 @@
+---
+import { getStaticPaths, toLocale } from '../../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p) => localePath(p, lang);
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import ResultsChart from '../../../components/mocks/ResultsChart.astro';
+import Footer from '../../../components/Footer.astro';
+import PageHero from '../../../components/PageHero.astro';
+import FeatureRow from '../../../components/FeatureRow.astro';
+import ConversationDemo from '../../../components/ConversationDemo.astro';
+import FeatureFaq from '../../../components/FeatureFaq.astro';
+import CtaInline from '../../../components/CtaInline.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es traducción, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Software para implante capilar · Sara',
+    metaDesc:
+      'Sara atiende, agenda y cobra por WhatsApp e Instagram para clínicas de implante capilar. Responde las dudas, agenda el diagnóstico, cobra el anticipo y acompaña el post-operatorio.',
+    heroEyebrow: 'Negocios · Implante capilar',
+    heroTitle: "El diagnóstico agendado, <em class='text-pine-dark'>la fecha asegurada.</em>",
+    heroLead:
+      'El implante capilar se piensa mucho y se pregunta más. Sara responde cada duda por WhatsApp e Instagram, agenda el diagnóstico, cobra el anticipo y acompaña el post-operatorio.',
+    heroImageAlt:
+      'Profesional evaluando la línea capilar de un paciente con un dermatoscopio en una clínica luminosa.',
+    mech: [
+      { title: 'Responde cada duda al instante', desc: 'Precios, técnica y post-operatorio, por WhatsApp e Instagram.' },
+      { title: 'Cobra el anticipo', desc: 'Asegura la fecha del procedimiento y filtra al que solo pregunta.' },
+      { title: 'Acompaña el post-operatorio', desc: 'Recuerda los controles y los cuidados después del implante.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'Una consulta de Instagram, con el diagnóstico&nbsp;agendado.',
+    howP1:
+      'Esta es una consulta real, tal cual llega por chat. Sara responde la duda, explica que primero va el diagnóstico y lo deja agendado con el anticipo pagado, sin que recepción toque nada.',
+    howP2:
+      'Llegó un domingo a la noche, el horario en que más consultan y menos gente hay para responder. Sara no la dejó&nbsp;enfriar.',
+    howBubbles: [
+      { who: 'in', text: 'Hola! se me marcaron mucho las entradas, hacen implante capilar? cuánto sale', t: '22:41' },
+      { who: 'out', text: '¡Hola! Sí, lo hacemos. El precio depende de la cantidad de folículos, y eso se define en un diagnóstico con el especialista. ¿Te lo agendo?', t: '22:41' },
+      { who: 'out', text: 'Tengo jueves 17:00 o sábado 10:30. ¿Cuál te viene mejor?', t: '22:43' },
+      { who: 'in', text: 'Jueves 17 🙌', t: '22:44' },
+      { who: 'out', text: '¡Listo! Jueves 17:00 con el especialista. Para dejar el diagnóstico confirmado va un anticipo, te paso el link 👇', t: '22:44' },
+    ],
+    whyKicker: 'Por qué el implante capilar es distinto',
+    whyH2: 'Tu negocio no se juega en la reserva. Se juega en la&nbsp;consulta.',
+    steps: [
+      {
+        n: '01',
+        title: 'Es una decisión grande, se piensa mucho',
+        body: 'El paciente investiga durante semanas, compara clínicas y hace muchas preguntas antes de decidirse. Si no le respondes cada duda, se enfría o se va con otro.',
+      },
+      {
+        n: '02',
+        title: 'Todo empieza por el diagnóstico',
+        body: 'Sin evaluar la zona donante y la densidad no hay presupuesto real. El diagnóstico es la puerta al procedimiento.',
+      },
+      {
+        n: '03',
+        title: 'El ticket es alto, cada consulta pesa',
+        body: 'Una consulta que se pierde por no responder a tiempo es mucha facturación. Y el que reserva la fecha, tiene que llegar.',
+      },
+    ],
+    caps: [
+      {
+        eyebrow: 'Atiende 24/7',
+        title: "Responde cada duda <em class='text-pine-dark'>antes de que se enfríe.</em>",
+        body: 'La consulta de implante viene cargada de preguntas: precio, técnica, tiempo de recuperación, resultados. Sara responde todo por WhatsApp e Instagram a cualquier hora y agenda el diagnóstico en la misma conversación. Nadie se va a averiguar a otra clínica.',
+        points: [
+          'WhatsApp, Instagram y el chat de tu web',
+          'Responde dudas de técnica, precio y recuperación',
+          'Deriva siempre al diagnóstico con el especialista',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'in', text: 'Hola, la técnica es con FUE? y cuánto tarda en verse el resultado?', t: '20:14' },
+          { who: 'out', text: '¡Hola! Sí, trabajamos con FUE. El resultado final se ve a los 8 a 12 meses. En el diagnóstico el especialista te arma un plan según tu caso. ¿Te lo agendo?', t: '20:14' },
+          { who: 'in', text: 'Buenísimo, sí', t: '20:16' },
+          { who: 'out', text: 'Tengo martes 18:00 o miércoles 10:30. ¿Cuál prefieres?', t: '20:16' },
+        ],
+      },
+      {
+        eyebrow: 'Cobra el anticipo',
+        title: "La fecha del procedimiento, <em class='text-pine-dark'>asegurada.</em>",
+        body: 'Un implante es un ticket alto y un día completo de equipo. Sara pide el anticipo en el mismo chat, con link de pago, para asegurar la fecha. Filtra al que solo estaba averiguando y protege la agenda del quirófano.',
+        points: [
+          'Link de pago en la misma conversación',
+          'Asegura la fecha y bloquea el día del equipo',
+          'Filtra curiosos, menos ausencias en un turno caro',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'Te dejo el diagnóstico el jueves 17:00. Para confirmarlo va un anticipo que se descuenta del procedimiento 🙂', t: '15:02' },
+          { who: 'out', text: 'Link 👉 pago.holasara.ai/tu-clinica', t: '15:02' },
+          { who: 'in', text: 'Listo, pagué', t: '15:09' },
+          { who: 'out', text: '¡Confirmado! ✅ Jueves 17:00. Te espero.', t: '15:09' },
+        ],
+      },
+      {
+        eyebrow: 'Reactiva',
+        title: "Al que lo consultó y lo dejó pensando, <em class='text-pine-dark'>lo trae de vuelta.</em>",
+        body: 'El implante capilar se decide con tiempo, y muchas consultas quedan a mitad de camino. Sara vuelve a escribir a quien preguntó y no cerró, en el momento justo, para retomar la conversación sin que el interés se pierda.',
+        points: [
+          'Detecta al que consultó y no agendó',
+          'Retoma la conversación en la ventana correcta',
+          'Recupera consultas de alto valor que se enfriaban',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'Hola, Martín! Hace unas semanas consultaste por el implante. ¿Quieres que te agende el diagnóstico así avanzamos? Tengo viernes 16:00 o sábado 12:30.', t: '10:30' },
+          { who: 'in', text: 'Sí, lo estuve pensando. El viernes me sirve', t: '13:41' },
+          { who: 'out', text: '¡Genial! Viernes 16:00 con el especialista. Te paso el link del anticipo para dejarlo confirmado 👇', t: '13:41' },
+        ],
+      },
+      {
+        eyebrow: 'Post-operatorio',
+        title: "Después del implante, <em class='text-pine-dark'>no lo deja solo.</em>",
+        body: 'El resultado depende de que el paciente siga los cuidados y vuelva a sus controles. Sara le recuerda las indicaciones y las revisiones por WhatsApp, en las fechas que corresponden, para que el post-operatorio no quede librado al azar.',
+        points: [
+          'Recuerda cuidados e indicaciones post-implante',
+          'Agenda y confirma los controles de seguimiento',
+          'Un paciente acompañado cuida mejor su resultado',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'Hola, Leo! Mañana se cumple una semana de tu implante, toca el primer control 🙌 Tengo jueves 11:00 o 16:30. ¿Cuál te queda mejor?', t: '09:30' },
+          { who: 'in', text: 'El de las 11 me sirve', t: '10:02' },
+          { who: 'out', text: '¡Perfecto! Jueves 11:00. Recuerda seguir durmiendo boca arriba y no exponerte al sol hasta la revisión 🌿', t: '10:02' },
+        ],
+      },
+      {
+        eyebrow: 'Pide la reseña',
+        title: "Y cuando el pelo crece, <em class='text-pine-dark'>pide la reseña.</em>",
+        body: 'El implante se elige mirando resultados de otros. Cuando el paciente ve crecer su pelo y queda contento, Sara le pide la reseña en Google en el momento justo, con el link directo. Cada reseña de 5 estrellas te trae al próximo paciente.',
+        points: [
+          'La pide cuando el resultado ya se nota',
+          'Link directo a tu Google, un solo clic',
+          'Mejor reputación, más consultas nuevas',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'Hola, Seba! ¿Cómo vas viendo el crecimiento? Si estás contento con el resultado, nos ayudarías un montón con una reseña en Google 🙏', t: '17:40' },
+          { who: 'out', text: 'Te dejo el link directo, es un solo clic 👉 g.page/tu-clinica', t: '17:40' },
+          { who: 'in', text: 'Sí! quedé muy conforme, ya la dejé ⭐️⭐️⭐️⭐️⭐️', t: '20:12' },
+          { who: 'out', text: '¡Mil gracias, Seba! Nos ayuda muchísimo 🙌', t: '20:12' },
+        ],
+      },
+    ],
+    ctaInline1: 'Que ninguna consulta de implante se pierda por no&nbsp;responder.',
+    caseKicker: 'Caso real',
+    caseQuote:
+      '“Las consultas de implante llegan a cualquier hora y con mil preguntas. Sara las responde y agenda los diagnósticos sola. Dejamos de perder pacientes por no llegar a&nbsp;contestar.”',
+    caseAttr: 'Una clínica de implante capilar que ya trabaja con Sara todos los días.',
+    caseLink: 'Ver el caso completo',
+    caseImgAlt: 'Resultados reales de una clínica de implante capilar trabajando con Sara.',
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada consulta y cada diagnóstico deja&nbsp;rastro.',
+    panelSub:
+      'En la bandeja de Chats, cada conversación muestra en qué estado está. De un vistazo sabes a quién está reactivando Sara, qué anticipo ya entró y quién confirmó su&nbsp;diagnóstico.',
+    estados: [
+      { tag: '📨 Seguimiento', desc: 'Sara retomó a alguien que consultó por un implante y no cerró. El contador (×3) muestra cuántas veces insistió.' },
+      { tag: 'Reservó', desc: 'Agendó el diagnóstico desde la conversación.' },
+      { tag: '💳 Anticipo cobrado', desc: 'El anticipo entró y la fecha del procedimiento quedó asegurada.' },
+      { tag: '✅ Confirmado', desc: 'El paciente confirmó su turno. El día del equipo no queda vacío.' },
+    ],
+    faqs: [
+      {
+        q: '¿Sara agenda primero el diagnóstico?',
+        a: 'Sí. Entiende que un implante no se presupuesta sin evaluar la zona donante y la densidad, así que responde las dudas, explica que primero va el diagnóstico y lo deja agendado. El plan y el número de folículos los define el profesional.',
+      },
+      {
+        q: '¿Puede recibir fotos de la zona?',
+        a: 'Sí. Si el paciente manda fotos, Sara las guarda en la conversación para que tu equipo tenga contexto antes del diagnóstico. La evaluación final siempre la hace el profesional, no Sara.',
+      },
+      {
+        q: '¿Cobra el anticipo?',
+        a: 'Sí. Sara puede pedir el anticipo en el mismo chat, con link de pago, para asegurar la fecha del procedimiento. Filtra al que solo estaba averiguando y deja la agenda con pacientes reales.',
+      },
+      {
+        q: '¿Recontacta al que consultó y no cerró?',
+        a: 'Sí. El implante capilar se decide con tiempo. Sara vuelve a escribir a quien consultó y quedó pensándolo, en el momento justo, para retomar la conversación sin que se pierda el interés.',
+      },
+      {
+        q: '¿Acompaña el post-operatorio?',
+        a: 'Sí. Después del procedimiento, Sara recuerda los controles y los cuidados por WhatsApp, para que el paciente siga las indicaciones y vuelva a sus revisiones.',
+      },
+      {
+        q: '¿Responde por Instagram además de WhatsApp?',
+        a: 'Por los dos, y también por el chat de tu web. Es la misma Sara en los tres canales, con el historial de cada paciente. Muchas consultas de implante llegan por Instagram fuera de horario, y ahí contesta al instante.',
+      },
+      {
+        q: '¿Sirve si tengo varias sedes?',
+        a: 'Sí. Sara maneja la agenda de cada local y deriva a cada paciente a la sede que le queda cómoda, todo en un solo panel. Si trabajas con varias sucursales, escríbenos y te mostramos cómo lo resolvemos.',
+      },
+    ],
+    ctaBandTitle: 'Que la consulta de implante de las 23:00 no se vaya a otra&nbsp;clínica.',
+    ctaBandSub:
+      'Pon a Sara a atender, agendar y cobrar el anticipo hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
+  },
+  en: {
+    metaTitle: 'Software for hair transplant clinics · Sara',
+    metaDesc:
+      'Sara answers, books and collects payment over WhatsApp and Instagram for hair transplant clinics. She answers the questions, books the assessment, collects the deposit and supports the post-op.',
+    heroEyebrow: 'Businesses · Hair transplant',
+    heroTitle: "The assessment booked, <em class='text-pine-dark'>the date secured.</em>",
+    heroLead:
+      'A hair transplant is thought over for a long time, and asked about even more. Sara answers every question over WhatsApp and Instagram, books the assessment, collects the deposit and supports the post-op.',
+    heroImageAlt:
+      'A provider examining a patient hairline with a dermatoscope in a bright clinic.',
+    mech: [
+      { title: 'Answers every question instantly', desc: 'Prices, technique and post-op, over WhatsApp and Instagram.' },
+      { title: 'Collects the deposit', desc: 'Secures the procedure date and filters out those just asking.' },
+      { title: 'Supports the post-op', desc: 'Reminds patients of check-ups and after-care once the implant is done.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: 'An Instagram enquiry, with the assessment&nbsp;booked.',
+    howP1:
+      'This is a real enquiry, exactly as it comes in by chat. Sara answers the question, explains that the assessment comes first, and leaves it booked with the deposit paid, without the front desk touching a thing.',
+    howP2:
+      'It came in on a Sunday night, the time when enquiries peak and the fewest people are around to reply. Sara did not let it&nbsp;cool off.',
+    howBubbles: [
+      { who: 'in', text: 'Hi! my hairline has receded a lot, do you do hair transplants? how much', t: '10:41 pm' },
+      { who: 'out', text: 'Hi there! Yes, we do. The price depends on the number of grafts, and that is defined in an assessment with the specialist. Shall I book it for you?', t: '10:41 pm' },
+      { who: 'out', text: 'I have Thursday at 5:00 pm or Saturday at 10:30 am. Which works better?', t: '10:43 pm' },
+      { who: 'in', text: 'Thursday at 5 🙌', t: '10:44 pm' },
+      { who: 'out', text: 'All set! Thursday at 5:00 pm with the specialist. To confirm the assessment there is a deposit, here is the link 👇', t: '10:44 pm' },
+    ],
+    whyKicker: 'Why hair transplant is different',
+    whyH2: 'Your business is not won at the booking. It is won at the&nbsp;consult.',
+    steps: [
+      {
+        n: '01',
+        title: 'It is a big decision, thought over a lot',
+        body: 'The patient researches for weeks, compares clinics and asks many questions before deciding. If you do not answer every one, they cool off or go elsewhere.',
+      },
+      {
+        n: '02',
+        title: 'It all starts with the assessment',
+        body: 'Without evaluating the donor area and density there is no real quote. The assessment is the door to the procedure.',
+      },
+      {
+        n: '03',
+        title: 'The ticket is high, every enquiry counts',
+        body: 'An enquiry lost for not replying in time is a lot of revenue. And whoever books the date has to show up.',
+      },
+    ],
+    caps: [
+      {
+        eyebrow: 'Answers 24/7',
+        title: "Answers every question <em class='text-pine-dark'>before it cools off.</em>",
+        body: 'A hair transplant enquiry comes loaded with questions: price, technique, recovery time, results. Sara answers everything over WhatsApp and Instagram at any hour and books the assessment in the same conversation. No one leaves to ask at another clinic.',
+        points: [
+          'WhatsApp, Instagram and your website chat',
+          'Answers questions on technique, price and recovery',
+          'Always routes to the assessment with the specialist',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'in', text: 'Hi, is the technique FUE? and how long until the result shows?', t: '8:14 pm' },
+          { who: 'out', text: 'Hi! Yes, we work with FUE. The final result shows at 8 to 12 months. At the assessment the specialist builds a plan for your case. Shall I book it for you?', t: '8:14 pm' },
+          { who: 'in', text: 'Great, yes', t: '8:16 pm' },
+          { who: 'out', text: 'I have Tuesday at 6:00 pm or Wednesday at 10:30 am. Which do you prefer?', t: '8:16 pm' },
+        ],
+      },
+      {
+        eyebrow: 'Collects the deposit',
+        title: "The procedure date, <em class='text-pine-dark'>secured.</em>",
+        body: 'A transplant is a high ticket and a full day of the team. Sara asks for the deposit right in the chat, with a payment link, to secure the date. It filters out whoever was just asking and protects the operating-room schedule.',
+        points: [
+          'Payment link in the same conversation',
+          'Secures the date and blocks the team day',
+          'Filters the curious, fewer no-shows on a costly slot',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'I will hold the assessment for you on Thursday at 5:00 pm. To confirm it there is a deposit that comes off the procedure 🙂', t: '3:02 pm' },
+          { who: 'out', text: 'Link 👉 pago.holasara.ai/tu-clinica', t: '3:02 pm' },
+          { who: 'in', text: 'Done, paid', t: '3:09 pm' },
+          { who: 'out', text: 'Confirmed! ✅ Thursday at 5:00 pm. See you then.', t: '3:09 pm' },
+        ],
+      },
+      {
+        eyebrow: 'Wins back',
+        title: "Whoever enquired and kept thinking, <em class='text-pine-dark'>she brings back.</em>",
+        body: 'A hair transplant is decided over time, and many enquiries stall halfway. Sara writes again to whoever asked and did not close, at just the right moment, to pick the conversation back up before the interest fades.',
+        points: [
+          'Spots whoever enquired and did not book',
+          'Picks the conversation back up at the right window',
+          'Wins back high-value enquiries that were cooling off',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'Hi, Martín! A few weeks ago you enquired about the transplant. Want me to book the assessment so we move forward? I have Friday at 4:00 pm or Saturday at 12:30 pm.', t: '10:30 am' },
+          { who: 'in', text: 'Yes, I have been thinking about it. Friday works for me', t: '1:41 pm' },
+          { who: 'out', text: 'Great! Friday at 4:00 pm with the specialist. Here is the deposit link to confirm it 👇', t: '1:41 pm' },
+        ],
+      },
+      {
+        eyebrow: 'Post-op',
+        title: "After the transplant, <em class='text-pine-dark'>she does not leave them alone.</em>",
+        body: 'The result depends on the patient following the after-care and coming back for check-ups. Sara reminds them of the instructions and the reviews over WhatsApp, on the right dates, so the post-op is not left to chance.',
+        points: [
+          'Reminds of after-care and post-implant instructions',
+          'Books and confirms the follow-up check-ups',
+          'A supported patient takes better care of the result',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'Hi, Leo! Tomorrow marks one week since your transplant, time for the first check-up 🙌 I have Thursday at 11:00 am or 4:30 pm. Which works better?', t: '9:30 am' },
+          { who: 'in', text: 'The 11 works for me', t: '10:02 am' },
+          { who: 'out', text: 'Perfect! Thursday at 11:00 am. Remember to keep sleeping face-up and avoid sun exposure until the check-up 🌿', t: '10:02 am' },
+        ],
+      },
+      {
+        eyebrow: 'Asks for the review',
+        title: "And when the hair grows in, <em class='text-pine-dark'>she asks for the review.</em>",
+        body: 'A transplant is chosen by looking at other people results. When the patient sees their hair grow in and is happy, Sara asks for a Google review at just the right moment, with the direct link. Every 5-star review brings you the next patient.',
+        points: [
+          'Asks once the result is already showing',
+          'Direct link to your Google, a single click',
+          'Better reputation, more new enquiries',
+        ],
+        channel: 'whatsapp',
+        bubbles: [
+          { who: 'out', text: 'Hi, Seba! How is the growth coming along? If you are happy with the result, a Google review would help us a ton 🙏', t: '5:40 pm' },
+          { who: 'out', text: 'Here is the direct link, it is a single click 👉 g.page/tu-clinica', t: '5:40 pm' },
+          { who: 'in', text: 'Yes! I am really happy, left it already ⭐️⭐️⭐️⭐️⭐️', t: '8:12 pm' },
+          { who: 'out', text: 'Thank you so much, Seba! It helps us a lot 🙌', t: '8:12 pm' },
+        ],
+      },
+    ],
+    ctaInline1: 'Do not let a single transplant enquiry slip away for not&nbsp;replying.',
+    caseKicker: 'Real case',
+    caseQuote:
+      '“Transplant enquiries come in at any hour and with a thousand questions. Sara answers them and books the assessments on her own. We stopped losing patients because we could not reply in&nbsp;time.”',
+    caseAttr: 'A hair transplant clinic that already works with Sara every day.',
+    caseLink: 'See the full case',
+    caseImgAlt: 'Real results from a hair transplant clinic working with Sara.',
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every enquiry and every assessment leaves a&nbsp;trace.',
+    panelSub:
+      'In the Chats inbox, every conversation shows its status. At a glance you know who Sara is winning back, which deposit has already come in and who confirmed their&nbsp;assessment.',
+    estados: [
+      { tag: '📨 Follow-up', desc: 'Sara picked back up with someone who enquired about a transplant and did not close. The counter (×3) shows how many times she followed up.' },
+      { tag: 'Booked', desc: 'She booked the assessment right from the conversation.' },
+      { tag: '💳 Deposit collected', desc: 'The deposit came in and the procedure date is secured.' },
+      { tag: '✅ Confirmed', desc: 'The patient confirmed their appointment. The team day does not go empty.' },
+    ],
+    faqs: [
+      {
+        q: 'Does Sara book the assessment first?',
+        a: 'Yes. She understands that a transplant is not quoted without evaluating the donor area and density, so she answers the questions, explains that the assessment comes first and leaves it booked. The plan and the number of grafts are defined by the provider.',
+      },
+      {
+        q: 'Can she receive photos of the area?',
+        a: 'Yes. If the patient sends photos, Sara keeps them in the conversation so your team has context before the assessment. The final evaluation is always done by the provider, not Sara.',
+      },
+      {
+        q: 'Does she collect the deposit?',
+        a: 'Yes. Sara can ask for the deposit right in the chat, with a payment link, to secure the procedure date. It filters out whoever was just asking and keeps the calendar with real patients.',
+      },
+      {
+        q: 'Does she reach back out to whoever enquired and did not close?',
+        a: 'Yes. A hair transplant is decided over time. Sara writes again to whoever enquired and was still thinking about it, at just the right moment, to pick the conversation back up before the interest fades.',
+      },
+      {
+        q: 'Does she support the post-op?',
+        a: 'Yes. After the procedure, Sara reminds patients of check-ups and after-care over WhatsApp, so they follow the instructions and come back for their reviews.',
+      },
+      {
+        q: 'Does she reply on Instagram as well as WhatsApp?',
+        a: 'On both, and on your website chat too. It is the same Sara across all three channels, with each patient history. Many transplant enquiries come in over Instagram after hours, and that is where she replies instantly.',
+      },
+      {
+        q: 'Does it work if I have several locations?',
+        a: 'Yes. Sara manages the calendar for each location and routes each patient to the branch that is convenient for them, all in one dashboard. If you work with several branches, message us and we will show you how we handle it.',
+      },
+    ],
+    ctaBandTitle: 'Do not let the 11 pm transplant enquiry go to another&nbsp;clinic.',
+    ctaBandSub:
+      'Put Sara to work answering, booking and collecting the deposit today. Without changing your calendar or the way you work.',
+  },
+}[lang];
+
+const { mech, steps, caps, estados, faqs } = dict;
+---
+
+<Layout lang={lang}
+  title={dict.metaTitle}
+  description={dict.metaDesc}
+>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/implante-capilar-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1200}
+      imageH={896}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{mech[0].title}</p>
+          <p class="mt-1 text-salvia">{mech[0].desc}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{mech[1].title}</p>
+          <p class="mt-1 text-salvia">{mech[1].desc}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{mech[2].title}</p>
+          <p class="mt-1 text-salvia">{mech[2].desc}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · conversación real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.howP1}</p>
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            channel="instagram"
+            lang={lang}
+            bubbles={dict.howBubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ POR QUÉ ES DISTINTO · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{dict.whyKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.whyH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={caps[0].eyebrow}
+          title={caps[0].title}
+          body={caps[0].body}
+          points={caps[0].points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={caps[0].bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={caps[1].eyebrow}
+          title={caps[1].title}
+          body={caps[1].body}
+          points={caps[1].points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={caps[1].bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={caps[2].eyebrow}
+          title={caps[2].title}
+          body={caps[2].body}
+          points={caps[2].points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={caps[2].bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={caps[3].eyebrow}
+          title={caps[3].title}
+          body={caps[3].body}
+          points={caps[3].points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={caps[3].bubbles} />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={caps[4].eyebrow}
+          title={caps[4].title}
+          body={caps[4].body}
+          points={caps[4].points}
+        >
+          <ConversationDemo channel="whatsapp" lang={lang} bubbles={caps[4].bubbles} />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline1} lang={lang} />
+
+    <!-- ══════════ CASO REAL · placeholder, reemplazar por testimonial propio ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.caseKicker}</p>
+          <blockquote class="font-serif text-2xl font-black leading-snug text-ink text-balance md:text-3xl" set:html={dict.caseQuote} />
+          <p class="mt-6 text-salvia">{dict.caseAttr}</p>
+          <a href={L('/caso')} class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            {dict.caseLink} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div>
+          <ResultsChart lang={lang} class="w-full max-w-full" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelSub} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand
+      lang={lang}
+      title={dict.ctaBandTitle}
+      sub={dict.ctaBandSub}
+    />
+  </main>
+  <Footer lang={lang} />
+</Layout>
+</content>

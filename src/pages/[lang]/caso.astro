@@ -6,11 +6,11 @@ const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import ResultsChart from "../../components/mocks/ResultsChart.astro";
 import Footer from '../../components/Footer.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import CtaInline from '../../components/CtaInline.astro';
 import ClientsStrip from '../../components/ClientsStrip.astro';
-import ResultsChart from '../../components/mocks/ResultsChart.astro';
 import { whatsappLink, whatsappText } from '../../lib/whatsapp';
 
 // ── Copy por idioma. EN es traducción, no calco. ──
