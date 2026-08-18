@@ -4,6 +4,7 @@ export { getStaticPaths };
 const lang = toLocale(Astro.params.lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
+import AgendaPanel from '../../components/mocks/AgendaPanel.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
@@ -276,15 +277,7 @@ const { steps, items, faqs } = dict;
           body={dict.row1Body}
           points={dict.row1Points}
         >
-          <img
-            src="/img/agenda.jpg"
-            width="1200"
-            height="900"
-            alt={dict.row1ImgAlt}
-            loading="lazy"
-            decoding="async"
-            class="w-full rounded-xl border border-line shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]"
-          />
+          <AgendaPanel lang={lang} class="w-full" />
         </FeatureRow>
 
         <div id="recordatorios" class="scroll-mt-24">

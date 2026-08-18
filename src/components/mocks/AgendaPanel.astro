@@ -1,0 +1,204 @@
+---
+// Mock del tablero de agenda semanal de Sara (reemplaza /img/agenda.jpg).
+// HTML/CSS nítido y bilingüe: header de marca, 4 KPI tiles, 5 columnas por día
+// (Lun a Vie) con tarjetas de cita coloreadas por estado y leyenda al pie.
+// Datos fieles al mockup original (RAY Health).
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+
+const en = lang === 'en';
+const t = {
+  brand: 'RAY Health',
+  section: en ? 'Schedule' : 'Agenda',
+  week: en ? 'Week of Jul 28' : 'Semana del 28/7',
+  kpis: [
+    { v: '48', l: en ? 'appointments this week' : 'citas esta semana' },
+    { v: '31', l: en ? 'with deposit collected' : 'con anticipo cobrado' },
+    { v: '2', l: en ? 'gaps resold from the waitlist' : 'huecos revendidos desde la lista de espera' },
+    { v: '0', l: en ? 'front desk calls' : 'llamadas de recepción' },
+  ],
+  legend: [
+    { key: 'paid', l: en ? 'Deposit paid' : 'Anticipo pagado' },
+    { key: 'confirmed', l: en ? 'Confirmed' : 'Confirmada' },
+    { key: 'reminder', l: en ? 'Reminder sent' : 'Recordatorio enviado' },
+    { key: 'waitlist', l: en ? 'From waitlist' : 'Desde lista de espera' },
+  ],
+};
+
+// Estados -> color de borde izquierdo y fondo de tarjeta.
+type Status = 'paid' | 'confirmed' | 'reminder' | 'waitlist';
+const statusStyle: Record<Status, { border: string; bg: string }> = {
+  paid: { border: '#1f9d55', bg: '#eaf6ec' },
+  confirmed: { border: '#2f6fe0', bg: '#eaf0fd' },
+  reminder: { border: '#e0952f', bg: '#fdf1e0' },
+  waitlist: { border: '#8250c8', bg: '#f3ecfb' },
+};
+const dotColor: Record<Status, string> = {
+  paid: '#1f9d55',
+  confirmed: '#2f6fe0',
+  reminder: '#e0952f',
+  waitlist: '#8250c8',
+};
+
+// Tratamientos ES -> EN.
+const tr = en
+  ? { val: 'Assessment', ah: 'Hyaluronic acid', tox: 'Botox', peel: 'Peeling', meso: 'Mesotherapy', clean: 'Facial cleansing', ctrl: 'Follow-up' }
+  : { val: 'Valoración', ah: 'Ac. hialurónico', tox: 'Toxina botulínica', peel: 'Peeling', meso: 'Mesoterapia', clean: 'Limpieza facial', ctrl: 'Control' };
+
+type Appt = { time: string; name: string; sub: string; status: Status };
+type Day = { label: string; count: number; appts: Appt[] };
+
+const days: Day[] = [
+  {
+    label: en ? 'Mon Jul 28' : 'Lun 28/7',
+    count: 10,
+    appts: [
+      { time: '09:00', name: 'Camila F.', sub: tr.val, status: 'paid' },
+      { time: '09:45', name: 'Martín O.', sub: tr.tox, status: 'paid' },
+      { time: '10:30', name: 'Lucía B.', sub: tr.ah, status: 'confirmed' },
+      { time: '11:15', name: 'Rocío S.', sub: tr.peel, status: 'paid' },
+      { time: '12:00', name: 'Pilar M.', sub: tr.meso, status: 'paid' },
+      { time: '14:00', name: 'Diego A.', sub: tr.clean, status: 'confirmed' },
+      { time: '14:45', name: 'Elena Q.', sub: tr.ctrl, status: 'paid' },
+      { time: '15:30', name: 'Ana C.', sub: tr.ah, status: 'paid' },
+      { time: '16:15', name: 'Hugo D.', sub: tr.val, status: 'reminder' },
+      { time: '17:00', name: 'Nadia W.', sub: tr.peel, status: 'paid' },
+    ],
+  },
+  {
+    label: en ? 'Tue Jul 29' : 'Mar 29/7',
+    count: 9,
+    appts: [
+      { time: '09:00', name: 'Sofía M.', sub: tr.peel, status: 'paid' },
+      { time: '09:45', name: 'León T.', sub: tr.meso, status: 'confirmed' },
+      { time: '10:30', name: 'Julián F.', sub: tr.clean, status: 'reminder' },
+      { time: '11:15', name: 'Paula N.', sub: tr.ctrl, status: 'paid' },
+      { time: '12:00', name: 'Ivo R.', sub: tr.ah, status: 'paid' },
+      { time: '14:00', name: 'Clara Z.', sub: tr.val, status: 'paid' },
+      { time: '14:45', name: 'Ignacio P.', sub: tr.peel, status: 'confirmed' },
+      { time: '15:30', name: 'Mora L.', sub: tr.val, status: 'paid' },
+      { time: '16:15', name: 'Valentina R.', sub: tr.tox, status: 'paid' },
+    ],
+  },
+  {
+    label: en ? 'Wed Jul 30' : 'Mié 30/7',
+    count: 10,
+    appts: [
+      { time: '09:00', name: 'Bruno K.', sub: tr.ctrl, status: 'paid' },
+      { time: '09:45', name: 'Tomás L.', sub: tr.ah, status: 'paid' },
+      { time: '10:30', name: 'Carla V.', sub: tr.val, status: 'confirmed' },
+      { time: '11:15', name: 'Mariana D.', sub: tr.peel, status: 'waitlist' },
+      { time: '12:00', name: 'Selva O.', sub: tr.val, status: 'paid' },
+      { time: '14:00', name: 'Nicolás G.', sub: tr.tox, status: 'paid' },
+      { time: '14:45', name: 'Iván B.', sub: tr.ah, status: 'reminder' },
+      { time: '15:30', name: 'Florencia A.', sub: tr.peel, status: 'paid' },
+      { time: '16:15', name: 'Emilia T.', sub: tr.meso, status: 'paid' },
+      { time: '17:00', name: 'Gael P.', sub: tr.clean, status: 'confirmed' },
+    ],
+  },
+  {
+    label: en ? 'Thu Jul 31' : 'Jue 31/7',
+    count: 10,
+    appts: [
+      { time: '09:00', name: 'Bruno M.', sub: tr.peel, status: 'confirmed' },
+      { time: '09:45', name: 'Noelia S.', sub: tr.val, status: 'paid' },
+      { time: '10:30', name: 'Agustina C.', sub: tr.tox, status: 'paid' },
+      { time: '11:15', name: 'Ramiro S.', sub: tr.ah, status: 'paid' },
+      { time: '12:00', name: 'Ruth A.', sub: tr.peel, status: 'paid' },
+      { time: '14:00', name: 'Kevin M.', sub: tr.meso, status: 'confirmed' },
+      { time: '14:45', name: 'Josefina P.', sub: tr.clean, status: 'reminder' },
+      { time: '15:30', name: 'Matías E.', sub: tr.ctrl, status: 'paid' },
+      { time: '16:15', name: 'Zoe V.', sub: tr.ah, status: 'paid' },
+      { time: '17:00', name: 'Delfina R.', sub: tr.val, status: 'confirmed' },
+    ],
+  },
+  {
+    label: en ? 'Fri Aug 1' : 'Vie 1/8',
+    count: 9,
+    appts: [
+      { time: '09:00', name: 'Iara C.', sub: tr.ah, status: 'paid' },
+      { time: '09:45', name: 'Santiago V.', sub: tr.peel, status: 'paid' },
+      { time: '10:30', name: 'Renata B.', sub: tr.meso, status: 'paid' },
+      { time: '11:15', name: 'Otto N.', sub: tr.clean, status: 'confirmed' },
+      { time: '12:00', name: 'Bianca F.', sub: tr.ctrl, status: 'paid' },
+      { time: '14:00', name: 'Facundo I.', sub: tr.ah, status: 'confirmed' },
+      { time: '14:45', name: 'Lara G.', sub: tr.val, status: 'paid' },
+      { time: '15:30', name: 'Guadalupe H.', sub: tr.peel, status: 'waitlist' },
+      { time: '16:15', name: 'Lautaro N.', sub: tr.val, status: 'paid' },
+    ],
+  },
+];
+---
+
+<figure
+  class={`w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-[#f4f6f9] shadow-[0_18px_50px_-24px_rgba(20,38,31,0.4)] ${cls}`}
+  aria-label={en ? 'Sara weekly schedule board' : 'Tablero de agenda semanal de Sara'}
+>
+  <!-- Header de marca -->
+  <div class="flex items-center gap-3 border-b border-line bg-white px-5 py-4 sm:px-6">
+    <span class="grid h-9 w-9 shrink-0 place-content-center rounded-lg bg-[#2f6fe0] text-base font-black text-white">R</span>
+    <span class="flex flex-wrap items-baseline gap-x-2 text-[15px]">
+      <span class="font-bold text-ink">{t.brand}</span>
+      <span class="text-salvia">· {t.section} · {t.week}</span>
+    </span>
+  </div>
+
+  <div class="p-4 sm:p-5">
+    <!-- KPI tiles -->
+    <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {
+        t.kpis.map((k) => (
+          <div class="rounded-xl border border-line bg-white px-4 py-3.5">
+            <p class="font-serif text-2xl font-black leading-tight text-ink tabular-nums">{k.v}</p>
+            <p class="mt-1 text-[13px] text-salvia">{k.l}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Columnas por día -->
+    <div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      {
+        days.map((d) => (
+          <section class="rounded-xl border border-line bg-white p-3">
+            <div class="mb-2.5 flex items-center justify-between gap-2 border-b border-line pb-2">
+              <span class="text-sm font-bold text-ink">{d.label}</span>
+              <span class="grid h-5 min-w-5 place-content-center rounded-full bg-[#eaf0fd] px-1.5 text-xs font-bold text-[#2f6fe0] tabular-nums">
+                {d.count}
+              </span>
+            </div>
+            <ul class="space-y-2">
+              {d.appts.map((a) => (
+                <li
+                  class="rounded-md border-l-[3px] px-2.5 py-1.5"
+                  style={`border-color:${statusStyle[a.status].border};background:${statusStyle[a.status].bg}`}
+                >
+                  <p class="text-xs font-bold text-ink tabular-nums">{a.time}</p>
+                  <p class="truncate text-[13px] font-semibold leading-tight text-ink">{a.name}</p>
+                  <p class="truncate text-[11px] leading-tight text-salvia">{a.sub}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+
+    <!-- Leyenda -->
+    <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 rounded-xl border border-line bg-white px-4 py-3">
+      {
+        t.legend.map((g) => (
+          <span class="flex items-center gap-1.5 text-xs font-medium text-salvia">
+            <span class="h-2.5 w-2.5 rounded-[3px]" style={`background:${dotColor[g.key as Status]}`} />
+            {g.l}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</figure>
