@@ -210,14 +210,19 @@ const { flow, faqs } = dict;
     <!-- ══════════ CAPACIDADES ══════════ -->
     <section class="border-t border-line">
       <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
-        <FeatureRow
-          eyebrow={dict.row1Eyebrow}
-          title={dict.row1Title}
-          body={dict.row1Body}
-          points={dict.row1Points}
-        >
+        <div class="flex flex-col gap-12">
+          <div class="mx-auto max-w-2xl text-center">
+            <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+              {dict.row1Eyebrow}
+            </p>
+            <h3
+              class="font-serif text-2xl font-black leading-tight text-balance md:text-3xl"
+              set:html={dict.row1Title}
+            />
+            <p class="mt-4 text-lg text-salvia">{dict.row1Body}</p>
+          </div>
           <InstagramShowcase lang={lang} class="w-full" />
-        </FeatureRow>
+        </div>
 
         <FeatureRow
           flip
