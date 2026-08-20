@@ -1,0 +1,93 @@
+---
+// Landing por país: /es/mexico, /es/colombia, /es/uruguay (y sus /en/*).
+// Solo genera los slugs de src/data/countries.ts; el resto de rutas top-level
+// son archivos estáticos y ganan prioridad sobre esta ruta dinámica.
+import { locales, toLocale, localePath } from '../../i18n/config';
+import { countries } from '../../data/countries';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+export function getStaticPaths() {
+  return locales.flatMap((lang) => countries.map((c) => ({ params: { lang, country: c.slug } })));
+}
+
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+const country = countries.find((c) => c.slug === Astro.params.country)!;
+const dict = country.copy[lang];
+
+// JSON-LD: FAQPage con las mismas preguntas visibles de la página.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: dict.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription} schema={schema}>
+  <Header lang={lang} />
+
+  <PageHero lang={lang} eyebrow={dict.eyebrow} title={dict.title} lead={dict.lead} />
+
+  <!-- Qué hace Sara acá -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto max-w-6xl px-5 py-20">
+      <div class="grid gap-6 md:grid-cols-3">
+        {
+          dict.bullets.map((b) => (
+            <div class="rounded-2xl border border-line p-6">
+              <h3 class="font-serif text-xl font-black text-ink">{b.title}</h3>
+              <p class="mt-2 text-salvia">{b.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Registro por país -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-2 md:items-center">
+      <div>
+        <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.dialect.title} />
+        <p class="mt-4 text-lg text-salvia">{dict.dialect.body}</p>
+      </div>
+      <div class="rounded-2xl border border-pine/20 bg-mint/[0.07] p-8">
+        <h3 class="font-serif text-2xl font-black text-ink" set:html={dict.price.title} />
+        <p class="mt-3 text-salvia">{dict.price.body}</p>
+      </div>
+    </div>
+  </section>
+
+  {
+    dict.proof && (
+      <section class="border-t border-line">
+        <div class="reveal mx-auto max-w-4xl px-5 py-20 text-center">
+          <p class="mx-auto max-w-2xl text-lg text-salvia">{dict.proof.body}</p>
+          <a
+            href={L('/caso')}
+            class="mt-6 inline-block rounded-full border border-pine/30 px-6 py-3 font-semibold text-pine-dark transition-colors hover:bg-mint/20"
+          >
+            {dict.proof.cta}
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaInline lang={lang} />
+
+  <FeatureFaq lang={lang} items={dict.faq} />
+
+  <CtaBand lang={lang} />
+  <Footer lang={lang} />
+</Layout>

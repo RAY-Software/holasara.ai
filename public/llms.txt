@@ -81,6 +81,14 @@ No inventar otros clientes ni testimonios.
 - https://holasara.ai/implementacion — Conecta el Google Calendar y ya está funcionando.
 - https://holasara.ai/precios — Un plan, todo incluido, precio por país.
 - https://holasara.ai/caso — Caso de éxito ViaLaser.
+- https://holasara.ai/mejores-asistentes-ia-clinicas — Comparativa honesta 2026: Sara vs Soyla (Doctocliq), Kura, Cloudia, AgendaPro y Zenvia, con la tabla de qué hace cada uno y cuándo conviene elegir a otro.
+- https://holasara.ai/sara-vs-cloudia — Sara AI vs Cloudia, cara a cara.
+- https://holasara.ai/sara-vs-doctocliq — Sara AI vs Soyla (Doctocliq), cara a cara.
+- https://holasara.ai/sara-vs-kura — Sara AI vs Kura, cara a cara.
+- https://holasara.ai/sara-vs-agendapro — Sara AI vs AgendaPro, cara a cara.
+- https://holasara.ai/mexico — Sara AI en México: precios en pesos, tuteo local, piso de precio público.
+- https://holasara.ai/colombia — Sara AI en Colombia: confirmación de citas y menos ausencias.
+- https://holasara.ai/uruguay — Sara AI en Uruguay: ya funciona en ViaLaser, atiende con voseo.
 - https://holasara.ai/demo — Pedir una demo con la clínica del interesado.
 
 ## Preguntas frecuentes

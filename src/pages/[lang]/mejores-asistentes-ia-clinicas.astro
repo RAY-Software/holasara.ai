@@ -1,0 +1,591 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { PRICE_MX, PRICE_UNIT } from '../../lib/pricing';
+import { competitors } from '../../data/competitors';
+import { countries } from '../../data/countries';
+
+const linksCopy =
+  lang === 'en'
+    ? { vs: 'Head-to-head comparisons', countries: 'Sara in your country', vsPrefix: 'Sara AI vs' }
+    : { vs: 'Comparaciones cara a cara', countries: 'Sara en tu país', vsPrefix: 'Sara AI vs' };
+
+// ── Comparativa honesta. Datos de competidores tomados de sus sitios públicos
+// (agosto 2026). Regla: nada inventado; si un dato no es público, se dice
+// "no publica". Los checks de Sara tienen que coincidir con lo que Sara hace
+// de verdad (misma fuente de verdad que /agent y llms.txt). ──
+
+type Cell = { v: 'yes' | 'no' | 'partial' | 'text'; note?: string };
+const yes = (note?: string): Cell => ({ v: 'yes', note });
+const no = (note?: string): Cell => ({ v: 'no', note });
+const partial = (): Cell => ({ v: 'partial' });
+const text = (note: string): Cell => ({ v: 'text', note });
+
+const dict = {
+  es: {
+    metaTitle: 'Los mejores asistentes con IA para clínicas (2026): comparativa honesta',
+    metaDescription:
+      'Comparamos Sara, Soyla (Doctocliq), Kura, Cloudia, AgendaPro y Zenvia para clínicas de estética y salud: IA real, Instagram, cobro de la seña, agenda y precios públicos. Con datos de agosto 2026.',
+    hero: {
+      eyebrow: 'Comparativa 2026',
+      title: 'Los mejores asistentes con IA para&nbsp;clínicas.',
+      lead: 'Si tu clínica pierde pacientes porque nadie contesta WhatsApp o Instagram a tiempo, estas son las opciones reales en español y portugués. La armamos nosotros (el equipo de Sara), con datos públicos de cada producto a agosto de 2026, y jugamos limpio: también te decimos cuándo conviene elegir a otro.',
+    },
+    tableTitle: 'La tabla, sin vueltas',
+    tableNote:
+      'Datos de los sitios públicos de cada producto (agosto 2026). Si representas a uno de estos productos y algo cambió, escríbenos a info@rayapp.io y lo corregimos.',
+    legend: { yes: 'Sí', no: 'No', partial: 'Parcial' },
+    rows: [
+      'IA conversacional real (no árbol de botones)',
+      'Instagram DM con IA',
+      'WhatsApp con API oficial',
+      'Usa tu agenda actual (Google Calendar, sin migrar)',
+      'Cobra la seña dentro del chat',
+      'Reactiva pacientes que no vuelven',
+      'Lista de espera para huecos liberados',
+      'Pide reseñas de Google',
+      'Crea el contenido de Instagram',
+      'Gift cards vendidas online',
+      'Ficha / historia clínica',
+      'Precio público de entrada',
+    ],
+    products: [
+      {
+        name: 'Sara AI',
+        home: 'holasara.ai',
+        cells: [
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          no('a propósito: no toca datos clínicos'),
+          text(`desde ${PRICE_MX.display} ${PRICE_UNIT}`),
+        ],
+      },
+      {
+        name: 'Soyla (Doctocliq)',
+        home: 'doctocliq.com',
+        cells: [
+          yes(),
+          no(),
+          yes(),
+          no('requiere usar la agenda de Doctocliq'),
+          partial(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          no(),
+          yes('odontograma, facturación'),
+          text('suite desde US$19; Soyla aparte'),
+        ],
+      },
+      {
+        name: 'Kura',
+        home: 'getkura.ai',
+        cells: [
+          yes(),
+          no(),
+          yes(),
+          no('agenda propia; HIS solo en Enterprise'),
+          no(),
+          yes(),
+          no(),
+          yes(),
+          no(),
+          no(),
+          no(),
+          text('59,99 € por profesional / mes'),
+        ],
+      },
+      {
+        name: 'Cloudia',
+        home: 'cloudia.com.br',
+        cells: [
+          partial(),
+          yes(),
+          yes(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          no(),
+          no(),
+          no(),
+          no(),
+          text('~R$49-80 + módulo de IA'),
+        ],
+      },
+      {
+        name: 'AgendaPro',
+        home: 'agendapro.com',
+        cells: [
+          partial(),
+          no(),
+          partial(),
+          no('hay que migrar a su agenda'),
+          partial(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          yes(),
+          yes(),
+          text('no publica (~US$19-59 según terceros)'),
+        ],
+      },
+      {
+        name: 'Zenvia',
+        home: 'zenvia.com',
+        cells: [
+          partial(),
+          yes('canal disponible, sin foco clínicas'),
+          yes('es BSP oficial de Meta'),
+          no('sin agenda: los flujos los arma la clínica'),
+          no('deriva a un link de pago externo'),
+          partial(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          no(),
+          text('US$130/mes con IA + canal WhatsApp aparte'),
+        ],
+      },
+    ],
+    versus: {
+      title: 'Cuándo conviene cada&nbsp;uno',
+      lead: 'Ningún producto es el mejor para todos. Este es nuestro criterio honesto, el mismo que usamos cuando un prospecto no es para nosotros.',
+      items: [
+        {
+          name: 'Elige Doctocliq (con Soyla) si...',
+          body: 'necesitas la suite clínica completa: historia clínica con odontograma, presupuestos dentales y facturación electrónica en Perú, México, Colombia o Ecuador. Su IA por WhatsApp es de las buenas, pero funciona solo si migras tu operación a Doctocliq, y no atiende Instagram.',
+        },
+        {
+          name: 'Elige Kura si...',
+          body: 'tu clínica está en España, te importa el compliance europeo (RGPD, datos en la UE) y tu canal es únicamente WhatsApp. Hace bien la calificación de leads de anuncios y la recuperación de presupuestos. No cobra señas ni atiende Instagram.',
+        },
+        {
+          name: 'Elige Cloudia si...',
+          body: 'tu clínica está en Brasil o Portugal y ya usas uno de los 40+ software de gestión que integra. Es la opción más barata. Ten en cuenta que su base son flujos: la conversación con IA generativa es un módulo adicional que se paga aparte.',
+        },
+        {
+          name: 'Elige AgendaPro si...',
+          body: 'lo que buscas es el software de agenda y caja, no un asistente que converse: reservas online, ficha, POS, inventario y reportes, con miles de negocios de belleza y salud en LATAM. Su chatbot responde preguntas frecuentes; no vende ni cobra por ti.',
+        },
+        {
+          name: 'Elige Zenvia si...',
+          body: 'eres una institución grande con equipo técnico propio y quieres construir tus flujos sobre una plataforma de mensajería (WhatsApp, SMS, email, RCS) a escala. Para una clínica sin equipo técnico, armar y mantener los flujos corre por tu cuenta.',
+        },
+        {
+          name: 'Elige Sara AI si...',
+          body: 'quieres que la consulta de las 23:00 por WhatsApp o Instagram termine en una cita agendada en tu Google Calendar y con la seña cobrada, sin migrar tu agenda ni sumar recepción. Sara además reactiva pacientes, llena huecos con lista de espera, pide las reseñas y crea el contenido de Instagram. No toca la historia clínica, a propósito.',
+        },
+      ],
+    },
+    proof: {
+      title: 'El único caso que publicamos es&nbsp;real',
+      body: 'No inventamos logos ni testimonios. ViaLaser (depilación láser, Uruguay) tiene a Sara atendiendo su WhatsApp, Instagram y web en vivo: 7 de cada 10 citas las agenda Sara.',
+      cta: 'Ver el caso de ViaLaser',
+    },
+    ctaInline: { title: 'Compara con una demo de tu propia&nbsp;clínica.', cta: 'Ver mi demo' },
+    faq: [
+      {
+        q: '¿Cuál es el mejor asistente con IA para una clínica estética?',
+        a: 'Depende de qué problema quieras resolver. Si el cuello de botella es la conversación (responder a tiempo, agendar y cobrar la seña por WhatsApp e Instagram), Sara es la opción más completa. Si necesitas historia clínica y facturación, mira Doctocliq o AgendaPro. Si estás en Brasil con software de gestión propio, Cloudia.',
+      },
+      {
+        q: '¿Tengo que cambiar mi software de agenda para usar un asistente con IA?',
+        a: 'Con la mayoría, sí: Soyla requiere Doctocliq, Kura usa su propia agenda y AgendaPro implica migrar a su sistema. Sara trabaja sobre el Google Calendar que tu clínica ya usa, sin migración.',
+      },
+      {
+        q: '¿Cuál cobra la seña o anticipo dentro de la conversación?',
+        a: 'De los seis comparados, solo Sara cobra la seña dentro del chat antes de confirmar la cita. Los demás derivan a links externos, cobran al reservar en su sistema o directamente no cobran. La seña cobrada es lo que más baja las ausencias.',
+      },
+      {
+        q: '¿Cuánto cuesta un asistente con IA para clínicas?',
+        a: `Los precios públicos a agosto 2026 van desde ~R$49-80 por mes (Cloudia, base de flujos con la IA aparte) hasta US$130 más costos de canal (Zenvia). Kura publica 59,99 € por profesional al mes. Sara parte de ${PRICE_MX.display} ${PRICE_UNIT}, con la conversación, el cobro y el marketing incluidos.`,
+      },
+      {
+        q: '¿Y la historia clínica del paciente?',
+        a: 'Sara no lee ni escribe historias clínicas, a propósito: se encarga de la conversación, la agenda y el cobro. Si tu prioridad es digitalizar fichas y odontogramas, esa parte resuélvela con un software clínico como Doctocliq o AgendaPro; Sara convive con ellos porque no compite por tu agenda.',
+      },
+    ],
+  },
+  en: {
+    metaTitle: 'Best AI assistants for clinics (2026): an honest comparison',
+    metaDescription:
+      'We compare Sara, Soyla (Doctocliq), Kura, Cloudia, AgendaPro and Zenvia for aesthetic and health clinics: real AI, Instagram, deposit collection, scheduling and public pricing. Data from August 2026.',
+    hero: {
+      eyebrow: '2026 comparison',
+      title: 'The best AI assistants for&nbsp;clinics.',
+      lead: 'If your clinic loses patients because nobody answers WhatsApp or Instagram in time, these are the real options in Spanish and Portuguese. We built this ourselves (the Sara team) with public data from each product as of August 2026, and we play fair: we also tell you when someone else is the better pick.',
+    },
+    tableTitle: 'The table, straight up',
+    tableNote:
+      'Data from each product’s public site (August 2026). If you represent one of these products and something changed, write to info@rayapp.io and we’ll fix it.',
+    legend: { yes: 'Yes', no: 'No', partial: 'Partial' },
+    rows: [
+      'Real conversational AI (not a button tree)',
+      'Instagram DM with AI',
+      'WhatsApp via official API',
+      'Works with your current calendar (Google Calendar, no migration)',
+      'Collects the deposit inside the chat',
+      'Reactivates patients who stopped coming',
+      'Waitlist for freed slots',
+      'Asks for Google reviews',
+      'Creates your Instagram content',
+      'Gift cards sold online',
+      'Patient records / EHR',
+      'Public entry price',
+    ],
+    products: [
+      {
+        name: 'Sara AI',
+        home: 'holasara.ai',
+        cells: [
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          yes(),
+          no('on purpose: it never touches clinical data'),
+          text(`from ${PRICE_MX.display} per location / month`),
+        ],
+      },
+      {
+        name: 'Soyla (Doctocliq)',
+        home: 'doctocliq.com',
+        cells: [
+          yes(),
+          no(),
+          yes(),
+          no('requires using the Doctocliq calendar'),
+          partial(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          no(),
+          yes('dental charting, e-invoicing'),
+          text('suite from US$19; Soyla apart'),
+        ],
+      },
+      {
+        name: 'Kura',
+        home: 'getkura.ai',
+        cells: [
+          yes(),
+          no(),
+          yes(),
+          no('own calendar; HIS only on Enterprise'),
+          no(),
+          yes(),
+          no(),
+          yes(),
+          no(),
+          no(),
+          no(),
+          text('€59.99 per professional / month'),
+        ],
+      },
+      {
+        name: 'Cloudia',
+        home: 'cloudia.com.br',
+        cells: [
+          partial(),
+          yes(),
+          yes(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          no(),
+          no(),
+          no(),
+          no(),
+          text('~R$49-80 + AI module'),
+        ],
+      },
+      {
+        name: 'AgendaPro',
+        home: 'agendapro.com',
+        cells: [
+          partial(),
+          no(),
+          partial(),
+          no('you migrate to their calendar'),
+          partial(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          yes(),
+          yes(),
+          text('not published (~US$19-59 per third parties)'),
+        ],
+      },
+      {
+        name: 'Zenvia',
+        home: 'zenvia.com',
+        cells: [
+          partial(),
+          yes('channel available, no clinic focus'),
+          yes('official Meta BSP'),
+          no('no calendar: the clinic builds its own flows'),
+          no('hands off to an external payment link'),
+          partial(),
+          partial(),
+          no(),
+          no(),
+          no(),
+          no(),
+          text('US$130/mo with AI + WhatsApp channel billed apart'),
+        ],
+      },
+    ],
+    versus: {
+      title: 'When each one makes&nbsp;sense',
+      lead: 'No product is best for everyone. This is our honest take, the same one we use when a prospect is not a fit for us.',
+      items: [
+        {
+          name: 'Pick Doctocliq (with Soyla) if...',
+          body: 'you need the full clinical suite: patient records with dental charting, treatment estimates and e-invoicing in Peru, Mexico, Colombia or Ecuador. Their WhatsApp AI is solid, but it only works if you move your operation onto Doctocliq, and it does not cover Instagram.',
+        },
+        {
+          name: 'Pick Kura if...',
+          body: 'your clinic is in Spain, EU compliance matters to you (GDPR, data in the EU) and WhatsApp is your only channel. It does ad-lead qualification and estimate recovery well. It does not collect deposits or answer Instagram.',
+        },
+        {
+          name: 'Pick Cloudia if...',
+          body: 'your clinic is in Brazil or Portugal and you already use one of the 40+ management systems it integrates with. It is the cheapest option. Keep in mind its core is flow-based: generative AI conversation is a paid add-on.',
+        },
+        {
+          name: 'Pick AgendaPro if...',
+          body: 'what you want is the scheduling and point-of-sale software, not an assistant that converses: online booking, records, POS, inventory and reports, with thousands of beauty and health businesses across LATAM. Its chatbot answers FAQs; it does not sell or collect for you.',
+        },
+        {
+          name: 'Pick Zenvia if...',
+          body: 'you are a large institution with your own technical team and want to build flows on top of a messaging platform (WhatsApp, SMS, email, RCS) at scale. For a clinic without a technical team, building and maintaining those flows is on you.',
+        },
+        {
+          name: 'Pick Sara AI if...',
+          body: 'you want the 11 pm enquiry on WhatsApp or Instagram to end as a booked appointment in your Google Calendar with the deposit already paid, without migrating your calendar or adding front-desk staff. Sara also reactivates patients, fills freed slots from a waitlist, asks for reviews and creates your Instagram content. It never touches patient records, on purpose.',
+        },
+      ],
+    },
+    proof: {
+      title: 'The only case we publish is a real&nbsp;one',
+      body: 'We do not invent logos or testimonials. ViaLaser (laser hair removal, Uruguay) has Sara answering its WhatsApp, Instagram and website live: 7 out of 10 appointments are booked by Sara.',
+      cta: 'See the ViaLaser case',
+    },
+    ctaInline: { title: 'Compare with a demo of your own&nbsp;clinic.', cta: 'See my demo' },
+    faq: [
+      {
+        q: 'What is the best AI assistant for an aesthetic clinic?',
+        a: 'It depends on the problem you want to solve. If the bottleneck is the conversation (answering in time, booking and collecting the deposit on WhatsApp and Instagram), Sara is the most complete option. If you need patient records and invoicing, look at Doctocliq or AgendaPro. In Brazil with your own management software, Cloudia.',
+      },
+      {
+        q: 'Do I have to change my scheduling software to use an AI assistant?',
+        a: 'With most of them, yes: Soyla requires Doctocliq, Kura uses its own calendar and AgendaPro means migrating to their system. Sara works on top of the Google Calendar your clinic already uses, with no migration.',
+      },
+      {
+        q: 'Which one collects the deposit inside the conversation?',
+        a: 'Of the six compared, only Sara collects the deposit inside the chat before confirming the appointment. The others hand off to external links, charge when booking in their system, or do not charge at all. A paid deposit is what lowers no-shows the most.',
+      },
+      {
+        q: 'How much does an AI assistant for clinics cost?',
+        a: `Public prices as of August 2026 range from ~R$49-80 per month (Cloudia, flow-based with AI sold apart) to US$130 plus channel costs (Zenvia). Kura publishes €59.99 per professional per month. Sara starts at ${PRICE_MX.display} per location per month, with the conversation, payment collection and marketing included.`,
+      },
+      {
+        q: 'What about patient records?',
+        a: 'Sara does not read or write patient records, on purpose: it handles the conversation, the booking and the payment. If digitizing records is your priority, solve that with clinical software like Doctocliq or AgendaPro; Sara coexists with them because it does not compete for your calendar.',
+      },
+    ],
+  },
+}[lang];
+
+// JSON-LD: FAQPage con las mismas preguntas visibles (nunca contenido distinto al de la página).
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: dict.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+// Iconos: ✓ (incluido), − (parcial), ✗ (no). El label textual queda en sr-only.
+const icon: Record<'yes' | 'no' | 'partial', { d: string; cls: string }> = {
+  yes: { d: 'M4 10.5l4 4 8-9', cls: 'text-pine-dark' },
+  no: { d: 'M5.5 5.5l9 9M14.5 5.5l-9 9', cls: 'text-salvia/35' },
+  partial: { d: 'M5 10h10', cls: 'text-ink/45' },
+};
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription} schema={schema}>
+  <Header lang={lang} />
+
+  <PageHero lang={lang} eyebrow={dict.hero.eyebrow} title={dict.hero.title} lead={dict.hero.lead} />
+
+  <!-- Tabla comparativa -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto max-w-6xl px-5 py-20">
+      <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.tableTitle}</h2>
+      <div class="mt-8 overflow-x-auto rounded-2xl border border-line">
+        <table class="w-full min-w-[880px] border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-line bg-mint/[0.07] text-left">
+              <th class="px-4 py-3 font-semibold text-ink"></th>
+              {
+                dict.products.map((p, i) => (
+                  <th class={`px-4 py-3 font-semibold whitespace-nowrap ${i === 0 ? 'text-pine-dark' : 'text-ink'}`}>
+                    {p.name}
+                    <span class="mt-0.5 block text-xs font-normal text-salvia">{p.home}</span>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            {
+              dict.rows.map((row, r) => (
+                <tr class={r % 2 ? 'bg-mint/[0.03]' : ''}>
+                  <td class="max-w-[240px] px-4 py-3 font-medium text-ink">{row}</td>
+                  {dict.products.map((p) => {
+                    const c = p.cells[r];
+                    return (
+                      <td class="px-4 py-3 align-top">
+                        {c.v === 'text' ? (
+                          <span class="text-ink">{c.note}</span>
+                        ) : (
+                          <>
+                            <svg class={`h-5 w-5 ${icon[c.v].cls}`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                              <path d={icon[c.v].d} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="sr-only">{dict.legend[c.v]}</span>
+                            {c.v !== 'partial' && c.note && <span class="mt-1 block text-xs font-normal text-salvia">{c.note}</span>}
+                          </>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-salvia">
+        {(['yes', 'partial', 'no'] as const).map((k) => (
+          <span class="inline-flex items-center gap-1.5">
+            <svg class={`h-4 w-4 ${icon[k].cls}`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d={icon[k].d} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {dict.legend[k]}
+          </span>
+        ))}
+      </p>
+      <p class="mt-3 text-sm text-salvia">{dict.tableNote}</p>
+    </div>
+  </section>
+
+  <CtaInline lang={lang} title={dict.ctaInline.title} cta={dict.ctaInline.cta} />
+
+  <!-- Cuándo elegir cada uno -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto max-w-4xl px-5 py-20">
+      <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.versus.title} />
+      <p class="mt-4 max-w-2xl text-lg text-salvia">{dict.versus.lead}</p>
+      <div class="mt-10 grid gap-6 sm:grid-cols-2">
+        {
+          dict.versus.items.map((it, i) => (
+            <div
+              class={`rounded-2xl border p-6 ${i === dict.versus.items.length - 1 ? 'border-pine/30 bg-mint/[0.07] sm:col-span-2' : 'border-line'}`}
+            >
+              <h3 class="font-serif text-xl font-black text-ink">{it.name}</h3>
+              <p class="mt-2 text-salvia">{it.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Links a los cara a cara y a las landings por país -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto max-w-4xl px-5 py-14">
+      <div class="grid gap-8 sm:grid-cols-2">
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{linksCopy.vs}</p>
+          <ul class="flex flex-col gap-2">
+            {
+              competitors.map((c) => (
+                <li>
+                  <a href={L(`/sara-vs-${c.slug}`)} class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">
+                    {linksCopy.vsPrefix} {c.name}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{linksCopy.countries}</p>
+          <ul class="flex flex-col gap-2">
+            {
+              countries.map((c) => (
+                <li>
+                  <a href={L(`/${c.slug}`)} class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">
+                    Sara AI · {c.name[lang]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prueba real -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto max-w-4xl px-5 py-20 text-center">
+      <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.proof.title} />
+      <p class="mx-auto mt-4 max-w-2xl text-lg text-salvia">{dict.proof.body}</p>
+      <a
+        href={L('/caso')}
+        class="mt-6 inline-block rounded-full border border-pine/30 px-6 py-3 font-semibold text-pine-dark transition-colors hover:bg-mint/20"
+      >
+        {dict.proof.cta}
+      </a>
+    </div>
+  </section>
+
+  <FeatureFaq lang={lang} items={dict.faq} />
+
+  <CtaBand lang={lang} />
+  <Footer lang={lang} />
+</Layout>

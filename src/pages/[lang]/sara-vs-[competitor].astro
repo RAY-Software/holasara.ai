@@ -1,0 +1,135 @@
+---
+// Páginas "Sara vs X": /es/sara-vs-cloudia, /es/sara-vs-doctocliq, etc.
+// Template único; el contenido vive en src/data/competitors.ts.
+import { locales, toLocale, localePath } from '../../i18n/config';
+import { competitors, type VsCell } from '../../data/competitors';
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+export function getStaticPaths() {
+  return locales.flatMap((lang) => competitors.map((c) => ({ params: { lang, competitor: c.slug } })));
+}
+
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+const competitor = competitors.find((c) => c.slug === Astro.params.competitor)!;
+const dict = competitor.copy[lang];
+
+const legend =
+  lang === 'en' ? { yes: 'Yes', no: 'No', partial: 'Partial' } : { yes: 'Sí', no: 'No', partial: 'Parcial' };
+// Iconos: ✓ (incluido), − (parcial), ✗ (no). El label textual queda en sr-only.
+const icon: Record<'yes' | 'no' | 'partial', { d: string; cls: string }> = {
+  yes: { d: 'M4 10.5l4 4 8-9', cls: 'text-pine-dark' },
+  no: { d: 'M5.5 5.5l9 9M14.5 5.5l-9 9', cls: 'text-salvia/35' },
+  partial: { d: 'M5 10h10', cls: 'text-ink/45' },
+};
+const tableNote =
+  lang === 'en'
+    ? `Data from each product’s public site (August 2026). If you represent ${competitor.name} and something changed, write to info@rayapp.io and we’ll fix it.`
+    : `Datos de los sitios públicos de cada producto (agosto 2026). Si representas a ${competitor.name} y algo cambió, escríbenos a info@rayapp.io y lo corregimos.`;
+
+// JSON-LD: FAQPage con las mismas preguntas visibles de la página.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: dict.faq.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription} schema={schema}>
+  <Header lang={lang} />
+
+  <PageHero lang={lang} eyebrow={dict.eyebrow} title={dict.title} lead={dict.lead} />
+
+  <!-- Veredicto rápido -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto max-w-6xl px-5 py-20">
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="rounded-2xl border border-line p-7">
+          <h2 class="font-serif text-2xl font-black text-ink">{dict.verdictThem.title}</h2>
+          <p class="mt-3 text-salvia">{dict.verdictThem.body}</p>
+        </div>
+        <div class="rounded-2xl border border-pine/30 bg-mint/[0.07] p-7">
+          <h2 class="font-serif text-2xl font-black text-ink">{dict.verdictSara.title}</h2>
+          <p class="mt-3 text-salvia">{dict.verdictSara.body}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tabla cara a cara -->
+  <section class="border-t border-line">
+    <div class="reveal mx-auto max-w-4xl px-5 py-20">
+      <div class="overflow-x-auto rounded-2xl border border-line">
+        <table class="w-full min-w-[560px] border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-line bg-mint/[0.07] text-left">
+              <th class="px-4 py-3"></th>
+              <th class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">
+                Sara AI
+                <span class="mt-0.5 block text-xs font-normal text-salvia">holasara.ai</span>
+              </th>
+              <th class="whitespace-nowrap px-4 py-3 font-semibold text-ink">
+                {competitor.name}
+                <span class="mt-0.5 block text-xs font-normal text-salvia">{competitor.home}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-line">
+            {
+              dict.rows.map((row, r) => (
+                <tr class={r % 2 ? 'bg-mint/[0.03]' : ''}>
+                  <td class="max-w-[240px] px-4 py-3 font-medium text-ink">{row.label}</td>
+                  {[row.sara, row.them].map((c) => (
+                    <td class="px-4 py-3 align-top">
+                      {c.v === 'text' ? (
+                        <span class="text-ink">{c.note}</span>
+                      ) : (
+                        <>
+                          <svg class={`h-5 w-5 ${icon[c.v].cls}`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                            <path d={icon[c.v].d} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                          <span class="sr-only">{legend[c.v]}</span>
+                          {c.v !== 'partial' && c.note && <span class="mt-1 block text-xs font-normal text-salvia">{c.note}</span>}
+                        </>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-salvia">
+        {(['yes', 'partial', 'no'] as const).map((k) => (
+          <span class="inline-flex items-center gap-1.5">
+            <svg class={`h-4 w-4 ${icon[k].cls}`} viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d={icon[k].d} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {legend[k]}
+          </span>
+        ))}
+      </p>
+      <p class="mt-3 text-sm text-salvia">{tableNote}</p>
+      <p class="mt-6 text-center">
+        <a href={L('/mejores-asistentes-ia-clinicas')} class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">
+          {dict.compareAllCta}
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <FeatureFaq lang={lang} items={dict.faq} />
+
+  <CtaBand lang={lang} />
+  <Footer lang={lang} />
+</Layout>
