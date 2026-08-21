@@ -202,6 +202,11 @@ const pickLink = (l: RawLink, lang: Locale): FeatureLink => ({
 export const getProductGroups = (lang: Locale): FeatureGroup[] =>
   productGroupsRaw.map((g) => ({ label: g.label[lang], items: g.items.map((i) => pickLink(i, lang)) }));
 
+/** Lista plana de todas las funcionalidades (los grupos de producto sin agrupar),
+ * en el orden del mega menú. La usa el footer para su columna "Funcionalidades". */
+export const getProductLinks = (lang: Locale): FeatureLink[] =>
+  productGroupsRaw.flatMap((g) => g.items.map((i) => pickLink(i, lang)));
+
 export const getIndustryLinks = (lang: Locale): FeatureLink[] => industryLinksRaw.map((l) => pickLink(l, lang));
 export const getSizeLinks = (lang: Locale): FeatureLink[] => sizeLinksRaw.map((l) => pickLink(l, lang));
 export const getTopLinks = (lang: Locale): FeatureLink[] => topLinksRaw.map((l) => pickLink(l, lang));
