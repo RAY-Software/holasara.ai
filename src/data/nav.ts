@@ -44,6 +44,11 @@ const productGroupsRaw: RawGroup[] = [
         desc: { es: 'Responde donde te escriben, siempre.', en: 'Replies wherever they message you, always.' },
       },
       {
+        href: '/llamadas',
+        name: { es: 'Atiende el teléfono', en: 'Answers the phone' },
+        desc: { es: 'Contesta las llamadas por voz, 24/7.', en: 'Picks up voice calls, 24/7.' },
+      },
+      {
         href: '/operador',
         name: { es: 'Modo operador', en: 'Operator mode' },
         desc: { es: 'Tu equipo le pide cosas por WhatsApp.', en: 'Your team asks her for things over WhatsApp.' },
