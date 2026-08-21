@@ -10,7 +10,7 @@ interface Props {
   lang?: Locale;
 }
 const { lang = defaultLocale, tone = 'paper' } = Astro.props;
-const { label = lang === 'en' ? 'Clinics already working with Sara' : 'Clínicas que ya trabajan con Sara' } = Astro.props;
+const { label = lang === 'en' ? 'Businesses already working with Sara' : 'Negocios que ya trabajan con Sara' } = Astro.props;
 
 type Client = { name: string; tag: string; img: string; alt: string };
 
