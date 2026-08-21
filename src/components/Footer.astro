@@ -1,7 +1,7 @@
 ---
 import Wordmark from './Wordmark.astro';
 import { whatsappLink, whatsappText } from '../lib/whatsapp';
-import { getIndustryLinks, getSizeLinks } from '../data/nav';
+import { getProductLinks, getIndustryLinks, getSizeLinks } from '../data/nav';
 import { defaultLocale, localePath, type Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
@@ -10,6 +10,7 @@ interface Props {
 }
 const { lang = defaultLocale } = Astro.props;
 const t = useTranslations(lang);
+const productLinks = getProductLinks(lang);
 const industryLinks = getIndustryLinks(lang);
 const sizeLinks = getSizeLinks(lang);
 const L = (p: string) => localePath(p, lang);
@@ -31,7 +32,19 @@ const year = new Date().getFullYear();
           {t('footer.talkToSara')}
         </a>
       </div>
-      <div class="grid grid-cols-2 gap-10 text-sm text-cream/70 sm:grid-cols-3">
+      <div class="grid grid-cols-2 gap-10 text-sm text-cream/70 sm:grid-cols-4">
+        <nav aria-label={t('footer.features')}>
+          <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">{t('footer.features')}</p>
+          <ul class="flex flex-col gap-2.5">
+            {
+              productLinks.map((it) => (
+                <li>
+                  <a href={L(it.href)} class="transition-colors hover:text-cream">{it.name}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
         <nav aria-label={t('footer.business')}>
           <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-cream/45">{t('footer.business')}</p>
           <ul class="flex flex-col gap-2.5">

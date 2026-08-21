@@ -29,6 +29,7 @@ export const ui = {
     // Footer
     'footer.tagline': 'La recepción que nunca cierra.',
     'footer.talkToSara': 'Habla con Sara',
+    'footer.features': 'Funcionalidades',
     'footer.business': 'Negocios',
     'footer.bySize': 'Por tamaño',
     'footer.company': 'Sara',
@@ -72,6 +73,7 @@ export const ui = {
     // Footer
     'footer.tagline': 'The front desk that never closes.',
     'footer.talkToSara': 'Talk to Sara',
+    'footer.features': 'Features',
     'footer.business': 'Businesses',
     'footer.bySize': 'By size',
     'footer.company': 'Sara',
