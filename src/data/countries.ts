@@ -34,8 +34,8 @@ export const countries: Country[] = [
     name: { es: 'México', en: 'Mexico' },
     copy: {
       es: {
-        metaTitle: 'Sara AI en México: la secretaria con IA para clínicas',
-        metaDescription: `Sara atiende el WhatsApp e Instagram de clínicas en México las 24 horas: responde precios, agenda en tu Google Calendar y cobra el anticipo en pesos. Desde ${PRICE_MX.display} ${PRICE_UNIT}.`,
+        metaTitle: 'Sara AI en México: la recepcionista con IA para clínicas, médicos y wellness',
+        metaDescription: `Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en México las 24 horas: responde precios, agenda en tu Google Calendar y cobra el anticipo en pesos. Desde ${PRICE_MX.display} ${PRICE_UNIT}.`,
         eyebrow: 'Sara AI en México',
         title: 'La recepción que contesta a las 11 de la noche, también en&nbsp;México.',
         lead: 'Las clínicas mexicanas reciben la consulta por WhatsApp o Instagram cuando la recepción ya se fue. Sara contesta al momento, informa precios en pesos, agenda en tu Google Calendar y cobra el anticipo para que la cita quede en firme.',
@@ -60,8 +60,8 @@ export const countries: Country[] = [
         ],
       },
       en: {
-        metaTitle: 'Sara AI in Mexico: the AI receptionist for clinics',
-        metaDescription: `Sara answers WhatsApp and Instagram for clinics in Mexico around the clock: quotes prices, books into your Google Calendar and collects the deposit in pesos. From ${PRICE_MX.display} per location / month.`,
+        metaTitle: 'Sara AI in Mexico: the AI receptionist for clinics, doctors & wellness',
+        metaDescription: `Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Mexico around the clock: quotes prices, books into your Google Calendar and collects the deposit in pesos. From ${PRICE_MX.display} per location / month.`,
         eyebrow: 'Sara AI in Mexico',
         title: 'The front desk that answers at 11 pm, in Mexico&nbsp;too.',
         lead: 'Mexican clinics get the enquiry on WhatsApp or Instagram after the front desk has gone home. Sara answers on the spot, quotes prices in pesos, books into your Google Calendar and collects the deposit so the appointment is locked in.',
@@ -93,7 +93,7 @@ export const countries: Country[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI en Colombia: IA que responde WhatsApp y confirma citas',
-        metaDescription: 'Sara atiende el WhatsApp e Instagram de clínicas en Colombia las 24 horas: responde, agenda en tu Google Calendar, cobra el anticipo y baja las ausencias con confirmación automática.',
+        metaDescription: 'Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en Colombia las 24 horas: responde, agenda en tu Google Calendar, cobra el anticipo y baja las ausencias con confirmación automática.',
         eyebrow: 'Sara AI en Colombia',
         title: 'Menos ausencias, agenda llena, sin sumar&nbsp;recepción.',
         lead: 'En Colombia la consulta entra por WhatsApp a cualquier hora, y la cita sin confirmar se convierte en silla vacía. Sara responde al momento, agenda en tu Google Calendar, cobra el anticipo y confirma cada cita sin que nadie levante el teléfono.',
@@ -119,7 +119,7 @@ export const countries: Country[] = [
       },
       en: {
         metaTitle: 'Sara AI in Colombia: AI that answers WhatsApp and confirms appointments',
-        metaDescription: 'Sara answers WhatsApp and Instagram for clinics in Colombia around the clock: replies, books into your Google Calendar, collects the deposit and lowers no-shows with automatic confirmation.',
+        metaDescription: 'Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Colombia around the clock: replies, books into your Google Calendar, collects the deposit and lowers no-shows with automatic confirmation.',
         eyebrow: 'Sara AI in Colombia',
         title: 'Fewer no-shows, a full calendar, no extra&nbsp;staff.',
         lead: 'In Colombia the enquiry arrives on WhatsApp at any hour, and an unconfirmed appointment becomes an empty chair. Sara answers on the spot, books into your Google Calendar, collects the deposit and confirms every appointment without anyone picking up the phone.',
@@ -150,7 +150,7 @@ export const countries: Country[] = [
     name: { es: 'Uruguay', en: 'Uruguay' },
     copy: {
       es: {
-        metaTitle: 'Sara AI en Uruguay: la IA que ya atiende clínicas uruguayas',
+        metaTitle: 'Sara AI en Uruguay: la IA que ya atiende clínicas, médicos y wellness',
         metaDescription: 'Sara ya trabaja en Uruguay: en ViaLaser agenda 7 de cada 10 citas por WhatsApp, Instagram y la web. Atiende con voseo, agenda en tu Google Calendar y cobra la seña.',
         eyebrow: 'Sara AI en Uruguay',
         title: 'En Uruguay, Sara ya está&nbsp;trabajando.',
@@ -180,7 +180,7 @@ export const countries: Country[] = [
         ],
       },
       en: {
-        metaTitle: 'Sara AI in Uruguay: the AI already working in Uruguayan clinics',
+        metaTitle: 'Sara AI in Uruguay: the AI already working with clinics, doctors and wellness',
         metaDescription: 'Sara already works in Uruguay: at ViaLaser it books 7 out of 10 appointments across WhatsApp, Instagram and the web. It writes in local voseo Spanish, books into your Google Calendar and collects the deposit.',
         eyebrow: 'Sara AI in Uruguay',
         title: 'In Uruguay, Sara is already on the&nbsp;job.',

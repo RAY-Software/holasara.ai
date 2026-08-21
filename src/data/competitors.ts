@@ -43,11 +43,11 @@ export const competitors: Competitor[] = [
     home: 'cloudia.com.br',
     copy: {
       es: {
-        metaTitle: 'Sara AI vs Cloudia: ¿cuál conviene para tu clínica? (2026)',
-        metaDescription: 'Comparamos Sara AI y Cloudia para clínicas: IA conversacional real vs flujos con IA como módulo aparte, cobro de la seña en el chat, agenda y precios públicos a agosto 2026.',
+        metaTitle: 'Sara AI vs Cloudia: ¿cuál conviene para tu negocio? (2026)',
+        metaDescription: 'Comparamos Sara AI y Cloudia para clínicas, médicos y wellness: IA conversacional real vs flujos con IA como módulo aparte, cobro de la seña en el chat, agenda y precios públicos a agosto 2026.',
         eyebrow: 'Sara AI vs Cloudia',
         title: 'Sara AI vs Cloudia, sin&nbsp;vueltas.',
-        lead: 'Cloudia es la secretaria virtual más instalada de Brasil, con 1.500+ clínicas. Sara es el asistente con IA conversacional para clínicas de habla hispana. Acá va la comparación honesta, con datos públicos de agosto 2026.',
+        lead: 'Cloudia es la secretaria virtual más instalada de Brasil, con 1.500+ clínicas. Sara es el asistente con IA conversacional para clínicas, médicos y wellness de habla hispana. Acá va la comparación honesta, con datos públicos de agosto 2026.',
         verdictThem: {
           title: 'Elige Cloudia si...',
           body: 'tu clínica está en Brasil o Portugal y ya usas uno de los 40+ software de gestión que integra. Es la opción más barata del mercado y tiene años de recorrido con casos grandes como OdontoCompany.',
@@ -74,11 +74,11 @@ export const competitors: Competitor[] = [
         compareAllCta: 'Ver la comparativa completa de asistentes con IA',
       },
       en: {
-        metaTitle: 'Sara AI vs Cloudia: which one fits your clinic? (2026)',
-        metaDescription: 'We compare Sara AI and Cloudia for clinics: real conversational AI vs flows with AI as a paid add-on, in-chat deposit collection, scheduling and public pricing as of August 2026.',
+        metaTitle: 'Sara AI vs Cloudia: which one fits your business? (2026)',
+        metaDescription: 'We compare Sara AI and Cloudia for clinics, doctors and wellness: real conversational AI vs flows with AI as a paid add-on, in-chat deposit collection, scheduling and public pricing as of August 2026.',
         eyebrow: 'Sara AI vs Cloudia',
         title: 'Sara AI vs Cloudia, straight&nbsp;up.',
-        lead: 'Cloudia is Brazil’s most installed virtual receptionist, with 1,500+ clinics. Sara is the conversational AI assistant for Spanish-speaking clinics. Here’s the honest comparison, with public data from August 2026.',
+        lead: 'Cloudia is Brazil’s most installed virtual receptionist, with 1,500+ clinics. Sara is the conversational AI assistant for Spanish-speaking clinics, doctors and wellness. Here’s the honest comparison, with public data from August 2026.',
         verdictThem: {
           title: 'Pick Cloudia if...',
           body: 'your clinic is in Brazil or Portugal and you already use one of the 40+ management systems it integrates. It’s the cheapest option on the market, with years of track record and large cases like OdontoCompany.',
@@ -112,8 +112,8 @@ export const competitors: Competitor[] = [
     home: 'doctocliq.com',
     copy: {
       es: {
-        metaTitle: 'Sara AI vs Soyla de Doctocliq: ¿cuál conviene para tu clínica? (2026)',
-        metaDescription: 'Comparamos Sara AI y Soyla (Doctocliq) para clínicas: las dos tienen IA real por WhatsApp, pero difieren en Instagram, en el cobro de la seña y en si te obligan a migrar la agenda.',
+        metaTitle: 'Sara AI vs Soyla de Doctocliq: ¿cuál conviene para tu negocio? (2026)',
+        metaDescription: 'Comparamos Sara AI y Soyla (Doctocliq) para clínicas, médicos y wellness: las dos tienen IA real por WhatsApp, pero difieren en Instagram, en el cobro de la seña y en si te obligan a migrar la agenda.',
         eyebrow: 'Sara AI vs Soyla (Doctocliq)',
         title: 'Sara AI vs Soyla, sin&nbsp;vueltas.',
         lead: 'Soyla es el asistente con IA de Doctocliq, la suite clínica peruana. Las dos tienen IA conversacional real por WhatsApp; la diferencia está en todo lo demás. Datos públicos de agosto 2026.',
@@ -143,8 +143,8 @@ export const competitors: Competitor[] = [
         compareAllCta: 'Ver la comparativa completa de asistentes con IA',
       },
       en: {
-        metaTitle: 'Sara AI vs Soyla by Doctocliq: which one fits your clinic? (2026)',
-        metaDescription: 'We compare Sara AI and Soyla (Doctocliq) for clinics: both have real WhatsApp AI, but they differ on Instagram, deposit collection and whether you must migrate your calendar.',
+        metaTitle: 'Sara AI vs Soyla by Doctocliq: which one fits your business? (2026)',
+        metaDescription: 'We compare Sara AI and Soyla (Doctocliq) for clinics, doctors and wellness: both have real WhatsApp AI, but they differ on Instagram, deposit collection and whether you must migrate your calendar.',
         eyebrow: 'Sara AI vs Soyla (Doctocliq)',
         title: 'Sara AI vs Soyla, straight&nbsp;up.',
         lead: 'Soyla is the AI assistant of Doctocliq, the Peruvian clinical suite. Both have real conversational AI on WhatsApp; the difference is everything else. Public data from August 2026.',
@@ -181,11 +181,11 @@ export const competitors: Competitor[] = [
     home: 'getkura.ai',
     copy: {
       es: {
-        metaTitle: 'Sara AI vs Kura: ¿cuál conviene para tu clínica? (2026)',
-        metaDescription: 'Comparamos Sara AI y Kura para clínicas: las dos tienen IA real por WhatsApp, pero difieren en Instagram, cobro de la seña, agenda y mercado (LATAM vs España). Datos de agosto 2026.',
+        metaTitle: 'Sara AI vs Kura: ¿cuál conviene para tu negocio? (2026)',
+        metaDescription: 'Comparamos Sara AI y Kura para clínicas, médicos y wellness: las dos tienen IA real por WhatsApp, pero difieren en Instagram, cobro de la seña, agenda y mercado (LATAM vs España). Datos de agosto 2026.',
         eyebrow: 'Sara AI vs Kura',
         title: 'Sara AI vs Kura, sin&nbsp;vueltas.',
-        lead: 'Kura es un agente IA español para clínicas, fuerte en calificación de leads de anuncios y recuperación de presupuestos. Sara es el asistente para clínicas de LATAM que además cobra y hace el marketing. Datos públicos de agosto 2026.',
+        lead: 'Kura es un agente IA español para clínicas, fuerte en calificación de leads de anuncios y recuperación de presupuestos. Sara es el asistente para clínicas, médicos y wellness de LATAM que además cobra y hace el marketing. Datos públicos de agosto 2026.',
         verdictThem: {
           title: 'Elige Kura si...',
           body: 'tu clínica está en España, te importa el compliance europeo (RGPD, datos en la UE) y tu canal es solo WhatsApp. Hace muy bien la calificación de leads de Meta y Google Ads y el follow-up de presupuestos, con encuestas NPS incluidas.',
@@ -213,11 +213,11 @@ export const competitors: Competitor[] = [
         compareAllCta: 'Ver la comparativa completa de asistentes con IA',
       },
       en: {
-        metaTitle: 'Sara AI vs Kura: which one fits your clinic? (2026)',
-        metaDescription: 'We compare Sara AI and Kura for clinics: both have real WhatsApp AI, but they differ on Instagram, deposit collection, scheduling and market (LATAM vs Spain). Data from August 2026.',
+        metaTitle: 'Sara AI vs Kura: which one fits your business? (2026)',
+        metaDescription: 'We compare Sara AI and Kura for clinics, doctors and wellness: both have real WhatsApp AI, but they differ on Instagram, deposit collection, scheduling and market (LATAM vs Spain). Data from August 2026.',
         eyebrow: 'Sara AI vs Kura',
         title: 'Sara AI vs Kura, straight&nbsp;up.',
-        lead: 'Kura is a Spanish AI agent for clinics, strong at qualifying ad leads and recovering estimates. Sara is the assistant for LATAM clinics that also collects payments and does the marketing. Public data from August 2026.',
+        lead: 'Kura is a Spanish AI agent for clinics, strong at qualifying ad leads and recovering estimates. Sara is the assistant for LATAM clinics, doctors and wellness that also collects payments and does the marketing. Public data from August 2026.',
         verdictThem: {
           title: 'Pick Kura if...',
           body: 'your clinic is in Spain, EU compliance matters to you (GDPR, data in the EU) and WhatsApp is your only channel. It does Meta and Google Ads lead qualification and estimate follow-up very well, with NPS surveys included.',
@@ -252,7 +252,7 @@ export const competitors: Competitor[] = [
     home: 'agendapro.com',
     copy: {
       es: {
-        metaTitle: 'Sara AI vs AgendaPro: ¿cuál necesita tu clínica? (2026)',
+        metaTitle: 'Sara AI vs AgendaPro: ¿cuál necesita tu negocio? (2026)',
         metaDescription: 'AgendaPro es un software de agenda; Sara es un asistente con IA que conversa, agenda y cobra. Comparamos qué hace cada uno y cuándo conviene cada opción, con datos de agosto 2026.',
         eyebrow: 'Sara AI vs AgendaPro',
         title: 'Sara AI vs AgendaPro: no compiten por lo&nbsp;mismo.',
@@ -283,7 +283,7 @@ export const competitors: Competitor[] = [
         compareAllCta: 'Ver la comparativa completa de asistentes con IA',
       },
       en: {
-        metaTitle: 'Sara AI vs AgendaPro: which one does your clinic need? (2026)',
+        metaTitle: 'Sara AI vs AgendaPro: which one does your business need? (2026)',
         metaDescription: 'AgendaPro is scheduling software; Sara is an AI assistant that converses, books and collects. We compare what each one does and when each option makes sense, with data from August 2026.',
         eyebrow: 'Sara AI vs AgendaPro',
         title: 'Sara AI vs AgendaPro: not competing for the same&nbsp;job.',
@@ -321,7 +321,7 @@ export const competitors: Competitor[] = [
     home: 'glossgenius.com',
     copy: {
       es: {
-        metaTitle: 'Sara AI vs GlossGenius: ¿cuál conviene para tu clínica? (2026)',
+        metaTitle: 'Sara AI vs GlossGenius: ¿cuál conviene para tu negocio? (2026)',
         metaDescription: 'Comparamos Sara AI y GlossGenius (Reception) para clínicas, médicos y wellness: Sara atiende todos los canales (WhatsApp, Instagram, SMS y teléfono), tu Google Calendar sin migrar, mercado LATAM vs EE.UU. Datos de agosto 2026.',
         eyebrow: 'Sara AI vs GlossGenius',
         title: 'Sara AI vs GlossGenius, sin&nbsp;vueltas.',
@@ -356,7 +356,7 @@ export const competitors: Competitor[] = [
         compareAllCta: 'Ver la comparativa completa de asistentes con IA',
       },
       en: {
-        metaTitle: 'Sara AI vs GlossGenius: which one fits your clinic? (2026)',
+        metaTitle: 'Sara AI vs GlossGenius: which one fits your business? (2026)',
         metaDescription: 'We compare Sara AI and GlossGenius (Reception) for clinics, doctors and wellness: Sara covers every channel (WhatsApp, Instagram, SMS and the phone), your Google Calendar with no migration, LATAM vs US market. Data from August 2026.',
         eyebrow: 'Sara AI vs GlossGenius',
         title: 'Sara AI vs GlossGenius, straight&nbsp;up.',
