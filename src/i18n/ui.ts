@@ -9,7 +9,7 @@ export const ui = {
     // Layout / meta
     'meta.title': 'Sara · La recepción que nunca cierra',
     'meta.description':
-      'Sara es la secretaria con IA de tu clínica: atiende WhatsApp e Instagram las 24 horas, agenda, cobra el anticipo y baja las ausencias. Más pacientes, más facturación, todo automático.',
+      'Sara es la recepcionista con IA para clínicas, médicos y wellness: responde, agenda, cobra el anticipo y baja las ausencias por WhatsApp, Instagram, SMS y teléfono. Más pacientes, más facturación, todo automático.',
 
     // Header
     'nav.product': 'Producto',
@@ -53,7 +53,7 @@ export const ui = {
     // Layout / meta
     'meta.title': 'Sara · The front desk that never closes',
     'meta.description':
-      "Sara is your clinic's AI receptionist: she handles WhatsApp and Instagram 24/7, books appointments, collects the deposit and cuts no-shows. More patients, more revenue, all on autopilot.",
+      'Sara is the AI receptionist for clinics, doctors and wellness: she answers, books, collects the deposit and cuts no-shows on WhatsApp, Instagram, SMS and the phone. More patients, more revenue, all on autopilot.',
 
     // Header
     'nav.product': 'Product',
