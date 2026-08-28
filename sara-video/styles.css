@@ -1,0 +1,59 @@
+/* ===== Sara — video design system ===== */
+@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-900.woff2') format('woff2');font-weight:900;font-display:block}
+@font-face{font-family:'Archivo';src:url('assets/fonts/archivo-700.woff2') format('woff2');font-weight:700;font-display:block}
+@font-face{font-family:'Inter';src:url('assets/fonts/inter-400.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Inter';src:url('assets/fonts/inter-500.woff2') format('woff2');font-weight:500;font-display:block}
+@font-face{font-family:'Inter';src:url('assets/fonts/inter-600.woff2') format('woff2');font-weight:600;font-display:block}
+@font-face{font-family:'Inter';src:url('assets/fonts/inter-700.woff2') format('woff2');font-weight:700;font-display:block}
+
+:root{
+  --ink:#0A0F0D;        /* tinta */
+  --ink-2:#131B17;      /* panel */
+  --cream:#EDEFEA;      /* crema */
+  --paper:#F7F8F5;      /* fondo claro cálido */
+  --mint:#3FE08A;       /* verde cursor / fills */
+  --mint-600:#17B877;   /* botones */
+  --pine:#0C6B47;       /* acento texto sobre claro (accesible) */
+  --muted:#5B6660;      /* texto secundario */
+  --muted-2:#8A938D;
+  --line:#E4E7E2;       /* hairline */
+  --wa-bg:#EAE6DD;      /* fondo whatsapp */
+  --wa-in:#FFFFFF;      /* burbuja entrante */
+  --wa-out:#DEF6E4;     /* burbuja Sara (menta) */
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#fff}
+#stage{position:relative;width:1920px;height:1080px;background:var(--paper);
+  font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;color:var(--ink)}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity}
+.mono-hidden{opacity:0}
+
+/* type */
+.display{font-family:'Archivo',sans-serif;font-weight:900;letter-spacing:-.03em;word-spacing:.06em;line-height:.98;color:var(--ink)}
+.kicker{font-family:'Inter';font-weight:700;letter-spacing:.34em;font-size:26px;color:var(--pine);text-transform:uppercase}
+.lead{font-family:'Inter';font-weight:500;color:var(--muted);font-size:34px;letter-spacing:-.01em}
+
+/* wordmark (Sara) */
+.wordmark{font-family:'Archivo';font-weight:900;letter-spacing:-.06em;line-height:1;
+  display:inline-flex;align-items:center;text-transform:lowercase}
+.wordmark .caret{display:inline-block;width:.30em;height:.74em;margin-left:.10em;
+  background:var(--mint);border-radius:2px;transform:translateY(.05em)}
+.on-ink{color:var(--cream)}
+.on-light{color:var(--ink)}
+
+/* bullets */
+.blist{list-style:none;display:flex;flex-direction:column;gap:34px}
+.blist li{display:flex;align-items:center;gap:22px;font-family:'Inter';font-weight:600;
+  font-size:44px;color:var(--ink);letter-spacing:-.01em}
+.blist li .dot{width:16px;height:16px;border-radius:50%;background:var(--mint-600);flex:0 0 auto}
+
+/* device shells */
+.phone{position:absolute;width:430px;background:#fff;border-radius:52px;
+  box-shadow:0 40px 90px -30px rgba(10,15,13,.35), 0 0 0 12px #EEF0EC, 0 0 0 13px #DfE3dd;overflow:hidden}
+.phone .screen{position:relative;background:#fff;border-radius:40px;overflow:hidden}
+.win{position:absolute;background:#fff;border-radius:22px;
+  box-shadow:0 40px 90px -34px rgba(10,15,13,.38);overflow:hidden;border:1px solid var(--line)}
+
+/* helpers */
+.center{position:absolute;left:50%;transform:translateX(-50%);text-align:center}
+.soft{color:var(--muted)}

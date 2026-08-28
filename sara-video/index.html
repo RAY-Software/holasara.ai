@@ -1,0 +1,467 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="styles.css"></head>
+<body><div id="stage"></div>
+<script>
+const stage = document.getElementById('stage');
+const FPS = 30;
+// ---- math / easing ----
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const inv=(t,a,b)=>b<=a?(t>=b?1:0):clamp((t-a)/(b-a),0,1);
+const eOut=x=>1-Math.pow(1-x,3);
+const eOutQ=x=>1-Math.pow(1-x,4);
+const eInOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const mix=(a,b,p)=>a+(b-a)*p;
+const blink=t=>(Math.floor(t/0.55)%2===0)?1:0;
+// ---- dom helper ----
+function E(tag, cls, css, html){const e=document.createElement(tag); if(cls)e.className=cls;
+  if(css)Object.assign(e.style,css); if(html!=null)e.innerHTML=html; return e;}
+function rise(el,p,dy=44){el.style.opacity=p; el.style.transform=`translateY(${(1-eOut(clamp(p,0,1)))*dy}px)`;}
+function typeText(el,full,p){const n=Math.round(clamp(p,0,1)*full.length); el.textContent=full.slice(0,n);}
+
+const scenes=[];
+function scene(start,end,build){
+  const el=E('div','scene'); stage.appendChild(el);
+  const api=build(el); scenes.push({start,end,el,tick:api.tick||(()=>{}),bg:api.bg});
+}
+
+/* ============ SCENE 1 — INTRO (ink) ============ */
+scene(0.0,2.0,(el)=>{
+  el.style.background='var(--ink)';
+  const wrap=E('div','center',{top:'50%',transform:'translate(-50%,-50%)',width:'100%'});
+  const wm=E('div','wordmark on-ink',{fontSize:'190px',justifyContent:'center'});
+  const txt=E('span'); const caret=E('span','caret',{height:'.72em'});
+  wm.appendChild(txt); wm.appendChild(caret); wrap.appendChild(wm);
+  const tag=E('div','lead',{marginTop:'40px',color:'var(--cream)',fontSize:'40px',textAlign:'center'},'la recepción que nunca cierra');
+  const url=E('div',null,{marginTop:'44px',textAlign:'center',color:'var(--mint)',fontFamily:'Inter',fontWeight:'600',fontSize:'34px'},'holasara.ai');
+  wrap.appendChild(tag); wrap.appendChild(url); el.appendChild(wrap);
+  txt.textContent='sara';           // formado desde el frame 0 → portada tinta
+  return {tick:(lt,t)=>{
+    caret.style.opacity=blink(t);
+  }};
+});
+
+/* ============ SCENE 2 — "Tu clínica ya cerró" (paper) ============ */
+scene(2.0,9.4,(el)=>{
+  el.style.background='var(--paper)';
+  const clock=E('div','center',{top:'150px',fontFamily:'Inter',fontWeight:'700',fontSize:'92px',color:'var(--ink)',opacity:0},
+    '11:41<span style="font-size:40px;font-weight:600;color:var(--muted-2);margin-left:14px">PM</span>');
+  el.appendChild(clock);
+  const feed=E('div',null,{position:'absolute',left:'50%',transform:'translateX(-50%)',top:'340px',width:'760px'});
+  el.appendChild(feed);
+  function inBubble(txt,time){const b=E('div',null,{background:'#fff',border:'1px solid var(--line)',
+    borderRadius:'6px 20px 20px 20px',padding:'22px 26px 30px',maxWidth:'560px',position:'relative',
+    boxShadow:'0 10px 30px -18px rgba(10,15,13,.25)',fontSize:'30px',color:'var(--ink)',lineHeight:'1.35',opacity:0},txt);
+    b.appendChild(E('span',null,{position:'absolute',right:'20px',bottom:'8px',fontSize:'19px',color:'var(--muted-2)'},time));
+    return b;}
+  const b1=inBubble('Hola, ¿cuánto cuesta un tratamiento de ácido hialurónico?','11:41 PM');
+  b1.style.marginBottom='22px';
+  const b2=inBubble('¿Hola?','11:52 PM'); b2.style.width='190px';
+  feed.appendChild(b1); feed.appendChild(b2);
+  const closed=E('div','display center',{top:'700px',fontSize:'62px',lineHeight:'1.12',width:'1500px'},
+    'Tu clínica ya cerró…<br><span style="font-size:.74em;color:var(--muted);font-family:Inter;font-weight:600;letter-spacing:-.01em">y no le contestaste al paciente.</span>');
+  el.appendChild(closed);
+  return {tick:(lt)=>{
+    clock.style.opacity=eOut(inv(lt,0.1,0.6));
+    b1.style.opacity=eOut(inv(lt,1.1,1.5)); rise(b1,inv(lt,1.1,1.6),24);
+    b2.style.opacity=eOut(inv(lt,3.2,3.6)); rise(b2,inv(lt,3.2,3.7),24);
+    const cp=inv(lt,4.9,5.5); closed.style.opacity=eOut(cp);
+    closed.style.transform=`translateX(-50%) translateY(${(1-eOut(cp))*26}px)`;
+  }};
+});
+
+/* ============ SCENE 3 — "Conoce a Sara." (paper) ============ */
+scene(9.4,12.2,(el)=>{
+  el.style.background='var(--paper)';
+  const wm=E('div','wordmark on-light center',{top:'250px',fontSize:'44px'});
+  wm.appendChild(E('span',null,null,'sara')); wm.appendChild(E('span','caret',{height:'.72em',background:'var(--mint-600)'}));
+  el.appendChild(wm);
+  const av=E('div','center',{top:'330px',width:'220px',height:'220px',borderRadius:'50%',overflow:'hidden',
+    boxShadow:'0 24px 60px -24px rgba(10,15,13,.45), 0 0 0 8px #fff',opacity:0,background:'#ddd'});
+  av.appendChild(E('img',null,{width:'118%',height:'118%',objectFit:'cover',marginLeft:'-9%',marginTop:'-9%'}));
+  av.querySelector('img').src='assets/img/sara-face.png';
+  el.appendChild(av);
+  const h=E('div','display center',{top:'610px',fontSize:'120px',opacity:0},'Conoce a Sara.');
+  el.appendChild(h);
+  const sub=E('div','lead center',{top:'790px',opacity:0,fontSize:'36px'},'Atiende, agenda y cobra. A cualquier hora.');
+  el.appendChild(sub);
+  return {tick:(lt)=>{
+    wm.style.opacity=eOut(inv(lt,0.2,0.6));
+    const ap=inv(lt,0.3,0.9); av.style.opacity=eOut(ap);
+    av.style.transform=`translateX(-50%) scale(${mix(.7,1,eOutQ(ap))})`;
+    const hp=inv(lt,0.7,1.2); h.style.opacity=eOut(hp);
+    h.style.transform=`translateX(-50%) translateY(${(1-eOut(hp))*30}px)`;
+    sub.style.opacity=eOut(inv(lt,1.2,1.6));
+  }};
+});
+
+/* ============ SCENE 4 — WhatsApp (paper) ============ */
+scene(12.2,19.4,(el)=>{
+  el.style.background='var(--paper)';
+  // left column
+  const L=E('div',null,{position:'absolute',left:'130px',top:'250px',width:'760px'});
+  const k=E('div','kicker',{opacity:0},'EN WHATSAPP');
+  const h=E('div','display',{fontSize:'104px',marginTop:'30px',opacity:0},'Sara responde<br>en segundos.');
+  const ul=E('ul','blist',{marginTop:'80px'});
+  const items=['Contesta la consulta','Propone el horario','Cobra el anticipo'].map(t=>{
+    const li=E('li',null,{opacity:0}); li.appendChild(E('span','dot')); li.appendChild(E('span',null,null,t)); ul.appendChild(li); return li;});
+  L.appendChild(k);L.appendChild(h);L.appendChild(ul); el.appendChild(L);
+  // phone
+  const ph=E('div','phone',{right:'150px',top:'70px',height:'940px'});
+  const scr=E('div','screen',{margin:'14px',height:'912px'});
+  scr.innerHTML=`
+   <div style="height:100%;display:flex;flex-direction:column;background:var(--wa-bg);font-family:Inter">
+    <div style="background:#fff;padding:16px 18px 14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #e9e9e4">
+      <div style="font-size:15px;color:#9aa">‹</div>
+      <div style="width:42px;height:42px;border-radius:50%;overflow:hidden;flex:0 0 auto"><img src="assets/img/sara-face.png" style="width:130%;height:130%;object-fit:cover;margin:-15% 0 0 -15%"></div>
+      <div style="flex:1"><div style="font-weight:700;font-size:19px;color:#111">Clínica Aurora</div><div style="font-size:13px;color:var(--mint-600)">en línea</div></div>
+      <div style="color:var(--mint-600);font-size:18px">📹 📞</div>
+    </div>
+    <div style="flex:1;overflow:hidden;padding:14px 14px;display:flex;flex-direction:column;gap:9px;font-size:16px;line-height:1.32">
+      ${waIn('Hola! ¿Hacen consulta previa para ácido hialurónico?','23:41')}
+      ${waOut('¡Hola! Sí. Valoración con la Dra. Ruiz, 30 min, US$ 45 que se descuenta del tratamiento 😊','23:41')}
+      ${waOut('Tengo <b>jueves 10:30, jueves 16:00</b> o <b>viernes 12:00</b>.','23:41')}
+      ${waIn('El jueves a las 16','23:42')}
+      ${waOut('Perfecto, te dejo el link:'+
+        '<div style="margin-top:8px;border-radius:12px;overflow:hidden;border:1px solid #d8ecdf">'+
+        '<div style="background:#635BFF;color:#fff;font-size:12px;font-weight:700;padding:6px 10px">stripe</div>'+
+        '<div style="background:#fff;padding:10px 12px"><div style="font-weight:700;color:#111">Consulta de valoración</div>'+
+        '<div style="font-weight:700;color:#111">US$ 45</div>'+
+        '<div style="font-size:12px;color:#8a938d;margin-top:4px">pay.holasara.ai/c/aurora-4821</div></div></div>','23:42')}
+      ${waNote('✓ Pago recibido · US$ 45')}
+      ${waOut('¡Listo, Camila! Cita <b>confirmada</b>: jueves 31/7, 16:00 con la Dra. Ruiz 📍','23:43')}
+      <div style="align-self:center;background:#fff;border-radius:8px;padding:4px 12px;font-size:12px;color:#8a938d;font-weight:600">JUEVES 31/7</div>
+      ${waOut('¡Buen día, Camila! Te esperamos hoy a las <b>16:00</b>.','09:00')}
+      ${waOut('⭐⭐⭐⭐⭐<br>Gracias por venir 💚 ¿Nos dejas una reseña?<br><span style="color:var(--pine)">g.page/clinica-aurora</span>','18:40')}
+    </div>
+   </div>`;
+  ph.appendChild(scr); el.appendChild(ph);
+  return {tick:(lt)=>{
+    const sp=inv(lt,0.15,0.95); ph.style.opacity=1;
+    ph.style.transform=`translateX(${(1-eOutQ(sp))*520}px)`;
+    k.style.opacity=eOut(inv(lt,0.3,0.7));
+    const hp=inv(lt,0.45,1.0); h.style.opacity=eOut(hp); h.style.transform=`translateY(${(1-eOut(hp))*26}px)`;
+    const times=[1.6,3.0,4.4];
+    items.forEach((li,i)=>{const p=inv(lt,times[i],times[i]+0.5); li.style.opacity=eOut(p);
+      li.style.transform=`translateX(${(1-eOut(p))*-24}px)`;});
+  }};
+});
+function waIn(t,tm){return `<div style="align-self:flex-start;max-width:78%;background:var(--wa-in);border-radius:4px 14px 14px 14px;padding:9px 12px 16px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.06);color:#111">${t}<span style="position:absolute;right:10px;bottom:4px;font-size:11px;color:#9aa">${tm}</span></div>`;}
+function waOut(t,tm){return `<div style="align-self:flex-end;max-width:80%;background:var(--wa-out);border-radius:14px 4px 14px 14px;padding:9px 12px 16px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.06);color:#0d2018">${t}<span style="position:absolute;right:10px;bottom:4px;font-size:11px;color:#7a9">${tm} ✓✓</span></div>`;}
+function waNote(t){return `<div style="align-self:flex-end;max-width:80%;background:#EAF7EE;border:1px solid #cdeBd6;border-radius:12px;padding:8px 12px;font-weight:700;color:var(--pine);font-size:14px">${t}</div>`;}
+
+/* ============ SCENE 5 — "No solo responde. Ejecuta." (desktop) ============ */
+scene(19.4,25.0,(el)=>{
+  el.style.background='var(--paper)';
+  const L=E('div',null,{position:'absolute',left:'110px',top:'250px',width:'640px'});
+  const k=E('div','kicker',{opacity:0},'PARA TU EQUIPO');
+  const h=E('div','display',{fontSize:'88px',marginTop:'26px',opacity:0},'No solo responde.<br>Ejecuta.');
+  const chip=E('div',null,{marginTop:'70px',display:'inline-flex',alignItems:'center',gap:'12px',
+    border:'2px solid var(--mint-600)',borderRadius:'16px',padding:'18px 26px',fontFamily:'Inter',
+    fontWeight:'600',fontSize:'27px',color:'var(--ink)',background:'#fff',opacity:0});
+  chip.innerHTML='<span style="color:var(--mint-600)">›</span><span class="chiptxt"></span><span class="chipcar" style="display:inline-block;width:3px;height:30px;background:var(--mint-600)"></span>';
+  const checks=E('div',null,{marginTop:'40px',display:'flex',flexDirection:'column',gap:'22px'});
+  const mkck=(t)=>{const c=E('div',null,{display:'flex',alignItems:'center',gap:'14px',fontFamily:'Inter',
+    fontWeight:'600',fontSize:'26px',color:'var(--ink)',opacity:0},
+    '<span style="color:var(--mint-600);font-size:24px">✓</span>'+t);checks.appendChild(c);return c;};
+  const ck1=mkck('10 citas reprogramadas'), ck2=mkck('Cada paciente, avisado por WhatsApp');
+  L.append(k,h,chip,checks); el.appendChild(L);
+  // desktop window
+  const win=E('div','win',{right:'110px',top:'150px',width:'1000px',height:'760px',opacity:0,fontFamily:'Inter'});
+  const rows=[["09:00","Camila Ferrer","Valoración"],["09:45","Martín Ocampo","Ácido hialurónico"],
+    ["10:30","Lucía Bentancur","Toxina botulínica"],["11:15","Rocío Silveira","Peeling"],
+    ["14:00","Diego Arrieta","Mesoterapia"],["14:45","Paula Nogueira","Limpieza facial"],
+    ["15:30","Ana Cardoso","Valoración"],["16:15","Julián Ferrari","Ácido hialurónico"],
+    ["17:00","Sofía Márquez","Toxina botulínica"],["17:45","Ignacio Pereda","Valoración"]];
+  const rowsHtml=rows.map(r=>`<div style="display:flex;align-items:center;padding:11px 20px;border-bottom:1px solid #f0f2ee">
+    <div style="width:64px;font-weight:700;color:#111;font-size:16px">${r[0]}</div>
+    <div style="flex:1"><div style="font-weight:700;color:#111;font-size:16px">${r[1]}</div>
+    <div style="color:#8a938d;font-size:13px">${r[2]}</div></div>
+    <div style="background:#E7F6EC;color:var(--pine);font-weight:600;font-size:13px;padding:5px 12px;border-radius:20px">→ jue 31/7 · ${r[0]}</div></div>`).join('');
+  win.innerHTML=`
+   <div style="background:#F7F8F5;border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:14px">
+     <div style="display:flex;gap:7px"><i style="width:12px;height:12px;border-radius:50%;background:#e2e4df;display:block"></i><i style="width:12px;height:12px;border-radius:50%;background:#e2e4df;display:block"></i><i style="width:12px;height:12px;border-radius:50%;background:#e2e4df;display:block"></i></div>
+     <div style="display:flex;align-items:center;gap:8px;margin-left:6px">
+       <img src="assets/img/sara-mark.png" style="width:28px;height:28px;border-radius:8px">
+       <span style="font-weight:700;color:#111;font-size:16px">Sara</span><span style="color:#b6bcb5">· Agenda · Semana del 28/7</span></div>
+   </div>
+   <div style="display:flex;height:706px">
+     <div style="flex:1.15;border-right:1px solid var(--line);display:flex;flex-direction:column">
+       <div style="padding:16px 20px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line)">
+         <span style="font-weight:800;color:#111;font-size:20px">Martes 29/7</span>
+         <span style="color:#8a938d;font-size:14px">10 citas · <b style="color:var(--pine)">todas reprogramadas</b></span></div>
+       ${rowsHtml}
+     </div>
+     <div style="flex:.95;background:var(--wa-bg);display:flex;flex-direction:column">
+       <div style="background:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #eee">
+         <div style="width:34px;height:34px;border-radius:50%;overflow:hidden"><img src="assets/img/sara-face.png" style="width:130%;height:130%;object-fit:cover;margin:-15% 0 0 -15%"></div>
+         <div><div style="font-weight:700;font-size:15px;color:#111">Sara</div><div style="font-size:12px;color:var(--mint-600)">en línea</div></div></div>
+       <div style="flex:1;padding:14px;display:flex;flex-direction:column;gap:9px;font-size:14px;line-height:1.34">
+         <div style="align-self:flex-end;max-width:82%;background:var(--wa-out);border-radius:12px 3px 12px 12px;padding:8px 12px;color:#0d2018">Reagenda a todos los del martes</div>
+         <div style="align-self:flex-start;max-width:86%;background:#fff;border-radius:3px 12px 12px 12px;padding:8px 12px;color:#111">Listo. Moví las 10 citas al jueves 31/7 en el mismo horario y le avisé a cada paciente por WhatsApp.</div>
+         <div style="align-self:flex-start;max-width:86%;background:#fff;border-radius:12px;padding:8px 12px;color:#111">Dos pidieron otro horario, ya se los reasigné. ¿Bloqueo el martes?</div>
+         <div style="align-self:flex-end;background:var(--wa-out);border-radius:12px;padding:8px 12px;color:#0d2018">Sí, bloquéalo</div>
+         <div style="align-self:flex-start;max-width:92%;background:#fff;border-radius:12px;padding:12px 14px;margin-top:2px">
+           <div style="font-weight:800;font-size:11px;letter-spacing:.08em;color:#8a938d;margin-bottom:8px">RESUMEN DE LA GESTIÓN</div>
+           <div style="display:flex;flex-direction:column;gap:5px;color:#111">
+             <div>✅ 10 citas reprogramadas</div><div>✅ 10 pacientes notificados</div><div>✅ 0 llamadas de recepción</div></div>
+           <div style="margin-top:8px;color:#111">El martes 29/7 queda cerrado.</div></div>
+       </div>
+     </div>
+   </div>`;
+  el.appendChild(win);
+  const chipFull='Reagenda a todos los del martes';
+  return {tick:(lt,t)=>{
+    const wp=inv(lt,0.2,0.9); win.style.opacity=eOut(wp); win.style.transform=`translateY(${(1-eOut(wp))*30}px)`;
+    k.style.opacity=eOut(inv(lt,0.3,0.7));
+    const hp=inv(lt,0.45,1.0); h.style.opacity=eOut(hp); h.style.transform=`translateY(${(1-eOut(hp))*26}px)`;
+    chip.style.opacity=eOut(inv(lt,1.1,1.4));
+    typeText(chip.querySelector('.chiptxt'),chipFull,inv(lt,1.3,2.5));
+    chip.querySelector('.chipcar').style.opacity=(inv(lt,2.5,2.6)>=1?blink(t):1);
+    const c1=inv(lt,2.9,3.3);ck1.style.opacity=eOut(c1);ck1.style.transform=`translateX(${(1-eOut(c1))*-16}px)`;
+    const c2=inv(lt,3.6,4.0);ck2.style.opacity=eOut(c2);ck2.style.transform=`translateX(${(1-eOut(c2))*-16}px)`;
+  }};
+});
+
+/* ============ SCENE 6 — Marketing (phone IG + panel) ============ */
+scene(25.0,32.5,(el)=>{
+  el.style.background='var(--paper)';
+  const L=E('div',null,{position:'absolute',left:'110px',top:'250px',width:'820px'});
+  const k=E('div','kicker',{opacity:0},'MARKETING');
+  const h=E('div','display',{fontSize:'60px',marginTop:'26px',opacity:0},'Marketing que no depende<br>de que tengas tiempo.');
+  const ul=E('ul','blist',{marginTop:'56px'});
+  const items=['Contenido de Instagram con IA','Engagement explicado','Campañas medidas de verdad'].map(t=>{
+    const li=E('li',null,{opacity:0,fontSize:'36px'});li.append(E('span','dot'),E('span',null,null,t));ul.appendChild(li);return li;});
+  L.append(k,h,ul); el.appendChild(L);
+  // phone IG
+  const cell=(bg,kick,txt,img)=>img?`<div style="background:#eee;overflow:hidden"><img src="${img}" style="width:100%;height:100%;object-fit:cover"></div>`
+    :`<div style="background:${bg};padding:8px;display:flex;flex-direction:column;justify-content:flex-end">
+       <div style="font-size:8px;font-weight:800;letter-spacing:.06em;color:${bg==='#F2C744'?'#7a5c00':'#fff'};opacity:.9">${kick}</div>
+       <div style="font-size:11px;font-weight:800;line-height:1.1;color:${bg==='#F2C744'?'#3a2d00':'#fff'}">${txt}</div></div>`;
+  const grid=[
+    cell(null,null,null,'assets/img/consulta.png'),
+    cell('#2FB0E8','¿SABÍAS QUE?','La toxina no congela la cara'),
+    cell(null,null,null,'assets/img/sara-face.png'),
+    cell('#38C06E','MITO vs REALIDAD','“Se nota enseguida”'),
+    cell(null,null,null,'assets/img/consulta.png'),
+    cell('#2E9BE6','ÁCIDO HIALURÓNICO','Qué esperar la 1ª semana'),
+    cell('#F2C744','5 PREGUNTAS','Antes de tu primera valoración'),
+    cell(null,null,null,'assets/img/consulta.png'),
+    cell('#39C06E','CUIDADOS','Después del peeling')].join('');
+  const ph=E('div','phone',{left:'950px',top:'110px',width:'400px',height:'860px',opacity:0});
+  ph.innerHTML=`<div class="screen" style="margin:13px;height:834px;font-family:Inter;background:#fff">
+    <div style="padding:14px 16px 8px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:9px;font-weight:700">9:41</span><span style="font-size:11px">▬</span></div>
+    <div style="padding:0 16px;display:flex;align-items:center;justify-content:space-between">
+      <span style="font-weight:700;font-size:18px;color:#111">clinicaaurora</span><span style="font-size:18px;color:#111">☰</span></div>
+    <div style="padding:12px 16px;display:flex;align-items:center;gap:20px">
+      <div style="width:66px;height:66px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)">
+        <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;border:2px solid #fff"><img src="assets/img/sara-face.png" style="width:130%;height:130%;object-fit:cover;margin:-15% 0 0 -15%"></div></div>
+      <div style="display:flex;gap:22px;text-align:center;color:#111">
+        <div><div style="font-weight:800;font-size:16px">128</div><div style="font-size:11px;color:#666">publicaciones</div></div>
+        <div><div style="font-weight:800;font-size:16px">4.812</div><div style="font-size:11px;color:#666">seguidores</div></div>
+        <div><div style="font-weight:800;font-size:16px">212</div><div style="font-size:11px;color:#666">seguidos</div></div></div></div>
+    <div style="padding:0 16px;color:#111;font-size:12px;line-height:1.4">
+      <b>Clínica Aurora · Medicina estética</b><br>Valoración con la Dra. Ruiz. Resultados naturales, sin excesos.<br>
+      <span style="color:var(--pine);font-weight:600">clinicaaurora.com/agenda</span></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:12px;height:396px">${grid}</div>
+  </div>`;
+  el.appendChild(ph);
+  // side panel steps
+  const panel=E('div',null,{position:'absolute',left:'1400px',top:'150px',width:'460px',opacity:0});
+  const step=(n,ico,t,s)=>`<div style="background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 18px 40px -30px rgba(10,15,13,.4)">
+     <span style="width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--mint);font-family:Archivo;font-weight:900;font-size:17px;display:flex;align-items:center;justify-content:center;flex:0 0 auto">${n}</span>
+     <div><div style="font-weight:700;font-size:20px;color:#111">${t}</div><div style="font-size:15px;color:#6a726b">${ico} ${s}</div></div></div>`;
+  panel.innerHTML=`<div style="background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center;font-weight:700;color:#111;font-size:18px;margin-bottom:14px;box-shadow:0 18px 40px -30px rgba(10,15,13,.4)">Tu feed, en piloto automático</div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      ${step('1','📸','Aprende de tu feed','tono, temas y tus fotos')}
+      ${step('2','<img src=\'assets/img/sara-mark.png\' style=\'width:16px;height:16px;border-radius:4px;vertical-align:-3px\'>','Escribe y diseña','texto, hashtags e imagen')}
+      ${step('3','<span style=\'color:var(--mint-600)\'>✔</span>','Tú apruebas','nada sale sin tu visto bueno')}
+      ${step('4','💬','Publica y responde','quien comenta, habla con Sara')}</div>
+    <div style="margin-top:16px;background:var(--ink);border-radius:18px;padding:20px;text-align:center;color:#fff">
+      <div style="font-family:Archivo;font-weight:900;font-size:30px;color:var(--mint)">24 citas</div>
+      <div style="font-size:14px;color:#c8cec9;margin-top:4px">atribuidas a tus publicaciones · últimos 90 días</div></div>`;
+  el.appendChild(panel);
+  return {tick:(lt)=>{
+    k.style.opacity=eOut(inv(lt,0.3,0.7));
+    const hp=inv(lt,0.45,1.0);h.style.opacity=eOut(hp);h.style.transform=`translateY(${(1-eOut(hp))*26}px)`;
+    const pp=inv(lt,0.5,1.2);ph.style.opacity=eOut(pp);ph.style.transform=`translateY(${(1-eOut(pp))*30}px)`;
+    const T=[1.6,2.5,3.4];items.forEach((li,i)=>{const p=inv(lt,T[i],T[i]+0.5);li.style.opacity=eOut(p);li.style.transform=`translateX(${(1-eOut(p))*-20}px)`;});
+    const pn=inv(lt,1.3,2.2);panel.style.opacity=eOut(pn);panel.style.transform=`translateX(${(1-eOut(pn))*40}px)`;
+  }};
+});
+
+/* ============ SCENE 7 — Del post al ingreso facturado (3 phones) ============ */
+scene(32.5,41.2,(el)=>{
+  el.style.background='var(--paper)';
+  const h=E('div','display center',{top:'85px',width:'1600px',fontSize:'72px',opacity:0},'Del post al ingreso facturado.');
+  const sub=E('div','lead center',{top:'205px',opacity:0,fontSize:'32px'},'Los tres momentos ocurren dentro de Sara.');
+  el.append(h,sub);
+  const labels=['1 · EL POST','2 · EL CHAT<br>CON SARA','3 · EL CHECKOUT'];
+  const xs=[210,760,1310]; const PW=400;
+  const phones=[]; const labs=[]; const arrows=[];
+  // phone bodies
+  const post=`<div class="screen" style="margin:11px;height:838px;font-family:Inter;background:#fff;font-size:12px;color:#111">
+     <div style="padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #f0f0ec">
+       <span style="color:#aaa">‹</span><b>Publicación</b></div>
+     <div style="padding:9px 12px;display:flex;align-items:center;gap:8px">
+       <div style="width:30px;height:30px;border-radius:50%;overflow:hidden;background:linear-gradient(45deg,#F58529,#DD2A7B)"><img src="assets/img/sara-face.png" style="width:130%;height:130%;object-fit:cover;margin:-15% 0 0 -15%"></div>
+       <div><b>clinicaaurora</b><div style="font-size:10px;color:#888">Clínica Aurora · Medicina estética</div></div></div>
+     <div style="height:390px;overflow:hidden"><img src="assets/img/consulta.png" style="width:100%;height:100%;object-fit:cover"></div>
+     <div style="padding:9px 12px"><div style="font-size:18px;color:#111">♡ 💬 ➤</div>
+       <div style="font-weight:700;margin-top:4px">312 Me gusta</div>
+       <div style="margin-top:4px"><b>clinicaaurora</b> Ácido hialurónico en labios: qué esperar la primera semana. Desliza para ver el paso a paso.</div>
+       <div style="color:#8a938d;margin-top:6px">Ver los 18 comentarios</div></div></div>`;
+  const chat=`<div class="screen" style="margin:11px;height:838px;font-family:Inter;background:var(--wa-bg);display:flex;flex-direction:column;font-size:12px">
+     <div style="background:#fff;padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #eee">
+       <span style="color:#aaa">‹</span><div style="width:30px;height:30px;border-radius:50%;overflow:hidden"><img src="assets/img/sara-face.png" style="width:130%;height:130%;object-fit:cover;margin:-15% 0 0 -15%"></div>
+       <div><b>Clínica Aurora</b><div style="font-size:10px;color:var(--mint-600)">en línea</div></div></div>
+     <div style="flex:1;padding:12px;display:flex;flex-direction:column;gap:8px;line-height:1.32">
+       <div style="align-self:flex-start;background:#fff;border-radius:3px 12px 12px 12px;padding:7px 10px">El jueves a las 16 me viene bien</div>
+       <div style="align-self:flex-end;max-width:84%;background:var(--wa-out);border-radius:12px 3px 12px 12px;padding:7px 10px">Perfecto. Te dejo el link para confirmar:
+         <div style="margin-top:6px;border-radius:10px;overflow:hidden;border:1px solid #d8ecdf">
+           <div style="background:#635BFF;color:#fff;font-size:10px;font-weight:700;padding:5px 9px">stripe</div>
+           <div style="background:#fff;padding:8px 10px;color:#111"><b>Consulta de valoración</b><br><b>US$ 45</b><br><span style="font-size:10px;color:#8a938d">pay.holasara.ai/c/aurora-4821</span></div></div></div>
+       <div style="align-self:flex-end;background:#EAF7EE;border:1px solid #cde8d6;border-radius:10px;padding:6px 10px;font-weight:700;color:var(--pine)">✓ Pago recibido · US$ 45</div>
+       <div style="align-self:flex-end;max-width:84%;background:var(--wa-out);border-radius:12px;padding:7px 10px">¡Listo, Camila! Tu consulta quedó <b>confirmada</b> para el jueves 31/7 a las 16:00 con la Dra. Ruiz 📍</div></div></div>`;
+  const checkout=`<div class="screen" style="margin:11px;height:838px;font-family:Inter;background:#fff;font-size:12px;color:#111;padding:18px 18px">
+     <div style="display:flex;align-items:center;gap:8px"><img src="assets/img/sara-mark.png" style="width:26px;height:26px;border-radius:7px"><b>Clínica Aurora</b></div>
+     <div style="color:#8a938d;margin-top:16px">Consulta de valoración</div>
+     <div style="font-family:Archivo;font-weight:900;font-size:38px;margin-top:2px">US$ 45,00</div>
+     <div style="color:#8a938d;font-size:11px;margin-top:2px">Jueves 31/7 · 16:00 · Dra. Ruiz</div>
+     <div style="margin-top:16px;background:#EAF7EE;border:1px solid #cde8d6;border-radius:14px;padding:20px;text-align:center">
+       <div style="width:40px;height:40px;border-radius:50%;background:var(--mint-600);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto">✓</div>
+       <div style="font-weight:800;color:var(--pine);margin-top:8px">Pago confirmado</div>
+       <div style="font-size:11px;color:#5f6b64;margin-top:4px">Tu cita quedó reservada.<br>Te enviamos la confirmación por WhatsApp.</div></div>
+     <div style="margin-top:16px;font-size:12px">
+       <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f0f2ee"><span style="color:#8a938d">Fecha</span><b>31 jul 2026, 16:00</b></div>
+       <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f0f2ee"><span style="color:#8a938d">Profesional</span><b>Dra. Ruiz</b></div>
+       <div style="display:flex;justify-content:space-between;padding:9px 0"><span style="color:#8a938d">Total</span><b>US$ 45,00</b></div></div>
+     <div style="margin-top:14px;background:var(--ink);color:#fff;border-radius:12px;padding:14px;text-align:center;font-weight:700">Agregar a mi calendario</div>
+     <div style="text-align:center;color:#b6bcb5;font-size:10px;margin-top:14px">Pago procesado de forma segura por stripe</div></div>`;
+  const bodies=[post,chat,checkout];
+  xs.forEach((x,i)=>{
+    const lab=E('div','kicker',{position:'absolute',left:x+'px',top:'292px',width:PW+'px',textAlign:'center',
+      fontSize:'20px',letterSpacing:'.14em',lineHeight:'1.3',opacity:0},labels[i]); labs.push(lab); el.appendChild(lab);
+    const ph=E('div','phone',{left:x+'px',top:'350px',width:PW+'px',height:'862px',opacity:0}); ph.innerHTML=bodies[i];
+    phones.push(ph); el.appendChild(ph);
+    if(i<2){const ar=E('div',null,{position:'absolute',left:(x+PW+14)+'px',top:'760px',width:'70px',height:'6px',
+      background:'var(--mint-600)',borderRadius:'3px',opacity:0},'');
+      ar.appendChild(E('div',null,{position:'absolute',right:'-2px',top:'-7px',width:'0',height:'0',
+        borderLeft:'16px solid var(--mint-600)',borderTop:'10px solid transparent',borderBottom:'10px solid transparent'}));
+      arrows.push(ar); el.appendChild(ar);}
+  });
+  return {tick:(lt)=>{
+    const hp=inv(lt,0.2,0.8);h.style.opacity=eOut(hp);h.style.transform=`translateX(-50%) translateY(${(1-eOut(hp))*20}px)`;
+    sub.style.opacity=eOut(inv(lt,0.6,1.1));
+    const T=[1.3,2.6,3.9];
+    phones.forEach((ph,i)=>{const p=inv(lt,T[i],T[i]+0.6);ph.style.opacity=eOut(p);
+      ph.style.transform=`translateY(${(1-eOut(p))*40}px)`;labs[i].style.opacity=eOut(inv(lt,T[i]-0.1,T[i]+0.4));});
+    arrows.forEach((ar,i)=>{ar.style.opacity=eOut(inv(lt,T[i+1]-0.3,T[i+1]+0.1));});
+  }};
+});
+
+/* ============ SCENE 8 — Atribución / ROI (diagrama) ============ */
+scene(41.2,50.6,(el)=>{
+  el.style.background='var(--paper)';
+  const k=E('div','kicker center',{top:'150px',fontSize:'24px'},'ATRIBUCIÓN');
+  k.style.opacity=0;
+  const h=E('div','display center',{top:'210px',width:'1500px',fontSize:'78px',opacity:0},
+    'Por fin vas a saber<br>el retorno de tu Instagram.');
+  el.append(k,h);
+  // svg arc (return / attribution)
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 1920 1080'); Object.assign(svg.style,{position:'absolute',inset:'0',width:'1920px',height:'1080px',pointerEvents:'none'});
+  const path=document.createElementNS(NS,'path');
+  path.setAttribute('d','M 1490 690 C 1490 900, 430 900, 430 690');
+  path.setAttribute('fill','none'); path.setAttribute('stroke','var(--mint-600)'); path.setAttribute('stroke-width','5'); path.setAttribute('stroke-linecap','round');
+  const head=document.createElementNS(NS,'path');
+  head.setAttribute('d','M 430 690 l -13 26 l 26 0 z'); head.setAttribute('fill','var(--mint-600)'); head.style.opacity=0;
+  svg.append(path,head); el.appendChild(svg);
+  const L=path.getTotalLength(); path.style.strokeDasharray=L; path.style.strokeDashoffset=L;
+  const arcLabel=E('div','center',{top:'846px',opacity:0,background:'#fff',border:'1px solid var(--line)',
+    borderRadius:'40px',padding:'14px 30px',fontFamily:'Inter',fontWeight:'600',fontSize:'27px',color:'var(--pine)',
+    boxShadow:'0 16px 40px -26px rgba(10,15,13,.4)',whiteSpace:'nowrap'},'atribuido a cada publicación');
+  el.appendChild(arcLabel);
+  // nodes
+  const W=380,H=200,top=470; const xs=[240,770,1300];
+  const node=(x,inner)=>{const n=E('div',null,{position:'absolute',left:x+'px',top:top+'px',width:W+'px',height:H+'px',
+    background:'#fff',border:'1px solid var(--line)',borderRadius:'26px',boxShadow:'0 30px 70px -40px rgba(10,15,13,.5)',
+    display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'12px',opacity:0},inner);
+  el.appendChild(n); return n;};
+  const nA=node(xs[0],`<div style="width:70px;height:70px;border-radius:20px;background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF);display:flex;align-items:center;justify-content:center">
+     <div style="width:34px;height:34px;border:3px solid #fff;border-radius:11px;position:relative"><span style="position:absolute;inset:0;margin:auto;width:14px;height:14px;border:3px solid #fff;border-radius:50%"></span></div></div>
+     <div style="font-family:Archivo;font-weight:900;font-size:30px;color:var(--ink)">Instagram</div>
+     <div style="font-family:Inter;font-size:20px;color:var(--muted)">publicás e invertís</div>`);
+  const nB=node(xs[1],`<img src="assets/img/sara-mark.png" style="width:74px;height:74px;border-radius:21px">
+     <div style="font-family:Archivo;font-weight:900;font-size:30px;color:var(--ink)">Sara</div>
+     <div style="font-family:Inter;font-size:20px;color:var(--muted)">agenda y cobra</div>`);
+  const nC=node(xs[2],`<div style="font-family:Archivo;font-weight:900;font-size:44px;color:var(--pine)">US$ 1.680</div>
+     <div style="font-family:Archivo;font-weight:900;font-size:26px;color:var(--ink)">Facturación</div>
+     <div style="font-family:Inter;font-size:20px;color:var(--muted)">24 citas atribuidas</div>`);
+  // forward arrows
+  const fArrow=(x)=>{const a=E('div',null,{position:'absolute',left:x+'px',top:(top+H/2-3)+'px',width:'78px',height:'6px',
+    background:'var(--mint-600)',borderRadius:'3px',opacity:0});
+    a.appendChild(E('div',null,{position:'absolute',right:'-2px',top:'-8px',width:'0',height:'0',
+      borderLeft:'18px solid var(--mint-600)',borderTop:'11px solid transparent',borderBottom:'11px solid transparent'}));
+    el.appendChild(a); return a;};
+  const ar1=fArrow(xs[0]+W+18), ar2=fArrow(xs[1]+W+18);
+  const nodes=[nA,nB,nC], arrows=[ar1,ar2];
+  return {tick:(lt)=>{
+    k.style.opacity=eOut(inv(lt,0.2,0.6));
+    const hp=inv(lt,0.35,1.0);h.style.opacity=eOut(hp);h.style.transform=`translateX(-50%) translateY(${(1-eOut(hp))*24}px)`;
+    const NT=[1.2,2.0,2.8];
+    nodes.forEach((n,i)=>{const p=inv(lt,NT[i],NT[i]+0.45);n.style.opacity=eOut(p);
+      n.style.transform=`scale(${mix(.85,1,eOutQ(p))})`;});
+    arrows.forEach((a,i)=>{a.style.opacity=eOut(inv(lt,NT[i]+0.4,NT[i]+0.7));});
+    const dp=inv(lt,3.5,4.7); path.style.strokeDashoffset=L*(1-eInOut(dp));
+    head.style.opacity=(dp>=1?1:0);
+    arcLabel.style.opacity=eOut(inv(lt,4.4,4.9));
+  }};
+});
+
+/* ============ SCENE 9 — sin cambiar (paper) ============ */
+scene(50.6,53.4,(el)=>{
+  el.style.background='var(--paper)';
+  const box=E('div','center',{top:'50%',transform:'translate(-50%,-50%)',width:'100%',textAlign:'center'});
+  const a=E('div','display',{fontSize:'92px',opacity:0},'Sin cambiar tu agenda.');
+  const b=E('div','display',{fontSize:'92px',marginTop:'26px',opacity:0},'Sin tocar tu historia clínica.');
+  const c=E('div','lead',{marginTop:'40px',opacity:0,fontSize:'36px'},'Sara se monta encima de lo que ya usás.');
+  box.appendChild(a);box.appendChild(b);box.appendChild(c);el.appendChild(box);
+  return {tick:(lt)=>{const pa=inv(lt,0.2,0.7);a.style.opacity=eOut(pa);a.style.transform=`translateY(${(1-eOut(pa))*20}px)`;
+    const pb=inv(lt,0.7,1.2);b.style.opacity=eOut(pb);b.style.transform=`translateY(${(1-eOut(pb))*20}px)`;
+    c.style.opacity=eOut(inv(lt,1.3,1.8));}};
+});
+
+/* ============ SCENE 10 — OUTRO (ink) ============ */
+scene(53.4,56.6,(el)=>{
+  el.style.background='var(--ink)';
+  const wrap=E('div','center',{top:'50%',transform:'translate(-50%,-50%)',width:'100%'});
+  const wm=E('div','wordmark on-ink',{fontSize:'150px',justifyContent:'center',opacity:0});
+  wm.appendChild(E('span',null,null,'sara')); const caret=E('span','caret',{height:'.72em'}); wm.appendChild(caret);
+  wrap.appendChild(wm);
+  const tag=E('div','lead',{marginTop:'34px',color:'var(--cream)',opacity:0,fontSize:'38px',textAlign:'center'},'la recepción que nunca cierra');
+  const url=E('div',{},{marginTop:'54px',textAlign:'center',color:'var(--mint)',fontFamily:'Inter',fontWeight:'600',fontSize:'34px',opacity:0},'holasara.ai');
+  wrap.appendChild(tag);wrap.appendChild(url);el.appendChild(wrap);
+  return {tick:(lt,t)=>{const p=inv(lt,0.15,0.7);wm.style.opacity=eOut(p);
+    wm.style.transform=`scale(${mix(.9,1,eOutQ(p))})`;caret.style.opacity=(lt>0.2?blink(t):1);
+    tag.style.opacity=eOut(inv(lt,0.6,1.1));url.style.opacity=eOut(inv(lt,1.0,1.5));}};
+});
+
+/* ============ engine ============ */
+const FIN=0.30, FOUT=0.30;
+window.setTime=function(t){
+  for(const s of scenes){
+    const active = t>=s.start-0.34 && t<s.end+0.02;
+    if(!active){ s.el.style.opacity=0; s.el.style.visibility='hidden'; continue; }
+    s.el.style.visibility='visible';
+    const lt=t-s.start;
+    const a=s.start===0?1:inv(t,s.start,s.start+FIN);   // primera escena sin fade-in (portada)
+    const b=1-inv(t,s.end-FOUT,s.end);
+    s.el.style.opacity=Math.max(0,Math.min(a,b));
+    s.tick(lt,t);
+  }
+};
+window.setTime(0);
+document.title='sara-video';
+</script></body></html>
