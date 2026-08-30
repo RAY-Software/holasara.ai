@@ -25,6 +25,9 @@ interface Props {
   avatar?: string;
   bubbles: Bubble[];
   lang?: Locale;
+  /** Anima la conversación (revela mensaje a mensaje con "escribiendo…") al
+   * entrar en viewport. Opt-in; respeta prefers-reduced-motion y no-JS. */
+  animate?: boolean;
 }
 const {
   channel = 'whatsapp',
@@ -33,6 +36,7 @@ const {
   avatar = '/agents/sara-thumb.png',
   bubbles,
   lang = defaultLocale,
+  animate = false,
 } = Astro.props;
 
 const ui =
@@ -42,7 +46,7 @@ const ui =
 const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
 ---
 
-<figure class="chat" data-channel={channel}>
+<figure class="chat" data-channel={channel} data-animate={animate ? '' : undefined}>
   <div class="chat__header">
     <svg class="chat__back" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -250,6 +254,72 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
     height: 11px;
   }
 
+  /* ── Animación de conversación (opt-in vía [data-animate]) ── */
+  .chat[data-animate] .chat__body.is-anim .msg:not(.is-shown) {
+    display: none;
+  }
+  .chat[data-animate] .msg.is-shown {
+    animation: msg-in 0.34s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  @keyframes msg-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  /* Burbuja "escribiendo…" con tres puntitos */
+  .msg.typing {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .typing__dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 0.55rem;
+  }
+  .typing__dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.35;
+    animation: typing-bounce 1.1s infinite ease-in-out;
+  }
+  .typing__dots i:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+  .typing__dots i:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+  @keyframes typing-bounce {
+    0%,
+    65%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.3;
+    }
+    30% {
+      transform: translateY(-4px);
+      opacity: 0.75;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chat[data-animate] .chat__body.is-anim .msg:not(.is-shown) {
+      display: flex;
+    }
+    .chat[data-animate] .msg.is-shown {
+      animation: none;
+    }
+    .typing__dots i {
+      animation: none;
+    }
+  }
+
   .compose {
     display: flex;
     align-items: center;
@@ -432,3 +502,72 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
     color: #8e8e8e;
   }
 </style>
+
+<script>
+  // Revela la conversación mensaje a mensaje (con "escribiendo…") cuando el
+  // chat entra en viewport. Progressive enhancement: sin JS, todo visible;
+  // con prefers-reduced-motion, todo visible sin animar. Corre una vez por
+  // página y maneja todos los <figure.chat[data-animate]>.
+  (() => {
+    const reduce =
+      typeof matchMedia === 'function' &&
+      matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const figures = document.querySelectorAll('figure.chat[data-animate]');
+    figures.forEach((fig) => {
+      const body = fig.querySelector('.chat__body');
+      if (!body) return;
+      const msgs = Array.from(body.querySelectorAll('.msg'));
+      if (!msgs.length || reduce) return;
+
+      // Reserva la altura final para que la tarjeta no crezca durante la animación.
+      body.style.minHeight = body.scrollHeight + 'px';
+      body.classList.add('is-anim');
+      msgs.forEach((m) => m.classList.remove('is-shown'));
+
+      const typing = document.createElement('div');
+      typing.className = 'msg typing';
+      typing.setAttribute('aria-hidden', 'true');
+      typing.innerHTML = '<span class="typing__dots"><i></i><i></i><i></i></span>';
+
+      let played = false;
+      const play = () => {
+        if (played) return;
+        played = true;
+        let i = 0;
+        const step = () => {
+          if (i >= msgs.length) {
+            if (typing.parentNode) typing.parentNode.removeChild(typing);
+            return;
+          }
+          const m = msgs[i];
+          const isLeft = m.classList.contains('msg--left');
+          typing.classList.toggle('msg--left', isLeft);
+          typing.classList.toggle('msg--right', !isLeft);
+          body.appendChild(typing);
+          const len = (m.textContent || '').length;
+          const typeDur = Math.min(1500, Math.max(480, len * 13));
+          window.setTimeout(() => {
+            if (typing.parentNode) typing.parentNode.removeChild(typing);
+            m.classList.add('is-shown');
+            i += 1;
+            window.setTimeout(step, 360);
+          }, typeDur);
+        };
+        step();
+      };
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              play();
+              io.disconnect();
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(fig);
+    });
+  })();
+</script>
