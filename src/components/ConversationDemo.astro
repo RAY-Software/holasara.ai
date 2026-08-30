@@ -255,7 +255,9 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
   }
 
   /* ── Animación de conversación (opt-in vía [data-animate]) ── */
-  .chat[data-animate] .chat__body.is-anim .msg:not(.is-shown) {
+  /* Oculta los mensajes aún no revelados; la burbuja .typing queda exenta
+     (es la que muestra los tres puntitos mientras "escribe"). */
+  .chat[data-animate] .chat__body.is-anim .msg:not(.is-shown):not(.typing) {
     display: none;
   }
   .chat[data-animate] .msg.is-shown {
@@ -309,7 +311,7 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .chat[data-animate] .chat__body.is-anim .msg:not(.is-shown) {
+    .chat[data-animate] .chat__body.is-anim .msg:not(.is-shown):not(.typing) {
       display: flex;
     }
     .chat[data-animate] .msg.is-shown {
@@ -542,24 +544,31 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
           }
           const m = msgs[i];
           const isLeft = m.classList.contains('msg--left');
-          typing.classList.toggle('msg--left', isLeft);
-          typing.classList.toggle('msg--right', !isLeft);
-          body.appendChild(typing);
           const len = (m.textContent || '').length;
-          const typeDur = Math.min(1500, Math.max(480, len * 13));
-          window.setTimeout(() => {
+          const reveal = () => {
             if (typing.parentNode) typing.parentNode.removeChild(typing);
             m.classList.add('is-shown');
             i += 1;
-            window.setTimeout(step, 360);
-          }, typeDur);
+            window.setTimeout(step, 420);
+          };
+          if (isLeft) {
+            // Sara "escribe": tres puntitos y después el mensaje (como WhatsApp;
+            // los puntitos solo se ven del lado del otro, nunca de uno mismo).
+            typing.classList.add('msg--left');
+            typing.classList.remove('msg--right');
+            body.appendChild(typing);
+            window.setTimeout(reveal, Math.min(1900, Math.max(700, len * 15)));
+          } else {
+            // Respuesta del otro lado: aparece tras una pausa, sin puntitos.
+            window.setTimeout(reveal, Math.min(1100, Math.max(500, len * 10)));
+          }
         };
         step();
       };
 
-      // Dentro de un carrusel, el chat no se auto-dispara: espera la orden
-      // `chat:play` del carrusel (para animar recién cuando su slide está activo).
-      if (fig.closest('[data-chat-carousel]')) {
+      // Dentro de una secuencia encadenada, el chat no se auto-dispara: espera
+      // la orden `chat:play` (el orquestador decide cuándo le toca animar).
+      if (fig.closest('[data-chat-sequence]')) {
         fig.addEventListener('chat:play', play);
       } else {
         const io = new IntersectionObserver(
