@@ -175,8 +175,8 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
                   <ConversationDemo
                     lang={lang}
                     channel="whatsapp"
-                    name={member.name}
-                    avatar={member.avatar}
+                    name={s.name ?? member.name}
+                    avatar={s.avatar ?? member.avatar}
                     subtitle={s.subtitle}
                     bubbles={s.bubbles}
                     animate

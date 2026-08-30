@@ -44,10 +44,15 @@ interface RawMember {
   // Casos de uso (grid "lo que hace"). Opcional por personaje.
   // logo: path a un SVG de marca. icon: keyword de ícono inline (ver [member].astro).
   useCases?: Record<Locale, { title: string; desc: string; logo?: string; icon?: string }[]>;
-  // Carrusel de escenas animadas (chats encadenados). Opcional por personaje.
+  // Storyboard de escenas animadas (chats encadenados). Opcional por personaje.
+  // name/avatar: overrides por escena (p. ej. la escena donde Sara ejecuta lo
+  // que Daniel o Mia dispararon); si faltan, usa los del personaje.
   scenesTitle?: Record<Locale, string>; // admite <em> y &nbsp;
   scenesIntro?: Record<Locale, string>;
-  scenes?: Record<Locale, { label: string; subtitle?: string; bubbles: Bubble[] }[]>;
+  scenes?: Record<
+    Locale,
+    { label: string; subtitle?: string; name?: string; avatar?: string; bubbles: Bubble[] }[]
+  >;
 }
 
 const RAW: RawMember[] = [
@@ -248,7 +253,7 @@ const RAW: RawMember[] = [
       es: [
         { who: 'out', text: 'Resumen de la semana 👋 Tu web: +18% de visitas desde Google. Tu ficha de Google apareció en 2,400 búsquedas y entraron 9 llamadas. Instagram: +320 seguidores.', t: '09:12' },
         { who: 'out', text: 'Dos movimientos para esta semana: subo 6 fotos nuevas a tu ficha de Google (hace 40 días que no se toca y bajó en el mapa) y lanzo una campaña de Google Ads para "botox + tu zona" con $150 de prueba. ¿Le damos?', t: '09:12' },
-        { who: 'in', text: 'Dale con las fotos. La campaña arranca con $100', t: '09:20' },
+        { who: 'in', text: 'Sube las fotos. La campaña empieza con $100', t: '09:20' },
         { who: 'out', text: '¡Listo! Fotos arriba y campaña activa con $100 semanales. El jueves te paso los primeros resultados y quién llamó. 📈', t: '09:21' },
       ],
       en: [
@@ -259,6 +264,64 @@ const RAW: RawMember[] = [
       ],
     },
     featureLinkLabel: { es: 'Ver Instagram con Mia', en: 'See Instagram with Mia' },
+    scenesTitle: {
+      es: 'Mia ve la agenda floja. <em class="text-pine-dark">Y el equipo la llena.</em>',
+      en: 'Mia sees a slow week. <em class="text-pine-dark">And the team fills it.</em>',
+    },
+    scenesIntro: {
+      es: 'Así se ve en la vida real: Mia detecta los días flojos y te propone la promo. La apruebas, ella la publica, y a quien responde lo agenda Sara con el anticipo cobrado.',
+      en: 'Here’s what it looks like in real life: Mia catches the slow days and pitches the promo. You approve, she publishes, and whoever replies gets booked by Sara, deposit collected.',
+    },
+    scenes: {
+      es: [
+        {
+          label: '1 · Mia te propone la promo',
+          subtitle: 'Experta en marketing',
+          bubbles: [
+            { who: 'out', text: 'Hola 👋 Vi que el jueves y el viernes quedaron flojos: 9 huecos entre los dos. Te armo una promo para llenarlos.', t: '09:12' },
+            { who: 'out', text: 'Propuesta: "Botox jueves y viernes, agenda con anticipo y llevas la segunda zona a mitad de precio". Pieza para feed e historia lista. ¿La publico?', t: '09:12' },
+            { who: 'in', text: 'Sí, pero baja el descuento a 30%', t: '09:20' },
+            { who: 'out', text: '¡Listo! Ajusté al 30% y ya está publicada en feed e historia. A quien responda lo agenda Sara con el anticipo. Te aviso cómo va. 📈', t: '09:21' },
+          ],
+        },
+        {
+          label: '2 · Sara agenda a quien responde',
+          name: 'Sara',
+          avatar: '/equipo/sara-avatar.jpg',
+          subtitle: 'en línea',
+          bubbles: [
+            { who: 'in', text: '¡Hola! Vi la promo de botox en Instagram 🙋‍♀️ ¿Sigue disponible?', t: '13:47' },
+            { who: 'out', text: '¡Sí! Aplica jueves y viernes: agendas con anticipo y llevas la segunda zona con 30% de descuento. Tengo jueves 16:00 o viernes 11:30. ¿Cuál te queda mejor?', t: '13:47' },
+            { who: 'in', text: 'Viernes 11:30', t: '13:52' },
+            { who: 'out', text: '¡Listo! Viernes 11:30 reservado ✅ Te paso el enlace del anticipo y con eso queda confirmado. ¡Nos vemos!', t: '13:52' },
+          ],
+        },
+      ],
+      en: [
+        {
+          label: '1 · Mia pitches the promo',
+          subtitle: 'Marketing expert',
+          bubbles: [
+            { who: 'out', text: 'Hey 👋 Thursday and Friday are looking light: 9 open slots between them. Let me put together a promo to fill them.', t: '09:12' },
+            { who: 'out', text: 'Idea: "Botox Thursday & Friday, book with a deposit and get the second area half off." Feed and story pieces are ready. Shall I publish?', t: '09:12' },
+            { who: 'in', text: 'Yes, but drop the discount to 30%', t: '09:20' },
+            { who: 'out', text: 'Done! Set it to 30% and it’s live on feed and story. Whoever replies gets booked by Sara, deposit included. I’ll keep you posted. 📈', t: '09:21' },
+          ],
+        },
+        {
+          label: '2 · Sara books whoever replies',
+          name: 'Sara',
+          avatar: '/equipo/sara-avatar.jpg',
+          subtitle: 'online',
+          bubbles: [
+            { who: 'in', text: 'Hi! I saw the botox promo on Instagram 🙋‍♀️ Is it still on?', t: '13:47' },
+            { who: 'out', text: 'It is! Valid Thursday and Friday: book with a deposit and get 30% off the second area. I have Thursday 4:00pm or Friday 11:30am. Which works better?', t: '13:47' },
+            { who: 'in', text: 'Friday 11:30', t: '13:52' },
+            { who: 'out', text: 'Done! Friday 11:30am booked ✅ I’ll send the deposit link and that confirms it. See you!', t: '13:52' },
+          ],
+        },
+      ],
+    },
     useCases: {
       es: [
         { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Crea las publicaciones con tu marca, responde a quien comenta y lo lleva hasta la cita.' },
@@ -296,25 +359,25 @@ const RAW: RawMember[] = [
     },
     heroEyebrow: { es: 'Daniel · Finanzas', en: 'Daniel · Finance' },
     heroTitle: {
-      es: "Te dice cómo va la plata.<br /><em class='text-pine-dark'>Antes de que preguntes.</em>",
+      es: "Te dice cómo va el dinero.<br /><em class='text-pine-dark'>Antes de que preguntes.</em>",
       en: "Tells you how the money’s doing.<br /><em class='text-pine-dark'>Before you ask.</em>",
     },
     heroLead: {
-      es: 'Daniel es el analista de finanzas con IA de tu clínica. Lleva las cuentas y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen. Sin abrir una sola planilla.',
+      es: 'Daniel es el analista de finanzas con IA de tu clínica. Lleva las cuentas y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen. Sin abrir un solo Excel.',
       en: 'Daniel is your clinic’s AI finance analyst. He keeps the books and flags what matters: how much you billed, what’s still to collect and which treatment leaves the most margin. Without opening a single spreadsheet.',
     },
     kicker: { es: 'Cómo trabaja Daniel', en: 'How Daniel works' },
     h2: {
-      es: 'Daniel te dice cómo va la plata. <em class="text-pine-dark">Antes de que preguntes.</em>',
+      es: 'Daniel te dice cómo va el dinero. <em class="text-pine-dark">Antes de que preguntes.</em>',
       en: 'Daniel tells you how the money’s doing. <em class="text-pine-dark">Before you ask.</em>',
     },
     paragraph: {
-      es: 'Daniel lleva las cuentas de tu clínica y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen. Cuando hay algo para hacer, te lo propone y el equipo lo ejecuta. Sin abrir una sola planilla.',
+      es: 'Daniel lleva las cuentas de tu clínica y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen. Cuando hay algo para hacer, te lo propone y el equipo lo ejecuta. Sin abrir un solo Excel.',
       en: 'Daniel keeps your clinic’s books and flags what matters: how much you billed, what’s still to collect, and which treatment leaves the most margin. When there’s something to do, he pitches it and the team runs it. Without opening a single spreadsheet.',
     },
     points: {
       es: [
-        'Te resume la facturación sin que abras una planilla',
+        'Te resume la facturación sin que abras un Excel',
         'Detecta anticipos y pagos pendientes por cobrar',
         'Te dice qué tratamiento deja más margen',
       ],
@@ -329,7 +392,7 @@ const RAW: RawMember[] = [
       es: [
         { who: 'out', text: 'Cerré los números de octubre 👋 Facturaste $312,000, un 12% arriba que septiembre. Te dejo lo importante.', t: '08:30' },
         { who: 'out', text: 'Tienes $18,400 en anticipos sin cobrar de 7 citas de esta semana. Y el láser sigue siendo lo más rentable: 68% de margen. ¿Te armo el recordatorio de cobro?', t: '08:30' },
-        { who: 'in', text: 'Sí, dale', t: '08:41' },
+        { who: 'in', text: 'Sí, adelante', t: '08:41' },
         { who: 'out', text: '¡Listo! Se los pasé a Sara para que los cobre por WhatsApp. Te aviso cuando entren. 📊', t: '08:41' },
       ],
       en: [
@@ -340,9 +403,63 @@ const RAW: RawMember[] = [
       ],
     },
     featureLinkLabel: { es: 'Pedir una demo', en: 'Book a demo' },
+    scenesTitle: {
+      es: 'Daniel encuentra dinero por cobrar. <em class="text-pine-dark">Y Sara sale a cobrarlo.</em>',
+      en: 'Daniel finds money to collect. <em class="text-pine-dark">And Sara goes and collects it.</em>',
+    },
+    scenesIntro: {
+      es: 'Así trabaja el equipo junto: Daniel detecta anticipos sin cobrar, tú apruebas con un mensaje, y Sara le escribe a cada paciente hasta recuperarlos.',
+      en: 'Here’s the team working together: Daniel spots uncollected deposits, you approve with one message, and Sara writes each patient until the money comes in.',
+    },
+    scenes: {
+      es: [
+        {
+          label: '1 · Daniel lo detecta',
+          subtitle: 'te avisa cómo van los números',
+          bubbles: [
+            { who: 'out', text: 'Revisé la semana 👋 Tienes $18,400 en anticipos sin cobrar de 7 citas. Si quieres, se los paso a Sara para que los cobre por WhatsApp.', t: '08:30' },
+            { who: 'in', text: 'Sí, adelante', t: '08:41' },
+            { who: 'out', text: '¡Listo! ✅ Sara ya está escribiendo a los 7. Te aviso a medida que vayan entrando los pagos. 📊', t: '08:41' },
+          ],
+        },
+        {
+          label: '2 · Sara lo cobra',
+          name: 'Sara',
+          avatar: '/equipo/sara-avatar.jpg',
+          subtitle: 'en línea',
+          bubbles: [
+            { who: 'out', text: 'Hola Laura 👋 Te escribo de la clínica. Quedó pendiente el anticipo de tu cita del jueves 17:30. Te dejo el enlace para asegurarla 😊', t: '09:05' },
+            { who: 'in', text: '¡Uy, se me pasó! Ya lo pago', t: '09:18' },
+            { who: 'out', text: '¡Recibido! ✅ Tu cita del jueves 17:30 queda confirmada. Te llega el recordatorio un día antes. ¡Nos vemos!', t: '09:19' },
+          ],
+        },
+      ],
+      en: [
+        {
+          label: '1 · Daniel spots it',
+          subtitle: 'flags how the numbers are doing',
+          bubbles: [
+            { who: 'out', text: 'Went over the week 👋 You have $18,400 in uncollected deposits across 7 appointments. If you want, I’ll hand them to Sara to collect over WhatsApp.', t: '08:30' },
+            { who: 'in', text: 'Yes, go ahead', t: '08:41' },
+            { who: 'out', text: 'Done! ✅ Sara is already writing all 7. I’ll let you know as the payments come in. 📊', t: '08:41' },
+          ],
+        },
+        {
+          label: '2 · Sara collects it',
+          name: 'Sara',
+          avatar: '/equipo/sara-avatar.jpg',
+          subtitle: 'online',
+          bubbles: [
+            { who: 'out', text: 'Hi Laura 👋 It’s the clinic. The deposit for your Thursday 5:30pm appointment is still pending. Here’s the link to lock it in 😊', t: '09:05' },
+            { who: 'in', text: 'Oh, I missed it! Paying now', t: '09:18' },
+            { who: 'out', text: 'Received! ✅ Your Thursday 5:30pm appointment is confirmed. You’ll get a reminder a day before. See you!', t: '09:19' },
+          ],
+        },
+      ],
+    },
     useCases: {
       es: [
-        { title: 'Cierre del mes', icon: 'chart', desc: 'Te resume cuánto facturaste y cómo vienes contra el mes anterior, sin planillas.' },
+        { title: 'Cierre del mes', icon: 'chart', desc: 'Te resume cuánto facturaste y cómo vienes contra el mes anterior, sin hojas de cálculo.' },
         { title: 'Cobros pendientes', icon: 'card', desc: 'Detecta anticipos y pagos sin cobrar y te los pasa para recuperar.' },
         { title: 'Rentabilidad', icon: 'coin', desc: 'Te dice qué tratamiento deja más margen y cuál no está rindiendo.' },
         { title: 'Alertas', icon: 'bell', desc: 'Si algo se mueve, un gasto raro o una caída de ingresos, te avisa a tiempo.' },
@@ -382,7 +499,7 @@ export interface TeamMember {
   useCases?: { title: string; desc: string; logo?: string; icon?: string }[];
   scenesTitle?: string;
   scenesIntro?: string;
-  scenes?: { label: string; subtitle?: string; bubbles: Bubble[] }[];
+  scenes?: { label: string; subtitle?: string; name?: string; avatar?: string; bubbles: Bubble[] }[];
   /** Path interno de la ficha del personaje: /equipo/sara, /equipo/mia, … */
   href: string;
 }
