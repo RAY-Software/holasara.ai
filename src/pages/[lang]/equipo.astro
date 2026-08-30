@@ -187,7 +187,6 @@ const dict = {
     {
       team.map((m, i) => {
         const flip = i % 2 === 1; // Mia: chat a la izquierda
-        const link = m.featureHref ?? '/demo';
         return (
           <section id={m.id} class={`border-b border-line ${flip ? 'bg-paper' : ''}`}>
             <div class={`mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 ${flip ? 'md:grid-cols-[0.95fr_1.05fr]' : 'md:grid-cols-[1.05fr_0.95fr]'}`}>
@@ -203,10 +202,21 @@ const dict = {
                     </li>
                   ))}
                 </ul>
-                <a href={L(link)} class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
-                  {m.featureLinkLabel}
-                  <span aria-hidden="true">→</span>
-                </a>
+                <div class="mt-8 flex flex-wrap items-center gap-3">
+                  <a
+                    href={L(m.href)}
+                    class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+                  >
+                    {lang === 'en' ? `Everything about ${m.name}` : `Saber todo sobre ${m.name}`}
+                    <span aria-hidden="true">→</span>
+                  </a>
+                  <a
+                    href={L('/demo')}
+                    class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+                  >
+                    {lang === 'en' ? 'Book a demo' : 'Pedir demo'}
+                  </a>
+                </div>
               </div>
               <div class={`flex justify-center ${flip ? 'order-1 md:order-1 md:justify-start' : 'md:justify-end'}`}>
                 <ConversationDemo
