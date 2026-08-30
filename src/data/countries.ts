@@ -1,8 +1,7 @@
 // Landings por país (/es/mexico, /es/colombia, /es/uruguay). Una entrada por
-// país, con el copy es/en adentro. Reglas: el ÚNICO precio público es el piso
-// de México (src/lib/pricing.ts); el resto deriva a la demo, igual que /precios.
+// país, con el copy es/en adentro. Regla (ago 2026): NINGÚN precio publicado —
+// todos los países derivan a la demo; el número se comparte solo ahí.
 // El único caso publicable es ViaLaser (Uruguay). Nada inventado.
-import { PRICE_MX, PRICE_UNIT } from '../lib/pricing';
 
 export interface CountryQA {
   q: string;
@@ -35,7 +34,7 @@ export const countries: Country[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI en México: la recepcionista con IA para clínicas, médicos y wellness',
-        metaDescription: `Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en México las 24 horas: responde precios, agenda en tu Google Calendar y cobra el anticipo en pesos. Desde ${PRICE_MX.display} ${PRICE_UNIT}.`,
+        metaDescription: `Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en México las 24 horas: responde precios, agenda en tu Google Calendar y cobra el anticipo en pesos. Precio por clínica, en la demo.`,
         eyebrow: 'Sara AI en México',
         title: 'La recepción que contesta a las 11 de la noche, también en&nbsp;México.',
         lead: 'Las clínicas mexicanas reciben la consulta por WhatsApp o Instagram cuando la recepción ya se fue. Sara contesta al momento, informa precios en pesos, agenda en tu Google Calendar y cobra el anticipo para que la cita quede en firme.',
@@ -50,10 +49,10 @@ export const countries: Country[] = [
         },
         price: {
           title: 'Precio para&nbsp;México',
-          body: `El plan arranca en ${PRICE_MX.display} ${PRICE_UNIT} con todo incluido y sin comisión por cita. Es un piso: el número final depende de cuántas sucursales tengas, y te lo damos exacto en la demo.`,
+          body: 'Una suscripción mensual fija con todo incluido y sin comisión por cita. El plan se arma según tu clínica y tus sucursales, y el número exacto te lo damos en la demo.',
         },
         faq: [
-          { q: '¿Cuánto cuesta Sara en México?', a: `Desde ${PRICE_MX.display} ${PRICE_UNIT}, todo incluido y sin comisión por cita. El precio final depende de las sucursales; en la demo te pasamos el exacto.` },
+          { q: '¿Cuánto cuesta Sara en México?', a: 'Es una suscripción mensual con todo incluido y sin comisión por cita. El plan se arma según tu clínica y sus sucursales; en la demo te pasamos el número exacto.' },
           { q: '¿Sara cobra en pesos mexicanos?', a: 'Sí. El anticipo se cobra con un link de pago dentro del chat, en la moneda de tu clínica.' },
           { q: '¿Tengo que cambiar mi agenda o mi software?', a: 'No. Sara lee y escribe en el Google Calendar que ya usas. No hay migración ni sistema nuevo que aprender.' },
           { q: '¿Atiende WhatsApp e Instagram a la vez?', a: 'Sí, los dos canales, las 24 horas, con la información y el tono de tu clínica. Si algo se sale de lo que sabe, lo deriva a tu equipo con el contexto completo.' },
@@ -61,7 +60,7 @@ export const countries: Country[] = [
       },
       en: {
         metaTitle: 'Sara AI in Mexico: the AI receptionist for clinics, doctors & wellness',
-        metaDescription: `Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Mexico around the clock: quotes prices, books into your Google Calendar and collects the deposit in pesos. From ${PRICE_MX.display} per location / month.`,
+        metaDescription: `Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Mexico around the clock: quotes prices, books into your Google Calendar and collects the deposit in pesos. Pricing per clinic, shared in the demo.`,
         eyebrow: 'Sara AI in Mexico',
         title: 'The front desk that answers at 11 pm, in Mexico&nbsp;too.',
         lead: 'Mexican clinics get the enquiry on WhatsApp or Instagram after the front desk has gone home. Sara answers on the spot, quotes prices in pesos, books into your Google Calendar and collects the deposit so the appointment is locked in.',
@@ -76,10 +75,10 @@ export const countries: Country[] = [
         },
         price: {
           title: 'Pricing for&nbsp;Mexico',
-          body: `Plans start at ${PRICE_MX.display} per location / month, everything included, no per-appointment commission. That’s a floor: the final number depends on your locations, and we’ll give you the exact one in the demo.`,
+          body: 'A flat monthly subscription with everything included and no per-appointment commission. The plan is built around your clinic and locations, and you get the exact number in the demo.',
         },
         faq: [
-          { q: 'How much does Sara cost in Mexico?', a: `From ${PRICE_MX.display} per location per month, everything included, no per-appointment commission. The final price depends on locations; you get the exact number in the demo.` },
+          { q: 'How much does Sara cost in Mexico?', a: 'It’s a monthly subscription with everything included and no per-appointment commission. The plan is built around your clinic and its locations; you get the exact number in the demo.' },
           { q: 'Does Sara charge in Mexican pesos?', a: 'Yes. The deposit is collected with a payment link inside the chat, in your clinic’s currency.' },
           { q: 'Do I have to change my calendar or software?', a: 'No. Sara reads and writes to the Google Calendar you already use. No migration, no new system to learn.' },
           { q: 'Does it cover WhatsApp and Instagram at the same time?', a: 'Yes, both channels, around the clock, with your clinic’s information and tone. Anything outside what it knows gets handed to your team with full context.' },
