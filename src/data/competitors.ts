@@ -3,7 +3,6 @@
 // comparativa general (/mejores-asistentes-ia-clinicas); si un dato no es
 // público se dice "no publica". El tono es honesto: cada página dice también
 // cuándo conviene elegir al otro.
-import { PRICE_MX, PRICE_UNIT } from '../lib/pricing';
 
 export type VsCell = 'yes' | 'no' | 'partial' | 'text';
 
@@ -33,8 +32,8 @@ export interface Competitor {
   copy: { es: CompetitorCopy; en: CompetitorCopy };
 }
 
-const saraPrice = `desde ${PRICE_MX.display} ${PRICE_UNIT} (México)`;
-const saraPriceEn = `from ${PRICE_MX.display} per location / month (Mexico)`;
+const saraPrice = 'a medida por clínica, en la demo';
+const saraPriceEn = 'tailored per clinic, shared in the demo';
 
 export const competitors: Competitor[] = [
   {

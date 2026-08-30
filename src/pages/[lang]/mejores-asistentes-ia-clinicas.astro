@@ -11,7 +11,6 @@ import PageHero from '../../components/PageHero.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
 import CtaInline from '../../components/CtaInline.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { PRICE_MX, PRICE_UNIT } from '../../lib/pricing';
 import { competitors } from '../../data/competitors';
 import { countries } from '../../data/countries';
 
@@ -75,7 +74,7 @@ const dict = {
           yes(),
           yes(),
           no('a propósito: no toca datos clínicos'),
-          text(`desde ${PRICE_MX.display} ${PRICE_UNIT}`),
+          text('a medida por clínica, en la demo'),
         ],
       },
       {
@@ -220,7 +219,7 @@ const dict = {
       },
       {
         q: '¿Cuánto cuesta un asistente con IA para clínicas?',
-        a: `Los precios públicos a agosto 2026 van desde ~R$49-80 por mes (Cloudia, base de flujos con la IA aparte) hasta US$130 más costos de canal (Zenvia). Kura publica 59,99 € por profesional al mes. Sara parte de ${PRICE_MX.display} ${PRICE_UNIT}, con la conversación, el cobro y el marketing incluidos.`,
+        a: `Los precios públicos a agosto 2026 van desde ~R$49-80 por mes (Cloudia, base de flujos con la IA aparte) hasta US$130 más costos de canal (Zenvia). Kura publica 59,99 € por profesional al mes. Sara no publica precio: el plan se arma por clínica y se comparte en la demo, con la conversación, el cobro y el marketing incluidos.`,
       },
       {
         q: '¿Y la historia clínica del paciente?',
@@ -271,7 +270,7 @@ const dict = {
           yes(),
           yes(),
           no('on purpose: it never touches clinical data'),
-          text(`from ${PRICE_MX.display} per location / month`),
+          text('tailored per clinic, shared in the demo'),
         ],
       },
       {
@@ -416,7 +415,7 @@ const dict = {
       },
       {
         q: 'How much does an AI assistant for clinics cost?',
-        a: `Public prices as of August 2026 range from ~R$49-80 per month (Cloudia, flow-based with AI sold apart) to US$130 plus channel costs (Zenvia). Kura publishes €59.99 per professional per month. Sara starts at ${PRICE_MX.display} per location per month, with the conversation, payment collection and marketing included.`,
+        a: `Public prices as of August 2026 range from ~R$49-80 per month (Cloudia, flow-based with AI sold apart) to US$130 plus channel costs (Zenvia). Kura publishes €59.99 per professional per month. Sara doesn't publish pricing: the plan is built per clinic and shared in the demo, with the conversation, payment collection and marketing included.`,
       },
       {
         q: 'What about patient records?',
