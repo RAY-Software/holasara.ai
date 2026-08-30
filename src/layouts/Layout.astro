@@ -93,6 +93,12 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- Verificación de dominio de Meta (porfolio RAY Software). Va en TODAS las páginas
+         y no solo en la home porque el Edge Middleware redirige / a /es: el crawler de
+         Meta sigue el redirect y termina leyendo el <head> de este Layout. Estático a
+         propósito (no env var): el tag tiene que estar en el HTML servido siempre. -->
+    <meta name="facebook-domain-verification" content="njpqfx6xxvyxxakl8z8pch5r1k5e9f" />
+
     <!-- Marketing tags (GA4 + Google Ads + Meta Pixel) · solo en producción -->
     {
       import.meta.env.PROD && (

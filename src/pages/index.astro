@@ -12,6 +12,10 @@ Astro.response.headers.set('cache-control', 'no-store');
 <html lang={defaultLocale}>
   <head>
     <meta charset="utf-8" />
+    <!-- Verificación de dominio de Meta. Duplicado del Layout a propósito: Meta pide el
+         tag en la home y este es el fallback que se sirve cuando el middleware no corre
+         (preview local, crawler sin Accept-Language). Mantener ambos en sync. -->
+    <meta name="facebook-domain-verification" content="njpqfx6xxvyxxakl8z8pch5r1k5e9f" />
     <meta http-equiv="refresh" content={`0;url=${target}`} />
     <link rel="canonical" href={target} />
     <meta name="robots" content="noindex" />
