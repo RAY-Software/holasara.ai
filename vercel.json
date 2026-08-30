@@ -10,5 +10,22 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/es/precios",
+      "destination": "/es/demo",
+      "permanent": true
+    },
+    {
+      "source": "/en/precios",
+      "destination": "/en/demo",
+      "permanent": true
+    },
+    {
+      "source": "/precios",
+      "destination": "/es/demo",
+      "permanent": true
+    }
   ]
 }
