@@ -42,7 +42,7 @@ const ICONS: Record<string, string> = {
 const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-4';
 ---
 
-<Layout lang={lang} title={member.metaTitle} description={member.metaDescription}>
+<Layout lang={lang} title={member.metaTitle} description={member.metaDescription} ogImage={`/og/equipo-${member.id}-${lang}.jpg`}>
   <Header lang={lang} />
   <main>
     <!-- ══════════ HERO ══════════ -->
