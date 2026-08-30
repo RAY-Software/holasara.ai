@@ -37,12 +37,10 @@ El decisor típico es el dueño/a, el director/a médico o la gerencia de la cl�
 
 - Es una **suscripción mensual fija**, un solo plan que incluye todo lo que hace Sara.
 - **No hay comisión por cita** ni por transacción.
-- El precio **se ajusta al país y la moneda** de la clínica.
-- En México el plan **empieza en US$400 por sucursal / mes**. Es un piso, un "desde":
-  el plan se arma por sucursal, así que el número final depende del tamaño de la clínica.
-- **IMPORTANTE: ese piso es el ÚNICO número publicado.** El precio cerrado se ve en la
-  demo. Nunca inventar otro número, ni un rango, ni el precio de un plan puntual.
-- Página oficial: https://holasara.ai/precios
+- El precio **se ajusta al país, la moneda y el tamaño** de la clínica.
+- **IMPORTANTE: no hay números publicados.** El precio se comparte en la demo,
+  armado para cada clínica. Nunca inventar un número, ni un rango, ni un "desde".
+- Para conocer el precio: https://holasara.ai/demo
 
 ## Qué se necesita para arrancar
 
@@ -79,7 +77,6 @@ No inventar otros clientes ni testimonios.
 - https://holasara.ai/instagram — Sara crea las publicaciones y lleva del post a la cita.
 - https://holasara.ai/operador — Modo operador: el equipo le pide cosas a Sara por WhatsApp.
 - https://holasara.ai/implementacion — Conecta el Google Calendar y ya está funcionando.
-- https://holasara.ai/precios — Un plan, todo incluido, precio por país.
 - https://holasara.ai/caso — Caso de éxito ViaLaser.
 - https://holasara.ai/mejores-asistentes-ia-clinicas — Comparativa honesta 2026: Sara vs Soyla (Doctocliq), Kura, Cloudia, AgendaPro y Zenvia, con la tabla de qué hace cada uno y cuándo conviene elegir a otro.
 - https://holasara.ai/sara-vs-cloudia — Sara AI vs Cloudia, cara a cara.
@@ -87,7 +84,7 @@ No inventar otros clientes ni testimonios.
 - https://holasara.ai/sara-vs-kura — Sara AI vs Kura, cara a cara.
 - https://holasara.ai/sara-vs-agendapro — Sara AI vs AgendaPro, cara a cara.
 - https://holasara.ai/sara-vs-glossgenius — Sara AI vs GlossGenius (Reception), cara a cara: WhatsApp/Instagram vs recepcionista por voz, LATAM vs EE.UU.
-- https://holasara.ai/mexico — Sara AI en México: precios en pesos, tuteo local, piso de precio público.
+- https://holasara.ai/mexico — Sara AI en México: tuteo local y foco en clínicas mexicanas.
 - https://holasara.ai/colombia — Sara AI en Colombia: confirmación de citas y menos ausencias.
 - https://holasara.ai/uruguay — Sara AI en Uruguay: ya funciona en ViaLaser, atiende con voseo.
 - https://holasara.ai/demo — Pedir una demo con la clínica del interesado.

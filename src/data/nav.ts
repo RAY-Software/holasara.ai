@@ -183,12 +183,10 @@ const topLinksRaw: RawLink[] = [
     name: { es: 'Cómo funciona', en: 'How it works' },
     desc: { es: 'Conectas tu calendario y listo.', en: 'Connect your calendar and you are set.' },
   },
-  {
-    href: '/precios',
-    name: { es: 'Precios', en: 'Pricing' },
-    desc: { es: 'Planes por país.', en: 'Plans by country.' },
-  },
 ];
+// "Precios" salió del top menu a pedido de Franco (ago 2026): prefiere no
+// mostrar precios en la navegación. La página /precios sigue viva por si hay
+// links directos (ads, contratos); solo dejó de promocionarse.
 
 const pickLink = (l: RawLink, lang: Locale): FeatureLink => ({
   href: l.href,

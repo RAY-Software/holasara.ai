@@ -28,7 +28,6 @@ export function buildAgentMarkdown(llmsBody = ''): string {
     '## Empezá acá',
     `- [Probar gratis](${abs('/prueba')})`,
     `- [Ver una demo](${abs('/demo')})`,
-    `- [Precios por país](${abs('/precios')})`,
     '',
     '## Producto',
   ];
