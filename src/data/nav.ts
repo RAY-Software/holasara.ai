@@ -175,12 +175,9 @@ const sizeLinksRaw: RawLink[] = [
   },
 ];
 
+// "Casos" salió del top menu a pedido de Franco (ago 2026); /caso sigue viva y
+// linkeada desde las tarjetas de caso de los mega menús y las campañas.
 const topLinksRaw: RawLink[] = [
-  {
-    href: '/caso',
-    name: { es: 'Casos', en: 'Cases' },
-    desc: { es: 'Clínicas reales con Sara.', en: 'Real clinics running on Sara.' },
-  },
   {
     href: '/implementacion',
     name: { es: 'Cómo funciona', en: 'How it works' },
