@@ -168,7 +168,7 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
                 </svg>
               </span>
               {member.scenes.map((s) => (
-                <div class="flex flex-col items-center gap-5">
+                <div data-scene-col class="scene-col flex flex-col items-center gap-5">
                   <span class="inline-flex items-center gap-2 rounded-full border border-cream/25 px-4 py-1.5 text-sm font-semibold text-cream/85">
                     {s.label}
                   </span>
@@ -271,27 +271,57 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
   <Footer lang={lang} />
 </Layout>
 
+<style>
+  /* Spotlight secuencial del storyboard: la escena activa a pleno, el resto
+     atenuado. Guía el ojo del paso 1 al 2 mientras corre la animación. */
+  .scene-col {
+    transition:
+      opacity 0.5s ease,
+      filter 0.5s ease;
+  }
+  .scene-col.is-dim {
+    opacity: 0.35;
+    filter: grayscale(0.55) saturate(0.6);
+  }
+  /* Alturas iguales: el grid estira las columnas y la tarjeta absorbe el resto. */
+  .scene-col :global(figure.chat) {
+    flex: 1;
+  }
+</style>
+
 <script>
   // Orquesta el storyboard de escenas: los chats están lado a lado y se animan
-  // encadenados. El primero arranca al entrar en viewport; cuando termina
-  // (chat:done), tras una pausa arranca el siguiente. Los chats de adentro no
-  // se auto-disparan (ConversationDemo los deja esperando `chat:play`).
+  // encadenados con spotlight. El primero arranca al entrar en viewport (el
+  // resto se atenúa); al terminar (chat:done) el foco pasa a la siguiente
+  // escena, y al final todas quedan a pleno para leerse. Los chats de adentro
+  // no se auto-disparan (ConversationDemo los deja esperando `chat:play`).
   (() => {
     document.querySelectorAll('[data-chat-sequence]').forEach((root) => {
       const el = root as HTMLElement;
       const figs = Array.from(el.querySelectorAll<HTMLElement>('figure.chat[data-animate]'));
+      const cols = Array.from(el.querySelectorAll<HTMLElement>('[data-scene-col]'));
       if (!figs.length) return;
       let next = 0;
 
+      const setFocus = (i: number | null) => {
+        cols.forEach((c, idx) => c.classList.toggle('is-dim', i !== null && idx !== i));
+      };
+
       const playNext = () => {
         if (next >= figs.length) return;
-        const fig = figs[next];
+        const i = next;
         next += 1;
-        fig.dispatchEvent(new CustomEvent('chat:play'));
+        setFocus(i);
+        figs[i].dispatchEvent(new CustomEvent('chat:play'));
       };
 
       el.addEventListener('chat:done', () => {
-        window.setTimeout(playNext, 1200);
+        if (next < figs.length) {
+          window.setTimeout(playNext, 1100);
+        } else {
+          // Terminó la última: todo a pleno para poder releer la secuencia.
+          window.setTimeout(() => setFocus(null), 900);
+        }
       });
 
       // Arranca cuando la secuencia entra en viewport.
