@@ -41,9 +41,9 @@ interface RawMember {
   chatSubtitle: Record<Locale, string>;
   bubbles: Record<Locale, Bubble[]>;
   featureLinkLabel: Record<Locale, string>; // CTA hacia featureHref o /demo
-  // Casos de uso (grid "lo que maneja"). Opcional por personaje.
-  // logo: path a un SVG de marca (opcional; si falta, la tarjeta usa un ícono).
-  useCases?: Record<Locale, { title: string; desc: string; logo?: string }[]>;
+  // Casos de uso (grid "lo que hace"). Opcional por personaje.
+  // logo: path a un SVG de marca. icon: keyword de ícono inline (ver [member].astro).
+  useCases?: Record<Locale, { title: string; desc: string; logo?: string; icon?: string }[]>;
 }
 
 const RAW: RawMember[] = [
@@ -69,12 +69,12 @@ const RAW: RawMember[] = [
     },
     heroEyebrow: { es: 'Sara · Recepción', en: 'Sara · Reception' },
     heroTitle: {
-      es: "Atiende, agenda y cobra.<br /><em class='text-pine-dark'>Sola.</em>",
-      en: "Answers, books and collects.<br /><em class='text-pine-dark'>On her own.</em>",
+      es: "Tu recepción.<br /><em class='text-pine-dark'>Y tu secretaria.</em>",
+      en: "Your front desk.<br /><em class='text-pine-dark'>And your secretary.</em>",
     },
     heroLead: {
-      es: 'Sara es la recepcionista con IA de tu clínica. Responde al instante, arma la propuesta que conviene, agenda la cita y cobra el anticipo. De noche, los fines de semana y en los picos.',
-      en: 'Sara is your clinic’s AI receptionist. She replies instantly, builds the offer that fits, books the appointment and takes the deposit. At night, on weekends and at peak times.',
+      es: 'Sara es la recepcionista y la secretaria con IA de tu clínica. Atiende, vende, agenda y cobra por WhatsApp, Instagram y teléfono. Y le pides lo que necesites — bloquear tu agenda, reagendar, reactivar pacientes — y lo hace. De noche, los fines de semana y en los picos.',
+      en: 'Sara is your clinic’s AI receptionist and secretary. She answers, sells, books and collects over WhatsApp, Instagram and phone. And you ask her for whatever you need — block your calendar, reschedule, win patients back — and she does it. At night, on weekends and at peak times.',
     },
     kicker: { es: 'Cómo trabaja Sara', en: 'How Sara works' },
     h2: {
@@ -115,6 +115,24 @@ const RAW: RawMember[] = [
       ],
     },
     featureLinkLabel: { es: 'Ver todo lo que hace Sara', en: 'See everything Sara does' },
+    useCases: {
+      es: [
+        { title: 'Tu secretaria', icon: 'chat', desc: 'Le pides las cosas por WhatsApp — "bloquea el viernes", "reagenda a Juan" — y las hace al instante.' },
+        { title: 'WhatsApp e Instagram', logo: '/img/logos/whatsapp.svg', desc: 'Atiende al instante donde te escriben, 24/7, con el criterio de tu clínica.' },
+        { title: 'Atiende el teléfono', icon: 'phone', desc: 'Contesta las llamadas por voz, informa y agenda, sin que suene ocupado.' },
+        { title: 'Agenda y recordatorios', icon: 'calendar', desc: 'Reserva en tu calendario, recuerda y confirma. Sin dobles reservas.' },
+        { title: 'Cobra el anticipo', icon: 'card', desc: 'Cobra la seña o la consulta en el mismo chat, antes de la cita.' },
+        { title: 'Reactiva pacientes', icon: 'refresh', desc: 'Trae de vuelta a los que no vuelven y llena los huecos de la agenda.' },
+      ],
+      en: [
+        { title: 'Your secretary', icon: 'chat', desc: 'You ask her over WhatsApp — "block Friday", "move Juan" — and she does it instantly.' },
+        { title: 'WhatsApp & Instagram', logo: '/img/logos/whatsapp.svg', desc: 'Answers instantly wherever they message you, 24/7, with your clinic’s judgment.' },
+        { title: 'Answers the phone', icon: 'phone', desc: 'Picks up voice calls, informs and books, with no busy tone.' },
+        { title: 'Scheduling & reminders', icon: 'calendar', desc: 'Books in your calendar, reminds and confirms. No double bookings.' },
+        { title: 'Takes the deposit', icon: 'card', desc: 'Charges the deposit or consult in the same chat, before the appointment.' },
+        { title: 'Wins patients back', icon: 'refresh', desc: 'Brings back those who don’t return and fills the gaps in your calendar.' },
+      ],
+    },
   },
 
   {
@@ -264,6 +282,20 @@ const RAW: RawMember[] = [
       ],
     },
     featureLinkLabel: { es: 'Pedir una demo', en: 'Book a demo' },
+    useCases: {
+      es: [
+        { title: 'Cierre del mes', icon: 'chart', desc: 'Te resume cuánto facturaste y cómo vienes contra el mes anterior, sin planillas.' },
+        { title: 'Cobros pendientes', icon: 'card', desc: 'Detecta anticipos y pagos sin cobrar y te los pasa para recuperar.' },
+        { title: 'Rentabilidad', icon: 'coin', desc: 'Te dice qué tratamiento deja más margen y cuál no está rindiendo.' },
+        { title: 'Alertas', icon: 'bell', desc: 'Si algo se mueve — un gasto raro, una caída de ingresos — te avisa a tiempo.' },
+      ],
+      en: [
+        { title: 'Monthly close', icon: 'chart', desc: 'Sums up how much you billed and how you’re tracking vs last month, no spreadsheets.' },
+        { title: 'Money to collect', icon: 'card', desc: 'Spots unpaid deposits and payments and hands them over to recover.' },
+        { title: 'Profitability', icon: 'coin', desc: 'Tells you which treatment leaves the most margin and which isn’t paying off.' },
+        { title: 'Alerts', icon: 'bell', desc: 'If something shifts — an odd expense, a dip in revenue — he flags it in time.' },
+      ],
+    },
   },
 ];
 
@@ -289,7 +321,7 @@ export interface TeamMember {
   chatSubtitle: string;
   bubbles: Bubble[];
   featureLinkLabel: string;
-  useCases?: { title: string; desc: string; logo?: string }[];
+  useCases?: { title: string; desc: string; logo?: string; icon?: string }[];
   /** Path interno de la ficha del personaje: /equipo/sara, /equipo/mia, … */
   href: string;
 }
