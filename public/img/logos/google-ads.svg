@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Google Ads: la "A" de dos barras + punto verde -->
+  <rect x="11" y="6" width="11" height="32" rx="5.5" transform="rotate(30 16.5 22)" fill="#FBBC04"/>
+  <rect x="26" y="6" width="11" height="32" rx="5.5" transform="rotate(-30 31.5 22)" fill="#4285F4"/>
+  <circle cx="10.8" cy="36.5" r="6.2" fill="#34A853"/>
+</svg>

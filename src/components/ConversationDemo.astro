@@ -16,6 +16,8 @@ interface Bubble {
   who: 'in' | 'out';
   text: string;
   t?: string;
+  /** URL visible dentro de la burbuja (p. ej. el link de pago), como lo pinta WhatsApp. */
+  link?: string;
 }
 import { defaultLocale, type Locale } from '../i18n/config';
 interface Props {
@@ -100,6 +102,7 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
       bubbles.map((b) => (
         <div class={`msg ${b.who === 'out' ? 'msg--left' : 'msg--right'}`}>
           <span class="msg__text">{b.text}</span>
+          {b.link && <span class="msg__link">{b.link}</span>}
           <span class="msg__meta">
             {b.t}
             {b.who === 'in' && channel === 'whatsapp' && (
@@ -268,6 +271,13 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
   .tick {
     width: 16px;
     height: 11px;
+  }
+  /* URL dentro de la burbuja, como la pinta WhatsApp (azul, subrayada). */
+  .msg__link {
+    color: #039be5;
+    text-decoration: underline;
+    word-break: break-all;
+    margin-top: 0.1rem;
   }
 
   /* ── Animación de conversación (opt-in vía [data-animate]) ── */
