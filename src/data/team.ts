@@ -167,7 +167,7 @@ const RAW: RawMember[] = [
         'Sends you the proposal and runs it once you approve',
       ],
     },
-    chatSubtitle: { es: 'te escribe cuando ve una oportunidad', en: 'writes you when she spots an opening' },
+    chatSubtitle: { es: 'Experta en marketing', en: 'Marketing expert' },
     bubbles: {
       es: [
         { who: 'out', text: 'Resumen de la semana 👋 Tu web: +18% de visitas desde Google. Tu ficha de Google apareció en 2,400 búsquedas y entraron 9 llamadas. Instagram: +320 seguidores.', t: '09:12' },
