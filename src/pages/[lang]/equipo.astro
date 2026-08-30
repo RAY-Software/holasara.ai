@@ -8,6 +8,7 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ConversationDemo from '../../components/ConversationDemo.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { getTeam } from '../../data/team';
 
@@ -223,6 +224,8 @@ const dict = {
         );
       })
     }
+
+    <ClientsStrip lang={lang} />
 
     <CtaBand lang={lang} title={dict.finalTitle} sub={dict.finalSub} />
   </main>

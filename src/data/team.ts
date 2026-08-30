@@ -44,6 +44,10 @@ interface RawMember {
   // Casos de uso (grid "lo que hace"). Opcional por personaje.
   // logo: path a un SVG de marca. icon: keyword de ícono inline (ver [member].astro).
   useCases?: Record<Locale, { title: string; desc: string; logo?: string; icon?: string }[]>;
+  // Carrusel de escenas animadas (chats encadenados). Opcional por personaje.
+  scenesTitle?: Record<Locale, string>; // admite <em> y &nbsp;
+  scenesIntro?: Record<Locale, string>;
+  scenes?: Record<Locale, { label: string; subtitle?: string; bubbles: Bubble[] }[]>;
 }
 
 const RAW: RawMember[] = [
@@ -73,8 +77,8 @@ const RAW: RawMember[] = [
       en: "Your front desk.<br /><em class='text-pine-dark'>And your secretary.</em>",
     },
     heroLead: {
-      es: 'Sara es la recepcionista y la secretaria con IA de tu clínica. Atiende, vende, agenda y cobra por WhatsApp, Instagram y teléfono. Y le pides lo que necesites — bloquear tu agenda, reagendar, reactivar pacientes — y lo hace. De noche, los fines de semana y en los picos.',
-      en: 'Sara is your clinic’s AI receptionist and secretary. She answers, sells, books and collects over WhatsApp, Instagram and phone. And you ask her for whatever you need — block your calendar, reschedule, win patients back — and she does it. At night, on weekends and at peak times.',
+      es: 'Sara es la recepcionista y la secretaria con IA de tu clínica. Atiende, vende, agenda y cobra por WhatsApp, Instagram y teléfono. Y le pides lo que necesites (bloquear tu agenda, reagendar, reactivar pacientes) y lo hace. De noche, los fines de semana y en los picos.',
+      en: 'Sara is your clinic’s AI receptionist and secretary. She answers, sells, books and collects over WhatsApp, Instagram and phone. And you ask her for whatever you need (block your calendar, reschedule, win patients back) and she does it. At night, on weekends and at peak times.',
     },
     kicker: { es: 'Cómo trabaja Sara', en: 'How Sara works' },
     h2: {
@@ -115,9 +119,63 @@ const RAW: RawMember[] = [
       ],
     },
     featureLinkLabel: { es: 'Ver todo lo que hace Sara', en: 'See everything Sara does' },
+    scenesTitle: {
+      es: 'Le pides algo a Sara. <em class="text-pine-dark">Y ella sale a resolverlo.</em>',
+      en: 'You ask Sara for something. <em class="text-pine-dark">And she goes and gets it done.</em>',
+    },
+    scenesIntro: {
+      es: 'Así se ve en la vida real: el doctor le pide reagendar una tarde entera, y Sara habla con cada paciente hasta dejar todo resuelto.',
+      en: 'Here’s what it looks like in real life: the doctor asks her to reschedule a whole afternoon, and Sara talks to each patient until everything is sorted.',
+    },
+    scenes: {
+      es: [
+        {
+          label: '1 · El doctor le pide',
+          subtitle: 'tu secretaria por WhatsApp',
+          bubbles: [
+            { who: 'in', text: 'Sara, me salió una cirugía el martes a la tarde. Reagenda a los pacientes que tengo ese día después de las 14.', t: '11:02' },
+            { who: 'out', text: 'Claro, doctor. El martes después de las 14 tiene 3 pacientes: Laura G. (14:30, limpieza), Marco P. (15:30, valoración) y Sofía T. (17:00, control). ¿Les propongo pasarse al jueves o al viernes?', t: '11:02' },
+            { who: 'in', text: 'Sí, dales prioridad el jueves', t: '11:04' },
+            { who: 'out', text: 'Perfecto ✅ Les escribo ahora a los tres con opciones del jueves y le confirmo apenas cierre cada uno.', t: '11:04' },
+          ],
+        },
+        {
+          label: '2 · Sara resuelve con el paciente',
+          subtitle: 'en línea',
+          bubbles: [
+            { who: 'out', text: 'Hola Laura 👋 Te escribo de la clínica. El doctor tuvo que mover su agenda del martes y necesitamos reagendar tu limpieza de las 14:30. ¿Te queda bien el jueves 15:00 o 17:30?', t: '11:07' },
+            { who: 'in', text: 'Uy, sí. El jueves 17:30 me va perfecto', t: '11:15' },
+            { who: 'out', text: '¡Listo! Jueves 17:30 confirmado ✅ Te llega el recordatorio un día antes. ¡Gracias por la flexibilidad!', t: '11:15' },
+            { who: 'out', text: 'Doctor: Laura ya quedó para el jueves 17:30. Sigo con Marco y Sofía y le aviso. 👍', t: '11:16' },
+          ],
+        },
+      ],
+      en: [
+        {
+          label: '1 · The doctor asks',
+          subtitle: 'your secretary on WhatsApp',
+          bubbles: [
+            { who: 'in', text: 'Sara, a surgery came up on Tuesday afternoon. Reschedule my patients that day after 2pm.', t: '11:02' },
+            { who: 'out', text: 'Of course, doctor. Tuesday after 2pm you have 3 patients: Laura G. (2:30, cleaning), Marco P. (3:30, assessment) and Sofía T. (5:00, follow-up). Shall I offer them Thursday or Friday?', t: '11:02' },
+            { who: 'in', text: 'Yes, prioritize Thursday', t: '11:04' },
+            { who: 'out', text: 'Perfect ✅ I’m messaging all three now with Thursday options and I’ll confirm as each one closes.', t: '11:04' },
+          ],
+        },
+        {
+          label: '2 · Sara sorts it with the patient',
+          subtitle: 'online',
+          bubbles: [
+            { who: 'out', text: 'Hi Laura 👋 It’s the clinic. The doctor had to move his Tuesday schedule and we need to reschedule your 2:30 cleaning. Would Thursday 3:00 or 5:30 work?', t: '11:07' },
+            { who: 'in', text: 'Oh, sure. Thursday 5:30 works great', t: '11:15' },
+            { who: 'out', text: 'Done! Thursday 5:30 confirmed ✅ You’ll get a reminder the day before. Thanks for being flexible!', t: '11:15' },
+            { who: 'out', text: 'Doctor: Laura is set for Thursday 5:30. Moving on to Marco and Sofía, I’ll keep you posted. 👍', t: '11:16' },
+          ],
+        },
+      ],
+    },
     useCases: {
       es: [
-        { title: 'Tu secretaria', icon: 'chat', desc: 'Le pides las cosas por WhatsApp — "bloquea el viernes", "reagenda a Juan" — y las hace al instante.' },
+        { title: 'Tu secretaria', icon: 'chat', desc: 'Le pides las cosas por WhatsApp, como "bloquea el viernes" o "reagenda a Juan", y las hace al instante.' },
         { title: 'WhatsApp e Instagram', logo: '/img/logos/whatsapp.svg', desc: 'Atiende al instante donde te escriben, 24/7, con el criterio de tu clínica.' },
         { title: 'Atiende el teléfono', icon: 'phone', desc: 'Contesta las llamadas por voz, informa y agenda, sin que suene ocupado.' },
         { title: 'Agenda y recordatorios', icon: 'calendar', desc: 'Reserva en tu calendario, recuerda y confirma. Sin dobles reservas.' },
@@ -125,7 +183,7 @@ const RAW: RawMember[] = [
         { title: 'Reactiva pacientes', icon: 'refresh', desc: 'Trae de vuelta a los que no vuelven y llena los huecos de la agenda.' },
       ],
       en: [
-        { title: 'Your secretary', icon: 'chat', desc: 'You ask her over WhatsApp — "block Friday", "move Juan" — and she does it instantly.' },
+        { title: 'Your secretary', icon: 'chat', desc: 'You ask her over WhatsApp, like "block Friday" or "move Juan", and she does it instantly.' },
         { title: 'WhatsApp & Instagram', logo: '/img/logos/whatsapp.svg', desc: 'Answers instantly wherever they message you, 24/7, with your clinic’s judgment.' },
         { title: 'Answers the phone', icon: 'phone', desc: 'Picks up voice calls, informs and books, with no busy tone.' },
         { title: 'Scheduling & reminders', icon: 'calendar', desc: 'Books in your calendar, reminds and confirms. No double bookings.' },
@@ -287,13 +345,13 @@ const RAW: RawMember[] = [
         { title: 'Cierre del mes', icon: 'chart', desc: 'Te resume cuánto facturaste y cómo vienes contra el mes anterior, sin planillas.' },
         { title: 'Cobros pendientes', icon: 'card', desc: 'Detecta anticipos y pagos sin cobrar y te los pasa para recuperar.' },
         { title: 'Rentabilidad', icon: 'coin', desc: 'Te dice qué tratamiento deja más margen y cuál no está rindiendo.' },
-        { title: 'Alertas', icon: 'bell', desc: 'Si algo se mueve — un gasto raro, una caída de ingresos — te avisa a tiempo.' },
+        { title: 'Alertas', icon: 'bell', desc: 'Si algo se mueve, un gasto raro o una caída de ingresos, te avisa a tiempo.' },
       ],
       en: [
         { title: 'Monthly close', icon: 'chart', desc: 'Sums up how much you billed and how you’re tracking vs last month, no spreadsheets.' },
         { title: 'Money to collect', icon: 'card', desc: 'Spots unpaid deposits and payments and hands them over to recover.' },
         { title: 'Profitability', icon: 'coin', desc: 'Tells you which treatment leaves the most margin and which isn’t paying off.' },
-        { title: 'Alerts', icon: 'bell', desc: 'If something shifts — an odd expense, a dip in revenue — he flags it in time.' },
+        { title: 'Alerts', icon: 'bell', desc: 'If something shifts, an odd expense or a dip in revenue, he flags it in time.' },
       ],
     },
   },
@@ -322,6 +380,9 @@ export interface TeamMember {
   bubbles: Bubble[];
   featureLinkLabel: string;
   useCases?: { title: string; desc: string; logo?: string; icon?: string }[];
+  scenesTitle?: string;
+  scenesIntro?: string;
+  scenes?: { label: string; subtitle?: string; bubbles: Bubble[] }[];
   /** Path interno de la ficha del personaje: /equipo/sara, /equipo/mia, … */
   href: string;
 }
@@ -349,6 +410,9 @@ const pick = (m: RawMember, lang: Locale): TeamMember => ({
   bubbles: m.bubbles[lang],
   featureLinkLabel: m.featureLinkLabel[lang],
   useCases: m.useCases ? m.useCases[lang] : undefined,
+  scenesTitle: m.scenesTitle ? m.scenesTitle[lang] : undefined,
+  scenesIntro: m.scenesIntro ? m.scenesIntro[lang] : undefined,
+  scenes: m.scenes ? m.scenes[lang] : undefined,
   href: `/equipo/${m.id}`,
 });
 

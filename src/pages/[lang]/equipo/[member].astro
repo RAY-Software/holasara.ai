@@ -5,6 +5,7 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import ConversationDemo from '../../../components/ConversationDemo.astro';
+import ClientsStrip from '../../../components/ClientsStrip.astro';
 import CtaBand from '../../../components/CtaBand.astro';
 
 // Ficha interna por personaje: /equipo/sara, /equipo/mia, /equipo/daniel.
@@ -144,6 +145,54 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
       </div>
     </section>
 
+    <!-- ══════════ ESCENAS · carrusel de chats encadenados ══════════ -->
+    {
+      member.scenes && member.scenes.length > 0 && (
+        <section class="border-b border-line bg-ink text-cream">
+          <div class="mx-auto max-w-6xl px-5 py-24">
+            <div class="mx-auto mb-12 max-w-2xl text-center">
+              <h2
+                class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl [&_em]:text-mint"
+                set:html={member.scenesTitle}
+              />
+              {member.scenesIntro && <p class="mt-4 text-lg text-cream/70">{member.scenesIntro}</p>}
+            </div>
+
+            <div data-chat-carousel class="mx-auto max-w-md">
+              <div role="tablist" class="mb-6 flex justify-center gap-2">
+                {member.scenes.map((s, i) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    data-scene-tab={i}
+                    aria-selected={i === 0 ? 'true' : 'false'}
+                    class="scene-tab rounded-full border border-cream/25 px-4 py-2 text-sm font-semibold text-cream/70 transition-colors"
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+              <div class="relative">
+                {member.scenes.map((s, i) => (
+                  <div data-scene={i} class={`scene ${i === 0 ? '' : 'scene--hidden'}`}>
+                    <ConversationDemo
+                      lang={lang}
+                      channel="whatsapp"
+                      name={member.name}
+                      avatar={member.avatar}
+                      subtitle={s.subtitle}
+                      bubbles={s.bubbles}
+                      animate
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
     <!-- ══════════ CASOS DE USO (si el personaje los tiene) ══════════ -->
     {
       member.useCases && (
@@ -219,7 +268,88 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
       </div>
     </section>
 
+    <ClientsStrip lang={lang} />
+
     <CtaBand lang={lang} />
   </main>
   <Footer lang={lang} />
 </Layout>
+
+<style>
+  /* Carrusel de escenas: tabs + slides. El slide oculto conserva el layout
+     del activo (grid overlay) para que la sección no salte de altura. */
+  .scene-tab[aria-selected='true'] {
+    background: var(--color-mint);
+    border-color: var(--color-mint);
+    color: var(--color-ink);
+  }
+  .scene {
+    transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: center;
+  }
+  .scene--hidden {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  // Orquesta el carrusel de escenas: reproduce la escena activa y, cuando su
+  // chat termina (chat:done), pasa a la siguiente tras una pausa. Los tabs
+  // permiten saltar a mano. Los chats de adentro no se auto-disparan (el
+  // script de ConversationDemo los deja en espera de `chat:play`).
+  (() => {
+    document.querySelectorAll('[data-chat-carousel]').forEach((root) => {
+      const el = root as HTMLElement;
+      const tabs = Array.from(el.querySelectorAll<HTMLElement>('[data-scene-tab]'));
+      const scenes = Array.from(el.querySelectorAll<HTMLElement>('[data-scene]'));
+      if (scenes.length < 2) return;
+      let active = 0;
+      let autoTimer: number | undefined;
+
+      const playScene = (i: number) => {
+        const fig = scenes[i].querySelector('figure.chat[data-animate]');
+        if (fig) fig.dispatchEvent(new CustomEvent('chat:play'));
+      };
+      const show = (i: number) => {
+        active = i;
+        scenes.forEach((s, idx) => s.classList.toggle('scene--hidden', idx !== i));
+        tabs.forEach((t, idx) => t.setAttribute('aria-selected', idx === i ? 'true' : 'false'));
+        playScene(i);
+      };
+
+      tabs.forEach((t, i) =>
+        t.addEventListener('click', () => {
+          window.clearTimeout(autoTimer);
+          show(i);
+        })
+      );
+
+      // Al terminar una escena, avanza sola a la siguiente (si existe).
+      el.addEventListener('chat:done', () => {
+        if (active < scenes.length - 1) {
+          const next = active + 1;
+          autoTimer = window.setTimeout(() => show(next), 1400);
+        }
+      });
+
+      // Arranca cuando el carrusel entra en viewport.
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              playScene(0);
+              io.disconnect();
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+      io.observe(el);
+    });
+  })();
+</script>

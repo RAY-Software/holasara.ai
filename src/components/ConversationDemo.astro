@@ -537,6 +537,7 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
         const step = () => {
           if (i >= msgs.length) {
             if (typing.parentNode) typing.parentNode.removeChild(typing);
+            fig.dispatchEvent(new CustomEvent('chat:done', { bubbles: true }));
             return;
           }
           const m = msgs[i];
@@ -556,18 +557,24 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
         step();
       };
 
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              play();
-              io.disconnect();
-            }
-          });
-        },
-        { threshold: 0.4 }
-      );
-      io.observe(fig);
+      // Dentro de un carrusel, el chat no se auto-dispara: espera la orden
+      // `chat:play` del carrusel (para animar recién cuando su slide está activo).
+      if (fig.closest('[data-chat-carousel]')) {
+        fig.addEventListener('chat:play', play);
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                play();
+                io.disconnect();
+              }
+            });
+          },
+          { threshold: 0.4 }
+        );
+        io.observe(fig);
+      }
     });
   })();
 </script>
