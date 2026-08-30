@@ -20,8 +20,8 @@ const team = getTeam(lang);
 // Etiquetas del mega menú de Equipo (no hay claves i18n dedicadas para esto).
 const teamNav =
   lang === 'en'
-    ? { label: 'Team', all: 'Meet the whole team' }
-    : { label: 'Equipo', all: 'Conoce a todo el equipo' };
+    ? { label: 'Team', all: 'Meet the whole team', action: 'In action' }
+    : { label: 'Equipo', all: 'Conoce a todo el equipo', action: 'En acción' };
 const L = (p: string) => localePath(p, lang);
 
 // Switcher ES/EN: alterna el segmento de idioma del path actual, preservando la ruta.
@@ -190,27 +190,53 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
         <div
           class="mega-panel invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
         >
-          <div class="mx-auto w-[min(96vw,760px)] rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)]">
-            <div class="grid gap-6 sm:grid-cols-3">
-              {
-                team.map((m) => (
-                  <a href={L(m.href)} class="group/link -m-2 flex gap-3 rounded-xl p-2 transition-colors hover:bg-paper">
-                    <span class="relative h-14 w-12 shrink-0 overflow-hidden rounded-lg bg-cream">
-                      <img src={m.avatar} alt={m.name} loading="lazy" decoding="async" class="h-full w-full object-cover object-center" />
-                    </span>
-                    <span class="min-w-0">
-                      <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
-                        {m.name} <span class="font-normal text-salvia">· {m.role}</span>
+          <div class="mx-auto grid w-[min(96vw,880px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_280px]">
+            <div class="flex flex-col">
+              <div class="flex flex-1 flex-col justify-center gap-1.5">
+                {
+                  team.map((m) => (
+                    <a href={L(m.href)} class="group/link -mx-3 flex items-center gap-4 rounded-xl px-3 py-2.5 transition-colors hover:bg-paper">
+                      <span class="relative h-[74px] w-16 shrink-0 overflow-hidden rounded-lg bg-cream">
+                        <img src={m.poster} alt={m.name} loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
                       </span>
-                      <span class="mt-1 block text-xs leading-snug text-salvia">{m.oneliner}</span>
-                    </span>
-                  </a>
-                ))
-              }
+                      <span class="min-w-0">
+                        <span class="block text-[15px] font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
+                          {m.name} <span class="font-normal text-salvia">· {m.role}</span>
+                        </span>
+                        <span class="mt-1 block text-[13px] leading-snug text-salvia">{m.oneliner}</span>
+                      </span>
+                    </a>
+                  ))
+                }
+              </div>
+              <a href={L('/equipo')} class="mt-5 inline-flex items-center gap-1.5 border-t border-line pt-5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+                {teamNav.all} <span aria-hidden="true">→</span>
+              </a>
             </div>
-            <a href={L('/equipo')} class="mt-6 inline-flex items-center gap-1.5 border-t border-line pt-5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
-              {teamNav.all} <span aria-hidden="true">→</span>
-            </a>
+
+            <!-- Rail "En acción": retratos grandes en crossfade (patrón diezX) -->
+            <div class="hidden flex-col border-l border-line pl-8 md:flex">
+              <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{teamNav.action}</p>
+              <div class="team-rail relative h-[270px] w-full overflow-hidden rounded-xl bg-ink">
+                {
+                  team.map((m, i) => (
+                    <a href={L(m.href)} class="team-rail__slide absolute inset-0" style={`animation-delay:${i * 3}s`}>
+                      <img
+                        src={m.poster}
+                        alt={`${m.name} · ${m.role}`}
+                        loading="lazy"
+                        decoding="async"
+                        class="h-full w-full object-cover object-top"
+                      />
+                      <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/80 to-transparent px-4 pb-3 pt-10">
+                        <span class="block text-sm font-bold text-cream">{m.name}</span>
+                        <span class="block text-xs text-cream/75">{m.role}</span>
+                      </span>
+                    </a>
+                  ))
+                }
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -419,6 +445,28 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
   }
   [data-mega].is-open .mega-chevron {
     transform: rotate(180deg);
+  }
+
+  /* Rail "En acción" del panel Equipo: crossfade CSS puro (sin JS), 3 retratos
+     de 3s cada uno en un loop de 9s, desfasados por animation-delay. */
+  .team-rail__slide {
+    opacity: 0;
+    animation: team-rail-fade 9s infinite;
+  }
+  @keyframes team-rail-fade {
+    0% { opacity: 0; }
+    4% { opacity: 1; }
+    33% { opacity: 1; }
+    38% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .team-rail__slide {
+      animation: none;
+    }
+    .team-rail__slide:first-child {
+      opacity: 1;
+    }
   }
 </style>
 

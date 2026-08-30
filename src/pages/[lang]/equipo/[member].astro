@@ -5,6 +5,7 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import ConversationDemo from '../../../components/ConversationDemo.astro';
+import IgPost from '../../../components/mocks/IgPost.astro';
 import ClientsStrip from '../../../components/ClientsStrip.astro';
 import CtaBand from '../../../components/CtaBand.astro';
 
@@ -144,6 +145,40 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
         </div>
       </div>
     </section>
+
+    <!-- ══════════ INSTAGRAM · flujo de 3 pasos (si el personaje lo tiene) ══════════ -->
+    {
+      member.igFlow && (
+        <section class="border-b border-line">
+          <div class="mx-auto max-w-6xl px-5 py-24">
+            <div class="mx-auto mb-14 max-w-2xl text-center">
+              <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+                {member.name} · Instagram
+              </p>
+              <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={member.igFlow.title} />
+              <p class="mt-4 text-lg text-salvia">{member.igFlow.intro}</p>
+            </div>
+            <div class="grid gap-10 md:grid-cols-3">
+              {member.igFlow.steps.map((p) => (
+                <div>
+                  <IgPost lang={lang} img={p.img} caption={p.caption} likes={p.likes} comment={p.comment} />
+                  <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
+                  <p class="text-salvia">{p.body}</p>
+                </div>
+              ))}
+            </div>
+            {member.featureHref && (
+              <div class="mt-12 text-center">
+                <a href={L(member.featureHref)} class="inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
+                  {member.featureLinkLabel}
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
 
     <!-- ══════════ ESCENAS · storyboard de chats encadenados ══════════ -->
     {

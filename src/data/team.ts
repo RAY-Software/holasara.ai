@@ -46,6 +46,16 @@ interface RawMember {
   // Casos de uso (grid "lo que hace"). Opcional por personaje.
   // logo: path a un SVG de marca. icon: keyword de ícono inline (ver [member].astro).
   useCases?: Record<Locale, { title: string; desc: string; logo?: string; icon?: string }[]>;
+  // Bloque de Instagram (solo Mia): flujo de 3 pasos con posts mock (IgPost),
+  // reusando el material de la página /instagram.
+  igFlow?: Record<
+    Locale,
+    {
+      title: string; // admite <em>
+      intro: string;
+      steps: { img: string; caption: string; likes: string; comment?: string; step: string; body: string }[];
+    }
+  >;
   // Storyboard de escenas animadas (chats encadenados). Opcional por personaje.
   // name/avatar: overrides por escena (p. ej. la escena donde Sara ejecuta lo
   // que Daniel o Mia dispararon); si faltan, usa los del personaje.
@@ -272,6 +282,66 @@ const RAW: RawMember[] = [
       ],
     },
     featureLinkLabel: { es: 'Ver Instagram con Mia', en: 'See Instagram with Mia' },
+    igFlow: {
+      es: {
+        title: 'Tu Instagram, <em class="text-pine-dark">de punta a punta.</em>',
+        intro:
+          'Mia entiende el feed de tu marca, propone las ideas, crea el contenido y lo publica. Y cada mes te dice qué publicación trajo consultas y cuánto facturaste a partir de cada una.',
+        steps: [
+          {
+            img: '/img/tenants/faceup.jpg',
+            likes: '312',
+            caption: '<b>clinicaaurora</b> Ácido hialurónico en labios: qué esperar la primera semana',
+            step: '1 · Entiende tu feed y propone',
+            body: 'Estudia tu marca y tu feed, y te propone el calendario del mes con ideas listas para aprobar.',
+          },
+          {
+            img: '/img/tenants/physiup.jpg',
+            likes: '208',
+            caption: '<b>clinicaaurora</b> Desliza para ver el paso a paso',
+            comment: '<b>camifer_</b> ¿Cuánto sale la valoración?',
+            step: '2 · Crea y publica',
+            body: 'Escribe el texto, arma la pieza con tu identidad y la publica. Nada sale sin tu aprobación.',
+          },
+          {
+            img: '/img/tenants/sorace.jpg',
+            likes: '176',
+            caption: '<b>clinicaaurora</b> Agenda tu valoración por mensaje',
+            step: '3 · Mide lo que facturó',
+            body: 'Te dice qué publicación trajo consultas y cuánto se facturó a partir de cada una. Nada de likes de vanidad.',
+          },
+        ],
+      },
+      en: {
+        title: 'Your Instagram, <em class="text-pine-dark">end to end.</em>',
+        intro:
+          'Mia understands your brand’s feed, pitches the ideas, creates the content and publishes it. And every month she tells you which post brought enquiries and how much you billed from each one.',
+        steps: [
+          {
+            img: '/img/tenants/faceup.jpg',
+            likes: '312',
+            caption: '<b>clinicaaurora</b> Lip hyaluronic acid: what to expect in week one',
+            step: '1 · Understands your feed and pitches',
+            body: 'She studies your brand and your feed, and pitches the month’s calendar with ideas ready to approve.',
+          },
+          {
+            img: '/img/tenants/physiup.jpg',
+            likes: '208',
+            caption: '<b>clinicaaurora</b> Swipe to see the step by step',
+            comment: '<b>camifer_</b> How much is the assessment?',
+            step: '2 · Creates and publishes',
+            body: 'She writes the copy, builds the piece with your identity and publishes it. Nothing goes out without your approval.',
+          },
+          {
+            img: '/img/tenants/sorace.jpg',
+            likes: '176',
+            caption: '<b>clinicaaurora</b> Book your assessment by message',
+            step: '3 · Measures what it billed',
+            body: 'She tells you which post brought enquiries and how much you billed from each one. No vanity likes.',
+          },
+        ],
+      },
+    },
     scenesTitle: {
       es: 'Mia ve la agenda floja. <em class="text-pine-dark">Y el equipo la llena.</em>',
       en: 'Mia sees a slow week. <em class="text-pine-dark">And the team fills it.</em>',
@@ -410,16 +480,16 @@ const RAW: RawMember[] = [
     chatSubtitle: { es: 'te avisa cómo van los números', en: 'flags how the numbers are doing' },
     bubbles: {
       es: [
-        { who: 'out', text: 'Cerré los números de octubre. Facturaste $312,000, un 12% arriba que septiembre. Te dejo lo importante.', t: '08:30' },
-        { who: 'out', text: 'Tienes $18,400 en anticipos sin cobrar de 7 citas de esta semana. Y el láser sigue siendo lo más rentable: 68% de margen. ¿Te armo el recordatorio de cobro?', t: '08:30' },
-        { who: 'in', text: 'Sí, adelante', t: '08:41' },
-        { who: 'out', text: 'Listo. Se los pasé a Sara para que los cobre por WhatsApp. Te aviso cuando entren.', t: '08:41' },
+        { who: 'out', text: 'Cerré los números de octubre. Facturaste $312,000 y gastaste $187,400: te quedó un margen de 40%, tres puntos arriba que septiembre.', t: '08:30' },
+        { who: 'out', text: 'Lo que más empujó fue el láser: $96,000 facturados con 68% de margen. La consulta de valoración sigue siendo lo que menos deja. Te dejé el detalle completo en el panel.', t: '08:30' },
+        { who: 'in', text: '¿Y noviembre cómo viene?', t: '08:41' },
+        { who: 'out', text: 'A este ritmo, noviembre cierra en unos $290,000. Viene un poco más lento por los feriados, pero la segunda quincena ya está 70% llena. Si algo se mueve, te aviso.', t: '08:42' },
       ],
       en: [
-        { who: 'out', text: 'Closed October’s numbers. You billed $312,000, up 12% from September. Here’s what matters.', t: '08:30' },
-        { who: 'out', text: 'You’ve got $18,400 in uncollected deposits across 7 appointments this week. And laser is still the most profitable: 68% margin. Want me to set up the payment reminders?', t: '08:30' },
-        { who: 'in', text: 'Yes, go ahead', t: '08:41' },
-        { who: 'out', text: 'Done. Handed them to Sara to collect over WhatsApp. I’ll let you know as they come in.', t: '08:41' },
+        { who: 'out', text: 'Closed October. You billed $312,000 and spent $187,400: a 40% margin, three points up from September.', t: '08:30' },
+        { who: 'out', text: 'Laser drove most of it: $96,000 billed at a 68% margin. The assessment consult is still your lowest earner. The full detail is in your dashboard.', t: '08:30' },
+        { who: 'in', text: 'And how is November looking?', t: '08:41' },
+        { who: 'out', text: 'At this pace, November lands around $290,000. A bit slower with the holidays, but the second half of the month is already 70% booked. If anything shifts, I will let you know.', t: '08:42' },
       ],
     },
     featureLinkLabel: { es: 'Pedir una demo', en: 'Book a demo' },
@@ -525,6 +595,11 @@ export interface TeamMember {
   bubbles: Bubble[];
   featureLinkLabel: string;
   useCases?: { title: string; desc: string; logo?: string; icon?: string }[];
+  igFlow?: {
+    title: string;
+    intro: string;
+    steps: { img: string; caption: string; likes: string; comment?: string; step: string; body: string }[];
+  };
   scenesTitle?: string;
   scenesIntro?: string;
   scenes?: { label: string; subtitle?: string; name?: string; avatar?: string; bubbles: Bubble[] }[];
@@ -555,6 +630,7 @@ const pick = (m: RawMember, lang: Locale): TeamMember => ({
   bubbles: m.bubbles[lang],
   featureLinkLabel: m.featureLinkLabel[lang],
   useCases: m.useCases ? m.useCases[lang] : undefined,
+  igFlow: m.igFlow ? m.igFlow[lang] : undefined,
   scenesTitle: m.scenesTitle ? m.scenesTitle[lang] : undefined,
   scenesIntro: m.scenesIntro ? m.scenesIntro[lang] : undefined,
   scenes: m.scenes ? m.scenes[lang] : undefined,
