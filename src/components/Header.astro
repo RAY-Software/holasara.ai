@@ -473,10 +473,18 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
 <script is:inline>
   // Hover-intent: abre al entrar, y al salir espera un poco antes de cerrar, así
   // el puntero puede cruzar el hueco entre el botón y el panel sin que se cierre.
+  // Al abrir uno, los demás se cierran AL INSTANTE (sin esperar su delay), para
+  // que nunca se vean dos paneles superpuestos.
   (function () {
-    document.querySelectorAll('[data-mega]').forEach(function (el) {
+    var megas = document.querySelectorAll('[data-mega]');
+    function closeOthers(current) {
+      megas.forEach(function (other) {
+        if (other !== current) other.classList.remove('is-open');
+      });
+    }
+    megas.forEach(function (el) {
       var t;
-      function open() { clearTimeout(t); el.classList.add('is-open'); }
+      function open() { clearTimeout(t); closeOthers(el); el.classList.add('is-open'); }
       function scheduleClose() { clearTimeout(t); t = setTimeout(function () { el.classList.remove('is-open'); }, 260); }
       el.addEventListener('mouseenter', open);
       el.addEventListener('mouseleave', scheduleClose);
