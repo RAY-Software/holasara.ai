@@ -1,0 +1,167 @@
+---
+import { locales, toLocale, localePath } from '../../../i18n/config';
+import { getMember, getTeam, memberIds } from '../../../data/team';
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import ConversationDemo from '../../../components/ConversationDemo.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+
+// Ficha interna por personaje: /equipo/sara, /equipo/mia, /equipo/daniel.
+// Bilingüe: getStaticPaths cruza cada idioma con cada integrante.
+export function getStaticPaths() {
+  return locales.flatMap((lang) => memberIds.map((member) => ({ params: { lang, member } })));
+}
+
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+const member = getMember(Astro.params.member ?? '', lang);
+if (!member) return Astro.redirect(L('/equipo'));
+
+// El resto del equipo (para el cross-link del pie).
+const others = getTeam(lang).filter((m) => m.id !== member.id);
+
+const backLabel = lang === 'en' ? 'Back to the team' : 'Volver al equipo';
+const demoLabel = lang === 'en' ? 'Book a demo' : 'Pedir demo';
+const othersTitle = lang === 'en' ? 'The rest of the team' : 'El resto del equipo';
+---
+
+<Layout lang={lang} title={member.metaTitle} description={member.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <!-- ══════════ HERO ══════════ -->
+    <section class="border-b border-line">
+      <div class="mx-auto max-w-6xl px-5 pb-16 pt-14">
+        <a href={L('/equipo')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+          <span aria-hidden="true">←</span> {backLabel}
+        </a>
+        <div class="grid gap-12 md:grid-cols-[1.05fr_0.95fr] md:items-center">
+          <div>
+            <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+              <span class="dot h-2 w-2"></span>{member.heroEyebrow}
+            </p>
+            <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl" set:html={member.heroTitle} />
+            <p class="mt-6 max-w-xl text-lg text-salvia">{member.heroLead}</p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href={L('/demo')}
+                class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+              >
+                {demoLabel}
+              </a>
+              {
+                member.featureHref && (
+                  <a
+                    href={L(member.featureHref)}
+                    class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+                  >
+                    {member.featureLinkLabel}
+                  </a>
+                )
+              }
+            </div>
+          </div>
+
+          <!-- Cara del personaje (video) -->
+          <div class="flex justify-center md:justify-end">
+            <figure class="w-full max-w-[340px] overflow-hidden rounded-2xl border border-line bg-cream shadow-[0_16px_44px_-26px_rgba(20,38,31,0.44)]">
+              <div class="relative aspect-[4/5] overflow-hidden">
+                <video
+                  src={member.video}
+                  poster={member.poster}
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                  class="h-full w-full object-cover object-top"
+                ></video>
+                <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-pine-dark backdrop-blur-sm">
+                  <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>
+                  {member.tag}
+                </span>
+              </div>
+              <figcaption class="flex items-baseline gap-2 px-4 py-3">
+                <span class="font-serif text-xl font-black text-ink">{member.name}</span>
+                <span class="text-sm font-semibold text-pine">{member.role}</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO TRABAJA · demo de chat ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{member.kicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={member.h2} />
+          <p class="mt-5 text-lg text-salvia">{member.paragraph}</p>
+          <ul class="mt-6 flex flex-col gap-3">
+            {
+              member.points.map((p) => (
+                <li class="flex items-start gap-3 text-ink">
+                  <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-pine/10 text-xs font-bold text-pine-dark">✓</span>
+                  {p}
+                </li>
+              ))
+            }
+          </ul>
+          {
+            member.featureHref && (
+              <a href={L(member.featureHref)} class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
+                {member.featureLinkLabel}
+                <span aria-hidden="true">→</span>
+              </a>
+            )
+          }
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name={member.name}
+            avatar={member.avatar}
+            subtitle={member.chatSubtitle}
+            bubbles={member.bubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ EL RESTO DEL EQUIPO ══════════ -->
+    <section class="border-b border-line">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <p class="mb-8 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{othersTitle}</p>
+        <div class="grid gap-6 sm:grid-cols-2">
+          {
+            others.map((o) => (
+              <a
+                href={L(o.href)}
+                class="group flex items-center gap-5 overflow-hidden rounded-2xl border border-line bg-white p-4 transition-all duration-300 hover:border-pine/40 hover:shadow-[0_16px_40px_-24px_rgba(20,38,31,0.4)]"
+              >
+                <span class="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-cream">
+                  <img src={o.poster} alt={o.name} loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="flex items-baseline gap-2">
+                    <span class="font-serif text-xl font-black text-ink">{o.name}</span>
+                    <span class="text-sm font-semibold text-pine">{o.role}</span>
+                  </span>
+                  <span class="mt-1 block text-sm text-salvia">{o.oneliner}</span>
+                  <span class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors group-hover:text-ink">
+                    {lang === 'en' ? `Meet ${o.name}` : `Conoce a ${o.name}`}
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+                  </span>
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

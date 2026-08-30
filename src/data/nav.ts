@@ -177,11 +177,6 @@ const sizeLinksRaw: RawLink[] = [
 
 const topLinksRaw: RawLink[] = [
   {
-    href: '/equipo',
-    name: { es: 'Equipo', en: 'Team' },
-    desc: { es: 'Sara, Mia y Daniel: tu equipo con IA.', en: 'Sara, Mia and Daniel: your AI team.' },
-  },
-  {
     href: '/caso',
     name: { es: 'Casos', en: 'Cases' },
     desc: { es: 'Clínicas reales con Sara.', en: 'Real clinics running on Sara.' },
