@@ -1,0 +1,342 @@
+---
+import { locales, toLocale, localePath } from '../../../i18n/config';
+import { getMember, getTeam, memberIds } from '../../../data/team';
+import Layout from '../../../layouts/Layout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import ConversationDemo from '../../../components/ConversationDemo.astro';
+import ClientsStrip from '../../../components/ClientsStrip.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+
+// Ficha interna por personaje: /equipo/sara, /equipo/mia, /equipo/daniel.
+// Bilingüe: getStaticPaths cruza cada idioma con cada integrante.
+export function getStaticPaths() {
+  return locales.flatMap((lang) => memberIds.map((member) => ({ params: { lang, member } })));
+}
+
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+const member = getMember(Astro.params.member ?? '', lang);
+if (!member) return Astro.redirect(L('/equipo'));
+
+// El resto del equipo (para el cross-link del pie).
+const others = getTeam(lang).filter((m) => m.id !== member.id);
+
+const backLabel = lang === 'en' ? 'Back to the team' : 'Volver al equipo';
+const demoLabel = lang === 'en' ? 'Book a demo' : 'Pedir demo';
+const othersTitle = lang === 'en' ? 'The rest of the team' : 'El resto del equipo';
+
+// Íconos inline (línea) para los casos de uso sin logo de marca. viewBox 0 0 24 24.
+const ICONS: Record<string, string> = {
+  chat: '<path d="M21 11.5a8.5 8.5 0 0 1-12.5 7.5L3 21l1.5-5.5A8.5 8.5 0 1 1 21 11.5z"/>',
+  phone:
+    '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7A2 2 0 0 1 22 16.9z"/>',
+  calendar: '<rect x="3" y="4.5" width="18" height="17" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 10h18"/>',
+  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>',
+  refresh: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>',
+  chart: '<path d="M4 19V5M4 19h16M8 16v-5M13 16V9M18 16v-3"/>',
+  coin: '<circle cx="12" cy="12" r="9"/><path d="M15.5 9.2c-.5-.9-1.5-1.4-2.6-1.4-1.5 0-2.7.8-2.7 2 0 2.7 5.4 1.4 5.4 4.1 0 1.2-1.2 2-2.7 2-1.2 0-2.3-.6-2.8-1.5M12 6v1.6M12 16.4V18"/>',
+  bell: '<path d="M6 8.5a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 14.5 6 8.5z"/><path d="M10.2 20a2 2 0 0 0 3.6 0"/>',
+};
+const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-cols-3' : 'lg:grid-cols-4';
+---
+
+<Layout lang={lang} title={member.metaTitle} description={member.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <!-- ══════════ HERO ══════════ -->
+    <section class="border-b border-line">
+      <div class="mx-auto max-w-6xl px-5 pb-16 pt-14">
+        <a href={L('/equipo')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+          <span aria-hidden="true">←</span> {backLabel}
+        </a>
+        <div class="grid gap-x-12 gap-y-10 md:grid-cols-[1.1fr_0.9fr] md:items-start">
+          <div>
+            <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+              <span class="dot h-2 w-2"></span>{member.heroEyebrow}
+            </p>
+            <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-5xl" set:html={member.heroTitle} />
+            <p class="mt-6 max-w-xl text-lg text-salvia">{member.heroLead}</p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href={L('/demo')}
+                class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+              >
+                {demoLabel}
+              </a>
+              {
+                member.featureHref && (
+                  <a
+                    href={L(member.featureHref)}
+                    class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+                  >
+                    {member.featureLinkLabel}
+                  </a>
+                )
+              }
+            </div>
+          </div>
+
+          <!-- Cara del personaje (video) -->
+          <div class="flex justify-center md:justify-end">
+            <figure class="w-full max-w-[340px] overflow-hidden rounded-2xl border border-line bg-cream shadow-[0_16px_44px_-26px_rgba(20,38,31,0.44)]">
+              <div class="relative aspect-[4/5] overflow-hidden">
+                <video
+                  src={member.video}
+                  poster={member.poster}
+                  autoplay
+                  loop
+                  muted
+                  playsinline
+                  class="h-full w-full object-cover object-top"
+                ></video>
+                <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-pine-dark backdrop-blur-sm">
+                  <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>
+                  {member.tag}
+                </span>
+              </div>
+              <figcaption class="flex items-baseline gap-2 px-4 py-3">
+                <span class="font-serif text-xl font-black text-ink">{member.name}</span>
+                <span class="text-sm font-semibold text-pine">{member.role}</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO TRABAJA · demo de chat ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{member.kicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={member.h2} />
+          <p class="mt-5 text-lg text-salvia">{member.paragraph}</p>
+          <ul class="mt-6 flex flex-col gap-3">
+            {
+              member.points.map((p) => (
+                <li class="flex items-start gap-3 text-ink">
+                  <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-pine/10 text-xs font-bold text-pine-dark">✓</span>
+                  {p}
+                </li>
+              ))
+            }
+          </ul>
+          {
+            member.featureHref && (
+              <a href={L(member.featureHref)} class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
+                {member.featureLinkLabel}
+                <span aria-hidden="true">→</span>
+              </a>
+            )
+          }
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name={member.name}
+            avatar={member.avatar}
+            subtitle={member.chatSubtitle}
+            bubbles={member.bubbles}
+            animate
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ESCENAS · storyboard de chats encadenados ══════════ -->
+    {
+      member.scenes && member.scenes.length > 0 && (
+        <section class="border-b border-line bg-ink text-cream">
+          <div class="mx-auto max-w-6xl px-5 py-24">
+            <div class="mx-auto mb-14 max-w-2xl text-center">
+              <h2
+                class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl [&_em]:text-mint"
+                set:html={member.scenesTitle}
+              />
+              {member.scenesIntro && <p class="mt-4 text-lg text-cream/70">{member.scenesIntro}</p>}
+            </div>
+
+            <div data-chat-sequence class="relative mx-auto grid max-w-4xl gap-12 md:grid-cols-2 md:gap-16">
+              <span
+                aria-hidden="true"
+                class="absolute left-1/2 top-1/2 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-cream/20 bg-ink text-mint md:grid"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </span>
+              {member.scenes.map((s) => (
+                <div data-scene-col class="scene-col flex flex-col items-center gap-5">
+                  <span class="inline-flex items-center gap-2 rounded-full border border-cream/25 px-4 py-1.5 text-sm font-semibold text-cream/85">
+                    {s.label}
+                  </span>
+                  <ConversationDemo
+                    lang={lang}
+                    channel="whatsapp"
+                    name={s.name ?? member.name}
+                    avatar={s.avatar ?? member.avatar}
+                    subtitle={s.subtitle}
+                    bubbles={s.bubbles}
+                    animate
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ══════════ CASOS DE USO (si el personaje los tiene) ══════════ -->
+    {
+      member.useCases && (
+        <section class="border-b border-line">
+          <div class="mx-auto max-w-6xl px-5 py-24">
+            <div class="mb-12 max-w-2xl">
+              <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+                {lang === 'en' ? 'Use cases' : 'Casos de uso'}
+              </p>
+              <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
+                {lang === 'en' ? `Everything ${member.name} does.` : `Todo lo que hace ${member.name}.`}
+              </h2>
+            </div>
+            <div class={`grid gap-6 sm:grid-cols-2 ${ucCols}`}>
+              {member.useCases.map((u) => (
+                <div class="flex flex-col rounded-2xl border border-line bg-white p-6 transition-colors hover:border-pine/40">
+                  <span class="mb-4 grid h-11 w-11 place-items-center rounded-xl border border-line bg-paper">
+                    {u.logo ? (
+                      <img src={u.logo} alt={u.title} width="24" height="24" loading="lazy" decoding="async" class="h-6 w-6 object-contain" />
+                    ) : (
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="h-6 w-6 text-pine"
+                        aria-hidden="true"
+                        set:html={ICONS[u.icon ?? 'chart'] ?? ICONS.chart}
+                      />
+                    )}
+                  </span>
+                  <h3 class="font-serif text-lg font-black text-ink">{u.title}</h3>
+                  <p class="mt-2 text-sm leading-snug text-salvia">{u.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ══════════ EL RESTO DEL EQUIPO ══════════ -->
+    <section class="border-b border-line">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <p class="mb-8 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{othersTitle}</p>
+        <div class="grid gap-6 sm:grid-cols-2">
+          {
+            others.map((o) => (
+              <a
+                href={L(o.href)}
+                class="group flex items-center gap-5 overflow-hidden rounded-2xl border border-line bg-white p-4 transition-all duration-300 hover:border-pine/40 hover:shadow-[0_16px_40px_-24px_rgba(20,38,31,0.4)]"
+              >
+                <span class="relative h-24 w-20 shrink-0 overflow-hidden rounded-xl bg-cream">
+                  <img src={o.poster} alt={o.name} loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
+                </span>
+                <span class="min-w-0 flex-1">
+                  <span class="flex items-baseline gap-2">
+                    <span class="font-serif text-xl font-black text-ink">{o.name}</span>
+                    <span class="text-sm font-semibold text-pine">{o.role}</span>
+                  </span>
+                  <span class="mt-1 block text-sm text-salvia">{o.oneliner}</span>
+                  <span class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors group-hover:text-ink">
+                    {lang === 'en' ? `Meet ${o.name}` : `Conoce a ${o.name}`}
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+                  </span>
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <ClientsStrip lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
+
+<style>
+  /* Spotlight secuencial del storyboard: la escena activa a pleno, el resto
+     atenuado. Guía el ojo del paso 1 al 2 mientras corre la animación. */
+  .scene-col {
+    transition:
+      opacity 0.5s ease,
+      filter 0.5s ease;
+  }
+  .scene-col.is-dim {
+    opacity: 0.35;
+    filter: grayscale(0.55) saturate(0.6);
+  }
+  /* Alturas iguales: el grid estira las columnas y la tarjeta absorbe el resto. */
+  .scene-col :global(figure.chat) {
+    flex: 1;
+  }
+</style>
+
+<script>
+  // Orquesta el storyboard de escenas: los chats están lado a lado y se animan
+  // encadenados con spotlight. El primero arranca al entrar en viewport (el
+  // resto se atenúa); al terminar (chat:done) el foco pasa a la siguiente
+  // escena, y al final todas quedan a pleno para leerse. Los chats de adentro
+  // no se auto-disparan (ConversationDemo los deja esperando `chat:play`).
+  (() => {
+    document.querySelectorAll('[data-chat-sequence]').forEach((root) => {
+      const el = root as HTMLElement;
+      const figs = Array.from(el.querySelectorAll<HTMLElement>('figure.chat[data-animate]'));
+      const cols = Array.from(el.querySelectorAll<HTMLElement>('[data-scene-col]'));
+      if (!figs.length) return;
+      let next = 0;
+
+      const setFocus = (i: number | null) => {
+        cols.forEach((c, idx) => c.classList.toggle('is-dim', i !== null && idx !== i));
+      };
+
+      const playNext = () => {
+        if (next >= figs.length) return;
+        const i = next;
+        next += 1;
+        setFocus(i);
+        figs[i].dispatchEvent(new CustomEvent('chat:play'));
+      };
+
+      el.addEventListener('chat:done', () => {
+        if (next < figs.length) {
+          window.setTimeout(playNext, 1100);
+        } else {
+          // Terminó la última: todo a pleno para poder releer la secuencia.
+          window.setTimeout(() => setFocus(null), 900);
+        }
+      });
+
+      // Arranca cuando la secuencia entra en viewport.
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              playNext();
+              io.disconnect();
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      io.observe(el);
+    });
+  })();
+</script>

@@ -1,0 +1,233 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getTeam } from '../../data/team';
+
+// Página de equipo. Reframe: Sara deja de ser "un software con features" y pasa
+// a ser "tu equipo de trabajo". Agentes con nombre, cara y rol que trabajan
+// solos y te escriben ellos. El elenco y el copy de cada uno viven en
+// src/data/team.ts (fuente única, compartida con el mega menú y las fichas).
+
+const team = getTeam(lang);
+
+const dict = {
+  es: {
+    metaTitle: 'Tu equipo con IA · Sara, Mia y Daniel trabajan solos y te escriben',
+    metaDescription:
+      'Sara, Mia y Daniel no son un software con botones. Son tu equipo con IA: cada uno hace lo suyo, trabaja solo y te escribe cuando hay algo que decidir. Recepción, marketing y finanzas.',
+    heroEyebrow: 'Tu equipo con IA',
+    heroTitle: "No es un software. <em class='text-pine-dark'>Es tu equipo.</em>",
+    heroLead:
+      'Sara, Mia y Daniel tienen nombre, cara y un trabajo. Cada uno hace lo suyo sin que le pidas nada, y cuando hay una decisión, te escriben a ti. Empleados que ejecutan, no bots que esperan tu pregunta.',
+    manifestoKicker: 'Cómo trabaja tu equipo',
+    manifestoH2: 'No espera a que le preguntes. <em class="text-pine-dark">Trabaja y te avisa.</em>',
+    manifestoP:
+      'Un chatbot se queda quieto hasta que alguien escribe. Tu equipo no. Sara atiende y cobra mientras duermes, Mia está encima de tu web, tu Google y tu Instagram, y cuando ve una oportunidad te la propone. Tú decides por chat, ellos ejecutan.',
+    teamKicker: 'El elenco',
+    teamH2: 'Tres roles, un solo&nbsp;equipo.',
+    finalTitle: 'Suma a tu equipo, no a tu&nbsp;nómina.',
+    finalSub:
+      'Sara, Mia y Daniel trabajan solos, cada uno en lo suyo, y te escriben ellos. Empieza hoy con uno o con los tres.',
+  },
+  en: {
+    metaTitle: 'Your AI team · Sara, Mia and Daniel work on their own and message you',
+    metaDescription:
+      'Sara, Mia and Daniel are not a software with buttons. They are your AI team: each one does their job, works on their own, and messages you when there is something to decide. Reception, marketing and finance.',
+    heroEyebrow: 'Your AI team',
+    heroTitle: "Not software. <em class='text-pine-dark'>Your team.</em>",
+    heroLead:
+      'Sara, Mia and Daniel have a name, a face and a job. Each one does their work without being asked, and when there is a decision, they message you. Employees who get things done, not bots waiting for your prompt.',
+    manifestoKicker: 'How your team works',
+    manifestoH2: 'They don’t wait to be asked. <em class="text-pine-dark">They work and tell you.</em>',
+    manifestoP:
+      'A chatbot sits still until someone types. Your team doesn’t. Sara answers and collects while you sleep, Mia stays on top of your website, your Google and your Instagram, and when she spots an opening she brings it to you. You decide over chat, they execute.',
+    teamKicker: 'The cast',
+    teamH2: 'Three roles, one&nbsp;team.',
+    finalTitle: 'Add to your team, not your&nbsp;payroll.',
+    finalSub:
+      'Sara, Mia and Daniel work on their own, each in their lane, and message you themselves. Start today with one or all three.',
+  },
+}[lang];
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <!-- ══════════ HERO ══════════ -->
+    <section class="border-b border-line">
+      <div class="mx-auto max-w-6xl px-5 pb-16 pt-14">
+        <a href={L('/')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+          <span aria-hidden="true">←</span> {lang === 'en' ? 'Back to home' : 'Volver al inicio'}
+        </a>
+        <div class="grid gap-12 md:grid-cols-[1.05fr_0.95fr] md:items-center">
+          <div>
+            <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+              <span class="dot h-2 w-2"></span>{dict.heroEyebrow}
+            </p>
+            <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl" set:html={dict.heroTitle} />
+            <p class="mt-6 max-w-xl text-lg text-salvia">{dict.heroLead}</p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href={L('/demo')}
+                class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+              >
+                {lang === 'en' ? 'Book a demo' : 'Pedir demo'}
+              </a>
+              <a
+                href="#equipo"
+                class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+              >
+                {lang === 'en' ? 'Meet the team' : 'Conoce al equipo'}
+              </a>
+            </div>
+          </div>
+
+          <!-- Visual: el trío real, con su nombre y rol -->
+          <div class="grid grid-cols-3 gap-2.5 sm:gap-3">
+            {
+              team.map((m, i) => (
+                <a
+                  href={L(m.href)}
+                  class={`group overflow-hidden rounded-2xl border border-line bg-cream shadow-[0_14px_36px_-24px_rgba(20,38,31,0.4)] transition-transform hover:-translate-y-1 ${i === 1 ? 'md:-translate-y-6 md:hover:-translate-y-7' : ''}`}
+                >
+                  <div class="relative aspect-[3/4] overflow-hidden">
+                    <video
+                      src={m.video}
+                      poster={m.poster}
+                      autoplay
+                      loop
+                      muted
+                      playsinline
+                      class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
+                  </div>
+                  <figcaption class="flex flex-col gap-0.5 px-3 py-2.5">
+                    <span class="flex items-center gap-1.5">
+                      <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
+                      <span class="truncate text-sm font-bold text-ink">{m.name}</span>
+                    </span>
+                    <span class="truncate pl-3 text-xs text-salvia">{m.role}</span>
+                  </figcaption>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ELENCO · 3 tarjetas ══════════ -->
+    <section id="equipo" class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <div class="mb-12 max-w-2xl">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.teamKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.teamH2} />
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            team.map((m) => (
+              <a
+                href={L(m.href)}
+                class="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:border-pine/40 hover:shadow-[0_16px_40px_-24px_rgba(20,38,31,0.4)]"
+              >
+                <div class="relative aspect-[4/5] overflow-hidden bg-cream">
+                  <video
+                    src={m.video}
+                    poster={m.poster}
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                  <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-pine-dark backdrop-blur-sm">
+                    <span class="h-1.5 w-1.5 rounded-full bg-mint" />
+                    {m.tag}
+                  </span>
+                </div>
+
+                <div class="flex flex-1 flex-col p-6">
+                  <div class="flex items-baseline gap-2">
+                    <h3 class="font-serif text-2xl font-black text-ink">{m.name}</h3>
+                    <span class="text-sm font-semibold text-pine">{m.role}</span>
+                  </div>
+                  <p class="mt-2 text-salvia">{m.oneliner}</p>
+                  <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors group-hover:text-ink">
+                    {lang === 'en' ? `Meet ${m.name}` : `Conoce a ${m.name}`}
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+                  </span>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ MANIFIESTO · trabajan solos y te escriben ══════════ -->
+    <section class="border-b border-line bg-ink text-cream">
+      <div class="mx-auto max-w-4xl px-5 py-24 text-center">
+        <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{dict.manifestoKicker}</p>
+        <h2 class="mx-auto max-w-3xl font-serif text-3xl font-black leading-tight text-balance md:text-5xl [&_em]:text-mint" set:html={dict.manifestoH2} />
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-cream/70">{dict.manifestoP}</p>
+      </div>
+    </section>
+
+    <!-- ══════════ DETALLE POR AGENTE (layout alternado) ══════════ -->
+    {
+      team.map((m, i) => {
+        const flip = i % 2 === 1; // Mia: chat a la izquierda
+        const link = m.featureHref ?? '/demo';
+        return (
+          <section id={m.id} class={`border-b border-line ${flip ? 'bg-paper' : ''}`}>
+            <div class={`mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 ${flip ? 'md:grid-cols-[0.95fr_1.05fr]' : 'md:grid-cols-[1.05fr_0.95fr]'}`}>
+              <div class={flip ? 'order-2 md:order-2' : ''}>
+                <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{m.heroEyebrow}</p>
+                <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={m.h2} />
+                <p class="mt-5 text-lg text-salvia">{m.paragraph}</p>
+                <ul class="mt-6 flex flex-col gap-3">
+                  {m.points.map((p) => (
+                    <li class="flex items-start gap-3 text-ink">
+                      <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-pine/10 text-xs font-bold text-pine-dark">✓</span>
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+                <a href={L(link)} class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
+                  {m.featureLinkLabel}
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+              <div class={`flex justify-center ${flip ? 'order-1 md:order-1 md:justify-start' : 'md:justify-end'}`}>
+                <ConversationDemo
+                  lang={lang}
+                  channel="whatsapp"
+                  name={m.name}
+                  avatar={m.avatar}
+                  subtitle={m.chatSubtitle}
+                  bubbles={m.bubbles}
+                  animate
+                />
+              </div>
+            </div>
+          </section>
+        );
+      })
+    }
+
+    <ClientsStrip lang={lang} />
+
+    <CtaBand lang={lang} title={dict.finalTitle} sub={dict.finalSub} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
