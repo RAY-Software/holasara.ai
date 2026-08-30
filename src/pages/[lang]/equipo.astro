@@ -1,0 +1,484 @@
+---
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+import { localePath } from '../../i18n/config';
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Página de equipo. El reframe: Sara deja de ser "un software con features" y
+// pasa a ser "tu equipo de trabajo". Agentes con nombre, cara y rol, que trabajan
+// solos y te escriben ellos. NO son chatbots que responden: son empleados que hacen.
+// Estructura inspirada en /our-experts de diezX, pero el framing es propio del
+// vertical (clínicas, pacientes, agenda, WhatsApp/Instagram). EN es traducción, no calco.
+
+// Elenco. Sara (existe, es la marca) · Mia (nueva, marketing proactivo) ·
+// Daniel (finanzas, PRÓXIMAMENTE: sin prometer capacidades disponibles).
+const dict = {
+  es: {
+    metaTitle: 'Tu equipo con IA · Sara, Mia y Daniel trabajan solos y te escriben',
+    metaDescription:
+      'Sara, Mia y Daniel no son un software con botones. Son tu equipo con IA: cada uno hace lo suyo, trabaja solo y te escribe cuando hay algo que decidir. Recepción, marketing y finanzas.',
+    heroEyebrow: 'Tu equipo con IA',
+    heroTitle: "No es un software. <em class='text-pine-dark'>Es tu equipo.</em>",
+    heroLead:
+      'Sara, Mia y Daniel tienen nombre, cara y un trabajo. Cada uno hace lo suyo sin que le pidas nada, y cuando hay una decisión, te escriben a ti. Empleados que ejecutan, no bots que esperan tu pregunta.',
+
+    manifestoKicker: 'Cómo trabaja tu equipo',
+    manifestoH2: 'No espera a que le preguntes. <em class="text-pine-dark">Trabaja y te avisa.</em>',
+    manifestoP:
+      'Un chatbot se queda quieto hasta que alguien escribe. Tu equipo no. Sara atiende y cobra mientras duermes, Mia mira tu Instagram y tu agenda, y cuando ve una oportunidad te la propone. Tú decides por chat, ellos ejecutan.',
+
+    teamKicker: 'El elenco',
+    teamH2: 'Tres roles, un solo&nbsp;equipo.',
+    members: [
+      {
+        id: 'sara',
+        name: 'Sara',
+        role: 'Recepción',
+        status: 'live' as const,
+        tag: 'Trabajando ahora',
+        media: 'video' as const,
+        src: '/videos/equipo/sara.mp4',
+        poster: '/equipo/sara.jpg',
+        oneliner: 'Atiende, agenda y cobra. Con el criterio de tu clínica.',
+        href: '/sara',
+        cta: 'Conoce a Sara',
+      },
+      {
+        id: 'mia',
+        name: 'Mia',
+        role: 'Marketing',
+        status: 'live' as const,
+        tag: 'Trabajando ahora',
+        media: 'video' as const,
+        src: '/videos/equipo/mia.mp4',
+        poster: '/equipo/mia.jpg',
+        oneliner: 'Cuida tu Instagram y te propone la promo cuando la agenda afloja.',
+        href: '/instagram',
+        cta: 'Conoce a Mia',
+      },
+      {
+        id: 'daniel',
+        name: 'Daniel',
+        role: 'Finanzas',
+        status: 'live' as const,
+        tag: 'Trabajando ahora',
+        media: 'video' as const,
+        src: '/videos/equipo/daniel.mp4',
+        poster: '/equipo/daniel.jpg',
+        oneliner: 'Lleva las cuentas de tu clínica y te avisa lo que importa.',
+        href: '#daniel',
+        cta: 'Conoce a Daniel',
+      },
+    ],
+
+    // ── Sara ──
+    saraKicker: 'Sara · Recepción',
+    saraH2: 'Ya conoces a Sara. <em class="text-pine-dark">Es la que atiende.</em>',
+    saraP:
+      'Responde WhatsApp, Instagram y el chat de tu web a toda hora. Informa con precios reales, arma la propuesta que conviene, agenda la cita y cobra el anticipo en la misma conversación. De noche, los fines de semana y en los picos, sin sumar a nadie a recepción.',
+    saraPoints: [
+      'Atiende y vende con el criterio que defines',
+      'Agenda, recuerda y confirma sin dobles reservas',
+      'Cobra el anticipo antes de dar la cita',
+    ],
+    saraLink: 'Ver todo lo que hace Sara',
+    saraBubbles: [
+      { who: 'out', text: '¡Hola! Piernas enteras las tenemos en el pack de 6 sesiones a $6,900, con la primera de prueba sin costo. ¿Te agendo esa primera sesión?', t: '23:41' },
+      { who: 'in', text: 'Sí, ¿tienen esta semana?', t: '23:42' },
+      { who: 'out', text: '¡Sí! Jueves 17:30 o viernes 18:00. Para dejar la reserva confirmada va un anticipo. ¿Cuál te queda mejor?', t: '23:42' },
+      { who: 'in', text: 'Jueves', t: '23:43' },
+      { who: 'out', text: '¡Listo! Jueves 17:30 reservado ✅ Te paso el link del anticipo y te llega el recordatorio un día antes.', t: '23:43' },
+    ],
+
+    // ── Mia ──
+    miaKicker: 'Mia · Marketing',
+    miaH2: 'Mia no espera el brief. <em class="text-pine-dark">Ve el hueco y te escribe.</em>',
+    miaP:
+      'Mia entiende tu feed, propone ideas y arma las piezas. Pero su diferencia es que es proactiva: mira tu agenda, y cuando ve días flojos te escribe con una promo lista para llenarlos. La apruebas por chat y ella la publica. Tú no abriste nada; Mia ya estaba trabajando.',
+    miaPoints: [
+      'Entiende tu Instagram y propone qué publicar',
+      'Detecta los días flojos antes que tú',
+      'Lanza la promo cuando la apruebas, sin que muevas un dedo',
+    ],
+    miaLink: 'Ver Instagram con Mia',
+    miaSubtitle: 'te escribe cuando ve una oportunidad',
+    miaBubbles: [
+      { who: 'out', text: 'Hola 👋 Vi que el jueves y el viernes quedaron flojos: 9 huecos entre los dos. Te armo una promo para llenarlos.', t: '09:12' },
+      { who: 'out', text: 'Propuesta: "Botox jueves y viernes, agenda con anticipo y llevas la segunda zona a mitad de precio". Pieza para feed y story lista. ¿La lanzo?', t: '09:12' },
+      { who: 'in', text: 'Dale, pero bajá el descuento a 30%', t: '09:20' },
+      { who: 'out', text: '¡Listo! Ajusté al 30% y ya la publiqué en feed e historia. A quien responda lo agendo y le cobro el anticipo yo misma. Te aviso cómo va. 📈', t: '09:21' },
+    ],
+
+    // ── Daniel ──
+    danielKicker: 'Daniel · Finanzas',
+    danielH2: 'Daniel te dice cómo va la plata. <em class="text-pine-dark">Antes de que preguntes.</em>',
+    danielP:
+      'Daniel lleva las cuentas de tu clínica y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen. Cuando hay algo para hacer, te lo propone y el equipo lo ejecuta. Sin abrir una sola planilla.',
+    danielPoints: [
+      'Te resume la facturación sin que abras una planilla',
+      'Detecta anticipos y pagos pendientes por cobrar',
+      'Te dice qué tratamiento deja más margen',
+    ],
+    danielSubtitle: 'te avisa cómo van los números',
+    danielBubbles: [
+      { who: 'out', text: 'Cerré los números de octubre 👋 Facturaste $312,000, un 12% arriba que septiembre. Te dejo lo importante.', t: '08:30' },
+      { who: 'out', text: 'Tienes $18,400 en anticipos sin cobrar de 7 citas de esta semana. Y el láser sigue siendo lo más rentable: 68% de margen. ¿Te armo el recordatorio de cobro?', t: '08:30' },
+      { who: 'in', text: 'Sí, dale', t: '08:41' },
+      { who: 'out', text: '¡Listo! Se los pasé a Sara para que los cobre por WhatsApp. Te aviso cuando entren. 📊', t: '08:41' },
+    ],
+
+    finalTitle: 'Suma a tu equipo, no a tu&nbsp;planilla.',
+    finalSub:
+      'Sara, Mia y Daniel trabajan solos, cada uno en lo suyo, y te escriben ellos. Empieza hoy con uno o con los tres.',
+  },
+
+  en: {
+    metaTitle: 'Your AI team · Sara, Mia and Daniel work on their own and message you',
+    metaDescription:
+      'Sara, Mia and Daniel are not a software with buttons. They are your AI team: each one does their job, works on their own, and messages you when there is something to decide. Reception, marketing and finance.',
+    heroEyebrow: 'Your AI team',
+    heroTitle: "Not software. <em class='text-pine-dark'>Your team.</em>",
+    heroLead:
+      'Sara, Mia and Daniel have a name, a face and a job. Each one does their work without being asked, and when there is a decision, they message you. Employees who get things done, not bots waiting for your prompt.',
+
+    manifestoKicker: 'How your team works',
+    manifestoH2: 'They don’t wait to be asked. <em class="text-pine-dark">They work and tell you.</em>',
+    manifestoP:
+      'A chatbot sits still until someone types. Your team doesn’t. Sara answers and collects while you sleep, Mia watches your Instagram and your calendar, and when she spots an opening she brings it to you. You decide over chat, they execute.',
+
+    teamKicker: 'The cast',
+    teamH2: 'Three roles, one&nbsp;team.',
+    members: [
+      {
+        id: 'sara',
+        name: 'Sara',
+        role: 'Reception',
+        status: 'live' as const,
+        tag: 'Working now',
+        media: 'video' as const,
+        src: '/videos/equipo/sara.mp4',
+        poster: '/equipo/sara.jpg',
+        oneliner: 'Answers, books and collects. With your clinic’s judgment.',
+        href: '/sara',
+        cta: 'Meet Sara',
+      },
+      {
+        id: 'mia',
+        name: 'Mia',
+        role: 'Marketing',
+        status: 'live' as const,
+        tag: 'Working now',
+        media: 'video' as const,
+        src: '/videos/equipo/mia.mp4',
+        poster: '/equipo/mia.jpg',
+        oneliner: 'Looks after your Instagram and pitches the promo when the calendar dips.',
+        href: '/instagram',
+        cta: 'Meet Mia',
+      },
+      {
+        id: 'daniel',
+        name: 'Daniel',
+        role: 'Finance',
+        status: 'live' as const,
+        tag: 'Working now',
+        media: 'video' as const,
+        src: '/videos/equipo/daniel.mp4',
+        poster: '/equipo/daniel.jpg',
+        oneliner: 'Keeps your clinic’s books and flags what matters.',
+        href: '#daniel',
+        cta: 'Meet Daniel',
+      },
+    ],
+
+    // ── Sara ──
+    saraKicker: 'Sara · Reception',
+    saraH2: 'You already know Sara. <em class="text-pine-dark">She’s the one who answers.</em>',
+    saraP:
+      'She replies on WhatsApp, Instagram and your website chat around the clock. She quotes real prices, builds the offer that fits, books the appointment and takes the deposit in the same conversation. At night, on weekends and at peak times, without adding anyone to your front desk.',
+    saraPoints: [
+      'Answers and sells with the judgment you set',
+      'Books, reminds and confirms with no double bookings',
+      'Takes the deposit before giving the slot',
+    ],
+    saraLink: 'See everything Sara does',
+    saraBubbles: [
+      { who: 'out', text: 'Hi! Full legs come in our 6-session pack at $6,900, with a free first trial session. Want me to book that first one?', t: '11:41' },
+      { who: 'in', text: 'Yes, anything this week?', t: '11:42' },
+      { who: 'out', text: 'Yes! Thursday 5:30pm or Friday 6:00pm. A deposit locks in the booking. Which works better?', t: '11:42' },
+      { who: 'in', text: 'Thursday', t: '11:43' },
+      { who: 'out', text: 'Done! Thursday 5:30pm booked ✅ I’ll send the deposit link and a reminder a day before.', t: '11:43' },
+    ],
+
+    // ── Mia ──
+    miaKicker: 'Mia · Marketing',
+    miaH2: 'Mia doesn’t wait for a brief. <em class="text-pine-dark">She spots the gap and writes you.</em>',
+    miaP:
+      'Mia understands your feed, pitches ideas and builds the pieces. But what sets her apart is that she’s proactive: she watches your calendar, and when she sees slow days she messages you with a promo ready to fill them. You approve it over chat and she publishes it. You opened nothing; Mia was already working.',
+    miaPoints: [
+      'Understands your Instagram and pitches what to post',
+      'Catches the slow days before you do',
+      'Launches the promo once you approve, hands off',
+    ],
+    miaLink: 'See Instagram with Mia',
+    miaSubtitle: 'writes you when she spots an opening',
+    miaBubbles: [
+      { who: 'out', text: 'Hey 👋 Thursday and Friday are looking light: 9 open slots between them. Let me put together a promo to fill them.', t: '09:12' },
+      { who: 'out', text: 'Idea: "Botox Thursday & Friday, book with a deposit and get the second area half off." Feed and story pieces are ready. Want me to launch?', t: '09:12' },
+      { who: 'in', text: 'Go for it, but drop the discount to 30%', t: '09:20' },
+      { who: 'out', text: 'Done! Set it to 30% and published to feed and story. Anyone who replies, I book and take the deposit myself. I’ll keep you posted. 📈', t: '09:21' },
+    ],
+
+    // ── Daniel ──
+    danielKicker: 'Daniel · Finance',
+    danielH2: 'Daniel tells you how the money’s doing. <em class="text-pine-dark">Before you ask.</em>',
+    danielP:
+      'Daniel keeps your clinic’s books and flags what matters: how much you billed, what’s still to collect, and which treatment leaves the most margin. When there’s something to do, he pitches it and the team runs it. Without opening a single spreadsheet.',
+    danielPoints: [
+      'Sums up your billing without you opening a spreadsheet',
+      'Catches deposits and payments still to be collected',
+      'Tells you which treatment leaves the most margin',
+    ],
+    danielSubtitle: 'flags how the numbers are doing',
+    danielBubbles: [
+      { who: 'out', text: 'Closed October’s numbers 👋 You billed $312,000, up 12% from September. Here’s what matters.', t: '08:30' },
+      { who: 'out', text: 'You’ve got $18,400 in uncollected deposits across 7 appointments this week. And laser is still the most profitable: 68% margin. Want me to set up the payment reminders?', t: '08:30' },
+      { who: 'in', text: 'Yes, go ahead', t: '08:41' },
+      { who: 'out', text: 'Done! Handed them to Sara to collect over WhatsApp. I’ll let you know as they come in. 📊', t: '08:41' },
+    ],
+
+    finalTitle: 'Add to your team, not your&nbsp;payroll.',
+    finalSub:
+      'Sara, Mia and Daniel work on their own, each in their lane, and message you themselves. Start today with one or all three.',
+  },
+}[lang];
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <!-- ══════════ HERO ══════════ -->
+    <section class="border-b border-line">
+      <div class="mx-auto max-w-6xl px-5 pb-16 pt-14">
+        <a href={L('/')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+          <span aria-hidden="true">←</span> {lang === 'en' ? 'Back to home' : 'Volver al inicio'}
+        </a>
+        <div class="grid gap-12 md:grid-cols-[1.05fr_0.95fr] md:items-center">
+          <div>
+            <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+              <span class="dot h-2 w-2"></span>{dict.heroEyebrow}
+            </p>
+            <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl" set:html={dict.heroTitle} />
+            <p class="mt-6 max-w-xl text-lg text-salvia">{dict.heroLead}</p>
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href={L('/demo')}
+                class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
+              >
+                {lang === 'en' ? 'Book a demo' : 'Pedir demo'}
+              </a>
+              <a
+                href="#equipo"
+                class="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-base font-semibold text-ink transition-colors hover:border-ink/30"
+              >
+                {lang === 'en' ? 'Meet the team' : 'Conoce al equipo'}
+              </a>
+            </div>
+          </div>
+
+          <!-- Visual: el trío real, con su nombre y rol -->
+          <div class="grid grid-cols-3 gap-2.5 sm:gap-3">
+            {
+              dict.members.map((m, i) => (
+                <figure class={`overflow-hidden rounded-2xl border border-line bg-cream shadow-[0_14px_36px_-24px_rgba(20,38,31,0.4)] ${i === 1 ? 'md:-translate-y-6' : ''}`}>
+                  <div class="relative aspect-[3/4] overflow-hidden">
+                    <video
+                      src={m.src}
+                      poster={'poster' in m ? m.poster : undefined}
+                      autoplay
+                      loop
+                      muted
+                      playsinline
+                      class="h-full w-full object-cover object-top"
+                    />
+                  </div>
+                  <figcaption class="flex flex-col gap-0.5 px-3 py-2.5">
+                    <span class="flex items-center gap-1.5">
+                      <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
+                      <span class="truncate text-sm font-bold text-ink">{m.name}</span>
+                    </span>
+                    <span class="truncate pl-3 text-xs text-salvia">{m.role}</span>
+                  </figcaption>
+                </figure>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ELENCO · 3 tarjetas ══════════ -->
+    <section id="equipo" class="border-b border-line bg-paper">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <div class="mb-12 max-w-2xl">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.teamKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.teamH2} />
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            dict.members.map((m) => (
+              <a
+                href={m.href.startsWith('#') ? m.href : L(m.href)}
+                class="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:border-pine/40 hover:shadow-[0_16px_40px_-24px_rgba(20,38,31,0.4)]"
+              >
+                <div class="relative aspect-[4/5] overflow-hidden bg-cream">
+                  <video
+                    src={m.src}
+                    poster={m.poster}
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                  <span class="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-pine-dark backdrop-blur-sm">
+                    <span class="h-1.5 w-1.5 rounded-full bg-mint" />
+                    {m.tag}
+                  </span>
+                </div>
+
+                <div class="flex flex-1 flex-col p-6">
+                  <div class="flex items-baseline gap-2">
+                    <h3 class="font-serif text-2xl font-black text-ink">{m.name}</h3>
+                    <span class="text-sm font-semibold text-pine">{m.role}</span>
+                  </div>
+                  <p class="mt-2 text-salvia">{m.oneliner}</p>
+                  <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors group-hover:text-ink">
+                    {m.cta}
+                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+                  </span>
+                </div>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ MANIFIESTO · trabajan solos y te escriben ══════════ -->
+    <section class="border-b border-line bg-ink text-cream">
+      <div class="mx-auto max-w-4xl px-5 py-24 text-center">
+        <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{dict.manifestoKicker}</p>
+        <h2 class="mx-auto max-w-3xl font-serif text-3xl font-black leading-tight text-balance md:text-5xl [&_em]:text-mint" set:html={dict.manifestoH2} />
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-cream/70">{dict.manifestoP}</p>
+      </div>
+    </section>
+
+    <!-- ══════════ SARA ══════════ -->
+    <section id="sara" class="border-b border-line">
+      <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.saraKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.saraH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.saraP}</p>
+          <ul class="mt-6 flex flex-col gap-3">
+            {
+              dict.saraPoints.map((p) => (
+                <li class="flex items-start gap-3 text-ink">
+                  <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-pine/10 text-xs font-bold text-pine-dark">✓</span>
+                  {p}
+                </li>
+              ))
+            }
+          </ul>
+          <a href={L('/sara')} class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
+            {dict.saraLink}
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo lang={lang} channel="whatsapp" name="Sara" avatar="/equipo/sara-avatar.jpg" bubbles={dict.saraBubbles} />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ MIA ══════════ -->
+    <section id="mia" class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[0.95fr_1.05fr]">
+        <div class="order-2 flex justify-center md:order-1 md:justify-start">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name="Mia"
+            avatar="/equipo/mia-avatar.jpg"
+            subtitle={dict.miaSubtitle}
+            bubbles={dict.miaBubbles}
+          />
+        </div>
+        <div class="order-1 md:order-2">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.miaKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.miaH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.miaP}</p>
+          <ul class="mt-6 flex flex-col gap-3">
+            {
+              dict.miaPoints.map((p) => (
+                <li class="flex items-start gap-3 text-ink">
+                  <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-pine/10 text-xs font-bold text-pine-dark">✓</span>
+                  {p}
+                </li>
+              ))
+            }
+          </ul>
+          <a href={L('/instagram')} class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
+            {dict.miaLink}
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ DANIEL ══════════ -->
+    <section id="daniel" class="border-b border-line">
+      <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.danielKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.danielH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.danielP}</p>
+          <ul class="mt-6 flex flex-col gap-3">
+            {
+              dict.danielPoints.map((p) => (
+                <li class="flex items-start gap-3 text-ink">
+                  <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-pine/10 text-xs font-bold text-pine-dark">✓</span>
+                  {p}
+                </li>
+              ))
+            }
+          </ul>
+          <a href={L('/demo')} class="mt-7 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink">
+            {lang === 'en' ? 'Book a demo' : 'Pedir una demo'}
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name="Daniel"
+            avatar="/equipo/daniel-avatar.jpg"
+            subtitle={dict.danielSubtitle}
+            bubbles={dict.danielBubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <CtaBand lang={lang} title={dict.finalTitle} sub={dict.finalSub} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
