@@ -19,11 +19,23 @@ export type ProductIcon =
   | 'camera'
   | 'star';
 
+export type BusinessIcon =
+  | 'laser'
+  | 'face'
+  | 'hair'
+  | 'tooth'
+  | 'flower'
+  | 'buildings'
+  | 'storefront'
+  | 'person';
+
+export type NavIconName = ProductIcon | BusinessIcon;
+
 export interface FeatureLink {
   name: string;
   href: string;
   desc: string;
-  icon?: ProductIcon;
+  icon?: NavIconName;
 }
 
 export interface FeatureGroup {
@@ -35,7 +47,7 @@ interface RawLink {
   href: string;
   name: Record<Locale, string>;
   desc: Record<Locale, string>;
-  icon?: ProductIcon;
+  icon?: NavIconName;
 }
 
 interface RawGroup {
@@ -140,6 +152,7 @@ const industryLinksRaw: RawLink[] = [
       es: 'La agenda llena entre sesiones, sin ausencias.',
       en: 'A full calendar between sessions, no no-shows.',
     },
+    icon: 'laser',
   },
   {
     href: '/negocios/medicina-estetica',
@@ -148,6 +161,7 @@ const industryLinksRaw: RawLink[] = [
       es: 'Consultas y tratamientos, cobrados por adelantado.',
       en: 'Consults and treatments, paid up front.',
     },
+    icon: 'face',
   },
   {
     href: '/negocios/implante-capilar',
@@ -156,6 +170,7 @@ const industryLinksRaw: RawLink[] = [
       es: 'Diagnósticos agendados y fechas aseguradas con anticipo.',
       en: 'Assessments booked and dates secured with a deposit.',
     },
+    icon: 'hair',
   },
   {
     href: '/negocios/odontologia',
@@ -164,6 +179,7 @@ const industryLinksRaw: RawLink[] = [
       es: 'Turnos que se confirman solos, sin recepción saturada.',
       en: 'Appointments that confirm themselves, no swamped front desk.',
     },
+    icon: 'tooth',
   },
   {
     href: '/negocios/estetica-spa',
@@ -172,6 +188,7 @@ const industryLinksRaw: RawLink[] = [
       es: 'Reservas 24/7 por WhatsApp e Instagram.',
       en: '24/7 bookings over WhatsApp and Instagram.',
     },
+    icon: 'flower',
   },
 ];
 
@@ -183,11 +200,13 @@ const sizeLinksRaw: RawLink[] = [
       es: 'Varias sedes, una sola Sara y todo en un panel.',
       en: 'Many locations, one Sara, everything in one dashboard.',
     },
+    icon: 'buildings',
   },
   {
     href: '/negocios/local-unico',
     name: { es: 'Local único', en: 'Single location' },
     desc: { es: 'Tu recepción, disponible las 24 horas.', en: 'Your front desk, open around the clock.' },
+    icon: 'storefront',
   },
   {
     href: '/negocios/independiente',
@@ -196,6 +215,7 @@ const sizeLinksRaw: RawLink[] = [
       es: 'Atiende y agenda mientras estás con un paciente.',
       en: 'Answers and books while you are with a patient.',
     },
+    icon: 'person',
   },
 ];
 
