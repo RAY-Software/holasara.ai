@@ -306,12 +306,12 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     </button>
   </div>
 
-  <!-- ─── Overlay mobile: sheet fijo bajo la barra, el único que scrollea ─── -->
+  <!-- ─── Dropdown mobile: panel en flujo bajo la barra (como RAY). La página scrollea. ─── -->
   <div
     id="mobile-nav"
-    class="absolute inset-x-0 bottom-0 z-[60] hidden overflow-hidden border-t border-line bg-cream overscroll-contain lg:hidden"
+    class="hidden overflow-visible border-t border-line bg-cream shadow-[0_16px_40px_-12px_rgba(20,38,31,0.28)] lg:hidden"
   >
-    <div class="h-full overflow-y-auto overscroll-contain px-4 pb-8 pt-3">
+    <div class="px-4 pb-4 pt-3">
       <nav class="flex flex-col">
         <!-- Producto -->
         <div data-accordion="product">
@@ -451,7 +451,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
                 href={langHref(l)}
                 data-astro-prefetch={false}
                 class={`flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-md px-4 py-3 text-sm ${
-                  l === lang ? 'bg-pine text-cream' : 'bg-white text-salvia'
+                  l === lang ? 'bg-pine text-cream' : 'bg-paper text-ink'
                 }`}
                 aria-current={l === lang ? 'true' : undefined}
                 hreflang={l}
@@ -492,46 +492,8 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     var closeI = document.getElementById('nav-close-icon');
     if (!btn || !panel) return;
 
-    var header = btn.closest('header');
-    var bar = header && header.firstElementChild;
-    var scrollY = 0;
-    var locked = false;
-
-    function syncHeaderH() {
-      if (!bar) return;
-      document.documentElement.style.setProperty('--header-h', bar.offsetHeight + 'px');
-    }
-
     function isOpen() {
       return !panel.classList.contains('hidden');
-    }
-
-    function lockScroll() {
-      if (locked) return;
-      locked = true;
-      scrollY = window.scrollY || window.pageYOffset || 0;
-      document.documentElement.classList.add('nav-open');
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-      // iOS: overflow hidden solo no alcanza; fixed + top guarda el scroll
-      // para que al cerrar no salte al tope.
-      document.body.style.position = 'fixed';
-      document.body.style.top = '-' + scrollY + 'px';
-      document.body.style.left = '0';
-      document.body.style.right = '0';
-    }
-
-    function unlockScroll() {
-      if (!locked) return;
-      locked = false;
-      document.documentElement.classList.remove('nav-open');
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      window.scrollTo(0, scrollY);
     }
 
     var accordions = panel.querySelectorAll('[data-accordion]');
@@ -563,13 +525,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       openI.classList.toggle('hidden', open);
       closeI.classList.toggle('hidden', !open);
-      if (open) {
-        syncHeaderH();
-        lockScroll();
-      } else {
-        collapseAccordions();
-        unlockScroll();
-      }
+      if (!open) collapseAccordions();
     }
 
     btn.addEventListener('click', function () {
@@ -584,25 +540,14 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     });
 
     window.addEventListener('resize', function () {
-      if (!isOpen()) return;
-      if (window.matchMedia('(min-width: 1024px)').matches) {
+      if (isOpen() && window.matchMedia('(min-width: 1024px)').matches) {
         setOpen(false);
-        return;
       }
-      syncHeaderH();
     });
   })();
 </script>
 
 <style>
-  #mobile-nav {
-    top: var(--header-h, 4rem);
-    overscroll-behavior: contain;
-  }
-  #mobile-nav > div {
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-  }
   [data-accordion].is-open [data-accordion-chevron] {
     transform: rotate(180deg);
   }

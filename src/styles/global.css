@@ -58,25 +58,6 @@ body {
   }
 }
 
-/* Menú mobile abierto: el documento no scrollea; el header pasa a cubrir el
-   viewport (backdrop-blur crea containing block, así el sheet bajo la barra
-   tiene altura). El body se ancla con position:fixed; rail y FAB no pintan. */
-html.nav-open,
-html.nav-open body {
-  overflow: hidden;
-  overscroll-behavior: none;
-}
-html.nav-open header {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  overflow: hidden;
-}
-html.nav-open .agent-toggle,
-html.nav-open .whatsapp-float {
-  display: none !important;
-}
-
 /* Los <em> dentro de titulares van rectos (énfasis solo por color, no itálica). */
 h1 em,
 h2 em,
