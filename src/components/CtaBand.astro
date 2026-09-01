@@ -32,7 +32,7 @@ const { title = copy.title, sub = copy.sub } = Astro.props;
     <p class="mb-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-cream/90">
       <span class="h-2 w-2 rounded-full bg-cream"></span> {copy.kicker}
     </p>
-    <h2 class="mx-auto max-w-3xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={title} />
+    <h2 class="mx-auto max-w-3xl font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={title} />
     <p class="mx-auto mt-6 max-w-xl text-lg text-cream/80">{sub}</p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
       <a

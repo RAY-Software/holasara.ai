@@ -99,7 +99,7 @@ const RAW: RawMember[] = [
     },
     kicker: { es: 'Cómo trabaja Sara', en: 'How Sara works' },
     h2: {
-      es: 'No es un bot con botones.<br /><em class="text-pine-dark">Atiende como tu mejor recepcionista.</em>',
+      es: 'No es un bot con botones.<br /><em class="text-pine-dark">Atiende como tu mejor&nbsp;recepcionista.</em>',
       en: 'Not a bot with buttons.<br /><em class="text-pine-dark">She answers like your best receptionist.</em>',
     },
     paragraph: {

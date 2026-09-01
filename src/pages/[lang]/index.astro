@@ -86,7 +86,7 @@ const dict = {
     postsKicker: 'Del post a la cita, paso a paso',
     postsClose: 'Instagram, el chat y el cobro, en un mismo lugar. Nadie más cierra ese&nbsp;círculo.',
     spotKicker: 'Spotlight · Sara',
-    spotH2: 'Además de atender y vender,<br /><em class="text-pine-dark">Sara es tu&nbsp;secretaria.</em>',
+    spotH2: 'Además de <span class="whitespace-nowrap">atender y vender,</span><br /><em class="text-pine-dark">Sara es tu&nbsp;secretaria.</em>',
     spotBody: 'Gestiona la agenda entera y notifica a cada paciente. Las 24 horas.',
     spotImgAlt: 'Sara gestiona la agenda de la semana y reprograma todas las citas del martes, avisando a cada paciente.',
     ctaInline1: 'Cada consulta que no respondes a tiempo, agenda en&nbsp;otra clínica.',
@@ -332,7 +332,7 @@ const loop = [
     <section id="video" class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-5xl px-5 py-24 text-center">
         <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.videoKicker}</p>
-        <h2 class="mx-auto max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.videoH2} />
+        <h2 class="mx-auto max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.videoH2} />
 
         <!-- Video demo: portada liviana (thumbnail YouTube); el iframe se carga recién al clic -->
         <div
@@ -383,7 +383,7 @@ const loop = [
           <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-mint">
             <span class="h-2 w-2 rounded-full bg-mint"></span>{dict.ctxKicker}
           </p>
-          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.ctxH2} />
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.ctxH2} />
           <p class="mt-5 text-lg text-cream/70" set:html={dict.ctxSub} />
         </div>
 
@@ -409,7 +409,7 @@ const loop = [
       <div class="reveal mx-auto grid min-w-0 max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
         <div>
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.saraKicker}</p>
-          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.saraH2} />
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.saraH2} />
           <p class="mt-5 text-lg text-salvia">{dict.saraSub}</p>
           <ul class="mt-8 flex flex-col gap-3.5">
             {
@@ -441,7 +441,7 @@ const loop = [
     <section class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.mktKicker}</p>
-        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.mktH2} />
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.mktH2} />
         <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.mktSub} />
         <a
           href={L('/instagram')}
@@ -491,7 +491,7 @@ const loop = [
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <div class="mx-auto max-w-3xl text-center">
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.spotKicker}</p>
-          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.spotH2} />
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.spotH2} />
           <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.spotBody}</p>
         </div>
         <div class="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
@@ -519,7 +519,7 @@ const loop = [
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <div class="mx-auto max-w-3xl text-center">
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.cobrosKicker}</p>
-          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
           <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.cobrosSub}</p>
         </div>
         <div class="mt-12 flex min-w-0 justify-center">
@@ -558,7 +558,7 @@ const loop = [
         <div>
           <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.caseKicker}</p>
           <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="mb-6 h-9 w-auto" loading="lazy" />
-          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.caseH2} />
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.caseH2} />
           <div class="mt-10 flex flex-col gap-8">
             <div>
               <p class="font-serif text-5xl font-black text-pine-dark tabular-nums">114</p>
