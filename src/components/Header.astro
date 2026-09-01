@@ -311,113 +311,173 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     id="mobile-nav"
     class="fixed inset-x-0 bottom-0 z-[60] hidden overflow-hidden border-t border-line bg-cream overscroll-contain lg:hidden"
   >
-    <div class="h-full space-y-7 overflow-y-auto overscroll-contain px-5 py-6">
-      {
-        productGroups.map((g) => (
-          <div>
-            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
-            <ul class="flex flex-col">
-              {g.items.map((it) => (
-                <li>
-                  <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                    {it.name}
-                  </a>
-                </li>
-              ))}
+    <div class="h-full overflow-y-auto overscroll-contain px-5 pb-8 pt-3">
+      <nav class="flex flex-col">
+        <!-- Producto -->
+        <div data-accordion="product">
+          <button
+            type="button"
+            data-accordion-btn
+            class="flex min-h-11 w-full items-center justify-between py-3 text-left text-base font-semibold text-ink"
+            aria-expanded="false"
+            aria-controls="mobile-acc-product"
+          >
+            {t('nav.product')}
+            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="mobile-acc-product" data-accordion-panel class="hidden pb-2 pl-1">
+            {
+              productGroups.map((g) => (
+                <div class="pt-2">
+                  <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
+                  <ul class="flex flex-col">
+                    {g.items.map((it) => (
+                      <li>
+                        <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                          <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
+                          {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Negocios -->
+        <div data-accordion="business">
+          <button
+            type="button"
+            data-accordion-btn
+            class="flex min-h-11 w-full items-center justify-between py-3 text-left text-base font-semibold text-ink"
+            aria-expanded="false"
+            aria-controls="mobile-acc-business"
+          >
+            {t('nav.business')}
+            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="mobile-acc-business" data-accordion-panel class="hidden pb-2 pl-1">
+            <div class="pt-2">
+              <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.byIndustry')}</p>
+              <ul class="flex flex-col">
+                {
+                  industryLinks.map((it) => (
+                    <li>
+                      <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                        <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
+                        {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div class="pt-3">
+              <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.bySize')}</p>
+              <ul class="flex flex-col">
+                {
+                  sizeLinks.map((it) => (
+                    <li>
+                      <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                        <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
+                        {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Equipo -->
+        <div data-accordion="team">
+          <button
+            type="button"
+            data-accordion-btn
+            class="flex min-h-11 w-full items-center justify-between py-3 text-left text-base font-semibold text-ink"
+            aria-expanded="false"
+            aria-controls="mobile-acc-team"
+          >
+            {teamNav.label}
+            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="mobile-acc-team" data-accordion-panel class="hidden pb-2 pl-1">
+            <ul class="flex flex-col pt-1">
+              {
+                team.map((m) => (
+                  <li>
+                    <a href={L(m.href)} class="block rounded-lg px-2 py-2.5">
+                      <span class="block text-sm font-semibold leading-snug text-ink">
+                        {m.name} <span class="font-normal text-salvia">· {m.role}</span>
+                      </span>
+                      {m.oneliner && <span class="mt-0.5 block text-xs leading-snug text-salvia">{m.oneliner}</span>}
+                    </a>
+                  </li>
+                ))
+              }
+              <li>
+                <a href={L('/equipo')} class="block rounded-lg px-2 py-2.5 text-sm font-semibold text-pine-dark">
+                  {teamNav.all}
+                </a>
+              </li>
             </ul>
           </div>
-        ))
-      }
-      <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.business')} · {t('nav.byIndustry')}</p>
-        <ul class="flex flex-col">
-          {
-            industryLinks.map((it) => (
-              <li>
-                <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                  {it.name}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.business')} · {t('nav.bySize')}</p>
-        <ul class="flex flex-col">
-          {
-            sizeLinks.map((it) => (
-              <li>
-                <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                  {it.name}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{teamNav.label}</p>
-        <ul class="flex flex-col">
-          {
-            team.map((m) => (
-              <li>
-                <a href={L(m.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                  {m.name} <span class="text-salvia">· {m.role}</span>
-                </a>
-              </li>
-            ))
-          }
-          <li>
-            <a href={L('/equipo')} class="block border-b border-line/70 py-2.5 text-ink">
-              {teamNav.all}
+        </div>
+
+        {
+          topLinks.map((l) => (
+            <a href={L(l.href)} class="flex min-h-11 items-center py-3 text-base font-semibold text-ink">
+              {l.name}
             </a>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <ul class="flex flex-col">
+          ))
+        }
+      </nav>
+
+      <div class="mt-2 border-t border-line pt-4">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{t('lang.switch')}</p>
+        <div class="flex gap-2" role="group" aria-label={t('lang.switch')}>
           {
-            topLinks.map((l) => (
-              <li>
-                <a href={L(l.href)} class="block border-b border-line/70 py-2.5 font-semibold text-ink">
-                  {l.name}
-                </a>
-              </li>
+            locales.map((l) => (
+              <a
+                href={langHref(l)}
+                data-astro-prefetch={false}
+                class={`flex min-h-11 flex-1 items-center justify-center rounded-full px-4 text-sm font-semibold uppercase tracking-wide ${
+                  l === lang ? 'bg-pine text-cream' : 'bg-white text-salvia'
+                }`}
+                aria-current={l === lang ? 'true' : undefined}
+                hreflang={l}
+              >
+                {l}
+              </a>
             ))
           }
-        </ul>
+        </div>
       </div>
-      <div class="flex flex-col gap-3 pt-1">
-        <a href={L('/demo')} class="inline-flex items-center justify-center rounded-full bg-pine px-5 py-3 text-base font-semibold text-cream">
+
+      <div class="mt-4 space-y-2 border-t border-line pt-4">
+        <a
+          href={L('/demo')}
+          class="inline-flex min-h-11 w-full items-center justify-center text-base font-semibold text-pine"
+        >
           {t('header.demoCta')}
         </a>
         {SHOW_GRADER_CTA && (
           <a
             href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
-            class="inline-flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-base font-semibold text-ink"
+            class="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-pine px-5 py-3 text-base font-semibold text-cream"
           >
             {t('header.scanCta')}
           </a>
         )}
-        <!-- Switcher ES/EN (mobile) -->
-        <div class="flex items-center justify-center gap-1 pt-1 text-sm font-semibold" role="group" aria-label={t('lang.switch')}>
-          {
-            locales.map((l, i) => (
-              <Fragment>
-                {i > 0 && <span class="text-line">·</span>}
-                <a
-                  href={langHref(l)}
-                  class={`px-2 py-1 uppercase tracking-wide ${l === lang ? 'text-ink' : 'text-salvia'}`}
-                  aria-current={l === lang ? 'true' : undefined}
-                  hreflang={l}
-                >
-                  {l}
-                </a>
-              </Fragment>
-            ))
-          }
-        </div>
       </div>
     </div>
   </div>
@@ -473,6 +533,32 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
       window.scrollTo(0, scrollY);
     }
 
+    var accordions = panel.querySelectorAll('[data-accordion]');
+
+    function setAccordion(name) {
+      var current = null;
+      accordions.forEach(function (el) {
+        if (el.classList.contains('is-open')) current = el.getAttribute('data-accordion');
+      });
+      var next = current === name ? null : name;
+      accordions.forEach(function (el) {
+        var open = el.getAttribute('data-accordion') === next;
+        el.classList.toggle('is-open', open);
+        var trigger = el.querySelector('[data-accordion-btn]');
+        var pane = el.querySelector('[data-accordion-panel]');
+        if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (pane) pane.classList.toggle('hidden', !open);
+      });
+    }
+
+    accordions.forEach(function (el) {
+      var trigger = el.querySelector('[data-accordion-btn]');
+      if (!trigger) return;
+      trigger.addEventListener('click', function () {
+        setAccordion(el.getAttribute('data-accordion'));
+      });
+    });
+
     function setOpen(open) {
       panel.classList.toggle('hidden', !open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -482,6 +568,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
         syncHeaderH();
         lockScroll();
       } else {
+        setAccordion(null);
         unlockScroll();
       }
     }
@@ -516,6 +603,9 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
   #mobile-nav > div {
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+  }
+  [data-accordion].is-open [data-accordion-chevron] {
+    transform: rotate(180deg);
   }
 
   /* Estado abierto del mega menú (lo togglea el JS con delay de cierre) */
