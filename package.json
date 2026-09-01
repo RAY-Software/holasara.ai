@@ -9,7 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:scripts": "node scripts/check-inline-scripts.mjs",
+    "synthetic": "node scripts/synthetic-check.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
