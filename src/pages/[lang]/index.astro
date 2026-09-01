@@ -74,12 +74,12 @@ const dict = {
     ctxH2: 'Tu paciente ya decidió <em class="text-mint">cómo</em> quiere&nbsp;agendar.',
     ctxSub: 'Espera lo mismo que en cualquier otro servicio: respuesta inmediata. La clínica que responde primero se queda con el&nbsp;paciente.',
     saraKicker: 'Conoce a Sara',
-    saraH2: '23:41 entra una&nbsp;consulta.<br /><em class="text-pine-dark">23:43 está <span class="whitespace-nowrap">pagada y agendada.</span></em>',
+    saraH2: '23:41 entra una&nbsp;consulta.<br /><em class="text-pine-dark">23:43 está<br />pagada y agendada.</em>',
     saraSub: 'Trabaja de noche, los fines de semana y en los picos. Sin sumar una persona más a recepción.',
     saraMore: 'Conoce más sobre Sara',
     saraImgAlt: 'Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo.',
     mktKicker: 'Marketing',
-    mktH2: 'Sara también <span class="whitespace-nowrap">lleva tu Instagram.</span>',
+    mktH2: 'Sara también lleva<br />tu Instagram.',
     mktSub: 'Crea las publicaciones de tu clínica y atiende a quien responde, hasta agendar. Tu marketing y tu agenda, por fin&nbsp;conectados.',
     mktMore: 'Ver cómo Sara lleva tu Instagram',
     mktImgAlt: 'Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir.',
@@ -156,19 +156,19 @@ const dict = {
     ctxH2: 'Your patient has already decided <em class="text-mint">how</em> they want to&nbsp;book.',
     ctxSub: 'They expect what they get everywhere else: an instant reply. The clinic that answers first keeps the&nbsp;patient.',
     saraKicker: 'Meet Sara',
-    saraH2: '11:41 pm an enquiry comes&nbsp;in.<br /><em class="text-pine-dark">11:43 pm it’s <span class="whitespace-nowrap">paid and booked.</span></em>',
+    saraH2: '11:41 pm an enquiry comes&nbsp;in.<br /><em class="text-pine-dark">11:43 pm it’s<br />paid and booked.</em>',
     saraSub: 'She works nights, weekends and peak hours. Without adding one more person to the front desk.',
     saraMore: 'Learn more about Sara',
     saraImgAlt: 'WhatsApp conversation: a patient enquires in the middle of the night and Sara replies, books and collects the deposit.',
     mktKicker: 'Marketing',
-    mktH2: 'Sara runs <span class="whitespace-nowrap">your Instagram, too.</span>',
+    mktH2: 'Sara runs your<br />Instagram,&nbsp;too.',
     mktSub: 'She creates your clinic’s posts and answers whoever replies, all the way to booking. Your marketing and your calendar, finally&nbsp;connected.',
     mktMore: 'See how Sara runs your Instagram',
     mktImgAlt: 'A clinic’s AI-generated Instagram feed: on-brand posts, ready to publish.',
     postsKicker: 'From post to appointment, step by step',
     postsClose: 'Instagram, the chat and the payment, all in one place. No one else closes that&nbsp;loop.',
     spotKicker: 'Spotlight · Sara',
-    spotH2: 'Beyond answering and selling,<br /><em class="text-pine-dark">Sara is your&nbsp;secretary.</em>',
+    spotH2: 'Beyond answering<br />and selling,<br /><em class="text-pine-dark">Sara is your&nbsp;secretary.</em>',
     spotBody: 'She manages the entire calendar and notifies every patient. Around the clock.',
     spotImgAlt: 'Sara manages the week’s calendar and reschedules every Tuesday appointment, notifying each patient.',
     ctaInline1: 'Every enquiry you don’t answer in time books at&nbsp;another clinic.',
@@ -332,7 +332,7 @@ const loop = [
     <section id="video" class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-5xl px-5 py-24 text-center">
         <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.videoKicker}</p>
-        <h2 class="mx-auto max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.videoH2} />
+        <h2 class="mx-auto max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.videoH2} />
 
         <!-- Video demo: portada liviana (thumbnail YouTube); el iframe se carga recién al clic -->
         <div
@@ -383,7 +383,7 @@ const loop = [
           <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-mint">
             <span class="h-2 w-2 rounded-full bg-mint"></span>{dict.ctxKicker}
           </p>
-          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.ctxH2} />
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.ctxH2} />
           <p class="mt-5 text-lg text-cream/70" set:html={dict.ctxSub} />
         </div>
 
@@ -409,7 +409,7 @@ const loop = [
       <div class="reveal mx-auto grid min-w-0 max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
         <div>
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.saraKicker}</p>
-          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.saraH2} />
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.saraH2} />
           <p class="mt-5 text-lg text-salvia">{dict.saraSub}</p>
           <ul class="mt-8 flex flex-col gap-3.5">
             {
@@ -441,7 +441,7 @@ const loop = [
     <section class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.mktKicker}</p>
-        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.mktH2} />
+        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.mktH2} />
         <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.mktSub} />
         <a
           href={L('/instagram')}
@@ -491,7 +491,7 @@ const loop = [
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <div class="mx-auto max-w-3xl text-center">
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.spotKicker}</p>
-          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.spotH2} />
+          <h2 class="font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.spotH2} />
           <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.spotBody}</p>
         </div>
         <div class="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
@@ -519,7 +519,7 @@ const loop = [
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <div class="mx-auto max-w-3xl text-center">
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.cobrosKicker}</p>
-          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
           <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.cobrosSub}</p>
         </div>
         <div class="mt-12 flex min-w-0 justify-center">
@@ -558,7 +558,7 @@ const loop = [
         <div>
           <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.caseKicker}</p>
           <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="mb-6 h-9 w-auto" loading="lazy" />
-          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-5xl" set:html={dict.caseH2} />
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.caseH2} />
           <div class="mt-10 flex flex-col gap-8">
             <div>
               <p class="font-serif text-5xl font-black text-pine-dark tabular-nums">114</p>

@@ -49,9 +49,10 @@ body {
    izquierda insetando el CONTENIDO de los containers (`.mx-auto.px-5`) sin tocar
    los fondos full-bleed de las secciones — el rail flota sobre el fondo, nunca
    sobre el texto. La especificidad (0,2,0) le gana a `.px-5`, así que sobrescribe
-   solo el padding-left (el derecho queda en 1.25rem). Solo hace falta en viewports
-   angostos: en desktop ancho el margen auto del max-w ya deja el rail libre. */
-@media (max-width: 1279px) {
+   solo el padding-left (el derecho queda en 1.25rem). El rail se oculta bajo `lg`
+   (igual que el hamburger); el gutter solo corre cuando el rail es visible y el
+   margen auto del max-w aún no lo deja libre. */
+@media (min-width: 1024px) and (max-width: 1279px) {
   .mx-auto.px-5 {
     padding-left: 3.5rem;
   }
