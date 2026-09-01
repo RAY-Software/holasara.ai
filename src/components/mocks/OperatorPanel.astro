@@ -74,7 +74,7 @@ const tick =
   '<svg class="op-tick" viewBox="0 0 18 12" fill="none" aria-hidden="true"><path d="M1 6.6l3.1 3.1L10.4 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.4 9.7L12.7 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 ---
 
-<figure class={`op w-full max-w-5xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_20px_60px_-30px_rgba(20,38,31,0.45)] ${cls}`} aria-label={en ? 'Sara operator panel' : 'Panel de operador de Sara'}>
+<figure class={`op w-full min-w-0 max-w-5xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_20px_60px_-30px_rgba(20,38,31,0.45)] ${cls}`} aria-label={en ? 'Sara operator panel' : 'Panel de operador de Sara'}>
   <!-- Barra superior -->
   <div class="flex items-center gap-2.5 border-b border-line bg-white px-4 py-3 sm:px-5">
     <span class="grid h-8 w-8 shrink-0 place-content-center rounded-lg bg-[#2563eb] font-serif text-sm font-black text-white">R</span>
@@ -83,23 +83,23 @@ const tick =
   </div>
 
   <!-- Cuerpo: 2 columnas -->
-  <div class="grid gap-4 bg-paper p-4 sm:p-5 lg:grid-cols-2">
+  <div class="grid min-w-0 gap-4 bg-paper p-4 sm:p-5 lg:grid-cols-2">
     <!-- ── Izquierda: agenda del dia ── -->
-    <div class="rounded-2xl border border-line bg-white p-4 shadow-[0_10px_30px_-24px_rgba(20,38,31,0.4)] sm:p-5">
-      <div class="flex items-baseline justify-between gap-3 pb-3">
+    <div class="min-w-0 rounded-2xl border border-line bg-white p-4 shadow-[0_10px_30px_-24px_rgba(20,38,31,0.4)] sm:p-5">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 pb-3">
         <h3 class="font-serif text-lg font-black text-ink">{t.dayTitle}</h3>
-        <span class="shrink-0 text-sm text-salvia">{t.daySub}</span>
+        <span class="text-sm text-salvia">{t.daySub}</span>
       </div>
       <ul>
         {
           rows.map((r, i) => (
-            <li class={`flex items-center gap-3 py-3 ${i > 0 ? 'border-t border-line/70' : ''}`}>
+            <li class={`flex flex-wrap items-center gap-x-3 gap-y-1.5 py-3 ${i > 0 ? 'border-t border-line/70' : ''}`}>
               <span class="w-12 shrink-0 font-semibold tabular-nums text-ink">{r.time}</span>
               <span class="min-w-0 flex-1">
                 <span class="block truncate font-semibold text-ink">{r.name}</span>
                 <span class="block truncate text-sm text-salvia">{r.treat}</span>
               </span>
-              <span class="shrink-0 whitespace-nowrap rounded-full bg-[#eaf1fe] px-3 py-1 text-xs font-semibold tabular-nums text-[#2563eb]">
+              <span class="max-w-full basis-full whitespace-nowrap rounded-full bg-[#eaf1fe] px-3 py-1 text-xs font-semibold tabular-nums text-[#2563eb] sm:ml-auto sm:basis-auto">
                 → {chipTo} · {r.time}
               </span>
             </li>
@@ -109,7 +109,7 @@ const tick =
     </div>
 
     <!-- ── Derecha: chat de WhatsApp (modo operador) ── -->
-    <div class="op-wa flex flex-col overflow-hidden rounded-2xl border border-line">
+    <div class="op-wa flex min-w-0 flex-col overflow-hidden rounded-2xl border border-line">
       <!-- Header -->
       <div class="op-head">
         <span class="op-photo" aria-hidden="true">S</span>

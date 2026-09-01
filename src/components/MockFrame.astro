@@ -1,0 +1,77 @@
+---
+/**
+ * Keeps an HTML product mockup inside the section width.
+ * The stage is 100% of the frame. If it still overflows, the inner
+ * stage is sized to that width and scaled uniformly
+ * (transform-origin top left) so text stays readable instead of clipping.
+ */
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+<div class:list={['mock-frame', cls]} data-mock-frame>
+  <div class="mock-stage" data-mock-stage>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .mock-frame {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .mock-stage {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    transform-origin: top left;
+  }
+</style>
+
+<script>
+  const FIT_EPSILON = 2;
+
+  function fit(frame: HTMLElement) {
+    const stage = frame.querySelector<HTMLElement>(':scope > [data-mock-stage]');
+    if (!stage) return;
+
+    stage.style.transform = 'none';
+    stage.style.width = '100%';
+    frame.style.height = '';
+
+    const avail = frame.clientWidth;
+    if (!avail) return;
+
+    const needed = stage.scrollWidth;
+    if (needed <= avail + FIT_EPSILON) return;
+
+    stage.style.width = `${needed}px`;
+    const scale = avail / needed;
+    stage.style.transform = `scale(${scale})`;
+    frame.style.height = `${Math.ceil(stage.scrollHeight * scale)}px`;
+  }
+
+  function fitAll() {
+    document.querySelectorAll<HTMLElement>('[data-mock-frame]').forEach(fit);
+  }
+
+  const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(fitAll) : null;
+
+  function watch() {
+    document.querySelectorAll<HTMLElement>('[data-mock-frame]').forEach((el) => ro?.observe(el));
+    fitAll();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', watch);
+  } else {
+    watch();
+  }
+
+  document.fonts?.ready?.then(fitAll);
+  window.addEventListener('resize', fitAll);
+</script>
