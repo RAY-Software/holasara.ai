@@ -99,8 +99,8 @@ const RAW: RawMember[] = [
     },
     kicker: { es: 'Cómo trabaja Sara', en: 'How Sara works' },
     h2: {
-      es: 'No es un bot con botones.<br /><em class="text-pine-dark">Atiende como tu mejor&nbsp;recepcionista.</em>',
-      en: 'Not a bot with buttons.<br /><em class="text-pine-dark">She answers like your best receptionist.</em>',
+      es: 'No es un bot.<br /><em class="text-pine-dark">Atiende como<br />tu mejor recepción.</em>',
+      en: 'Not a bot.<br /><em class="text-pine-dark">She answers like<br />your best front desk.</em>',
     },
     paragraph: {
       es: 'Responde WhatsApp, Instagram y el chat de tu web a toda hora. Informa con precios reales, arma la propuesta que conviene, agenda la cita y cobra el anticipo en la misma conversación. Sin sumar a nadie a recepción.',
@@ -247,8 +247,8 @@ const RAW: RawMember[] = [
     },
     kicker: { es: 'Cómo trabaja Mia', en: 'How Mia works' },
     h2: {
-      es: 'No tienes que pedirle nada. <em class="text-pine-dark">Ve la oportunidad y te trae pacientes.</em>',
-      en: 'You don’t have to ask. <em class="text-pine-dark">She spots the opening and brings you patients.</em>',
+      es: 'No le pides nada.<br /><em class="text-pine-dark">Te trae pacientes.</em>',
+      en: 'You don’t ask.<br /><em class="text-pine-dark">She brings you patients.</em>',
     },
     paragraph: {
       es: 'Mia lleva tu marketing de punta a punta: crea y publica tu Instagram, corre tus campañas de Google Ads, optimiza tu ficha de Google Business y mira las métricas de tu web. Y como es proactiva, no espera a que le pidas: cuando ve una forma de traer más pacientes (una ficha que bajó, una campaña que rinde, una semana floja) te escribe la propuesta lista. La apruebas por chat y ella la ejecuta.',

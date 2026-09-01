@@ -254,7 +254,7 @@ export const competitors: Competitor[] = [
         metaTitle: 'Sara AI vs AgendaPro: ¿cuál necesita tu negocio? (2026)',
         metaDescription: 'AgendaPro es un software de agenda; Sara es un asistente con IA que conversa, agenda y cobra. Comparamos qué hace cada uno y cuándo conviene cada opción, con datos de agosto 2026.',
         eyebrow: 'Sara AI vs AgendaPro',
-        title: 'Sara AI vs AgendaPro:<br />no compiten por lo&nbsp;mismo.',
+        title: 'Sara y AgendaPro<br />no hacen<br />lo mismo.',
         lead: 'AgendaPro es uno de los software de agenda más usados de LATAM, con más de 20.000 negocios. Sara no es un software de agenda: es la que atiende la conversación y la convierte en cita cobrada. La comparación honesta, con datos de agosto 2026.',
         verdictThem: {
           title: 'Elige AgendaPro si...',
@@ -285,7 +285,7 @@ export const competitors: Competitor[] = [
         metaTitle: 'Sara AI vs AgendaPro: which one does your business need? (2026)',
         metaDescription: 'AgendaPro is scheduling software; Sara is an AI assistant that converses, books and collects. We compare what each one does and when each option makes sense, with data from August 2026.',
         eyebrow: 'Sara AI vs AgendaPro',
-        title: 'Sara AI vs AgendaPro:<br />not competing for the same&nbsp;job.',
+        title: 'Sara vs AgendaPro:<br />not the same job.',
         lead: 'AgendaPro is one of LATAM’s most used scheduling platforms, with over 20,000 businesses. Sara is not scheduling software: it’s the one answering the conversation and turning it into a paid appointment. The honest comparison, with data from August 2026.',
         verdictThem: {
           title: 'Pick AgendaPro if...',

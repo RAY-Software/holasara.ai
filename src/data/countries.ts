@@ -36,7 +36,7 @@ export const countries: Country[] = [
         metaTitle: 'Sara AI en México: la recepcionista con IA para clínicas, médicos y wellness',
         metaDescription: `Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en México las 24 horas: responde precios, agenda en tu Google Calendar y cobra el anticipo en pesos. Precio por clínica, en la demo.`,
         eyebrow: 'Sara AI en México',
-        title: 'La recepción que contesta a las 11 de la noche, también en&nbsp;México.',
+        title: 'Contesta a las 11.<br /><em class="text-pine-dark">También en México.</em>',
         lead: 'Las clínicas mexicanas reciben la consulta por WhatsApp o Instagram cuando la recepción ya se fue. Sara contesta al momento, informa precios en pesos, agenda en tu Google Calendar y cobra el anticipo para que la cita quede en firme.',
         bullets: [
           { title: 'Responde como se habla en México', body: 'Tuteo natural, sin sonar a robot ni a call center de otro país.' },
