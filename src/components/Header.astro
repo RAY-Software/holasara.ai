@@ -114,21 +114,31 @@ const graderHref =
             <div class="mega-card mega-card--company">
               <div class="min-w-[220px] flex-1">
                 <p class="mega-group">{t('nav.byIndustry')}</p>
-                <ul class="mt-3 flex flex-col">
+                <ul class="mt-3 flex flex-col gap-0.5">
                   {
                     industryLinks.map((it) => (
                       <li>
-                        <a href={L(it.href)} class="mega-plain">{it.name}</a>
+                        <a href={L(it.href)} class="mega-feature">
+                          <span class="mega-feature__icon">
+                            <NavIcon name={it.icon} size={24} />
+                          </span>
+                          <span class="mega-feature__title">{it.name}</span>
+                        </a>
                       </li>
                     ))
                   }
                 </ul>
                 <p class="mega-group mt-7">{t('nav.bySize')}</p>
-                <ul class="mt-3 flex flex-col">
+                <ul class="mt-3 flex flex-col gap-0.5">
                   {
                     sizeLinks.map((it) => (
                       <li>
-                        <a href={L(it.href)} class="mega-plain">{it.name}</a>
+                        <a href={L(it.href)} class="mega-feature">
+                          <span class="mega-feature__icon">
+                            <NavIcon name={it.icon} size={24} />
+                          </span>
+                          <span class="mega-feature__title">{it.name}</span>
+                        </a>
                       </li>
                     ))
                   }
@@ -349,7 +359,12 @@ const graderHref =
                 {
                   industryLinks.map((it) => (
                     <li>
-                      <a href={L(it.href)} class="m-sub">{it.name}</a>
+                      <a href={L(it.href)} class="m-feature">
+                        <span class="m-feature__icon">
+                          <NavIcon name={it.icon} size={20} />
+                        </span>
+                        <span>{it.name}</span>
+                      </a>
                     </li>
                   ))
                 }
@@ -361,7 +376,12 @@ const graderHref =
                 {
                   sizeLinks.map((it) => (
                     <li>
-                      <a href={L(it.href)} class="m-sub">{it.name}</a>
+                      <a href={L(it.href)} class="m-feature">
+                        <span class="m-feature__icon">
+                          <NavIcon name={it.icon} size={20} />
+                        </span>
+                        <span>{it.name}</span>
+                      </a>
                     </li>
                   ))
                 }
@@ -388,8 +408,13 @@ const graderHref =
               {
                 team.map((m) => (
                   <li>
-                    <a href={L(m.href)} class="m-sub">
-                      {m.name} <span class="font-normal text-salvia">· {m.role}</span>
+                    <a href={L(m.href)} class="m-person">
+                      <span class="m-person__thumb">
+                        <img src={m.avatar} alt="" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
+                      </span>
+                      <span>
+                        {m.name} <span class="font-normal text-salvia">· {m.role}</span>
+                      </span>
                     </a>
                   </li>
                 ))
@@ -784,6 +809,24 @@ const graderHref =
     font-size: 14px;
     font-weight: 600;
     color: var(--color-ink);
+  }
+  .m-person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .m-person__thumb {
+    display: block;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: var(--color-cream);
   }
   .m-lang {
     margin-top: 20px;
