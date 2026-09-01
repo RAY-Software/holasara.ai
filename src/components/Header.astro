@@ -444,20 +444,20 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
 
       <div class="mt-2 border-t border-line pt-4">
         <p class="mb-2 px-3 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{t('lang.switch')}</p>
-        <div class="flex h-[52px] overflow-hidden rounded-lg bg-white" role="group" aria-label={t('lang.switch')}>
+        <div class="flex gap-2" role="group" aria-label={t('lang.switch')}>
           {
             locales.map((l) => (
               <a
                 href={langHref(l)}
                 data-astro-prefetch={false}
-                class={`flex h-full flex-1 items-center justify-center gap-2 text-sm font-medium ${
+                class={`flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-md px-4 py-3 text-sm ${
                   l === lang ? 'bg-pine text-cream' : 'bg-white text-salvia'
                 }`}
                 aria-current={l === lang ? 'true' : undefined}
                 hreflang={l}
               >
                 <span class="text-lg leading-none" aria-hidden="true">{l === 'es' ? '🇪🇸' : '🇺🇸'}</span>
-                <span>{l === 'es' ? t('lang.es') : t('lang.en')}</span>
+                <span class="font-medium">{l === 'es' ? t('lang.es') : t('lang.en')}</span>
               </a>
             ))
           }
