@@ -452,13 +452,13 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
               <a
                 href={langHref(l)}
                 data-astro-prefetch={false}
-                class={`flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-md px-4 py-3 text-sm ${
-                  l === lang ? 'bg-pine text-cream' : 'bg-paper text-ink'
+                class={`flex min-h-[44px] flex-1 items-center justify-center space-x-2 rounded-md px-4 py-3 text-sm ${
+                  l === lang ? 'bg-pine text-cream' : 'bg-white text-ink'
                 }`}
                 aria-current={l === lang ? 'true' : undefined}
                 hreflang={l}
               >
-                <span class="text-lg leading-none" aria-hidden="true">{l === 'es' ? '🇪🇸' : '🇺🇸'}</span>
+                <span class="text-lg" aria-hidden="true">{l === 'es' ? '🇪🇸' : '🇺🇸'}</span>
                 <span class="font-medium">{l === 'es' ? t('lang.es') : t('lang.en')}</span>
               </a>
             ))
