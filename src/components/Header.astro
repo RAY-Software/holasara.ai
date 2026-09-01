@@ -306,9 +306,12 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     </button>
   </div>
 
-  <!-- ─── Drawer mobile ─── -->
-  <div id="mobile-nav" class="hidden border-t border-line bg-cream lg:hidden">
-    <div class="max-h-[calc(100vh-4rem)] space-y-7 overflow-auto px-5 py-6">
+  <!-- ─── Overlay mobile: sheet fijo bajo la barra, el único que scrollea ─── -->
+  <div
+    id="mobile-nav"
+    class="fixed inset-x-0 bottom-0 z-[60] hidden overflow-hidden border-t border-line bg-cream overscroll-contain lg:hidden"
+  >
+    <div class="h-full space-y-7 overflow-y-auto overscroll-contain px-5 py-6">
       {
         productGroups.map((g) => (
           <div>
@@ -427,16 +430,94 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     var openI = document.getElementById('nav-open-icon');
     var closeI = document.getElementById('nav-close-icon');
     if (!btn || !panel) return;
-    btn.addEventListener('click', function () {
-      var open = panel.classList.toggle('hidden') === false;
+
+    var header = btn.closest('header');
+    var bar = header && header.firstElementChild;
+    var scrollY = 0;
+    var locked = false;
+
+    function syncHeaderH() {
+      if (!bar) return;
+      document.documentElement.style.setProperty('--header-h', bar.offsetHeight + 'px');
+    }
+
+    function isOpen() {
+      return !panel.classList.contains('hidden');
+    }
+
+    function lockScroll() {
+      if (locked) return;
+      locked = true;
+      scrollY = window.scrollY || window.pageYOffset || 0;
+      document.documentElement.classList.add('nav-open');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      // iOS: overflow hidden solo no alcanza; fixed + top guarda el scroll
+      // para que al cerrar no salte al tope.
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + scrollY + 'px';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+    }
+
+    function unlockScroll() {
+      if (!locked) return;
+      locked = false;
+      document.documentElement.classList.remove('nav-open');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      window.scrollTo(0, scrollY);
+    }
+
+    function setOpen(open) {
+      panel.classList.toggle('hidden', !open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       openI.classList.toggle('hidden', open);
       closeI.classList.toggle('hidden', !open);
+      if (open) {
+        syncHeaderH();
+        lockScroll();
+      } else {
+        unlockScroll();
+      }
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(!isOpen());
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        btn.focus();
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      if (!isOpen()) return;
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        setOpen(false);
+        return;
+      }
+      syncHeaderH();
     });
   })();
 </script>
 
 <style>
+  #mobile-nav {
+    top: var(--header-h, 4rem);
+    overscroll-behavior: contain;
+  }
+  #mobile-nav > div {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
   /* Estado abierto del mega menú (lo togglea el JS con delay de cierre) */
   [data-mega].is-open .mega-panel {
     visibility: visible;

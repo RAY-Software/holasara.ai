@@ -49,12 +49,32 @@ body {
    izquierda insetando el CONTENIDO de los containers (`.mx-auto.px-5`) sin tocar
    los fondos full-bleed de las secciones — el rail flota sobre el fondo, nunca
    sobre el texto. La especificidad (0,2,0) le gana a `.px-5`, así que sobrescribe
-   solo el padding-left (el derecho queda en 1.25rem). Solo hace falta en viewports
-   angostos: en desktop ancho el margen auto del max-w ya deja el rail libre. */
-@media (max-width: 1279px) {
+   solo el padding-left (el derecho queda en 1.25rem). El rail se oculta bajo `lg`
+   (igual que el hamburger); el gutter solo corre cuando el rail es visible y el
+   margen auto del max-w aún no lo deja libre. */
+@media (min-width: 1024px) and (max-width: 1279px) {
   .mx-auto.px-5 {
     padding-left: 3.5rem;
   }
+}
+
+/* Menú mobile abierto: el documento no scrollea; header queda fijo al tope
+   (el body se ancla con position:fixed); rail y FAB de WhatsApp no pintan. */
+html.nav-open,
+html.nav-open body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+html.nav-open header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 60;
+}
+html.nav-open .agent-toggle,
+html.nav-open .whatsapp-float {
+  display: none !important;
 }
 
 /* Los <em> dentro de titulares van rectos (énfasis solo por color, no itálica). */
