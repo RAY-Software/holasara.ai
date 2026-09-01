@@ -1,5 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
+import NavIcon from './NavIcon.astro';
 import { getProductGroups, getIndustryLinks, getSizeLinks, getTopLinks } from '../data/nav';
 import { getTeam } from '../data/team';
 import { SHOW_GRADER_CTA } from '../lib/flags';
@@ -13,226 +14,197 @@ const { lang = defaultLocale } = Astro.props;
 const t = useTranslations(lang);
 
 const productGroups = getProductGroups(lang);
+const productColumns = [productGroups.slice(0, 2), productGroups.slice(2)];
 const industryLinks = getIndustryLinks(lang);
 const sizeLinks = getSizeLinks(lang);
 const topLinks = getTopLinks(lang);
 const team = getTeam(lang);
-// Etiquetas del mega menú de Equipo (no hay claves i18n dedicadas para esto).
+const teamCards = team.slice(0, 2);
 const teamNav =
   lang === 'en'
-    ? { label: 'Team', all: 'Meet the whole team', action: 'In action' }
-    : { label: 'Equipo', all: 'Conoce a todo el equipo', action: 'En acción' };
+    ? { label: 'Team', all: 'Meet the whole team' }
+    : { label: 'Equipo', all: 'Conoce a todo el equipo' };
 const L = (p: string) => localePath(p, lang);
 
-// Switcher ES/EN: alterna el segmento de idioma del path actual, preservando la ruta.
 const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
 const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`;
+
+const triggerClass =
+  'mega-trigger inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm font-medium text-ink transition-colors';
+const graderHref =
+  'https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara';
 ---
 
 <header class="z-50">
-  <div class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
-    <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
-    <a href={L('/')} class="flex items-center" aria-label={t('header.homeAria')}>
-      <Wordmark class="text-[1.9rem]" />
-    </a>
+  <div data-nav-bar class="sticky top-0 z-[60] h-12 border-b border-line bg-white">
+    <div class="mx-auto flex h-full max-w-6xl items-center justify-between gap-3 px-4 lg:px-5">
+      <a href={L('/')} class="flex items-center" aria-label={t('header.homeAria')}>
+        <Wordmark class="text-[1.45rem] lg:text-[1.7rem]" />
+      </a>
 
-    <!-- ─── Nav desktop ─── -->
-    <nav class="hidden items-center gap-1 lg:flex">
-      <!-- Producto (mega menú, hover-intent con delay via JS) -->
-      <div class="group" data-mega>
-        <button
-          type="button"
-          class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
-          aria-haspopup="true"
-        >
-          {t('nav.product')}
-          <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
+      <!-- ─── Nav desktop ─── -->
+      <nav class="hidden items-center gap-0.5 lg:flex">
+        <!-- Producto -->
+        <div class="group" data-mega>
+          <button type="button" class={triggerClass} aria-haspopup="true" aria-expanded="false">
+            {t('nav.product')}
+            <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
 
-        <!-- Panel: full-width; visibilidad manejada por JS (is-open) con delay de cierre -->
-        <div
-          class="mega-panel invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
-        >
-          <div class="mx-auto grid w-[min(100%,1024px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_280px]">
-            <div class="grid grid-cols-2 gap-x-10 gap-y-9 sm:grid-cols-4">
+          <div class="mega-panel">
+            <div class="mega-card mega-card--product">
               {
-                productGroups.map((g) => (
-                  <div>
-                    <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
-                    <ul class="flex flex-col gap-6">
-                      {g.items.map((it) => (
-                        <li>
-                          <a href={L(it.href)} class="group/link block">
-                            <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
-                              {it.name}
-                            </span>
-                            <span class="mt-1 block text-xs leading-snug text-salvia">{it.desc}</span>
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+                productColumns.map((col) => (
+                  <div class="flex flex-col gap-8">
+                    {col.map((g) => (
+                      <div>
+                        <p class="mega-group">{g.label}</p>
+                        <ul class="mt-3 flex flex-col gap-0.5">
+                          {g.items.map((it) => (
+                            <li>
+                              <a href={L(it.href)} class="mega-feature">
+                                <span class="mega-feature__icon">
+                                  <NavIcon name={it.icon} size={24} />
+                                </span>
+                                <span class="mega-feature__title">{it.name}</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
                   </div>
                 ))
               }
-            </div>
 
-            <!-- Promo: imagen de ViaLaser (caso real) -->
-            <a href={L('/caso')} class="group/case relative flex min-h-[280px] overflow-hidden rounded-xl bg-ink">
-              <img
-                src="/img/vialaser-chart.jpg"
-                alt={t('header.caseImgAlt')}
-                class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-300 group-hover/case:scale-[1.04]"
-                loading="lazy"
-                decoding="async"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/5"></div>
-              <div class="relative mt-auto p-5">
-                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">{t('header.caseKicker')}</p>
-                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">{t('header.caseTitleProduct')}</p>
-                <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
-                  {t('header.caseCta')} <span aria-hidden="true">→</span>
-                </span>
+              <div class="mega-rule" aria-hidden="true"></div>
+
+              <div class="flex w-[251px] shrink-0 flex-col gap-3">
+                <a href={L('/caso')} class="mega-photo">
+                  <img
+                    src="/img/vialaser-chart.jpg"
+                    alt={t('header.caseImgAlt')}
+                    class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover/photo:scale-[1.04]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="mega-photo__scrim"></span>
+                  <span class="mega-photo__title">{t('header.caseTitleProduct')}</span>
+                </a>
+                <a href={L('/caso')} class="mega-photo mega-photo--brand">
+                  <span class="mega-photo__title">{t('header.caseTitleSecond')}</span>
+                </a>
               </div>
-            </a>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Negocios (mega menú: para quién es Sara, por industria y por tamaño) -->
-      <div class="group" data-mega>
-        <button
-          type="button"
-          class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
-          aria-haspopup="true"
-        >
-          {t('nav.business')}
-          <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
+        <!-- Negocios -->
+        <div class="group" data-mega>
+          <button type="button" class={triggerClass} aria-haspopup="true" aria-expanded="false">
+            {t('nav.business')}
+            <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
 
-        <div
-          class="mega-panel invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
-        >
-          <div class="mx-auto grid w-[min(100%,880px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_1fr_280px]">
-            <div>
-              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.byIndustry')}</p>
-              <ul class="flex flex-col gap-6">
-                {
-                  industryLinks.map((it) => (
-                    <li>
-                      <a href={L(it.href)} class="group/link block">
-                        <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
-                          {it.name}
-                        </span>
-                        <span class="mt-1 block text-xs leading-snug text-salvia">{it.desc}</span>
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-
-            <div>
-              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.bySize')}</p>
-              <ul class="flex flex-col gap-6">
-                {
-                  sizeLinks.map((it) => (
-                    <li>
-                      <a href={L(it.href)} class="group/link block">
-                        <span class="block text-sm font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
-                          {it.name}
-                        </span>
-                        <span class="mt-1 block text-xs leading-snug text-salvia">{it.desc}</span>
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-
-            <!-- Promo: caso real ViaLaser (misma imagen que el panel de Producto) -->
-            <a href={L('/caso')} class="group/case relative flex min-h-[240px] overflow-hidden rounded-xl bg-ink">
-              <img
-                src="/img/vialaser-chart.jpg"
-                alt={t('header.caseImgAlt')}
-                class="absolute inset-0 h-full w-full object-cover opacity-90 transition duration-300 group-hover/case:scale-[1.04]"
-                loading="lazy"
-                decoding="async"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/5"></div>
-              <div class="relative mt-auto p-5">
-                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-mint">{t('header.caseKicker')}</p>
-                <p class="mt-1 font-serif text-lg font-black leading-tight text-cream">{t('header.caseTitleBusiness')}</p>
-                <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-cream">
-                  {t('header.caseCta')} <span aria-hidden="true">→</span>
-                </span>
+          <div class="mega-panel">
+            <div class="mega-card mega-card--company">
+              <div class="min-w-[220px] flex-1">
+                <p class="mega-group">{t('nav.byIndustry')}</p>
+                <ul class="mt-3 flex flex-col">
+                  {
+                    industryLinks.map((it) => (
+                      <li>
+                        <a href={L(it.href)} class="mega-plain">{it.name}</a>
+                      </li>
+                    ))
+                  }
+                </ul>
+                <p class="mega-group mt-7">{t('nav.bySize')}</p>
+                <ul class="mt-3 flex flex-col">
+                  {
+                    sizeLinks.map((it) => (
+                      <li>
+                        <a href={L(it.href)} class="mega-plain">{it.name}</a>
+                      </li>
+                    ))
+                  }
+                </ul>
               </div>
-            </a>
+
+              <div class="mega-rule mega-rule--tall" aria-hidden="true"></div>
+
+              <div class="grid w-[min(100%,420px)] shrink-0 grid-cols-2 gap-3">
+                <a href={L('/caso')} class="mega-photo mega-photo--tall">
+                  <img
+                    src="/img/vialaser-chart.jpg"
+                    alt={t('header.caseImgAlt')}
+                    class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover/photo:scale-[1.04]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="mega-photo__scrim"></span>
+                  <span class="mega-photo__title">{t('header.caseTitleBusiness')}</span>
+                </a>
+                <a href={L('/caso')} class="mega-photo mega-photo--tall mega-photo--brand">
+                  <span class="mega-photo__title">{t('header.caseTitleSecond')}</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Equipo (mega menú: los tres personajes) -->
-      <div class="group" data-mega>
-        <button
-          type="button"
-          class="inline-flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink group-hover:text-ink"
-          aria-haspopup="true"
-        >
-          {teamNav.label}
-          <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
+        <!-- Equipo -->
+        <div class="group" data-mega>
+          <button type="button" class={triggerClass} aria-haspopup="true" aria-expanded="false">
+            {teamNav.label}
+            <svg class="mega-chevron h-3.5 w-3.5 transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
 
-        <div
-          class="mega-panel invisible absolute left-0 right-0 top-full z-50 translate-y-1 pt-3 opacity-0 transition duration-150 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100"
-        >
-          <div class="mx-auto grid w-[min(100%,880px)] gap-8 rounded-2xl border border-line bg-white p-8 shadow-[0_24px_60px_-24px_rgba(20,38,31,0.4)] md:grid-cols-[1fr_280px]">
-            <div class="flex flex-col">
-              <div class="flex flex-1 flex-col justify-center gap-1.5">
-                {
-                  team.map((m) => (
-                    <a href={L(m.href)} class="group/link -mx-3 flex items-center gap-4 rounded-xl px-3 py-2.5 transition-colors hover:bg-paper">
-                      <span class="relative h-[74px] w-16 shrink-0 overflow-hidden rounded-lg bg-cream">
-                        <img src={m.poster} alt={m.name} loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
-                      </span>
-                      <span class="min-w-0">
-                        <span class="block text-[15px] font-semibold leading-snug text-ink transition-colors group-hover/link:text-pine-dark">
-                          {m.name} <span class="font-normal text-salvia">· {m.role}</span>
-                        </span>
-                        <span class="mt-1 block text-[13px] leading-snug text-salvia">{m.oneliner}</span>
-                      </span>
-                    </a>
-                  ))
-                }
+          <div class="mega-panel">
+            <div class="mega-card mega-card--company">
+              <div class="min-w-[240px] flex-1">
+                <ul class="flex flex-col">
+                  {
+                    team.map((m) => (
+                      <li>
+                        <a href={L(m.href)} class="mega-person">
+                          <span class="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-cream">
+                            <img src={m.avatar} alt="" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" />
+                          </span>
+                          <span>
+                            {m.name} <span class="font-normal text-salvia">· {m.role}</span>
+                          </span>
+                        </a>
+                      </li>
+                    ))
+                  }
+                </ul>
+                <a href={L('/equipo')} class="mega-plain mt-2 text-pine-dark hover:text-ink">
+                  {teamNav.all}
+                </a>
               </div>
-              <a href={L('/equipo')} class="mt-5 inline-flex items-center gap-1.5 border-t border-line pt-5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
-                {teamNav.all} <span aria-hidden="true">→</span>
-              </a>
-            </div>
 
-            <!-- Rail "En acción": retratos grandes en crossfade (patrón diezX) -->
-            <div class="hidden flex-col border-l border-line pl-8 md:flex">
-              <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{teamNav.action}</p>
-              <div class="team-rail relative h-[270px] w-full overflow-hidden rounded-xl bg-ink">
+              <div class="mega-rule mega-rule--tall" aria-hidden="true"></div>
+
+              <div class="grid w-[min(100%,420px)] shrink-0 grid-cols-2 gap-3">
                 {
-                  team.map((m, i) => (
-                    <a href={L(m.href)} class="team-rail__slide absolute inset-0" style={`animation-delay:${i * 3}s`}>
+                  teamCards.map((m) => (
+                    <a href={L(m.href)} class="mega-photo mega-photo--tall">
                       <img
                         src={m.poster}
                         alt={`${m.name} · ${m.role}`}
+                        class="absolute inset-0 h-full w-full object-cover object-top transition duration-300 group-hover/photo:scale-[1.04]"
                         loading="lazy"
                         decoding="async"
-                        class="h-full w-full object-cover object-top"
                       />
-                      <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/80 to-transparent px-4 pb-3 pt-10">
-                        <span class="block text-sm font-bold text-cream">{m.name}</span>
-                        <span class="block text-xs text-cream/75">{m.role}</span>
-                      </span>
+                      <span class="mega-photo__scrim"></span>
+                      <span class="mega-photo__title">{m.name}</span>
                     </a>
                   ))
                 }
@@ -240,106 +212,113 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
             </div>
           </div>
         </div>
-      </div>
 
-      {
-        topLinks.map((l) => (
-          <a href={L(l.href)} class="rounded-full px-3.5 py-2 text-sm font-medium text-salvia transition-colors hover:text-ink">
-            {l.name}
-          </a>
-        ))
-      }
-    </nav>
-
-    <!-- ─── CTAs desktop ─── -->
-    <div class="hidden items-center gap-2.5 lg:flex">
-      <!-- Switcher ES/EN -->
-      <div class="flex items-center rounded-full border border-line p-0.5 text-xs font-semibold" role="group" aria-label={t('lang.switch')}>
         {
-          locales.map((l) => (
-            <a
-              href={langHref(l)}
-              data-astro-prefetch={false}
-              class={`rounded-full px-2.5 py-1 uppercase tracking-wide transition-colors ${
-                l === lang ? 'bg-ink text-cream' : 'text-salvia hover:text-ink'
-              }`}
-              aria-current={l === lang ? 'true' : undefined}
-              hreflang={l}
-            >
-              {l}
+          topLinks.map((l) => (
+            <a href={L(l.href)} class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink transition-colors hover:bg-paper">
+              {l.name}
             </a>
           ))
         }
-      </div>
-      {/* CTA al grader — `product=servicios` activa la variante Sara
-          (cookie + CTAs de demo a holasara.ai/demo). NO quitar el param. */}
-      {SHOW_GRADER_CTA && (
-        <a
-          href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
-          class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
-        >
-          {t('header.scanCta')}
-        </a>
-      )}
-      <a
-        href={L('/demo')}
-        class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
-      >
-        {t('header.demoCta')}
-      </a>
-    </div>
+      </nav>
 
-    <!-- ─── Toggle mobile ─── -->
-    <button
-      id="nav-toggle"
-      type="button"
-      class="inline-flex h-10 w-10 items-center justify-center rounded-full text-ink lg:hidden"
-      aria-label={t('header.openMenu')}
-      aria-expanded="false"
-      aria-controls="mobile-nav"
-    >
-      <svg id="nav-open-icon" class="h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-      </svg>
-      <svg id="nav-close-icon" class="hidden h-6 w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-      </svg>
-    </button>
+      <!-- ─── CTAs desktop ─── -->
+      <div class="hidden items-center gap-2.5 lg:flex">
+        <div class="flex items-center rounded-full border border-line p-0.5 text-xs font-semibold" role="group" aria-label={t('lang.switch')}>
+          {
+            locales.map((l) => (
+              <a
+                href={langHref(l)}
+                data-astro-prefetch={false}
+                class={`rounded-full px-2.5 py-1 uppercase tracking-wide transition-colors ${
+                  l === lang ? 'bg-ink text-cream' : 'text-salvia hover:text-ink'
+                }`}
+                aria-current={l === lang ? 'true' : undefined}
+                hreflang={l}
+              >
+                {l}
+              </a>
+            ))
+          }
+        </div>
+        {/* CTA al grader: product=servicios activa la variante Sara. No quitar el param. */}
+        {SHOW_GRADER_CTA && (
+          <a
+            href={graderHref}
+            class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
+          >
+            {t('header.scanCta')}
+          </a>
+        )}
+        <a
+          href={L('/demo')}
+          class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
+        >
+          {t('header.demoCta')}
+        </a>
+      </div>
+
+      <!-- ─── Acciones mobile: Pedir demo + hamburger, como Owner ─── -->
+      <div class="flex items-center gap-2 lg:hidden">
+        <a
+          href={L('/demo')}
+          class="inline-flex h-8 items-center rounded-full bg-pine px-3.5 text-[13px] font-semibold text-cream"
+        >
+          {t('header.demoCta')}
+        </a>
+        <button
+          id="nav-toggle"
+          type="button"
+          class="inline-flex h-10 w-10 items-center justify-center text-ink"
+          aria-label={t('header.openMenu')}
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          data-label-open={t('header.openMenu')}
+          data-label-close={t('header.closeMenu')}
+        >
+          <svg id="nav-open-icon" class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 9h16M4 15h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+          <svg id="nav-close-icon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- ─── Dropdown mobile: panel en flujo bajo la barra (como RAY). La página scrollea. ─── -->
-  <div
-    id="mobile-nav"
-    class="hidden overflow-visible border-t border-line bg-cream shadow-[0_16px_40px_-12px_rgba(20,38,31,0.28)] lg:hidden"
-  >
-    <div class="px-4 pb-2.5 pt-1">
+  <div id="mega-backdrop" class="mega-backdrop" hidden></div>
+
+  <!-- Panel mobile: fijo a pantalla completa bajo la barra. Blanco opaco. -->
+  <div id="mobile-nav" class="m-panel hidden lg:hidden" hidden>
+    <div class="m-panel__inner">
       <nav class="flex flex-col">
-        <!-- Producto -->
-        <div data-accordion="product">
+        <div data-accordion="product" data-accordion-close-siblings>
           <button
             type="button"
             data-accordion-btn
-            class="flex min-h-11 w-full items-center justify-between px-3 py-1.5 text-left text-base font-medium text-ink"
+            class="m-row"
             aria-expanded="false"
             aria-controls="mobile-acc-product"
           >
             {t('nav.product')}
-            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <svg data-accordion-chevron class="m-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          <div id="mobile-acc-product" data-accordion-panel class="hidden pb-1 pl-1">
+          <div id="mobile-acc-product" data-accordion-panel class="hidden">
             {
               productGroups.map((g) => (
-                <div class="pt-1">
-                  <p class="px-2 pb-0.5 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
-                  <ul class="flex flex-col">
+                <div class="m-group">
+                  <p class="m-group__label">{g.label}</p>
+                  <ul>
                     {g.items.map((it) => (
                       <li>
-                        <a href={L(it.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
-                          <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
-                          {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
+                        <a href={L(it.href)} class="m-feature">
+                          <span class="m-feature__icon">
+                            <NavIcon name={it.icon} size={20} />
+                          </span>
+                          <span>{it.name}</span>
                         </a>
                       </li>
                     ))}
@@ -350,46 +329,39 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
           </div>
         </div>
 
-        <!-- Negocios -->
-        <div data-accordion="business">
+        <div data-accordion="business" data-accordion-close-siblings>
           <button
             type="button"
             data-accordion-btn
-            class="flex min-h-11 w-full items-center justify-between px-3 py-1.5 text-left text-base font-medium text-ink"
+            class="m-row"
             aria-expanded="false"
             aria-controls="mobile-acc-business"
           >
             {t('nav.business')}
-            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <svg data-accordion-chevron class="m-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          <div id="mobile-acc-business" data-accordion-panel class="hidden pb-1 pl-1">
-            <div class="pt-1">
-              <p class="px-2 pb-0.5 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.byIndustry')}</p>
-              <ul class="flex flex-col">
+          <div id="mobile-acc-business" data-accordion-panel class="hidden">
+            <div class="m-group">
+              <p class="m-group__label">{t('nav.byIndustry')}</p>
+              <ul>
                 {
                   industryLinks.map((it) => (
                     <li>
-                      <a href={L(it.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
-                        <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
-                        {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
-                      </a>
+                      <a href={L(it.href)} class="m-sub">{it.name}</a>
                     </li>
                   ))
                 }
               </ul>
             </div>
-            <div class="pt-1.5">
-              <p class="px-2 pb-0.5 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.bySize')}</p>
-              <ul class="flex flex-col">
+            <div class="m-group">
+              <p class="m-group__label">{t('nav.bySize')}</p>
+              <ul>
                 {
                   sizeLinks.map((it) => (
                     <li>
-                      <a href={L(it.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
-                        <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
-                        {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
-                      </a>
+                      <a href={L(it.href)} class="m-sub">{it.name}</a>
                     </li>
                   ))
                 }
@@ -398,38 +370,32 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
           </div>
         </div>
 
-        <!-- Equipo -->
-        <div data-accordion="team">
+        <div data-accordion="team" data-accordion-close-siblings>
           <button
             type="button"
             data-accordion-btn
-            class="flex min-h-11 w-full items-center justify-between px-3 py-1.5 text-left text-base font-medium text-ink"
+            class="m-row"
             aria-expanded="false"
             aria-controls="mobile-acc-team"
           >
             {teamNav.label}
-            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <svg data-accordion-chevron class="m-chevron" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          <div id="mobile-acc-team" data-accordion-panel class="hidden pb-1 pl-1">
-            <ul class="flex flex-col pt-0.5">
+          <div id="mobile-acc-team" data-accordion-panel class="hidden">
+            <ul class="m-group">
               {
                 team.map((m) => (
                   <li>
-                    <a href={L(m.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
-                      <span class="block text-sm font-semibold leading-snug text-ink">
-                        {m.name} <span class="font-normal text-salvia">· {m.role}</span>
-                      </span>
-                      {m.oneliner && <span class="mt-0.5 block text-xs leading-snug text-salvia">{m.oneliner}</span>}
+                    <a href={L(m.href)} class="m-sub">
+                      {m.name} <span class="font-normal text-salvia">· {m.role}</span>
                     </a>
                   </li>
                 ))
               }
               <li>
-                <a href={L('/equipo')} class="flex min-h-11 items-center rounded-lg px-2 py-1.5 text-sm font-semibold text-pine-dark">
-                  {teamNav.all}
-                </a>
+                <a href={L('/equipo')} class="m-sub">{teamNav.all}</a>
               </li>
             </ul>
           </div>
@@ -437,15 +403,15 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
 
         {
           topLinks.map((l) => (
-            <a href={L(l.href)} class="flex min-h-11 items-center px-3 py-1.5 text-base font-medium text-ink">
+            <a href={L(l.href)} class="m-row m-row--link">
               {l.name}
             </a>
           ))
         }
       </nav>
 
-      <div class="mt-1.5 border-t border-line pt-2.5">
-        <p class="mb-1.5 px-3 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{t('lang.switch')}</p>
+      <div class="m-lang">
+        <p class="m-lang__label">{t('lang.switch')}</p>
         <div class="flex gap-2" role="group" aria-label={t('lang.switch')}>
           {
             locales.map((l) => (
@@ -453,7 +419,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
                 href={langHref(l)}
                 data-astro-prefetch={false}
                 class={`flex min-h-11 flex-1 items-center justify-center space-x-2 rounded-md px-3 py-2 text-sm ${
-                  l === lang ? 'bg-pine text-cream' : 'bg-white text-ink'
+                  l === lang ? 'bg-pine text-cream' : 'border border-line bg-white text-ink'
                 }`}
                 aria-current={l === lang ? 'true' : undefined}
                 hreflang={l}
@@ -464,20 +430,8 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
             ))
           }
         </div>
-      </div>
-
-      <div class="mt-2 border-t border-line pt-2.5">
-        <a
-          href={L('/demo')}
-          class="inline-flex min-h-11 w-full items-center justify-center text-base font-medium text-pine"
-        >
-          {t('header.demoCta')}
-        </a>
         {SHOW_GRADER_CTA && (
-          <a
-            href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
-            class="mt-1.5 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-pine px-5 text-base font-semibold text-cream"
-          >
+          <a href={graderHref} class="m-scan">
             {t('header.scanCta')}
           </a>
         )}
@@ -490,12 +444,19 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
   (function () {
     var btn = document.getElementById('nav-toggle');
     var panel = document.getElementById('mobile-nav');
+    var bar = document.querySelector('[data-nav-bar]');
     var openI = document.getElementById('nav-open-icon');
     var closeI = document.getElementById('nav-close-icon');
     if (!btn || !panel) return;
 
     function isOpen() {
       return !panel.classList.contains('hidden');
+    }
+
+    function syncPanelTop() {
+      var h = bar ? bar.offsetHeight : 48;
+      document.documentElement.style.setProperty('--nav-bar-h', h + 'px');
+      panel.style.top = h + 'px';
     }
 
     var accordions = panel.querySelectorAll('[data-accordion]');
@@ -528,9 +489,16 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
 
     function setOpen(open) {
       panel.classList.toggle('hidden', !open);
+      if (open) panel.removeAttribute('hidden');
+      else panel.setAttribute('hidden', '');
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      var openLabel = btn.getAttribute('data-label-open') || '';
+      var closeLabel = btn.getAttribute('data-label-close') || '';
+      btn.setAttribute('aria-label', open ? closeLabel : openLabel);
       openI.classList.toggle('hidden', open);
       closeI.classList.toggle('hidden', !open);
+      document.documentElement.classList.toggle('nav-open', open);
+      if (open) syncPanelTop();
       if (!open) collapseAccordions();
     }
 
@@ -548,74 +516,384 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     window.addEventListener('resize', function () {
       if (isOpen() && window.matchMedia('(min-width: 1024px)').matches) {
         setOpen(false);
+      } else if (isOpen()) {
+        syncPanelTop();
       }
     });
+
+    syncPanelTop();
   })();
 </script>
+
+<style is:global>
+  html.nav-open,
+  html.nav-open body {
+    overflow: hidden;
+    height: 100%;
+  }
+  html.nav-open .whatsapp-float,
+  html.nav-open .agent-toggle,
+  html.is-mega-open .whatsapp-float,
+  html.is-mega-open .agent-toggle {
+    visibility: hidden;
+    pointer-events: none;
+  }
+</style>
 
 <style>
   [data-accordion].is-open [data-accordion-chevron] {
     transform: rotate(180deg);
   }
 
-  /* Estado abierto del mega menú (lo togglea el JS con delay de cierre) */
-  [data-mega].is-open .mega-panel {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
+  .mega-trigger:hover {
+    color: var(--color-ink);
+  }
+  [data-mega].is-open .mega-trigger {
+    background: #f0f1f0;
+    color: var(--color-ink);
   }
   [data-mega].is-open .mega-chevron {
     transform: rotate(180deg);
   }
 
-  /* Rail "En acción" del panel Equipo: crossfade CSS puro (sin JS), 3 retratos
-     de 3s cada uno en un loop de 9s, desfasados por animation-delay. */
-  .team-rail__slide {
+  .mega-panel {
+    visibility: hidden;
+    pointer-events: none;
+    position: fixed;
+    left: 50%;
+    top: var(--nav-bar-h, 48px);
+    z-index: 55;
+    width: min(calc(100vw - 2rem), 960px);
+    transform: translate(-50%, 6px);
+    padding-top: 8px;
     opacity: 0;
-    animation: team-rail-fade 9s infinite;
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
   }
-  @keyframes team-rail-fade {
-    0% { opacity: 0; }
-    4% { opacity: 1; }
-    33% { opacity: 1; }
-    38% { opacity: 0; }
-    100% { opacity: 0; }
+  [data-mega].is-open .mega-panel {
+    visibility: visible;
+    pointer-events: auto;
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
-  @media (prefers-reduced-motion: reduce) {
-    .team-rail__slide {
-      animation: none;
-    }
-    .team-rail__slide:first-child {
-      opacity: 1;
+
+  .mega-card {
+    display: grid;
+    gap: 2rem;
+    border-radius: 18px;
+    background: #fff;
+    padding: 2rem;
+    box-shadow: 0 16px 48px -12px rgba(20, 38, 31, 0.28);
+  }
+  .mega-card--product {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 1px 251px;
+    align-items: start;
+  }
+  .mega-card--company {
+    display: flex;
+    align-items: stretch;
+    width: min(calc(100vw - 2rem), 860px);
+    margin-inline: auto;
+  }
+  .mega-rule {
+    width: 1px;
+    align-self: stretch;
+    background: var(--color-line);
+  }
+  .mega-rule--tall {
+    flex-shrink: 0;
+  }
+  .mega-group {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+  }
+  .mega-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.25rem;
+  }
+  .mega-feature__icon {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    place-items: center;
+    color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+  }
+  .mega-feature__title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-ink);
+  }
+  .mega-feature:hover .mega-feature__title {
+    color: var(--color-pine-dark);
+  }
+  .mega-plain {
+    display: block;
+    padding: 0.45rem 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--color-ink);
+  }
+  .mega-plain:hover {
+    color: var(--color-pine-dark);
+  }
+  .mega-person {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 0.6rem;
+    padding: 0.5rem 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .mega-person:hover {
+    color: var(--color-pine-dark);
+  }
+  .mega-photo {
+    position: relative;
+    display: flex;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background: var(--color-ink);
+  }
+  .mega-photo--tall {
+    height: 240px;
+  }
+  .mega-photo--brand {
+    background:
+      radial-gradient(120% 90% at 0% 100%, color-mix(in srgb, var(--color-mint) 35%, transparent), transparent 55%),
+      linear-gradient(145deg, var(--color-pine) 0%, var(--color-ink) 78%);
+  }
+  .mega-photo__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20, 38, 31, 0.88) 0%, rgba(20, 38, 31, 0.25) 48%, transparent 72%);
+  }
+  .mega-photo__title {
+    position: relative;
+    margin-top: auto;
+    padding: 0.9rem 1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+  }
+
+  .mega-backdrop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: var(--nav-bar-h, 48px);
+    z-index: 45;
+    background: color-mix(in srgb, var(--color-ink) 28%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+  html.is-mega-open .mega-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .m-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--nav-bar-h, 48px);
+    bottom: 0;
+    z-index: 50;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #fff;
+    -webkit-overflow-scrolling: touch;
+  }
+  .m-panel__inner {
+    padding: 0 1.25rem 1.75rem;
+  }
+  .m-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--color-line);
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-ink);
+    text-align: left;
+  }
+  [data-accordion].is-open > .m-row {
+    border-bottom-color: transparent;
+  }
+  [data-accordion] [data-accordion-panel] {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .m-chevron {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    color: var(--color-salvia);
+    transition: transform 0.2s ease;
+  }
+  .m-group {
+    padding-top: 8px;
+  }
+  .m-group + .m-group {
+    padding-top: 16px;
+  }
+  .m-group__label {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+  }
+  .m-feature {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 7px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .m-feature__icon {
+    display: grid;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    place-items: center;
+    color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+  }
+  .m-sub {
+    display: block;
+    padding: 7px 0 7px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .m-lang {
+    margin-top: 20px;
+    padding-top: 8px;
+  }
+  .m-lang__label {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-ink) 50%, transparent);
+  }
+  .m-scan {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 14px;
+    min-height: 44px;
+    border: 1px solid var(--color-line);
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 1023px) {
+    .mega-panel,
+    .mega-backdrop {
+      display: none;
     }
   }
 </style>
 
 <script is:inline>
-  // Hover-intent: abre al entrar, y al salir espera un poco antes de cerrar, así
-  // el puntero puede cruzar el hueco entre el botón y el panel sin que se cierre.
-  // Al abrir uno, los demás se cierran AL INSTANTE (sin esperar su delay), para
-  // que nunca se vean dos paneles superpuestos.
   (function () {
     var megas = document.querySelectorAll('[data-mega]');
+    var backdrop = document.getElementById('mega-backdrop');
+    var bar = document.querySelector('[data-nav-bar]');
+
+    function anyOpen() {
+      for (var i = 0; i < megas.length; i++) {
+        if (megas[i].classList.contains('is-open')) return true;
+      }
+      return false;
+    }
+
+    function syncMega() {
+      var open = anyOpen();
+      document.documentElement.classList.toggle('is-mega-open', open);
+      if (bar) document.documentElement.style.setProperty('--nav-bar-h', bar.offsetHeight + 'px');
+      if (backdrop) {
+        if (open) backdrop.removeAttribute('hidden');
+        else backdrop.setAttribute('hidden', '');
+      }
+      megas.forEach(function (el) {
+        var btn = el.querySelector('.mega-trigger');
+        if (btn) btn.setAttribute('aria-expanded', el.classList.contains('is-open') ? 'true' : 'false');
+      });
+    }
+
     function closeOthers(current) {
       megas.forEach(function (other) {
         if (other !== current) other.classList.remove('is-open');
       });
     }
+
+    function closeAll() {
+      megas.forEach(function (el) {
+        el.classList.remove('is-open');
+      });
+      syncMega();
+    }
+
     megas.forEach(function (el) {
       var t;
-      function open() { clearTimeout(t); closeOthers(el); el.classList.add('is-open'); }
-      function scheduleClose() { clearTimeout(t); t = setTimeout(function () { el.classList.remove('is-open'); }, 260); }
+      function open() {
+        clearTimeout(t);
+        closeOthers(el);
+        el.classList.add('is-open');
+        syncMega();
+      }
+      function scheduleClose() {
+        clearTimeout(t);
+        t = setTimeout(function () {
+          el.classList.remove('is-open');
+          syncMega();
+        }, 260);
+      }
       el.addEventListener('mouseenter', open);
       el.addEventListener('mouseleave', scheduleClose);
       el.addEventListener('focusin', open);
       el.addEventListener('focusout', scheduleClose);
-      el.addEventListener('keydown', function (e) { if (e.key === 'Escape') { clearTimeout(t); el.classList.remove('is-open'); } });
-      // al hacer clic en un link del panel, cerrar de una
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          clearTimeout(t);
+          el.classList.remove('is-open');
+          syncMega();
+        }
+      });
       el.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () { clearTimeout(t); el.classList.remove('is-open'); });
+        a.addEventListener('click', function () {
+          clearTimeout(t);
+          el.classList.remove('is-open');
+          syncMega();
+        });
       });
     });
+
+    if (backdrop) {
+      backdrop.addEventListener('click', closeAll);
+    }
+    if (bar) document.documentElement.style.setProperty('--nav-bar-h', bar.offsetHeight + 'px');
   })();
 </script>

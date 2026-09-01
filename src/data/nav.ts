@@ -7,10 +7,23 @@
 
 import type { Locale } from '../i18n/config';
 
+export type ProductIcon =
+  | 'spark'
+  | 'chat'
+  | 'phone'
+  | 'headset'
+  | 'refresh'
+  | 'calendar'
+  | 'card'
+  | 'gift'
+  | 'camera'
+  | 'star';
+
 export interface FeatureLink {
   name: string;
   href: string;
   desc: string;
+  icon?: ProductIcon;
 }
 
 export interface FeatureGroup {
@@ -22,6 +35,7 @@ interface RawLink {
   href: string;
   name: Record<Locale, string>;
   desc: Record<Locale, string>;
+  icon?: ProductIcon;
 }
 
 interface RawGroup {
@@ -37,21 +51,25 @@ const productGroupsRaw: RawGroup[] = [
         href: '/sara',
         name: { es: 'Conoce a Sara', en: 'Meet Sara' },
         desc: { es: 'La secretaria con IA, de punta a punta.', en: 'The AI receptionist, end to end.' },
+        icon: 'spark',
       },
       {
         href: '/canales',
         name: { es: 'WhatsApp e Instagram 24/7', en: 'WhatsApp & Instagram 24/7' },
         desc: { es: 'Responde donde te escriben, siempre.', en: 'Replies wherever they message you, always.' },
+        icon: 'chat',
       },
       {
         href: '/llamadas',
         name: { es: 'Atiende el teléfono', en: 'Answers the phone' },
         desc: { es: 'Contesta las llamadas por voz, 24/7.', en: 'Picks up voice calls, 24/7.' },
+        icon: 'phone',
       },
       {
         href: '/operador',
         name: { es: 'Modo operador', en: 'Operator mode' },
         desc: { es: 'Tu equipo le pide cosas por WhatsApp.', en: 'Your team asks her for things over WhatsApp.' },
+        icon: 'headset',
       },
     ],
   },
@@ -65,6 +83,7 @@ const productGroupsRaw: RawGroup[] = [
           es: 'Trae de vuelta a quien no vuelve, llena los huecos.',
           en: 'Brings lapsed patients back, fills the gaps.',
         },
+        icon: 'refresh',
       },
       {
         href: '/agenda',
@@ -73,6 +92,7 @@ const productGroupsRaw: RawGroup[] = [
           es: 'Agenda sola, recuerda y confirma, sin dobles reservas.',
           en: 'Books itself, reminds and confirms, no double bookings.',
         },
+        icon: 'calendar',
       },
     ],
   },
@@ -83,11 +103,13 @@ const productGroupsRaw: RawGroup[] = [
         href: '/cobros',
         name: { es: 'Anticipo y consulta', en: 'Deposits & consults' },
         desc: { es: 'Cobra antes de atender.', en: 'Get paid before the appointment.' },
+        icon: 'card',
       },
       {
         href: '/gift-cards',
         name: { es: 'Gift cards', en: 'Gift cards' },
         desc: { es: 'Vende tratamientos por adelantado.', en: 'Sell treatments in advance.' },
+        icon: 'gift',
       },
     ],
   },
@@ -98,11 +120,13 @@ const productGroupsRaw: RawGroup[] = [
         href: '/instagram',
         name: { es: 'Instagram con IA', en: 'Instagram with AI' },
         desc: { es: 'Publica y agenda a quien responde.', en: 'Posts and books whoever replies.' },
+        icon: 'camera',
       },
       {
         href: '/resenas',
         name: { es: 'Reseñas', en: 'Reviews' },
         desc: { es: 'Más reseñas de 5 estrellas, solas.', en: 'More 5-star reviews, on their own.' },
+        icon: 'star',
       },
     ],
   },
@@ -192,6 +216,7 @@ const pickLink = (l: RawLink, lang: Locale): FeatureLink => ({
   href: l.href,
   name: l.name[lang],
   desc: l.desc[lang],
+  icon: l.icon,
 });
 
 export const getProductGroups = (lang: Locale): FeatureGroup[] =>
