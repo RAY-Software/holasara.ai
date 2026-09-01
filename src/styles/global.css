@@ -58,8 +58,9 @@ body {
   }
 }
 
-/* Menú mobile abierto: el documento no scrollea; header queda fijo al tope
-   (el body se ancla con position:fixed); rail y FAB de WhatsApp no pintan. */
+/* Menú mobile abierto: el documento no scrollea; el header pasa a cubrir el
+   viewport (backdrop-blur crea containing block, así el sheet bajo la barra
+   tiene altura). El body se ancla con position:fixed; rail y FAB no pintan. */
 html.nav-open,
 html.nav-open body {
   overflow: hidden;
