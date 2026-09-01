@@ -74,7 +74,7 @@ const chartW = weeks.length * bw + (weeks.length - 1) * gap;
   <!-- ── Donut: turnos por canal ── -->
   <div class="rounded-xl border border-line/70 p-5">
     <p class="mb-4 text-xs font-semibold uppercase tracking-[0.14em] text-salvia">{t.byChannel}</p>
-    <div class="flex items-center gap-6">
+    <div class="flex flex-col items-center gap-5 min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-6">
       <div class="relative shrink-0" style="width:120px;height:120px">
         <svg viewBox="0 0 100 100" class="h-[120px] w-[120px] -rotate-90">
           <circle cx="50" cy="50" r={R} fill="none" stroke="#eef1f9" stroke-width="12" />

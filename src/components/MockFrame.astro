@@ -1,7 +1,8 @@
 ---
 /**
  * Keeps an HTML product mockup inside the section width.
- * If the inner stage is wider than the frame, it scales uniformly
+ * The stage is 100% of the frame. If it still overflows, the inner
+ * stage is sized to that width and scaled uniformly
  * (transform-origin top left) so text stays readable instead of clipping.
  */
 interface Props {
@@ -24,28 +25,31 @@ const { class: cls = '' } = Astro.props;
     overflow: hidden;
   }
   .mock-stage {
-    width: max-content;
-    max-width: none;
-    min-width: 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     transform-origin: top left;
   }
 </style>
 
 <script>
-  const FIT_EPSILON = 1;
+  const FIT_EPSILON = 2;
 
   function fit(frame: HTMLElement) {
     const stage = frame.querySelector<HTMLElement>(':scope > [data-mock-stage]');
     if (!stage) return;
 
     stage.style.transform = 'none';
+    stage.style.width = '100%';
     frame.style.height = '';
 
     const avail = frame.clientWidth;
-    const needed = Math.max(stage.scrollWidth, stage.offsetWidth);
-    if (!avail || !needed) return;
+    if (!avail) return;
+
+    const needed = stage.scrollWidth;
     if (needed <= avail + FIT_EPSILON) return;
 
+    stage.style.width = `${needed}px`;
     const scale = avail / needed;
     stage.style.transform = `scale(${scale})`;
     frame.style.height = `${Math.ceil(stage.scrollHeight * scale)}px`;

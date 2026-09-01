@@ -81,7 +81,7 @@ const rows: { tag: Tag; name: string; channel: string; when: { es: string; en: s
     </span>
   </div>
 
-  <div class="p-4 sm:p-5">
+  <div class="min-w-0 p-4 sm:p-5">
     <!-- KPI tiles -->
     <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {
@@ -95,9 +95,9 @@ const rows: { tag: Tag; name: string; channel: string; when: { es: string; en: s
     </div>
 
     <!-- Cuerpo: lista de cobros + columna gift cards -->
-    <div class="mt-3 grid gap-3 lg:grid-cols-[1.7fr_1fr]">
+    <div class="mt-3 grid min-w-0 gap-3 lg:grid-cols-[1.7fr_1fr]">
       <!-- Cobros recientes -->
-      <section class="rounded-xl border border-line bg-white">
+      <section class="min-w-0 overflow-hidden rounded-xl border border-line bg-white">
         <div class="flex min-w-0 flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-4">
           <h3 class="text-base font-bold text-ink">{t.recentTitle}</h3>
           <span class="text-right text-[13px] text-salvia">{t.recentNote}</span>
@@ -105,8 +105,8 @@ const rows: { tag: Tag; name: string; channel: string; when: { es: string; en: s
         <ul>
           {
             rows.map((r, i) => (
-              <li class={`flex min-w-0 items-center gap-3 px-5 py-3 ${i > 0 ? 'border-t border-line/70' : ''}`}>
-                <span class={`w-[74px] shrink-0 rounded-full px-2.5 py-1 text-center text-xs font-semibold ${tagStyle[r.tag]}`}>
+              <li class={`flex min-w-0 items-center gap-2 px-4 py-3 sm:gap-3 sm:px-5 ${i > 0 ? 'border-t border-line/70' : ''}`}>
+                <span class={`w-[4.6rem] shrink-0 rounded-full px-2 py-1 text-center text-xs font-semibold sm:w-[74px] sm:px-2.5 ${tagStyle[r.tag]}`}>
                   {t.tags[r.tag]}
                 </span>
                 <span class="min-w-0 flex-1">
@@ -126,7 +126,7 @@ const rows: { tag: Tag; name: string; channel: string; when: { es: string; en: s
       </section>
 
       <!-- Gift cards -->
-      <section class="rounded-xl border border-line bg-white p-5">
+      <section class="min-w-0 overflow-hidden rounded-xl border border-line bg-white p-5">
         <h3 class="mb-4 text-base font-bold text-ink">{t.giftTitle}</h3>
 
         <!-- Tarjeta de regalo (gradiente verde -> amarillo) -->
