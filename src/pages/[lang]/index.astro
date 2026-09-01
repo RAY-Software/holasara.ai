@@ -8,11 +8,11 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import InstagramShowcase from '../../components/mocks/InstagramShowcase.astro';
 import SaraChatShowcase from '../../components/mocks/SaraChatShowcase.astro';
-import CalendarSyncPanel from '../../components/mocks/CalendarSyncPanel.astro';
 import OperatorPanel from '../../components/mocks/OperatorPanel.astro';
 import PaymentsPanel from '../../components/mocks/PaymentsPanel.astro';
 import ResultsChart from '../../components/mocks/ResultsChart.astro';
 import IgPost from '../../components/mocks/IgPost.astro';
+import MockFrame from '../../components/MockFrame.astro';
 import Footer from '../../components/Footer.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import CtaInline from '../../components/CtaInline.astro';
@@ -60,11 +60,6 @@ const dict = {
     ],
     loop: ['Te encuentran', 'Chatean', 'Agenda', 'Cobra la seña', 'Dejan Google Review'],
     spotlightQuotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'],
-    impl: [
-      { title: 'Un clic y listo', body: 'Autorizas tu cuenta de Google y Sara empieza a leer y escribir en el calendario que ya usas. No migras nada.' },
-      { title: 'Ve tu disponibilidad real', body: 'Agenda solo en los espacios libres, bloquea al instante y todo aparece en el calendario de tu equipo. Sin dobles reservas.' },
-      { title: 'Tus datos clínicos no pasan por aquí', body: 'No se almacena historia clínica ni información médica de tus pacientes. Eso queda donde está hoy.' },
-    ],
     heroKicker: 'La recepcionista con IA para clínicas, médicos y wellness',
     heroH1: ['Más pacientes.', 'Más facturación.', 'Todo automático,', 'las 24 horas.'],
     heroSub: 'Sara responde, agenda, cobra el anticipo y baja las ausencias, por WhatsApp, Instagram, SMS y teléfono. Sin cambiar tu agenda ni tocar tu historia&nbsp;clínica.',
@@ -102,10 +97,6 @@ const dict = {
     cobrosImgAlt: 'Panel de cobros: anticipos, consultas y gift cards cobrados por Sara, todos sin recepción.',
     ctaInline2: 'Ve a Sara atendiendo tu clínica, en vivo.',
     ctaInline2Cta: 'Pedir mi demo',
-    implKicker: 'Cómo funciona',
-    implH2: 'Conectas tu Google Calendar y ya está funcionando.',
-    implMore: 'Ver cómo se conecta',
-    implImgAlt: 'Sara sincronizada con Google Calendar, agendando solo en los espacios libres del consultorio.',
     caseKicker: 'Caso de éxito',
     caseH2: 'Ya está funcionando en clínicas&nbsp;reales.',
     caseStat1: 'conversaciones atendidas por Sara, sin que recepción tocara nada.',
@@ -151,11 +142,6 @@ const dict = {
     ],
     loop: ['They find you', 'They chat', 'Books', 'Takes deposit', 'Google review'],
     spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
-    impl: [
-      { title: 'One click and done', body: 'You authorize your Google account and Sara starts reading and writing in the calendar you already use. You migrate nothing.' },
-      { title: 'Sees your real availability', body: 'She books only in open slots, blocks instantly, and everything shows up in your team’s calendar. No double bookings.' },
-      { title: 'Your clinical data never comes through here', body: 'No medical history or clinical information about your patients is stored. That stays exactly where it is today.' },
-    ],
     heroKicker: 'AI receptionist for clinics, doctors & wellness',
     heroH1: ['More patients.', 'More revenue.', 'All automatic,', 'around the clock.'],
     heroSub: 'Sara answers, books, collects the deposit and cuts no-shows, on WhatsApp, Instagram, SMS and the phone. Without changing your calendar or touching your medical&nbsp;records.',
@@ -193,10 +179,6 @@ const dict = {
     cobrosImgAlt: 'Payments dashboard: deposits, consults and gift cards collected by Sara, all without a front desk.',
     ctaInline2: 'See Sara running your clinic, live.',
     ctaInline2Cta: 'Book my demo',
-    implKicker: 'How it works',
-    implH2: 'Connect your Google Calendar and it’s already running.',
-    implMore: 'See how it connects',
-    implImgAlt: 'Sara synced with Google Calendar, booking only in the open slots of the practice.',
     caseKicker: 'Success story',
     caseH2: 'It’s already running in real&nbsp;clinics.',
     caseStat1: 'conversations handled by Sara, without the front desk touching a thing.',
@@ -207,7 +189,7 @@ const dict = {
   },
 }[lang];
 
-const { faqs, saraDoes, context, payments, marketing, posts, impl } = dict;
+const { faqs, saraDoes, context, payments, marketing, posts } = dict;
 
 // Overlay del hero: el circuito de Sara, sin recepción. Con logos reales de plataformas.
 const dot = 'inline-block h-6 w-6 shrink-0';
@@ -424,7 +406,7 @@ const loop = [
 
     <!-- ══════════ CONOCE A SARA ══════════ -->
     <section id="sara" class="border-t border-line bg-paper">
-      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+      <div class="reveal mx-auto grid min-w-0 max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
         <div>
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.saraKicker}</p>
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.saraH2} />
@@ -447,8 +429,10 @@ const loop = [
           </a>
         </div>
 
-        <div class="flex justify-center md:justify-end">
-          <SaraChatShowcase lang={lang} class="w-full max-w-sm" />
+        <div class="flex min-w-0 justify-center md:justify-end">
+          <MockFrame>
+            <SaraChatShowcase lang={lang} class="w-full max-w-sm" />
+          </MockFrame>
         </div>
       </div>
     </section>
@@ -466,7 +450,7 @@ const loop = [
           {dict.mktMore} <span aria-hidden="true">→</span>
         </a>
 
-        <div class="mt-14 grid gap-10 md:grid-cols-[0.68fr_1.32fr] md:items-stretch">
+        <div class="mt-14 grid min-w-0 gap-10 md:grid-cols-[0.68fr_1.32fr] md:items-stretch">
           <div class="flex h-full flex-col gap-6">
             {
               marketing.map((m) => (
@@ -477,8 +461,10 @@ const loop = [
               ))
             }
           </div>
-          <div class="flex justify-center md:justify-end">
-            <InstagramShowcase lang={lang} class="w-full" />
+          <div class="flex min-w-0 justify-center md:justify-end">
+            <MockFrame>
+              <InstagramShowcase lang={lang} class="w-full" />
+            </MockFrame>
           </div>
         </div>
 
@@ -517,8 +503,10 @@ const loop = [
             ))
           }
         </div>
-        <div class="mt-12 flex justify-center">
-          <OperatorPanel lang={lang} class="w-full" />
+        <div class="mt-12 flex min-w-0 justify-center">
+          <MockFrame>
+            <OperatorPanel lang={lang} class="w-full" />
+          </MockFrame>
         </div>
       </div>
     </section>
@@ -534,8 +522,10 @@ const loop = [
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
           <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.cobrosSub}</p>
         </div>
-        <div class="mt-12 flex justify-center">
-          <PaymentsPanel lang={lang} class="w-full" />
+        <div class="mt-12 flex min-w-0 justify-center">
+          <MockFrame>
+            <PaymentsPanel lang={lang} class="w-full" />
+          </MockFrame>
         </div>
         <div class="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-3">
           {
@@ -562,40 +552,9 @@ const loop = [
     <!-- CTA intercalado -->
     <CtaInline title={dict.ctaInline2} cta={dict.ctaInline2Cta} lang={lang} />
 
-    <!-- ══════════ IMPLEMENTACIÓN ══════════ -->
-    <section class="border-t border-line">
-      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
-        <div>
-          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.implKicker}</p>
-          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">
-            {dict.implH2}
-          </h2>
-          <div class="mt-8 flex flex-col gap-6">
-            {
-              impl.map((it) => (
-                <div>
-                  <h3 class="text-lg font-semibold">{it.title}</h3>
-                  <p class="mt-1 text-salvia">{it.body}</p>
-                </div>
-              ))
-            }
-          </div>
-          <a
-            href={L('/implementacion')}
-            class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
-          >
-            {dict.implMore} <span aria-hidden="true">→</span>
-          </a>
-        </div>
-        <div class="flex justify-center md:justify-end">
-          <CalendarSyncPanel lang={lang} class="w-full" />
-        </div>
-      </div>
-    </section>
-
     <!-- ══════════ CASO REAL ══════════ -->
     <section id="caso" class="border-t border-line bg-paper">
-      <div class="reveal mx-auto grid max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+      <div class="reveal mx-auto grid min-w-0 max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
         <div>
           <p class="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.caseKicker}</p>
           <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="mb-6 h-9 w-auto" loading="lazy" />
@@ -617,8 +576,10 @@ const loop = [
             {dict.caseMore} <span aria-hidden="true">→</span>
           </a>
         </div>
-        <div class="flex justify-center md:justify-end">
-          <ResultsChart lang={lang} class="w-full max-w-full" />
+        <div class="flex min-w-0 justify-center md:justify-end">
+          <MockFrame>
+            <ResultsChart lang={lang} class="w-full max-w-full" />
+          </MockFrame>
         </div>
       </div>
     </section>

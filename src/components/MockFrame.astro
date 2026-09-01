@@ -1,0 +1,73 @@
+---
+/**
+ * Keeps an HTML product mockup inside the section width.
+ * If the inner stage is wider than the frame, it scales uniformly
+ * (transform-origin top left) so text stays readable instead of clipping.
+ */
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+---
+
+<div class:list={['mock-frame', cls]} data-mock-frame>
+  <div class="mock-stage" data-mock-stage>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .mock-frame {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .mock-stage {
+    width: max-content;
+    max-width: none;
+    min-width: 100%;
+    transform-origin: top left;
+  }
+</style>
+
+<script>
+  const FIT_EPSILON = 1;
+
+  function fit(frame: HTMLElement) {
+    const stage = frame.querySelector<HTMLElement>(':scope > [data-mock-stage]');
+    if (!stage) return;
+
+    stage.style.transform = 'none';
+    frame.style.height = '';
+
+    const avail = frame.clientWidth;
+    const needed = Math.max(stage.scrollWidth, stage.offsetWidth);
+    if (!avail || !needed) return;
+    if (needed <= avail + FIT_EPSILON) return;
+
+    const scale = avail / needed;
+    stage.style.transform = `scale(${scale})`;
+    frame.style.height = `${Math.ceil(stage.scrollHeight * scale)}px`;
+  }
+
+  function fitAll() {
+    document.querySelectorAll<HTMLElement>('[data-mock-frame]').forEach(fit);
+  }
+
+  const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(fitAll) : null;
+
+  function watch() {
+    document.querySelectorAll<HTMLElement>('[data-mock-frame]').forEach((el) => ro?.observe(el));
+    fitAll();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', watch);
+  } else {
+    watch();
+  }
+
+  document.fonts?.ready?.then(fitAll);
+  window.addEventListener('resize', fitAll);
+</script>
