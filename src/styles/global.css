@@ -67,10 +67,9 @@ html.nav-open body {
 }
 html.nav-open header {
   position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
+  inset: 0;
   z-index: 60;
+  overflow: hidden;
 }
 html.nav-open .agent-toggle,
 html.nav-open .whatsapp-float {
