@@ -99,8 +99,8 @@ const RAW: RawMember[] = [
     },
     kicker: { es: 'Cómo trabaja Sara', en: 'How Sara works' },
     h2: {
-      es: 'No es un bot con botones. <em class="text-pine-dark">Atiende como tu mejor recepcionista.</em>',
-      en: 'Not a bot with buttons. <em class="text-pine-dark">She answers like your best receptionist.</em>',
+      es: 'No es un bot con botones.<br /><em class="text-pine-dark">Atiende como tu mejor recepcionista.</em>',
+      en: 'Not a bot with buttons.<br /><em class="text-pine-dark">She answers like your best receptionist.</em>',
     },
     paragraph: {
       es: 'Responde WhatsApp, Instagram y el chat de tu web a toda hora. Informa con precios reales, arma la propuesta que conviene, agenda la cita y cobra el anticipo en la misma conversación. Sin sumar a nadie a recepción.',
@@ -238,7 +238,7 @@ const RAW: RawMember[] = [
     },
     heroEyebrow: { es: 'Mia · Marketing', en: 'Mia · Marketing' },
     heroTitle: {
-      es: "Maneja todo tu marketing.<br /><em class='text-pine-dark'>Y te dice dónde crecer.</em>",
+      es: "Maneja todo tu marketing.<br /><em class='text-pine-dark'>Y te dice dónde&nbsp;crecer.</em>",
       en: "Runs all your marketing.<br /><em class='text-pine-dark'>And tells you where to grow.</em>",
     },
     heroLead: {
@@ -449,7 +449,7 @@ const RAW: RawMember[] = [
     },
     heroEyebrow: { es: 'Daniel · Finanzas', en: 'Daniel · Finance' },
     heroTitle: {
-      es: "Te dice cómo va el dinero.<br /><em class='text-pine-dark'>Antes de que preguntes.</em>",
+      es: "Te dice cómo va el dinero.<br /><em class='text-pine-dark'>Antes de que&nbsp;preguntes.</em>",
       en: "Tells you how the money’s doing.<br /><em class='text-pine-dark'>Before you ask.</em>",
     },
     heroLead: {
