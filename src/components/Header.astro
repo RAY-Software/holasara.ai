@@ -313,14 +313,14 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     id="mobile-nav"
     class="hidden overflow-visible border-t border-line bg-cream shadow-[0_16px_40px_-12px_rgba(20,38,31,0.28)] lg:hidden"
   >
-    <div class="px-4 pb-4 pt-3">
+    <div class="px-4 pb-2.5 pt-1">
       <nav class="flex flex-col">
         <!-- Producto -->
         <div data-accordion="product">
           <button
             type="button"
             data-accordion-btn
-            class="flex min-h-11 w-full items-center justify-between px-3 py-2 text-left text-base font-medium text-ink"
+            class="flex min-h-11 w-full items-center justify-between px-3 py-1.5 text-left text-base font-medium text-ink"
             aria-expanded="false"
             aria-controls="mobile-acc-product"
           >
@@ -329,15 +329,15 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
               <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          <div id="mobile-acc-product" data-accordion-panel class="hidden pb-2 pl-1">
+          <div id="mobile-acc-product" data-accordion-panel class="hidden pb-1 pl-1">
             {
               productGroups.map((g) => (
-                <div class="pt-2">
-                  <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
+                <div class="pt-1">
+                  <p class="px-2 pb-0.5 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
                   <ul class="flex flex-col">
                     {g.items.map((it) => (
                       <li>
-                        <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                        <a href={L(it.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
                           <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
                           {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
                         </a>
@@ -355,7 +355,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
           <button
             type="button"
             data-accordion-btn
-            class="flex min-h-11 w-full items-center justify-between px-3 py-2 text-left text-base font-medium text-ink"
+            class="flex min-h-11 w-full items-center justify-between px-3 py-1.5 text-left text-base font-medium text-ink"
             aria-expanded="false"
             aria-controls="mobile-acc-business"
           >
@@ -364,14 +364,14 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
               <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          <div id="mobile-acc-business" data-accordion-panel class="hidden pb-2 pl-1">
-            <div class="pt-2">
-              <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.byIndustry')}</p>
+          <div id="mobile-acc-business" data-accordion-panel class="hidden pb-1 pl-1">
+            <div class="pt-1">
+              <p class="px-2 pb-0.5 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.byIndustry')}</p>
               <ul class="flex flex-col">
                 {
                   industryLinks.map((it) => (
                     <li>
-                      <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                      <a href={L(it.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
                         <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
                         {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
                       </a>
@@ -380,13 +380,13 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
                 }
               </ul>
             </div>
-            <div class="pt-3">
-              <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.bySize')}</p>
+            <div class="pt-1.5">
+              <p class="px-2 pb-0.5 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.bySize')}</p>
               <ul class="flex flex-col">
                 {
                   sizeLinks.map((it) => (
                     <li>
-                      <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                      <a href={L(it.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
                         <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
                         {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
                       </a>
@@ -403,7 +403,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
           <button
             type="button"
             data-accordion-btn
-            class="flex min-h-11 w-full items-center justify-between px-3 py-2 text-left text-base font-medium text-ink"
+            class="flex min-h-11 w-full items-center justify-between px-3 py-1.5 text-left text-base font-medium text-ink"
             aria-expanded="false"
             aria-controls="mobile-acc-team"
           >
@@ -412,12 +412,12 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
               <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </button>
-          <div id="mobile-acc-team" data-accordion-panel class="hidden pb-2 pl-1">
-            <ul class="flex flex-col pt-1">
+          <div id="mobile-acc-team" data-accordion-panel class="hidden pb-1 pl-1">
+            <ul class="flex flex-col pt-0.5">
               {
                 team.map((m) => (
                   <li>
-                    <a href={L(m.href)} class="block rounded-lg px-2 py-2.5">
+                    <a href={L(m.href)} class="block min-h-11 rounded-lg px-2 py-1.5">
                       <span class="block text-sm font-semibold leading-snug text-ink">
                         {m.name} <span class="font-normal text-salvia">· {m.role}</span>
                       </span>
@@ -427,7 +427,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
                 ))
               }
               <li>
-                <a href={L('/equipo')} class="block rounded-lg px-2 py-2.5 text-sm font-semibold text-pine-dark">
+                <a href={L('/equipo')} class="flex min-h-11 items-center rounded-lg px-2 py-1.5 text-sm font-semibold text-pine-dark">
                   {teamNav.all}
                 </a>
               </li>
@@ -437,22 +437,22 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
 
         {
           topLinks.map((l) => (
-            <a href={L(l.href)} class="flex min-h-11 items-center px-3 py-2 text-base font-medium text-ink">
+            <a href={L(l.href)} class="flex min-h-11 items-center px-3 py-1.5 text-base font-medium text-ink">
               {l.name}
             </a>
           ))
         }
       </nav>
 
-      <div class="mt-2 border-t border-line pt-4">
-        <p class="mb-2 px-3 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{t('lang.switch')}</p>
+      <div class="mt-1.5 border-t border-line pt-2.5">
+        <p class="mb-1.5 px-3 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{t('lang.switch')}</p>
         <div class="flex gap-2" role="group" aria-label={t('lang.switch')}>
           {
             locales.map((l) => (
               <a
                 href={langHref(l)}
                 data-astro-prefetch={false}
-                class={`flex min-h-[44px] flex-1 items-center justify-center space-x-2 rounded-md px-4 py-3 text-sm ${
+                class={`flex min-h-11 flex-1 items-center justify-center space-x-2 rounded-md px-3 py-2 text-sm ${
                   l === lang ? 'bg-pine text-cream' : 'bg-white text-ink'
                 }`}
                 aria-current={l === lang ? 'true' : undefined}
@@ -466,7 +466,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
         </div>
       </div>
 
-      <div class="mt-4 border-t border-line pt-4">
+      <div class="mt-2 border-t border-line pt-2.5">
         <a
           href={L('/demo')}
           class="inline-flex min-h-11 w-full items-center justify-center text-base font-medium text-pine"
@@ -476,7 +476,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
         {SHOW_GRADER_CTA && (
           <a
             href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
-            class="mt-2 inline-flex min-h-[52px] w-full items-center justify-center rounded-lg bg-pine px-5 text-base font-semibold text-cream"
+            class="mt-1.5 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-pine px-5 text-base font-semibold text-cream"
           >
             {t('header.scanCta')}
           </a>
@@ -518,7 +518,11 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
       var trigger = el.querySelector('[data-accordion-btn]');
       if (!trigger) return;
       trigger.addEventListener('click', function () {
-        setAccordionOpen(el, !el.classList.contains('is-open'));
+        var willOpen = !el.classList.contains('is-open');
+        accordions.forEach(function (other) {
+          if (other !== el) setAccordionOpen(other, false);
+        });
+        setAccordionOpen(el, willOpen);
       });
     });
 
