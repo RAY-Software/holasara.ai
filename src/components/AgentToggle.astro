@@ -53,10 +53,11 @@ const tt =
 </nav>
 
 <style>
-  /* Rail de iconos, discreto. Vive en el gutter izquierdo que reserva global.css
-     (.mx-auto.px-5) → nunca pisa el contenido. Sin texto: la etiqueta va en title
-     (tooltip) + aria-label (lectores de pantalla). Semi-transparente en reposo
-     para no competir con el contenido; se afirma al hover. */
+  /* Rail de iconos, discreto. Visible desde `lg` (1024px), el mismo corte que
+     el nav desktop / hamburger. En 1024–1279px global.css reserva gutter en
+     `.mx-auto.px-5` para que no pise el contenido. Sin texto: la etiqueta va
+     en title (tooltip) + aria-label. Semi-transparente en reposo; se afirma
+     al hover. */
   .agent-toggle {
     position: fixed;
     left: 0;
@@ -100,6 +101,11 @@ const tt =
   .agent-toggle__opt[aria-current='true'] {
     color: #0b1410;
     background: #3fe08a;
+  }
+  @media (max-width: 1023px) {
+    .agent-toggle {
+      display: none;
+    }
   }
 </style>
 

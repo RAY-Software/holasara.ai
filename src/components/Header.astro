@@ -29,8 +29,9 @@ const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
 const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`;
 ---
 
-<header class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
-  <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
+<header class="z-50">
+  <div class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
+    <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
     <a href={L('/')} class="flex items-center" aria-label={t('header.homeAria')}>
       <Wordmark class="text-[1.9rem]" />
     </a>
@@ -304,117 +305,182 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
         <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
       </svg>
     </button>
+    </div>
   </div>
 
-  <!-- ─── Drawer mobile ─── -->
-  <div id="mobile-nav" class="hidden border-t border-line bg-cream lg:hidden">
-    <div class="max-h-[calc(100vh-4rem)] space-y-7 overflow-auto px-5 py-6">
-      {
-        productGroups.map((g) => (
-          <div>
-            <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
-            <ul class="flex flex-col">
-              {g.items.map((it) => (
-                <li>
-                  <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                    {it.name}
-                  </a>
-                </li>
-              ))}
+  <!-- ─── Dropdown mobile: panel en flujo bajo la barra (como RAY). La página scrollea. ─── -->
+  <div
+    id="mobile-nav"
+    class="hidden overflow-visible border-t border-line bg-cream shadow-[0_16px_40px_-12px_rgba(20,38,31,0.28)] lg:hidden"
+  >
+    <div class="px-4 pb-4 pt-3">
+      <nav class="flex flex-col">
+        <!-- Producto -->
+        <div data-accordion="product">
+          <button
+            type="button"
+            data-accordion-btn
+            class="flex min-h-11 w-full items-center justify-between px-3 py-2 text-left text-base font-medium text-ink"
+            aria-expanded="false"
+            aria-controls="mobile-acc-product"
+          >
+            {t('nav.product')}
+            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="mobile-acc-product" data-accordion-panel class="hidden pb-2 pl-1">
+            {
+              productGroups.map((g) => (
+                <div class="pt-2">
+                  <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{g.label}</p>
+                  <ul class="flex flex-col">
+                    {g.items.map((it) => (
+                      <li>
+                        <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                          <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
+                          {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Negocios -->
+        <div data-accordion="business">
+          <button
+            type="button"
+            data-accordion-btn
+            class="flex min-h-11 w-full items-center justify-between px-3 py-2 text-left text-base font-medium text-ink"
+            aria-expanded="false"
+            aria-controls="mobile-acc-business"
+          >
+            {t('nav.business')}
+            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="mobile-acc-business" data-accordion-panel class="hidden pb-2 pl-1">
+            <div class="pt-2">
+              <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.byIndustry')}</p>
+              <ul class="flex flex-col">
+                {
+                  industryLinks.map((it) => (
+                    <li>
+                      <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                        <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
+                        {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div class="pt-3">
+              <p class="px-2 pb-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.bySize')}</p>
+              <ul class="flex flex-col">
+                {
+                  sizeLinks.map((it) => (
+                    <li>
+                      <a href={L(it.href)} class="block rounded-lg px-2 py-2.5">
+                        <span class="block text-sm font-semibold leading-snug text-ink">{it.name}</span>
+                        {it.desc && <span class="mt-0.5 block text-xs leading-snug text-salvia">{it.desc}</span>}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Equipo -->
+        <div data-accordion="team">
+          <button
+            type="button"
+            data-accordion-btn
+            class="flex min-h-11 w-full items-center justify-between px-3 py-2 text-left text-base font-medium text-ink"
+            aria-expanded="false"
+            aria-controls="mobile-acc-team"
+          >
+            {teamNav.label}
+            <svg data-accordion-chevron class="h-4 w-4 text-salvia transition-transform duration-200" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div id="mobile-acc-team" data-accordion-panel class="hidden pb-2 pl-1">
+            <ul class="flex flex-col pt-1">
+              {
+                team.map((m) => (
+                  <li>
+                    <a href={L(m.href)} class="block rounded-lg px-2 py-2.5">
+                      <span class="block text-sm font-semibold leading-snug text-ink">
+                        {m.name} <span class="font-normal text-salvia">· {m.role}</span>
+                      </span>
+                      {m.oneliner && <span class="mt-0.5 block text-xs leading-snug text-salvia">{m.oneliner}</span>}
+                    </a>
+                  </li>
+                ))
+              }
+              <li>
+                <a href={L('/equipo')} class="block rounded-lg px-2 py-2.5 text-sm font-semibold text-pine-dark">
+                  {teamNav.all}
+                </a>
+              </li>
             </ul>
           </div>
-        ))
-      }
-      <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.business')} · {t('nav.byIndustry')}</p>
-        <ul class="flex flex-col">
-          {
-            industryLinks.map((it) => (
-              <li>
-                <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                  {it.name}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{t('nav.business')} · {t('nav.bySize')}</p>
-        <ul class="flex flex-col">
-          {
-            sizeLinks.map((it) => (
-              <li>
-                <a href={L(it.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                  {it.name}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-      <div>
-        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{teamNav.label}</p>
-        <ul class="flex flex-col">
-          {
-            team.map((m) => (
-              <li>
-                <a href={L(m.href)} class="block border-b border-line/70 py-2.5 text-ink">
-                  {m.name} <span class="text-salvia">· {m.role}</span>
-                </a>
-              </li>
-            ))
-          }
-          <li>
-            <a href={L('/equipo')} class="block border-b border-line/70 py-2.5 text-ink">
-              {teamNav.all}
+        </div>
+
+        {
+          topLinks.map((l) => (
+            <a href={L(l.href)} class="flex min-h-11 items-center px-3 py-2 text-base font-medium text-ink">
+              {l.name}
             </a>
-          </li>
-        </ul>
-      </div>
-      <div>
-        <ul class="flex flex-col">
+          ))
+        }
+      </nav>
+
+      <div class="mt-2 border-t border-line pt-4">
+        <p class="mb-2 px-3 text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{t('lang.switch')}</p>
+        <div class="flex gap-2" role="group" aria-label={t('lang.switch')}>
           {
-            topLinks.map((l) => (
-              <li>
-                <a href={L(l.href)} class="block border-b border-line/70 py-2.5 font-semibold text-ink">
-                  {l.name}
-                </a>
-              </li>
+            locales.map((l) => (
+              <a
+                href={langHref(l)}
+                data-astro-prefetch={false}
+                class={`flex min-h-[44px] flex-1 items-center justify-center space-x-2 rounded-md px-4 py-3 text-sm ${
+                  l === lang ? 'bg-pine text-cream' : 'bg-white text-ink'
+                }`}
+                aria-current={l === lang ? 'true' : undefined}
+                hreflang={l}
+              >
+                <span class="text-lg" aria-hidden="true">{l === 'es' ? '🇪🇸' : '🇺🇸'}</span>
+                <span class="font-medium">{l === 'es' ? t('lang.es') : t('lang.en')}</span>
+              </a>
             ))
           }
-        </ul>
+        </div>
       </div>
-      <div class="flex flex-col gap-3 pt-1">
-        <a href={L('/demo')} class="inline-flex items-center justify-center rounded-full bg-pine px-5 py-3 text-base font-semibold text-cream">
+
+      <div class="mt-4 border-t border-line pt-4">
+        <a
+          href={L('/demo')}
+          class="inline-flex min-h-11 w-full items-center justify-center text-base font-medium text-pine"
+        >
           {t('header.demoCta')}
         </a>
         {SHOW_GRADER_CTA && (
           <a
             href="https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara"
-            class="inline-flex items-center justify-center gap-2 rounded-full border border-line px-5 py-3 text-base font-semibold text-ink"
+            class="mt-2 inline-flex min-h-[52px] w-full items-center justify-center rounded-lg bg-pine px-5 text-base font-semibold text-cream"
           >
             {t('header.scanCta')}
           </a>
         )}
-        <!-- Switcher ES/EN (mobile) -->
-        <div class="flex items-center justify-center gap-1 pt-1 text-sm font-semibold" role="group" aria-label={t('lang.switch')}>
-          {
-            locales.map((l, i) => (
-              <Fragment>
-                {i > 0 && <span class="text-line">·</span>}
-                <a
-                  href={langHref(l)}
-                  class={`px-2 py-1 uppercase tracking-wide ${l === lang ? 'text-ink' : 'text-salvia'}`}
-                  aria-current={l === lang ? 'true' : undefined}
-                  hreflang={l}
-                >
-                  {l}
-                </a>
-              </Fragment>
-            ))
-          }
-        </div>
       </div>
     </div>
   </div>
@@ -427,16 +493,67 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
     var openI = document.getElementById('nav-open-icon');
     var closeI = document.getElementById('nav-close-icon');
     if (!btn || !panel) return;
-    btn.addEventListener('click', function () {
-      var open = panel.classList.toggle('hidden') === false;
+
+    function isOpen() {
+      return !panel.classList.contains('hidden');
+    }
+
+    var accordions = panel.querySelectorAll('[data-accordion]');
+
+    function setAccordionOpen(el, open) {
+      el.classList.toggle('is-open', open);
+      var trigger = el.querySelector('[data-accordion-btn]');
+      var pane = el.querySelector('[data-accordion-panel]');
+      if (trigger) trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (pane) pane.classList.toggle('hidden', !open);
+    }
+
+    function collapseAccordions() {
+      accordions.forEach(function (el) {
+        setAccordionOpen(el, false);
+      });
+    }
+
+    accordions.forEach(function (el) {
+      var trigger = el.querySelector('[data-accordion-btn]');
+      if (!trigger) return;
+      trigger.addEventListener('click', function () {
+        setAccordionOpen(el, !el.classList.contains('is-open'));
+      });
+    });
+
+    function setOpen(open) {
+      panel.classList.toggle('hidden', !open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       openI.classList.toggle('hidden', open);
       closeI.classList.toggle('hidden', !open);
+      if (!open) collapseAccordions();
+    }
+
+    btn.addEventListener('click', function () {
+      setOpen(!isOpen());
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) {
+        setOpen(false);
+        btn.focus();
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      if (isOpen() && window.matchMedia('(min-width: 1024px)').matches) {
+        setOpen(false);
+      }
     });
   })();
 </script>
 
 <style>
+  [data-accordion].is-open [data-accordion-chevron] {
+    transform: rotate(180deg);
+  }
+
   /* Estado abierto del mega menú (lo togglea el JS con delay de cierre) */
   [data-mega].is-open .mega-panel {
     visibility: visible;
