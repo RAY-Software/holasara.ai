@@ -74,19 +74,19 @@ const dict = {
     ctxH2: 'Tu paciente ya decidió <em class="text-mint">cómo</em> quiere&nbsp;agendar.',
     ctxSub: 'Espera lo mismo que en cualquier otro servicio: respuesta inmediata. La clínica que responde primero se queda con el&nbsp;paciente.',
     saraKicker: 'Conoce a Sara',
-    saraH2: '23:41 entra una&nbsp;consulta.<br /><em class="text-pine-dark">23:43 está pagada y&nbsp;agendada.</em>',
+    saraH2: '23:41 entra una&nbsp;consulta.<br /><em class="text-pine-dark">23:43 está<br />pagada y agendada.</em>',
     saraSub: 'Trabaja de noche, los fines de semana y en los picos. Sin sumar una persona más a recepción.',
     saraMore: 'Conoce más sobre Sara',
     saraImgAlt: 'Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo.',
     mktKicker: 'Marketing',
-    mktH2: 'Sara también lleva tu&nbsp;Instagram.',
+    mktH2: 'Sara también lleva<br />tu Instagram.',
     mktSub: 'Crea las publicaciones de tu clínica y atiende a quien responde, hasta agendar. Tu marketing y tu agenda, por fin&nbsp;conectados.',
     mktMore: 'Ver cómo Sara lleva tu Instagram',
     mktImgAlt: 'Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir.',
     postsKicker: 'Del post a la cita, paso a paso',
     postsClose: 'Instagram, el chat y el cobro, en un mismo lugar. Nadie más cierra ese&nbsp;círculo.',
     spotKicker: 'Spotlight · Sara',
-    spotH2: 'Además de atender y vender, <em class="text-pine-dark">Sara es tu&nbsp;secretaria.</em>',
+    spotH2: 'Además de <span class="whitespace-nowrap">atender y vender,</span><br /><em class="text-pine-dark">Sara es tu&nbsp;secretaria.</em>',
     spotBody: 'Gestiona la agenda entera y notifica a cada paciente. Las 24 horas.',
     spotImgAlt: 'Sara gestiona la agenda de la semana y reprograma todas las citas del martes, avisando a cada paciente.',
     ctaInline1: 'Cada consulta que no respondes a tiempo, agenda en&nbsp;otra clínica.',
@@ -98,7 +98,7 @@ const dict = {
     ctaInline2: 'Ve a Sara atendiendo tu clínica, en vivo.',
     ctaInline2Cta: 'Pedir mi demo',
     caseKicker: 'Caso de éxito',
-    caseH2: 'Ya está funcionando en clínicas&nbsp;reales.',
+    caseH2: 'Ya está <span class="whitespace-nowrap">funcionando en</span><br />clínicas reales.',
     caseStat1: 'conversaciones atendidas por Sara, sin que recepción tocara nada.',
     caseStat2Num: '7 de 10',
     caseStat2: 'citas agendadas por Sara en WhatsApp, Instagram y la web.',
@@ -156,19 +156,19 @@ const dict = {
     ctxH2: 'Your patient has already decided <em class="text-mint">how</em> they want to&nbsp;book.',
     ctxSub: 'They expect what they get everywhere else: an instant reply. The clinic that answers first keeps the&nbsp;patient.',
     saraKicker: 'Meet Sara',
-    saraH2: '11:41 pm an enquiry comes&nbsp;in.<br /><em class="text-pine-dark">11:43 pm it’s paid and&nbsp;booked.</em>',
+    saraH2: '11:41 pm an enquiry comes&nbsp;in.<br /><em class="text-pine-dark">11:43 pm it’s<br />paid and booked.</em>',
     saraSub: 'She works nights, weekends and peak hours. Without adding one more person to the front desk.',
     saraMore: 'Learn more about Sara',
     saraImgAlt: 'WhatsApp conversation: a patient enquires in the middle of the night and Sara replies, books and collects the deposit.',
     mktKicker: 'Marketing',
-    mktH2: 'Sara runs your Instagram,&nbsp;too.',
+    mktH2: 'Sara runs your<br />Instagram,&nbsp;too.',
     mktSub: 'She creates your clinic’s posts and answers whoever replies, all the way to booking. Your marketing and your calendar, finally&nbsp;connected.',
     mktMore: 'See how Sara runs your Instagram',
     mktImgAlt: 'A clinic’s AI-generated Instagram feed: on-brand posts, ready to publish.',
     postsKicker: 'From post to appointment, step by step',
     postsClose: 'Instagram, the chat and the payment, all in one place. No one else closes that&nbsp;loop.',
     spotKicker: 'Spotlight · Sara',
-    spotH2: 'Beyond answering and selling, <em class="text-pine-dark">Sara is your&nbsp;secretary.</em>',
+    spotH2: 'Beyond answering<br />and selling,<br /><em class="text-pine-dark">Sara is your&nbsp;secretary.</em>',
     spotBody: 'She manages the entire calendar and notifies every patient. Around the clock.',
     spotImgAlt: 'Sara manages the week’s calendar and reschedules every Tuesday appointment, notifying each patient.',
     ctaInline1: 'Every enquiry you don’t answer in time books at&nbsp;another clinic.',
@@ -180,7 +180,7 @@ const dict = {
     ctaInline2: 'See Sara running your clinic, live.',
     ctaInline2Cta: 'Book my demo',
     caseKicker: 'Success story',
-    caseH2: 'It’s already running in real&nbsp;clinics.',
+    caseH2: 'It’s already <span class="whitespace-nowrap">running in</span><br />real clinics.',
     caseStat1: 'conversations handled by Sara, without the front desk touching a thing.',
     caseStat2Num: '7 of 10',
     caseStat2: 'appointments booked by Sara across WhatsApp, Instagram and the web.',
@@ -441,7 +441,7 @@ const loop = [
     <section class="border-t border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.mktKicker}</p>
-        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.mktH2} />
+        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.mktH2} />
         <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.mktSub} />
         <a
           href={L('/instagram')}
@@ -491,7 +491,7 @@ const loop = [
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
         <div class="mx-auto max-w-3xl text-center">
           <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.spotKicker}</p>
-          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.spotH2} />
+          <h2 class="font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.spotH2} />
           <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.spotBody}</p>
         </div>
         <div class="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
