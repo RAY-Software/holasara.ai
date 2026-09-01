@@ -29,8 +29,9 @@ const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
 const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`;
 ---
 
-<header class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
-  <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
+<header class="z-50">
+  <div class="sticky top-0 z-50 border-b border-line/70 bg-cream/90 backdrop-blur-md">
+    <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
     <a href={L('/')} class="flex items-center" aria-label={t('header.homeAria')}>
       <Wordmark class="text-[1.9rem]" />
     </a>
@@ -304,6 +305,7 @@ const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`
         <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
       </svg>
     </button>
+    </div>
   </div>
 
   <!-- ─── Dropdown mobile: panel en flujo bajo la barra (como RAY). La página scrollea. ─── -->
