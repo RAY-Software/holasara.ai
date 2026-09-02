@@ -202,10 +202,22 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
                   <path d="M5 12h14M13 6l6 6-6 6" />
                 </svg>
               </span>
-              {member.scenes.map((s) => (
+              {member.scenes.map((s, i) => (
+                <>
+                  {i > 0 && member.scenesHandoff && (
+                    <div class="-my-4 flex flex-col items-center gap-1.5 text-center text-sm text-cream/60 md:hidden" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-mint">
+                        <path d="M12 5v14M6 13l6 6 6-6" />
+                      </svg>
+                      <span>{member.scenesHandoff}</span>
+                    </div>
+                  )}
                 <div data-scene-col class="scene-col flex flex-col items-center gap-5">
-                  <span class="inline-flex items-center gap-2 rounded-full border border-cream/25 px-4 py-1.5 text-sm font-semibold text-cream/85">
-                    {s.label}
+                  {/* Pill: quién habla con quién (fuerte) · qué pasa (tenue). Sin wrap. */}
+                  <span class="inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-cream/25 px-4 py-1.5 text-sm text-cream/85">
+                    <span class="font-semibold text-cream">{s.who}</span>
+                    <span class="text-cream/40">·</span>
+                    <span class="text-cream/70">{s.label}</span>
                   </span>
                   <ConversationDemo
                     lang={lang}
@@ -217,6 +229,7 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
                     animate
                   />
                 </div>
+                </>
               ))}
             </div>
           </div>
