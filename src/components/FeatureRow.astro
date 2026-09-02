@@ -14,7 +14,7 @@ const { eyebrow, title, body, points = [], flip = false } = Astro.props;
 ---
 
 <div class="grid items-center gap-12 md:grid-cols-2 md:gap-14">
-  <div class={flip ? 'md:order-2' : ''}>
+  <div class={`min-w-0 max-lg:pr-16 max-lg:pb-8 ${flip ? 'md:order-2' : ''}`}>
     {
       eyebrow && (
         <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{eyebrow}</p>
@@ -36,7 +36,7 @@ const { eyebrow, title, body, points = [], flip = false } = Astro.props;
     }
   </div>
 
-  <div class={`flex justify-center ${flip ? 'md:order-1 md:justify-start' : 'md:justify-end'}`}>
+  <div class={`flex min-w-0 justify-center ${flip ? 'md:order-1 md:justify-start' : 'md:justify-end'}`}>
     <slot />
   </div>
 </div>
