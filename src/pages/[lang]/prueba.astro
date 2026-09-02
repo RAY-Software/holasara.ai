@@ -138,9 +138,17 @@ const T = dict.js;
         <span aria-hidden="true">←</span> {dict.back}
       </a>
 
-      <div class="grid gap-12 md:grid-cols-[0.95fr_1.05fr] md:gap-16 md:items-start">
-        <!-- ─── Izquierda: propuesta ─── -->
-        <div>
+      <!-- Tres bloques, no dos, y el formulario va segundo en el DOM. Antes la columna
+           izquierda era un solo div (encabezado + prueba ViaLaser + beneficios) y el form
+           caía al final: en móvil quedaba a dos pantallas de scroll y el tráfico de
+           anuncios llega casi todo por celular. Mismo arreglo que en demo.astro.
+           Se mueve en el DOM y no con `order` a propósito: así el orden visual, el de
+           lectura y el de tabulación coinciden en móvil. En md+ los tres bloques se
+           colocan a mano con col-start / row-start y vuelve el layout de dos columnas,
+           con el form ocupando las dos filas de la derecha. -->
+      <div class="grid gap-y-10 md:grid-cols-[0.95fr_1.05fr] md:gap-x-16 md:gap-y-10 md:items-start">
+        <!-- ─── Encabezado ─── -->
+        <div class="md:col-start-1 md:row-start-1">
           <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
             <span class="dot h-2 w-2"></span> {dict.kicker}
           </p>
@@ -148,38 +156,10 @@ const T = dict.js;
           <p class="mt-6 max-w-xl text-lg text-salvia">
             {dict.lead}
           </p>
-
-          <div class="mt-10 rounded-xl border border-line bg-cream p-7 @container">
-            <div class="flex items-center gap-3">
-              <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="h-7 w-auto" loading="lazy" />
-              <span class="text-sm font-medium text-salvia">{dict.worksHere}</span>
-            </div>
-            <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3">
-              <div>
-                <p class="font-serif text-3xl font-black leading-none tracking-tight text-pine-dark tabular-nums md:text-4xl">114</p>
-                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat1}</p>
-              </div>
-              <div>
-                <p class="font-serif text-3xl font-black leading-none tracking-tight text-pine-dark tabular-nums md:text-4xl">7/10</p>
-                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat2}</p>
-              </div>
-            </div>
-          </div>
-
-          <ul class="mt-8 grid gap-5 sm:grid-cols-2">
-            {
-              dict.benefits.map((x) => (
-                <li>
-                  <h3 class="text-[15px] font-semibold text-ink">{x.t}</h3>
-                  <p class="mt-1 text-sm text-salvia">{x.b}</p>
-                </li>
-              ))
-            }
-          </ul>
         </div>
 
-        <!-- ─── Derecha: formulario ─── -->
-        <div class="rounded-2xl border border-line bg-cream p-7 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] md:p-9">
+        <!-- ─── Formulario ─── -->
+        <div class="rounded-2xl border border-line bg-cream p-7 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] md:col-start-2 md:row-start-1 md:row-span-2 md:p-9">
           <h2 class="font-serif text-2xl font-black text-ink">{dict.formH2}</h2>
           <p class="mt-2 text-sm text-salvia">{dict.formSub}</p>
 
@@ -233,6 +213,37 @@ const T = dict.js;
               <p class="mt-2 max-w-sm text-salvia">{dict.loadingBody}</p>
             </div>
           </div>
+        </div>
+
+        <!-- ─── Por qué Sara: prueba real + beneficios ─── -->
+        <div class="md:col-start-1 md:row-start-2">
+          <div class="rounded-xl border border-line bg-cream p-7 @container">
+            <div class="flex items-center gap-3">
+              <img src="/img/vialaser-logo.png" width="398" height="126" alt="ViaLaser" class="h-7 w-auto" loading="lazy" />
+              <span class="text-sm font-medium text-salvia">{dict.worksHere}</span>
+            </div>
+            <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-3">
+              <div>
+                <p class="font-serif text-3xl font-black leading-none tracking-tight text-pine-dark tabular-nums md:text-4xl">114</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat1}</p>
+              </div>
+              <div>
+                <p class="font-serif text-3xl font-black leading-none tracking-tight text-pine-dark tabular-nums md:text-4xl">7/10</p>
+                <p class="mt-1 text-xs leading-tight text-salvia">{dict.stat2}</p>
+              </div>
+            </div>
+          </div>
+
+          <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+            {
+              dict.benefits.map((x) => (
+                <li>
+                  <h3 class="text-[15px] font-semibold text-ink">{x.t}</h3>
+                  <p class="mt-1 text-sm text-salvia">{x.b}</p>
+                </li>
+              ))
+            }
+          </ul>
         </div>
       </div>
     </div>
