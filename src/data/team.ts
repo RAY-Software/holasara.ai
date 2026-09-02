@@ -16,6 +16,8 @@ interface Bubble {
   t?: string;
   /** URL visible en la burbuja (p. ej. link de pago), como la pinta WhatsApp. */
   link?: string;
+  /** Post de Instagram adjunto (preview dentro de la burbuja), p. ej. la promo que Mia acaba de publicar. */
+  post?: { img: string; handle: string; caption: string };
 }
 
 interface RawMember {
@@ -61,9 +63,11 @@ interface RawMember {
   // que Daniel o Mia dispararon); si faltan, usa los del personaje.
   scenesTitle?: Record<Locale, string>; // admite <em> y &nbsp;
   scenesIntro?: Record<Locale, string>;
+  // Texto del conector entre escena 1 y 2 (mobile, donde las columnas se apilan).
+  scenesHandoff?: Record<Locale, string>;
   scenes?: Record<
     Locale,
-    { label: string; subtitle?: string; name?: string; avatar?: string; bubbles: Bubble[] }[]
+    { who: string; label: string; subtitle?: string; name?: string; avatar?: string; bubbles: Bubble[] }[]
   >;
 }
 
@@ -140,6 +144,10 @@ const RAW: RawMember[] = [
       es: 'Le pides algo a Sara. <em class="text-pine-dark">Y ella sale a resolverlo.</em>',
       en: 'You ask Sara for something. <em class="text-pine-dark">And she goes and gets it done.</em>',
     },
+    scenesHandoff: {
+      es: 'Sara le escribe a cada paciente',
+      en: 'Sara messages each patient',
+    },
     scenesIntro: {
       es: 'Así se ve en la vida real: el doctor le pide reagendar una tarde entera, y Sara habla con cada paciente hasta dejar todo resuelto.',
       en: 'Here’s what it looks like in real life: the doctor asks her to reschedule a whole afternoon, and Sara talks to each patient until everything is sorted.',
@@ -147,7 +155,8 @@ const RAW: RawMember[] = [
     scenes: {
       es: [
         {
-          label: '1 · El doctor le pide',
+          who: '1 · Tú y Sara',
+          label: 'le pides reagendar',
           subtitle: 'tu secretaria por WhatsApp',
           bubbles: [
             { who: 'in', text: 'Sara, me salió una cirugía el martes a la tarde. Reagenda a los pacientes que tengo ese día después de las 14.', t: '11:02' },
@@ -159,8 +168,9 @@ const RAW: RawMember[] = [
           ],
         },
         {
-          label: '2 · Sara resuelve con el paciente',
-          subtitle: 'en línea',
+          who: '2 · Sara y el paciente',
+          label: 'lo resuelve',
+          subtitle: 'con tu paciente',
           bubbles: [
             { who: 'out', text: 'Hola Laura, te escribo de la clínica. El doctor tuvo que mover su agenda del martes y necesitamos reagendar tu limpieza de las 14:30. ¿Te queda bien el jueves 15:00 o 17:30?', t: '11:07' },
             { who: 'in', text: 'Uy, sí. El jueves 17:30 me va perfecto', t: '11:15' },
@@ -172,7 +182,8 @@ const RAW: RawMember[] = [
       ],
       en: [
         {
-          label: '1 · The doctor asks',
+          who: '1 · You and Sara',
+          label: 'you ask her to reschedule',
           subtitle: 'your secretary on WhatsApp',
           bubbles: [
             { who: 'in', text: 'Sara, a surgery came up on Tuesday afternoon. Reschedule my patients that day after 2pm.', t: '11:02' },
@@ -184,8 +195,9 @@ const RAW: RawMember[] = [
           ],
         },
         {
-          label: '2 · Sara sorts it with the patient',
-          subtitle: 'online',
+          who: '2 · Sara and the patient',
+          label: 'she sorts it out',
+          subtitle: 'with your patient',
           bubbles: [
             { who: 'out', text: 'Hi Laura, it is the clinic. The doctor had to move his Tuesday schedule and we need to reschedule your 2:30 cleaning. Would Thursday 3:00 or 5:30 work?', t: '11:07' },
             { who: 'in', text: 'Oh, sure. Thursday 5:30 works great', t: '11:15' },
@@ -346,6 +358,10 @@ const RAW: RawMember[] = [
       es: 'Mia ve la agenda floja. <em class="text-pine-dark">Y el equipo la llena.</em>',
       en: 'Mia sees a slow week. <em class="text-pine-dark">And the team fills it.</em>',
     },
+    scenesHandoff: {
+      es: 'El paciente ve la promo en Instagram y escribe',
+      en: 'The patient sees the promo on Instagram and writes in',
+    },
     scenesIntro: {
       es: 'Así se ve en la vida real: Mia detecta los días flojos y te propone la promo. La apruebas, ella la publica, y a quien responde lo agenda Sara con el anticipo cobrado.',
       en: 'Here’s what it looks like in real life: Mia catches the slow days and pitches the promo. You approve, she publishes, and whoever replies gets booked by Sara, deposit collected.',
@@ -353,22 +369,24 @@ const RAW: RawMember[] = [
     scenes: {
       es: [
         {
-          label: '1 · Mia te propone la promo',
-          subtitle: 'Experta en marketing',
+          who: '1 · Mia y tú',
+          label: 'te propone la promo',
+          subtitle: 'contigo, por WhatsApp',
           bubbles: [
             { who: 'out', text: 'Hola, vi que el jueves y el viernes quedaron flojos: 9 huecos entre los dos, casi todos a la tarde.', t: '09:12' },
             { who: 'out', text: 'Te armo una promo para llenarlos: "Botox jueves y viernes, agenda con anticipo y llevas la segunda zona a mitad de precio". La pieza para feed y para historia ya está lista, con tu marca.', t: '09:12' },
             { who: 'in', text: 'Sí, pero baja el descuento a 30%. ¿Cuándo la publicarías?', t: '09:20' },
             { who: 'out', text: 'Ajustado al 30%. La publico hoy a las 18:00, que es cuando tu cuenta tiene más alcance, y mañana temprano repito la historia.', t: '09:20' },
             { who: 'in', text: 'Perfecto, adelante', t: '09:21' },
-            { who: 'out', text: 'Publicada. A quien responda lo agenda Sara con el anticipo cobrado. El lunes te paso cuántas citas salieron de la promo.', t: '18:02' },
+            { who: 'out', text: 'Publicada. A quien responda lo agenda Sara con el anticipo cobrado. El lunes te paso cuántas citas salieron de la promo.', t: '18:02', post: { img: '/img/tenants/faceup.jpg', handle: 'clinicaaurora', caption: 'Botox jueves y viernes: agenda con anticipo y llevas la segunda zona con 30% de descuento' } },
           ],
         },
         {
-          label: '2 · Sara agenda a quien responde',
+          who: '2 · Sara y el paciente',
+          label: 'agenda la cita',
           name: 'Sara',
           avatar: '/equipo/sara-avatar.jpg',
-          subtitle: 'en línea',
+          subtitle: 'con tu paciente',
           bubbles: [
             { who: 'in', text: 'Hola! Vi la promo de botox en Instagram. ¿Sigue disponible?', t: '13:47' },
             { who: 'out', text: 'Sí. Aplica jueves y viernes: agendas con anticipo y llevas la segunda zona con 30% de descuento. ¿Sería tu primera vez con nosotros?', t: '13:47' },
@@ -383,22 +401,24 @@ const RAW: RawMember[] = [
       ],
       en: [
         {
-          label: '1 · Mia pitches the promo',
-          subtitle: 'Marketing expert',
+          who: '1 · Mia and you',
+          label: 'pitches the promo',
+          subtitle: 'with you, on WhatsApp',
           bubbles: [
             { who: 'out', text: 'Hey, Thursday and Friday are looking light: 9 open slots between them, almost all in the afternoon.', t: '09:12' },
             { who: 'out', text: 'Let me put together a promo to fill them: "Botox Thursday and Friday, book with a deposit and get the second area half off." The feed and story pieces are ready, with your brand.', t: '09:12' },
             { who: 'in', text: 'Yes, but drop the discount to 30%. When would you publish it?', t: '09:20' },
             { who: 'out', text: 'Set to 30%. I would post today at 6pm, when your account gets the most reach, and repeat the story early tomorrow.', t: '09:20' },
             { who: 'in', text: 'Perfect, go ahead', t: '09:21' },
-            { who: 'out', text: 'Published. Whoever replies gets booked by Sara with the deposit collected. On Monday I will send you how many appointments came from the promo.', t: '18:02' },
+            { who: 'out', text: 'Published. Whoever replies gets booked by Sara with the deposit collected. On Monday I will send you how many appointments came from the promo.', t: '18:02', post: { img: '/img/tenants/faceup.jpg', handle: 'clinicaaurora', caption: 'Botox Thursday and Friday: book with a deposit and get 30% off the second area' } },
           ],
         },
         {
-          label: '2 · Sara books whoever replies',
+          who: '2 · Sara and the patient',
+          label: 'books the visit',
           name: 'Sara',
           avatar: '/equipo/sara-avatar.jpg',
-          subtitle: 'online',
+          subtitle: 'with your patient',
           bubbles: [
             { who: 'in', text: 'Hi! I saw the botox promo on Instagram. Is it still on?', t: '13:47' },
             { who: 'out', text: 'It is. Valid Thursday and Friday: book with a deposit and get 30% off the second area. Would this be your first time with us?', t: '13:47' },
@@ -497,6 +517,10 @@ const RAW: RawMember[] = [
       es: 'Daniel encuentra dinero por cobrar. <em class="text-pine-dark">Y Sara sale a cobrarlo.</em>',
       en: 'Daniel finds money to collect. <em class="text-pine-dark">And Sara goes and collects it.</em>',
     },
+    scenesHandoff: {
+      es: 'Sara le escribe a cada paciente con su link de pago',
+      en: 'Sara messages each patient with their payment link',
+    },
     scenesIntro: {
       es: 'Así trabaja el equipo junto: Daniel detecta anticipos sin cobrar, tú apruebas con un mensaje, y Sara le escribe a cada paciente hasta recuperarlos.',
       en: 'Here’s the team working together: Daniel spots uncollected deposits, you approve with one message, and Sara writes each patient until the money comes in.',
@@ -504,7 +528,8 @@ const RAW: RawMember[] = [
     scenes: {
       es: [
         {
-          label: '1 · Daniel lo detecta',
+          who: '1 · Daniel y tú',
+          label: 've anticipos sin cobrar',
           subtitle: 'te avisa cómo van los números',
           bubbles: [
             { who: 'out', text: 'Revisé la semana. Tienes $18,400 en anticipos sin cobrar, repartidos en 7 citas de los próximos días.', t: '08:30' },
@@ -515,10 +540,11 @@ const RAW: RawMember[] = [
           ],
         },
         {
-          label: '2 · Sara lo cobra',
+          who: '2 · Sara y el paciente',
+          label: 'cobra el anticipo',
           name: 'Sara',
           avatar: '/equipo/sara-avatar.jpg',
-          subtitle: 'en línea',
+          subtitle: 'con tu paciente',
           bubbles: [
             { who: 'out', text: 'Hola Laura, te escribo de la clínica. Quedó pendiente el anticipo de tu cita del jueves 17:30. Te dejo el link para pagarlo y asegurar tu lugar.', t: '09:05', link: 'holasara.ai/pago/3d7q' },
             { who: 'in', text: 'Uy, se me pasó por completo. ¿Hasta cuándo puedo pagarlo?', t: '09:18' },
@@ -530,7 +556,8 @@ const RAW: RawMember[] = [
       ],
       en: [
         {
-          label: '1 · Daniel spots it',
+          who: '1 · Daniel and you',
+          label: 'flags unpaid deposits',
           subtitle: 'flags how the numbers are doing',
           bubbles: [
             { who: 'out', text: 'Went over the week. You have $18,400 in uncollected deposits across 7 upcoming appointments.', t: '08:30' },
@@ -541,10 +568,11 @@ const RAW: RawMember[] = [
           ],
         },
         {
-          label: '2 · Sara collects it',
+          who: '2 · Sara and the patient',
+          label: 'collects it',
           name: 'Sara',
           avatar: '/equipo/sara-avatar.jpg',
-          subtitle: 'online',
+          subtitle: 'with your patient',
           bubbles: [
             { who: 'out', text: 'Hi Laura, it is the clinic. The deposit for your Thursday 5:30pm appointment is still pending. Here is the link to pay it and keep your spot.', t: '09:05', link: 'holasara.ai/pago/3d7q' },
             { who: 'in', text: 'Oh, it completely slipped my mind. Until when can I pay it?', t: '09:18' },
@@ -602,7 +630,8 @@ export interface TeamMember {
   };
   scenesTitle?: string;
   scenesIntro?: string;
-  scenes?: { label: string; subtitle?: string; name?: string; avatar?: string; bubbles: Bubble[] }[];
+  scenesHandoff?: string;
+  scenes?: { who: string; label: string; subtitle?: string; name?: string; avatar?: string; bubbles: Bubble[] }[];
   /** Path interno de la ficha del personaje: /equipo/sara, /equipo/mia, … */
   href: string;
 }
@@ -633,6 +662,7 @@ const pick = (m: RawMember, lang: Locale): TeamMember => ({
   igFlow: m.igFlow ? m.igFlow[lang] : undefined,
   scenesTitle: m.scenesTitle ? m.scenesTitle[lang] : undefined,
   scenesIntro: m.scenesIntro ? m.scenesIntro[lang] : undefined,
+  scenesHandoff: m.scenesHandoff ? m.scenesHandoff[lang] : undefined,
   scenes: m.scenes ? m.scenes[lang] : undefined,
   href: `/equipo/${m.id}`,
 });
