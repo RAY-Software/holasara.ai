@@ -65,8 +65,16 @@
     // no trae click id, así que el valor guardado sobrevive la navegación interna.
     // El subdomainIndex va fijo en 1 porque siempre scopeamos al dominio registrable,
     // que es lo que hace el píxel.
+    //
+    // El punto se escapa como `__DOT__`, que es lo que hace el propio fbevents.js: el
+    // punto es el separador de campos del formato, así que un `fbclid` con puntos
+    // —los hay— rompería el parseo. Comprobado en vivo el 2026-09-02: escribimos
+    // `fb.1.<ts>.abc.def` y dos segundos después el píxel lo pisó con
+    // `fb.1.<ts>.abc__DOT__def`. Sin esto, el mismo clic viaja con dos strings
+    // distintos según quién gane la carrera — el nuestro al armar el link de wa.me,
+    // el del píxel cuando `refs()` se llama más tarde (el submit de /demo).
     var fbclid = new URLSearchParams(location.search).get('fbclid');
-    if (fbclid) write(FBC, 'fb.1.' + Date.now() + '.' + fbclid);
+    if (fbclid) write(FBC, 'fb.1.' + Date.now() + '.' + fbclid.replace(/\./g, '__DOT__'));
 
     function fbc() {
       return read(FBC);
