@@ -29,58 +29,62 @@ const t = {
 ---
 
 <figure
-  class={`w-full max-w-3xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_18px_50px_-24px_rgba(20,38,31,0.4)] ${cls}`}
+  class={`w-full min-w-0 max-w-3xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_18px_50px_-24px_rgba(20,38,31,0.4)] ${cls}`}
   aria-label={en ? 'Sara setup checklist' : 'Checklist de configuración de Sara'}
 >
   <!-- Chrome estilo macOS -->
-  <div class="flex items-center gap-3 border-b border-line bg-[#f7f8fa] px-4 py-3">
-    <span class="flex gap-2" aria-hidden="true">
+  <div class="flex min-w-0 items-center gap-3 border-b border-line bg-[#f7f8fa] px-4 py-3">
+    <span class="flex shrink-0 gap-2" aria-hidden="true">
       <span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span>
       <span class="h-3 w-3 rounded-full bg-[#febc2e]"></span>
       <span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
     </span>
-    <span class="text-sm font-semibold text-salvia">{t.win}</span>
+    <span class="min-w-0 truncate text-sm font-semibold text-salvia">{t.win}</span>
   </div>
 
   <div class="p-4 sm:p-6">
     <div class="rounded-2xl border border-line p-4 sm:p-6">
-      <!-- Encabezado tarjeta: emoji + título + progreso -->
-      <div class="flex flex-wrap items-center gap-4">
-        <span class="grid h-11 w-11 shrink-0 place-content-center rounded-xl bg-[#eef2f8] text-xl">🚀</span>
-        <div class="min-w-0 flex-1">
-          <p class="text-lg font-bold text-ink">{t.title}</p>
-          <p class="mt-0.5 text-sm text-salvia">{t.sub}</p>
+      <!-- Encabezado: en <lg icono+copy a ancho completo, barra debajo. Desktop sigue en fila. -->
+      <div class="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:items-center">
+        <div class="flex min-w-0 items-start gap-3 lg:flex-1 lg:items-center">
+          <span class="grid h-11 w-11 shrink-0 place-content-center rounded-xl bg-[#eef2f8] text-xl">🚀</span>
+          <div class="min-w-0">
+            <p class="text-lg font-bold text-ink">{t.title}</p>
+            <p class="mt-0.5 text-sm text-salvia">{t.sub}</p>
+          </div>
         </div>
-        <div class="flex min-w-[160px] flex-1 items-center gap-3 sm:flex-none sm:basis-[220px]">
+        <div class="flex w-full items-center gap-3 lg:min-w-[160px] lg:max-w-[220px] lg:flex-none">
           <div class="h-2 flex-1 overflow-hidden rounded-full bg-[#e7eaf0]">
             <div class="h-full rounded-full bg-[#3b6ef2]" style="width:85%"></div>
           </div>
-          <span class="text-base font-bold text-[#3b6ef2] tabular-nums">85%</span>
+          <span class="shrink-0 text-base font-bold text-[#3b6ef2] tabular-nums">85%</span>
         </div>
       </div>
 
-      <!-- Items completados -->
+      <!-- Items completados: el label envuelve palabras completas (sin ellipsis a mitad de palabra). -->
       <ul class="mt-5">
         {
           t.items.map((label) => (
-            <li class="flex items-center gap-3 border-t border-line/70 py-3.5">
-              <span class="grid h-6 w-6 shrink-0 place-content-center rounded-full bg-[#e7f6ec]" aria-hidden="true">
+            <li class="flex items-start gap-3 border-t border-line/70 py-3.5 lg:items-center">
+              <span class="mt-0.5 grid h-6 w-6 shrink-0 place-content-center rounded-full bg-[#e7f6ec] lg:mt-0" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" class="h-3.5 w-3.5"><path d="M6 12.5l3.5 3.5L18 7" stroke="#1f9d55" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
-              <span class="min-w-0 flex-1 truncate text-[15px] font-medium text-salvia line-through">{label}</span>
+              <span class="min-w-0 flex-1 text-[15px] font-medium text-salvia line-through max-lg:line-clamp-2 lg:truncate">{label}</span>
               <span class="shrink-0 whitespace-nowrap text-sm font-semibold text-[#1f9d55]">✓ {t.done}</span>
             </li>
           ))
         }
 
-        <!-- Item pendiente -->
-        <li class="flex flex-wrap items-center gap-3 border-t border-line/70 py-3.5">
-          <span class="h-6 w-6 shrink-0 rounded-full border-2 border-[#c9cfd8]" aria-hidden="true"></span>
-          <span class="min-w-0 flex-1">
-            <span class="block text-[15px] font-bold text-ink">{t.pendingTitle}</span>
-            <span class="block text-sm text-salvia">{t.pendingSub}</span>
-          </span>
-          <span class="shrink-0 whitespace-nowrap rounded-lg border border-[#3b6ef2] px-4 py-2 text-sm font-bold text-[#3b6ef2]">
+        <!-- Item pendiente: Completar debajo del copy en móvil para no comprimir el título. -->
+        <li class="flex flex-col gap-3 border-t border-line/70 py-3.5 lg:flex-row lg:items-center">
+          <div class="flex min-w-0 items-start gap-3 lg:flex-1 lg:items-center">
+            <span class="mt-0.5 h-6 w-6 shrink-0 rounded-full border-2 border-[#c9cfd8] lg:mt-0" aria-hidden="true"></span>
+            <span class="min-w-0 flex-1">
+              <span class="block text-[15px] font-bold text-ink">{t.pendingTitle}</span>
+              <span class="block text-sm text-salvia">{t.pendingSub}</span>
+            </span>
+          </div>
+          <span class="inline-flex w-fit shrink-0 whitespace-nowrap rounded-lg border border-[#3b6ef2] px-4 py-2 text-sm font-bold text-[#3b6ef2] max-lg:ml-9">
             {t.cta}
           </span>
         </li>

@@ -28,9 +28,9 @@ const { title = copy.title, sub = copy.sub } = Astro.props;
 ---
 
 <section class="bg-pine text-cream">
-  <div class="mx-auto max-w-4xl px-5 py-24 text-center">
-    <p class="mb-5 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-cream/90">
-      <span class="h-2 w-2 rounded-full bg-cream"></span> {copy.kicker}
+  <div class="mx-auto max-w-4xl px-5 py-24 text-center max-lg:pb-32">
+    <p class="mb-5 inline-flex max-w-full flex-wrap items-center justify-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-cream/90">
+      <span class="h-2 w-2 shrink-0 rounded-full bg-cream"></span> {copy.kicker}
     </p>
     <h2 class="mx-auto max-w-3xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={title} />
     <p class="mx-auto mt-6 max-w-xl text-lg text-cream/80">{sub}</p>
