@@ -355,14 +355,26 @@ const benefits = dict.benefits;
         return out;
       }
 
+      // Sufijo de atribución del mensaje de WhatsApp: click-ids de Google + los
+      // identificadores de Meta que arma <MetaAttribution />.
+      //
+      // El `fbclid` crudo NO viaja acá aunque esté en `ids`: el backend solo sabe leer
+      // el formato `[fbc:fb.1.<ts>.<fbclid>]` (`extractFbc`). El crudo sigue yendo en el
+      // campo oculto del formulario, que es donde lo espera `parseAttribution`.
+      var GOOGLE_CLICK_KEYS = ['gclid', 'wbraid', 'gbraid'];
+
       function clickToken(ids) {
-        return CLICK_KEYS.filter(function (k) {
+        var out = GOOGLE_CLICK_KEYS.filter(function (k) {
           return ids[k];
         })
           .map(function (k) {
             return '[' + k + ':' + ids[k] + ']';
           })
           .join('');
+        try {
+          if (window.__saraMeta) out += window.__saraMeta.refs();
+        } catch (e) {}
+        return out;
       }
 
       // ── Enhanced Conversions ────────────────────────────────────────────────
@@ -454,7 +466,10 @@ const benefits = dict.benefits;
       if (fb)
         fb.setAttribute(
           'href',
-          'https://wa.me/' + WA + '?text=' + encodeURIComponent(T.waIntro + ' ' + SRC_TAG)
+          'https://wa.me/' +
+            WA +
+            '?text=' +
+            encodeURIComponent(T.waIntro + ' ' + SRC_TAG + clickToken(clickIds()))
         );
 
       form.addEventListener('submit', function (ev) {

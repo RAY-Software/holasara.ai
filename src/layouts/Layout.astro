@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import WhatsAppFloat from '../components/WhatsAppFloat.astro';
 import AgentToggle from '../components/AgentToggle.astro';
+import MetaAttribution from '../components/MetaAttribution.astro';
 import { GA4_ID, META_PIXEL_ID, GOOGLE_ADS_ID, saraTrack } from '../lib/tracking';
 import { SRC_TAG } from '../lib/whatsapp';
 import { defaultLocale, locales, type Locale } from '../i18n/config';
@@ -115,6 +116,12 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
         </Fragment>
       )
     }
+
+    <!-- Captura de `_fbc` / `_fbp`. Fuera del gate de PROD a propósito: solo escribe
+         cookies de primera parte (no manda nada a Meta) y así el circuito de
+         atribución se puede probar en dev igual que en producción. -->
+    <MetaAttribution />
+
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -168,7 +175,7 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
       }
     </script>
 
-    <!-- Atribución: captura de click-ids y evento Lead en clicks de WhatsApp -->
+    <!-- Atribución: captura de click-ids y evento Contact en clicks de WhatsApp -->
     <script is:inline define:vars={{ SRC_TAG }}>
       (function () {
         function setCookie(n, v) {
@@ -191,7 +198,18 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
 
         // Marcador de marca + click-ids. El de marca va SIEMPRE (identifica a holasara en
         // el backend compartido con RAY); los click-ids solo si hay. Ver lib/whatsapp.ts.
-        var tag = SRC_TAG + token;
+        //
+        // Al MENSAJE de WhatsApp van solo los click-ids de Google: el de Meta viaja como
+        // `[fbc:fb.1.<ts>.<fbclid>]` que arma <MetaAttribution />, que es el único formato
+        // que lee `extractFbc()` en el backend. El `[fbclid:<crudo>]` queda igual dentro de
+        // la cookie `sara_click`, porque de ahí lo levanta el formulario de /demo para los
+        // campos ocultos.
+        var googleToken = token.replace(/\[fbclid:[^\]]*\]/g, '');
+        var metaRefs = '';
+        try {
+          if (window.__saraMeta) metaRefs = window.__saraMeta.refs();
+        } catch (e) {}
+        var tag = SRC_TAG + googleToken + metaRefs;
 
         // Ruteo AR/MX (igual que ray-website): el link se server-renderiza a la línea MX
         // y acá lo pasamos a la AR para visitantes de Argentina (timezone o idioma).
@@ -201,7 +219,7 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
           IS_AR = /America\/Argentina/.test(_tz) || /^es-AR/i.test(navigator.language || '');
         } catch (e) {}
 
-        // 2) Ruteo AR/MX + token en el mensaje de wa.me + disparar Lead al click
+        // 2) Ruteo AR/MX + token en el mensaje de wa.me + disparar Contact al click
         function enhance() {
           document.querySelectorAll('a[href^="https://wa.me/"]').forEach(function (a) {
             if (IS_AR) a.href = a.href.replace('/' + WA_MX, '/' + WA_AR);
@@ -218,7 +236,19 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
             if (a.__saraBound) return;
             a.__saraBound = 1;
             a.addEventListener('click', function () {
-              try { if (window.fbq) fbq('track', 'Lead'); } catch (e) {}
+              // Meta: `Contact`, NO `Lead`. Un clic en WhatsApp no es un lead — es
+              // barato y lo hace cualquiera. Si compartiera nombre de evento con el
+              // envío del formulario, optimizar por `Lead` haría que el algoritmo
+              // persiga clics y el pipeline quede vacío con un CPA que parece
+              // excelente. Es la misma razón por la que en Google hay dos labels
+              // separados (ver lib/tracking.ts).
+              try {
+                if (window.fbq)
+                  fbq('track', 'Contact', {
+                    content_name: 'whatsapp-click',
+                    content_category: location.pathname,
+                  });
+              } catch (e) {}
               try {
                 if (window.gtag)
                   gtag('event', 'generate_lead', {

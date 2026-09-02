@@ -1,0 +1,98 @@
+---
+// Identificadores de atribución de Meta, del lado del cliente.
+//
+// Es la contraparte de la captura de `gclid`: Google Ads agrega `?gclid=…` y Meta
+// agrega `?fbclid=…`. Los dos tienen que sobrevivir el aterrizaje, porque la
+// conversión que de verdad importa pasa DESPUÉS y fuera del sitio — en WhatsApp,
+// hablando con Sara.
+//
+// Meta usa dos identificadores:
+//   `_fbc` — el click id, derivado del `fbclid`. Formato: `fb.1.<ts>.<fbclid>`.
+//   `_fbp` — el browser id, pseudónimo y de origen. Es la única matching key que
+//            queda para un visitante orgánico (sin click id).
+//
+// El píxel escribe las dos cookies solo, pero solo si llega a cargar. Adblockers e
+// ITP lo bloquean lo suficientemente seguido como para que un evento de la CAPI se
+// quede sin click id, así que escribimos `_fbc` nosotros al aterrizar — mismo nombre
+// y mismo scope que usa el píxel, así los dos valores nunca se contradicen.
+//
+// Circuito completo:
+//   clic en el anuncio → esta captura → cookie `_fbc`
+//     → el link de wa.me lleva `[fbc:…]` y `[fbp:…]` dentro del texto del mensaje
+//     → el webhook del backend los parsea (`extractFbc` / `extractFbp` en
+//       `scrapper/server/services/metaCapi.js`)
+//     → cuando Sara agenda, el backend sube el evento a la Conversions API.
+//
+// El FORMATO DE LOS MARCADORES NO ES LIBRE: `extractFbc` exige `[fbc:fb.…]`. Un
+// `[fbclid:<crudo>]` —que es lo que este sitio mandaba antes— no matchea con nada
+// y la conversación se sube sin click id, es decir, no se atribuye.
+---
+
+<script is:inline>
+  (function () {
+    var FBC = '_fbc',
+      FBP = '_fbp',
+      MAX_AGE = 60 * 60 * 24 * 90;
+
+    function read(name) {
+      var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    // Dominio registrable (`holasara.ai` desde `www.holasara.ai`), o '' en localhost.
+    // Hay que scopear las cookies EXACTAMENTE como las scopea el píxel: si escribimos
+    // una cookie host-only con el mismo nombre, convive con la del píxel y
+    // `document.cookie` devuelve las dos.
+    function domain() {
+      var h = location.hostname;
+      if (h.indexOf('.') === -1 || /^[\d.]+$/.test(h)) return '';
+      return h.split('.').slice(-2).join('.');
+    }
+
+    function write(name, value) {
+      var d = domain();
+      document.cookie =
+        name +
+        '=' +
+        encodeURIComponent(value) +
+        ';max-age=' +
+        MAX_AGE +
+        ';path=/;SameSite=Lax' +
+        (d ? ';domain=.' + d : '');
+    }
+
+    // `fbclid` de la URL → `_fbc` (gana el clic más reciente). No hace nada si la URL
+    // no trae click id, así que el valor guardado sobrevive la navegación interna.
+    // El subdomainIndex va fijo en 1 porque siempre scopeamos al dominio registrable,
+    // que es lo que hace el píxel.
+    var fbclid = new URLSearchParams(location.search).get('fbclid');
+    if (fbclid) write(FBC, 'fb.1.' + Date.now() + '.' + fbclid);
+
+    function fbc() {
+      return read(FBC);
+    }
+
+    // Genera el `_fbp` si falta, para que un evento server-side tenga con qué
+    // matchear aunque el píxel esté bloqueado. El píxel reusa el que encuentre en vez
+    // de pisarlo, así que navegador y servidor quedan sincronizados.
+    function fbp() {
+      var v = read(FBP);
+      if (v) return v;
+      v = 'fb.1.' + Date.now() + '.' + Math.floor(Math.random() * 1e10);
+      write(FBP, v);
+      return v;
+    }
+
+    /** Sufijo listo para concatenar al texto del mensaje de WhatsApp. */
+    function refs() {
+      var out = '';
+      var c = fbc();
+      if (c) out += '[fbc:' + c + ']';
+      var p = fbp();
+      if (p) out += '[fbp:' + p + ']';
+      return out;
+    }
+
+    window.__saraMeta = { fbc: fbc, fbp: fbp, refs: refs };
+  })();
+</script>
