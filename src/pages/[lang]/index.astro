@@ -193,6 +193,8 @@ const team = getTeam(lang);
 const byId = Object.fromEntries(team.map((m) => [m.id, m])) as Record<string, (typeof team)[number]>;
 const sara = getMember('sara', lang)!;
 const mia = getMember('mia', lang)!;
+const cal = mia.pipeline?.calendar;
+const calCells = cal ? Array.from({ length: 35 }, (_, i) => i - cal.startOffset + 1) : [];
 const daniel = getMember('daniel', lang)!;
 ---
 
@@ -487,30 +489,39 @@ const daniel = getMember('daniel', lang)!;
                 {/* 1 · Mia propone: chat corto, sin animar */}
                 <div class="relative flex flex-col gap-4">
                   <span class="inline-flex self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink">{mia.pipeline.steps[0].label}</span>
-                  <ConversationDemo lang={lang} channel="whatsapp" name={mia.name} avatar={mia.avatar} subtitle={mia.chatSubtitle} bubbles={mia.pipeline.chat} />
+                  <ConversationDemo lang={lang} channel="whatsapp" name={mia.name} avatar={mia.avatar} subtitle={mia.pipeline.chatSubtitle} bubbles={mia.pipeline.chat} />
                   <p class="text-sm text-salvia">{mia.pipeline.steps[0].body}</p>
                   <span aria-hidden="true" class="absolute -right-5 top-1 hidden h-7 w-7 place-items-center rounded-full border border-line bg-white text-pine md:grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
                 </div>
                 {/* 2 · Mia crea las piezas: post + reel listos en el panel */}
                 <div class="relative flex flex-col gap-4">
                   <span class="inline-flex self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink">{mia.pipeline.steps[1].label}</span>
-                  <div class="rounded-2xl border border-line bg-white p-3 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
+                  <div class="flex flex-col gap-3 rounded-2xl border border-line bg-white p-3 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
                     <div class="grid grid-cols-2 gap-3">
                       {
                         mia.pieces.items.filter((it) => it.shape !== 'blog').map((it) => (
-                          <div class="flex flex-col gap-2">
-                            <div class:list={['relative overflow-hidden rounded-xl bg-cream', it.shape === 'reel' ? 'aspect-[9/16]' : 'aspect-[4/5]']}>
-                              <img src={it.img} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
-                              {it.badge && <span class="absolute left-2 top-2 rounded-full bg-cream/95 px-2 py-0.5 text-[10px] font-semibold text-ink">{it.shape === 'reel' ? it.badge : it.kind}</span>}
-                              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-2.5 pt-8 text-cream">
-                                <p class="font-serif text-[13px] font-black leading-tight">{it.title}</p>
-                              </div>
-                            </div>
+                          <div class:list={['relative overflow-hidden rounded-xl bg-cream', it.shape === 'reel' ? 'aspect-[9/16]' : 'aspect-[4/5]']}>
+                            <img src={it.img} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+                            <span class="absolute left-2 top-2 rounded-full bg-cream/95 px-2 py-0.5 text-[10px] font-semibold text-ink">{it.shape === 'reel' ? it.badge : it.kind}</span>
+                            {it.shape === 'reel' && (
+                              <span class="absolute inset-0 grid place-items-center"><span class="grid h-9 w-9 place-items-center rounded-full bg-white/85 text-ink"><svg viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 h-4 w-4"><path d="M8 5v14l11-7z" /></svg></span></span>
+                            )}
                           </div>
                         ))
                       }
                     </div>
-                    <span class="mt-3 inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark"><span class="dot h-2 w-2"></span>{mia.pieces.items[0].badge}</span>
+                    {
+                      mia.pieces.items.filter((it) => it.shape === 'blog').map((it) => (
+                        <div class="flex items-center gap-3 rounded-xl border border-line bg-paper p-2">
+                          <img src={it.img} alt="" loading="lazy" decoding="async" class="h-12 w-16 shrink-0 rounded-lg object-cover" />
+                          <div class="min-w-0">
+                            <p class="text-[10px] font-semibold uppercase tracking-[0.08em] text-salvia">{it.kind}</p>
+                            <p class="truncate text-xs font-semibold text-ink">{it.title}</p>
+                          </div>
+                        </div>
+                      ))
+                    }
+                    <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark"><span class="dot h-2 w-2"></span>{mia.pieces.items[0].badge}</span>
                   </div>
                   <p class="text-sm text-salvia">{mia.pipeline.steps[1].body}</p>
                   <span aria-hidden="true" class="absolute -right-5 top-1 hidden h-7 w-7 place-items-center rounded-full border border-line bg-white text-pine md:grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
@@ -519,25 +530,28 @@ const daniel = getMember('daniel', lang)!;
                 <div class="relative flex flex-col gap-4">
                   <span class="inline-flex self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink">{mia.pipeline.steps[2].label}</span>
                   <div class="rounded-2xl border border-line bg-white p-4 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
-                    <p class="text-xs font-semibold uppercase tracking-[0.1em] text-salvia">{mia.pipeline.calendar.month}</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.1em] text-salvia">{cal!.month}</p>
                     <div class="mt-3 grid grid-cols-7 gap-1 text-center text-[11px] text-salvia">
-                      {mia.pipeline.calendar.days.map((d) => <span>{d}</span>)}
+                      {cal!.days.map((d) => <span>{d}</span>)}
                     </div>
                     <div class="mt-1 grid grid-cols-7 gap-1">
                       {
-                        mia.pipeline.calendar.days.map((_, i) => (
-                          <div class:list={['flex aspect-square items-center justify-center rounded-lg text-sm tabular-nums', i === mia.pipeline!.calendar.dayIndex ? 'bg-pine font-bold text-cream' : 'bg-paper text-ink']}>{i + 1}</div>
+                        calCells.map((d) => (
+                          d < 1 || d > cal!.daysInMonth ? (
+                            <span />
+                          ) : (
+                            <div class:list={['flex aspect-square items-center justify-center rounded-lg text-[13px] tabular-nums', d === cal!.day ? 'bg-pine font-bold text-cream' : 'bg-paper text-ink']}>{d}</div>
+                          )
                         ))
                       }
                     </div>
                     <div class="mt-3 flex items-center gap-2.5 rounded-xl border border-pine/30 bg-mint/10 p-2">
                       <img src={mia.pieces.items[0].img} alt="" loading="lazy" decoding="async" class="h-10 w-8 rounded-md object-cover" />
                       <div class="min-w-0">
-                        <p class="truncate text-xs font-semibold text-ink">{mia.pipeline.calendar.label}</p>
-                        <p class="text-[11px] text-salvia">{mia.pipeline.calendar.days[mia.pipeline.calendar.dayIndex]} {mia.pipeline.calendar.dayIndex + 1} · {mia.pipeline.calendar.time}</p>
+                        <p class="truncate text-xs font-semibold text-ink">{cal!.label}</p>
+                        <p class="text-[11px] text-salvia">{cal!.days[(cal!.day - 1 + cal!.startOffset) % 7]} {cal!.day} · {cal!.time}</p>
                       </div>
                     </div>
-                    <p class="mt-3 text-[11px] text-salvia">{mia.pipeline.calendar.note}</p>
                   </div>
                   <p class="text-sm text-salvia">{mia.pipeline.steps[2].body}</p>
                   <span aria-hidden="true" class="absolute -right-5 top-1 hidden h-7 w-7 place-items-center rounded-full border border-line bg-white text-pine md:grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
@@ -546,8 +560,23 @@ const daniel = getMember('daniel', lang)!;
                 <div class="flex flex-col gap-4">
                   <span class="inline-flex items-center gap-2 self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink"><img src="/img/logos/instagram.svg" alt="" class="h-4 w-4" />{mia.pipeline.steps[3].label}</span>
                   <div class="flex flex-col gap-2">
-                    <IgPost lang={lang} img={mia.pieces.items[0].img} caption={mia.pipeline.ig.caption} likes={mia.pipeline.ig.likes} comment={mia.pipeline.ig.comment} />
+                    <IgPost lang={lang} img={mia.pieces.items[0].img} caption={mia.pipeline.ig.caption} likes={mia.pipeline.ig.likes} comment={mia.pipeline.ig.comment} reply={mia.pipeline.ig.reply} />
                     <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark"><span class="dot h-2 w-2"></span>{mia.pipeline.ig.published}</span>
+                    {
+                      mia.pieces.items.filter((it) => it.shape === 'reel').map((it) => (
+                        <div class="mt-2 flex items-center gap-3 rounded-xl border border-line bg-white p-2 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
+                          <div class="relative h-16 w-10 shrink-0 overflow-hidden rounded-lg bg-cream">
+                            <img src={it.img} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+                            <span class="absolute inset-0 grid place-items-center text-white"><svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 drop-shadow"><path d="M8 5v14l11-7z" /></svg></span>
+                          </div>
+                          <div class="min-w-0">
+                            <p class="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-salvia"><img src="/img/logos/instagram.svg" alt="" class="h-3 w-3" />{mia.pipeline.ig.reelLabel} · clinicaaurora</p>
+                            <p class="truncate text-xs font-semibold text-ink">{it.title}</p>
+                            <p class="text-[11px] text-pine-dark">{mia.pipeline.ig.reelPublished}</p>
+                          </div>
+                        </div>
+                      ))
+                    }
                   </div>
                   <p class="text-sm text-salvia">{mia.pipeline.steps[3].body}</p>
                 </div>

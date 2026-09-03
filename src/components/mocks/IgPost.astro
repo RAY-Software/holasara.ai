@@ -9,9 +9,10 @@ interface Props {
   caption: string; // permite <b> para el handle en negrita
   likes: string;
   comment?: string; // opcional: un comentario destacado (con <b>handle</b>)
+  reply?: string; // opcional: respuesta de la cuenta al comentario (con <b>handle</b>)
   class?: string;
 }
-const { lang = defaultLocale, img, caption, likes, comment, class: cls = '' } = Astro.props;
+const { lang = defaultLocale, img, caption, likes, comment, reply, class: cls = '' } = Astro.props;
 const en = lang === 'en';
 const t = {
   likes: en ? 'likes' : 'Me gusta',
@@ -42,6 +43,7 @@ const t = {
     <p class="font-semibold">{likes} {t.likes}</p>
     <p class="mt-1" set:html={caption} />
     {comment && <p class="mt-1 text-salvia" set:html={comment} />}
+    {reply && <p class="mt-1 pl-4 text-salvia" set:html={reply} />}
   </div>
   <div class="border-t border-line px-3 py-2 text-xs text-salvia">{t.add}</div>
 </figure>

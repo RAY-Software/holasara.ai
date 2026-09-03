@@ -37,8 +37,9 @@ interface Pipeline {
   intro: string;
   steps: { label: string; body: string }[];
   chat: Bubble[];
-  calendar: { month: string; days: string[]; dayIndex: number; time: string; label: string; note: string };
-  ig: { caption: string; likes: string; comment: string; published: string };
+  calendar: { month: string; days: string[]; startOffset: number; daysInMonth: number; day: number; time: string; label: string };
+  ig: { caption: string; likes: string; comment: string; reply: string; published: string; reelLabel: string; reelPublished: string };
+  chatSubtitle: string;
 }
 
 interface RawMember {
@@ -418,8 +419,9 @@ const RAW: RawMember[] = [
           { who: 'in', text: 'La primera y el reel', t: '09:20' },
           { who: 'out', text: 'Perfecto. En una hora las tienes listas en el panel para aprobar.', t: '09:20' },
         ],
-        calendar: { month: 'Septiembre', days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], dayIndex: 3, time: '18:00', label: 'Post · primera sesión', note: 'Programado: se publica solo al llegar la fecha.' },
-        ig: { caption: '<b>clinicaaurora</b> Depilación láser: qué esperar en la primera sesión. Te contamos paso a paso.', likes: '312', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', published: 'Publicado · jueves 18:00' },
+        calendar: { month: 'Septiembre', days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], startOffset: 1, daysInMonth: 30, day: 3, time: '18:00', label: 'Post · primera sesión' },
+        ig: { caption: '<b>clinicaaurora</b> Depilación láser: qué esperar en la primera sesión. Te contamos paso a paso.', likes: '312', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', reply: '<b>clinicaaurora</b> Te escribimos por mensaje directo', published: 'Publicado · jueves 18:00', reelLabel: 'Reel', reelPublished: 'Publicado · viernes 12:00' },
+        chatSubtitle: 'Marketing',
       },
       en: {
         title: 'It starts in a chat with Mia. <em class="text-pine-dark">It ends on your&nbsp;Instagram.</em>',
@@ -435,8 +437,9 @@ const RAW: RawMember[] = [
           { who: 'in', text: 'The first one and the reel', t: '09:20' },
           { who: 'out', text: 'Perfect. They will be ready to approve in your dashboard within the hour.', t: '09:20' },
         ],
-        calendar: { month: 'September', days: ['M', 'T', 'W', 'T', 'F', 'S', 'S'], dayIndex: 3, time: '6:00pm', label: 'Post · first session', note: 'Scheduled: publishes itself when the date arrives.' },
-        ig: { caption: '<b>clinicaaurora</b> Laser hair removal: what to expect at your first session. Step by step.', likes: '312', comment: '<b>camifer_</b> How much is the assessment?', published: 'Published · Thursday 6:00pm' },
+        calendar: { month: 'September', days: ['M', 'T', 'W', 'T', 'F', 'S', 'S'], startOffset: 1, daysInMonth: 30, day: 3, time: '6:00pm', label: 'Post · first session' },
+        ig: { caption: '<b>clinicaaurora</b> Laser hair removal: what to expect at your first session. Step by step.', likes: '312', comment: '<b>camifer_</b> How much is the assessment?', reply: '<b>clinicaaurora</b> Messaging you directly', published: 'Published · Thursday 6:00pm', reelLabel: 'Reel', reelPublished: 'Published · Friday 12:00pm' },
+        chatSubtitle: 'Marketing',
       },
     },
     scenesTitle: {
