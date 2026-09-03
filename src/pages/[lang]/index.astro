@@ -500,12 +500,12 @@ const loop = [
               >
                 <img
                   src={m.poster}
-                  width="640"
-                  height="800"
+                  width="464"
+                  height="688"
                   alt=""
                   loading="lazy"
                   decoding="async"
-                  class="aspect-[4/5] w-full bg-cream object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                  class="h-auto w-full bg-cream transition-transform duration-500 group-hover:scale-[1.03]"
                 />
                 <div class="flex flex-1 flex-col p-6">
                   <div class="flex items-baseline gap-2">
@@ -618,7 +618,7 @@ const loop = [
         </div>
         <p class="mx-auto mt-10 max-w-xl text-center text-salvia">
           {dict.cobrosDaniel}
-          <a href={L('/equipo/daniel?ref=home')} class="font-semibold text-pine-dark transition-colors hover:text-ink">
+          <a href={L('/equipo/daniel?ref=home')} class="inline-flex items-center gap-1.5 whitespace-nowrap font-semibold text-pine-dark transition-colors hover:text-ink">
             {dict.cobrosDanielLink} <span aria-hidden="true">→</span>
           </a>
         </p>

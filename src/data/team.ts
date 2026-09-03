@@ -268,12 +268,12 @@ const RAW: RawMember[] = [
     },
     points: {
       es: [
-        'Lleva tu Instagram: contenido, publicación y campañas',
+        'Lleva tu Instagram: contenido, publicación y medición',
         'Corre tus campañas de Google Ads y optimiza tu ficha de Google',
         'Te escribe la propuesta y la ejecuta cuando la apruebas',
       ],
       en: [
-        'Runs your Instagram: content, publishing and campaigns',
+        'Runs your Instagram: content, publishing and measurement',
         'Runs your Google Ads campaigns and optimizes your Google profile',
         'Sends you the proposal and runs it once you approve',
       ],
@@ -434,7 +434,7 @@ const RAW: RawMember[] = [
     },
     useCases: {
       es: [
-        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Crea y publica las publicaciones con tu marca y mide cuál trajo consultas.' },
+        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Crea y publica los posts con tu marca y mide cuál trajo consultas.' },
         { title: 'Google Ads', logo: '/img/logos/google-ads.svg', desc: 'Arma y maneja tus campañas en Google para que te encuentren justo cuando buscan tu tratamiento.' },
         { title: 'Google Business', logo: '/img/logos/google-business.svg', desc: 'Optimiza tu ficha: fotos, reseñas y datos, para que aparezcas primero en el mapa.' },
         { title: 'Tu web y tus números', desc: 'Mira las métricas de tu sitio y te dice qué está trayendo pacientes y qué no.' },

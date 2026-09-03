@@ -1,6 +1,6 @@
 # Sara, la secretaria con IA para clínicas, y su equipo (holasara.ai)
 
-> Sara atiende WhatsApp e Instagram las 24 horas, informa tratamientos y precios,
+> Sara atiende WhatsApp, Instagram y teléfono las 24 horas, informa tratamientos y precios,
 > agenda la cita, cobra el anticipo y baja las ausencias. Sin cambiar la agenda de
 > la clínica ni tocar la historia clínica. Trabaja con Mia (marketing) y Daniel (finanzas).
 
@@ -36,7 +36,7 @@ El decisor típico es el dueño/a, el director/a médico o la gerencia de la cl�
 ## El equipo
 
 Sara no trabaja sola. Son tres agentes con IA, cada uno con su rol; trabajan solos y le
-escriben al dueño cuando hay algo que decidir. Se contratan sobre la misma cuenta.
+escriben al dueño cuando hay algo que decidir. Se suman sobre la misma cuenta de la clínica; qué incluye cada plan se define en la demo.
 
 - **Sara (recepción y secretaria):** atiende WhatsApp, Instagram y teléfono, informa,
   agenda, cobra el anticipo y ejecuta órdenes del equipo por WhatsApp.
@@ -79,33 +79,34 @@ No inventar otros clientes ni testimonios.
 
 ## Páginas del sitio
 
-- https://holasara.ai/: Home. Sara y su equipo: qué hace Sara, el equipo, Instagram (Mia), cobros, caso ViaLaser.
-- https://holasara.ai/sara: Atiende, agenda y cobra sin sumar a nadie a recepción.
-- https://holasara.ai/equipo: El equipo con IA: Sara, Mia y Daniel, cómo trabajan y se reparten el trabajo.
-- https://holasara.ai/equipo/sara: Ficha de Sara, recepción y secretaria.
-- https://holasara.ai/equipo/mia: Ficha de Mia, marketing: Instagram, Google Ads, Google Business, métricas.
-- https://holasara.ai/equipo/daniel: Ficha de Daniel, finanzas de la clínica.
-- https://holasara.ai/canales: WhatsApp e Instagram 24/7. Del mensaje a la cita sin recepción.
-- https://holasara.ai/agenda: La agenda que se llena sola: anticipo, recordatorios, lista de espera, reactivación.
-- https://holasara.ai/cobros: Cobra antes de atender: anticipo al reservar, consulta por adelantado, gift cards.
-- https://holasara.ai/recordatorios: Recordatorios y confirmación automáticos, sin levantar el teléfono.
-- https://holasara.ai/reactivacion: Lista de espera y reactivación de pacientes inactivos.
-- https://holasara.ai/gift-cards: Vende tratamientos por adelantado desde la web de la clínica.
-- https://holasara.ai/resenas: Pide la reseña de Google en el momento justo.
-- https://holasara.ai/instagram: Mia crea las publicaciones y Sara lleva del post a la cita.
-- https://holasara.ai/operador: Modo operador: el equipo le pide cosas a Sara por WhatsApp.
-- https://holasara.ai/implementacion: Conecta el Google Calendar y ya está funcionando.
-- https://holasara.ai/caso: Caso de éxito ViaLaser.
-- https://holasara.ai/mejores-asistentes-ia-clinicas: Comparativa honesta 2026: Sara vs Soyla (Doctocliq), Kura, Cloudia, AgendaPro y Zenvia, con la tabla de qué hace cada uno y cuándo conviene elegir a otro.
-- https://holasara.ai/sara-vs-cloudia: Sara AI vs Cloudia, cara a cara.
-- https://holasara.ai/sara-vs-doctocliq: Sara AI vs Soyla (Doctocliq), cara a cara.
-- https://holasara.ai/sara-vs-kura: Sara AI vs Kura, cara a cara.
-- https://holasara.ai/sara-vs-agendapro: Sara AI vs AgendaPro, cara a cara.
-- https://holasara.ai/sara-vs-glossgenius: Sara AI vs GlossGenius (Reception), cara a cara: WhatsApp/Instagram vs recepcionista por voz, LATAM vs EE.UU.
-- https://holasara.ai/mexico: Sara AI en México: tuteo local y foco en clínicas mexicanas.
-- https://holasara.ai/colombia: Sara AI en Colombia: confirmación de citas y menos ausencias.
-- https://holasara.ai/uruguay: Sara AI en Uruguay: ya funciona en ViaLaser, atiende con voseo.
-- https://holasara.ai/demo: Pedir una demo con la clínica del interesado.
+- https://holasara.ai/ | Home. Sara y su equipo: qué hace Sara, el equipo, Instagram (Mia), cobros, caso ViaLaser.
+- https://holasara.ai/sara | Atiende, agenda y cobra sin sumar a nadie a recepción.
+- https://holasara.ai/equipo | El equipo con IA: Sara, Mia y Daniel, cómo trabajan y se reparten el trabajo.
+- https://holasara.ai/equipo/sara | Ficha de Sara, recepción y secretaria.
+- https://holasara.ai/equipo/mia | Ficha de Mia, marketing: Instagram, Google Ads, Google Business, métricas.
+- https://holasara.ai/equipo/daniel | Ficha de Daniel, finanzas de la clínica.
+- https://holasara.ai/canales | WhatsApp e Instagram 24/7. Del mensaje a la cita sin recepción.
+- https://holasara.ai/llamadas | Sara también atiende el teléfono: misma agenda, mismo historial.
+- https://holasara.ai/agenda | La agenda que se llena sola: anticipo, recordatorios, lista de espera, reactivación.
+- https://holasara.ai/cobros | Cobra antes de atender: anticipo al reservar, consulta por adelantado, gift cards.
+- https://holasara.ai/recordatorios | Recordatorios y confirmación automáticos, sin levantar el teléfono.
+- https://holasara.ai/reactivacion | Lista de espera y reactivación de pacientes inactivos.
+- https://holasara.ai/gift-cards | Vende tratamientos por adelantado desde la web de la clínica.
+- https://holasara.ai/resenas | Pide la reseña de Google en el momento justo.
+- https://holasara.ai/instagram | Mia crea las publicaciones y Sara lleva del post a la cita.
+- https://holasara.ai/operador | Modo operador: el equipo le pide cosas a Sara por WhatsApp.
+- https://holasara.ai/implementacion | Conecta el Google Calendar y ya está funcionando.
+- https://holasara.ai/caso | Caso de éxito ViaLaser.
+- https://holasara.ai/mejores-asistentes-ia-clinicas | Comparativa honesta 2026: Sara vs Soyla (Doctocliq), Kura, Cloudia, AgendaPro y Zenvia, con la tabla de qué hace cada uno y cuándo conviene elegir a otro.
+- https://holasara.ai/sara-vs-cloudia | Sara AI vs Cloudia, cara a cara.
+- https://holasara.ai/sara-vs-doctocliq | Sara AI vs Soyla (Doctocliq), cara a cara.
+- https://holasara.ai/sara-vs-kura | Sara AI vs Kura, cara a cara.
+- https://holasara.ai/sara-vs-agendapro | Sara AI vs AgendaPro, cara a cara.
+- https://holasara.ai/sara-vs-glossgenius | Sara AI vs GlossGenius (Reception), cara a cara: WhatsApp/Instagram vs recepcionista por voz, LATAM vs EE.UU.
+- https://holasara.ai/mexico | Sara AI en México: tuteo local y foco en clínicas mexicanas.
+- https://holasara.ai/colombia | Sara AI en Colombia: confirmación de citas y menos ausencias.
+- https://holasara.ai/uruguay | Sara AI en Uruguay: ya funciona en ViaLaser, atiende con voseo.
+- https://holasara.ai/demo | Pedir una demo con la clínica del interesado.
 
 ## Preguntas frecuentes
 
