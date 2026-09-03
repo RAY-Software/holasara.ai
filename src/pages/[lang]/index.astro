@@ -7,11 +7,7 @@ const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import InstagramShowcase from '../../components/mocks/InstagramShowcase.astro';
-import SaraChatShowcase from '../../components/mocks/SaraChatShowcase.astro';
-import OperatorPanel from '../../components/mocks/OperatorPanel.astro';
-import PaymentsPanel from '../../components/mocks/PaymentsPanel.astro';
 import ResultsChart from '../../components/mocks/ResultsChart.astro';
-import IgPost from '../../components/mocks/IgPost.astro';
 import MockFrame from '../../components/MockFrame.astro';
 import Footer from '../../components/Footer.astro';
 import CtaBand from '../../components/CtaBand.astro';
@@ -23,6 +19,7 @@ import { SHOW_GRADER_CTA } from '../../lib/flags';
 import { getTeam, getMember } from '../../data/team';
 import AgentKicker from '../../components/AgentKicker.astro';
 import ConversationDemo from '../../components/ConversationDemo.astro';
+import SceneStoryboard from '../../components/SceneStoryboard.astro';
 
 // ── Copy por idioma. EN es traducción, no calco. ──
 const dict = {
@@ -57,11 +54,6 @@ const dict = {
       { title: 'El post termina en una cita', body: 'Quien comenta o escribe por una publicación, Sara lo atiende y lo agenda. Sin que el interés se enfríe.' },
       { title: 'Sabes qué funcionó', body: 'Cada mes, en español claro: qué publicación trajo más consultas y cuánto facturaste. Sin planillas.' },
     ],
-    posts: [
-      { img: '/img/tenants/faceup.jpg', likes: '312', caption: '<b>clinicaaurora</b> Ácido hialurónico en labios: qué esperar la primera semana ✨', step: '1 · Mia publica', body: 'Una publicación de tu clínica sale en Instagram.' },
-      { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Desliza para ver el paso a paso 👉', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
-      { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> Te escribimos por mensaje ahora mismo 💬', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
-    ],
     spotlightQuotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'],
     heroKicker: 'La recepcionista con IA para clínicas, médicos y wellness',
     heroH1: ['Más pacientes.', 'Más facturación.', 'Todo automático,', 'las 24 horas.'],
@@ -82,7 +74,7 @@ const dict = {
     saraSub: 'Trabaja de noche, los fines de semana y en los picos. Sin sumar una persona más a recepción.',
     saraMore: 'Conoce más sobre Sara',
     saraImgAlt: 'Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo.',
-    mktH2: 'Mia lleva<br />tu marketing.',
+    mktH2: 'Mia lleva tu&nbsp;marketing.',
     mktSub: 'Crea y publica los posts de tu clínica, corre tus campañas de Google y cuida tu ficha de Google Business. A quien responde, lo atiende Sara hasta&nbsp;agendar.',
     mktMore: 'Ver cómo Mia lleva tu Instagram',
     mktImgAlt: 'Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir.',
@@ -97,8 +89,6 @@ const dict = {
     danielH3: 'Daniel te escribe con los números.',
     danielPoints: ['Cuánto facturaste y cuánto te quedó', 'Qué anticipos faltan cobrar', 'Qué tratamiento deja más margen'],
     danielMore: 'Conoce a Daniel',
-    postsKicker: 'Del post a la cita, paso a paso',
-    postsClose: 'Instagram, el chat y el cobro, en un mismo lugar. Nadie más cierra ese&nbsp;círculo.',
     spotH2: 'Y le pides cosas<br /><em class="text-pine-dark">por WhatsApp.</em>',
     spotMore: 'Ver el modo operador',
     spotBody: 'Gestiona la agenda entera y notifica a cada paciente. Las 24 horas.',
@@ -149,11 +139,6 @@ const dict = {
       { title: 'The post ends in an appointment', body: 'Whoever comments or messages a post, Sara answers and books them. Before the interest cools.' },
       { title: 'You know what worked', body: 'Every month, in plain English: which post brought the most enquiries and how much you billed. No spreadsheets.' },
     ],
-    posts: [
-      { img: '/img/tenants/faceup.jpg', likes: '312', caption: '<b>clinicaaurora</b> Lip hyaluronic acid: what to expect in week one ✨', step: '1 · Mia posts', body: 'A post from your clinic goes live on Instagram.' },
-      { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Swipe to see the step by step 👉', comment: '<b>camifer_</b> How much is the assessment?', step: '2 · Someone replies', body: 'They comment or message, and Sara answers instantly.' },
-      { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> We’re messaging you right now 💬', step: '3 · They book and pay', body: 'She books the appointment and takes the deposit. Confirmed.' },
-    ],
     spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
     heroKicker: 'AI receptionist for clinics, doctors & wellness',
     heroH1: ['More patients.', 'More revenue.', 'All automatic,', 'around the clock.'],
@@ -174,7 +159,7 @@ const dict = {
     saraSub: 'She works nights, weekends and peak hours. Without adding one more person to the front desk.',
     saraMore: 'Learn more about Sara',
     saraImgAlt: 'WhatsApp conversation: a patient enquires in the middle of the night and Sara replies, books and collects the deposit.',
-    mktH2: 'Mia runs<br />your marketing.',
+    mktH2: 'Mia runs your&nbsp;marketing.',
     mktSub: 'She creates and posts your clinic’s content, runs your Google campaigns and looks after your Google Business profile. Whoever replies, Sara takes it from there to a&nbsp;booking.',
     mktMore: 'See how Mia runs your Instagram',
     mktImgAlt: 'A clinic’s AI-generated Instagram feed: on-brand posts, ready to publish.',
@@ -189,8 +174,6 @@ const dict = {
     danielH3: 'Daniel messages you with the numbers.',
     danielPoints: ['What you billed and what you kept', 'Which deposits are still owed', 'Which treatment leaves the most margin'],
     danielMore: 'Meet Daniel',
-    postsKicker: 'From post to appointment, step by step',
-    postsClose: 'Instagram, the chat and the payment, all in one place. No one else closes that&nbsp;loop.',
     spotH2: 'And you ask her<br /><em class="text-pine-dark">for things on WhatsApp.</em>',
     spotMore: 'See operator mode',
     spotBody: 'She manages the entire calendar and notifies every patient. Around the clock.',
@@ -212,12 +195,13 @@ const dict = {
   },
 }[lang];
 
-const { faqs, saraDoes, context, payments, marketing, posts } = dict;
+const { faqs, saraDoes, context, payments, marketing } = dict;
 
 // El equipo (Sara, Mia, Daniel): caras y roles para el hero, la intro y los kickers de
 // cada acto. Fuente única: team.ts. Daniel además presta su chat al Acto 3.
 const team = getTeam(lang);
 const byId = Object.fromEntries(team.map((m) => [m.id, m])) as Record<string, (typeof team)[number]>;
+const sara = getMember('sara', lang)!;
 const daniel = getMember('daniel', lang)!;
 ---
 
@@ -439,32 +423,37 @@ const daniel = getMember('daniel', lang)!;
         </div>
 
         <div class="flex min-w-0 justify-center md:justify-end">
-          <MockFrame>
-            <SaraChatShowcase lang={lang} class="w-full max-w-sm" />
-          </MockFrame>
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name={sara.name}
+            avatar={sara.avatar}
+            subtitle={sara.chatSubtitle}
+            bubbles={sara.bubbles}
+            animate
+          />
         </div>
       </div>
 
-      <!-- Segunda prueba de Sara: el modo operador (antes era el Spotlight "secretaria"). -->
-      <div class="reveal mx-auto grid min-w-0 max-w-6xl gap-14 px-5 pb-24 md:grid-cols-[1.15fr_0.85fr] md:items-center">
-        <div class="order-2 flex min-w-0 justify-center md:order-1 md:justify-start">
-          <MockFrame>
-            <OperatorPanel lang={lang} class="w-full" />
-          </MockFrame>
-        </div>
-        <div class="order-1 md:order-2">
+      <!-- Segunda prueba de Sara: le pides algo por WhatsApp y ella sale a resolverlo.
+           Mismo storyboard de escenas que su ficha (/equipo/sara), datos en team.ts. -->
+      <div class="reveal mx-auto max-w-6xl px-5 pb-24">
+        <div class="mx-auto mb-12 max-w-2xl text-center">
           <h2 class="font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.spotH2} />
-          <p class="mt-5 text-lg text-salvia">{dict.spotBody}</p>
-          <div class="mt-6 flex flex-col gap-2.5">
-            {
-              dict.spotlightQuotes.map((q) => (
-                <div class="rounded-xl border border-line bg-white px-4 py-2.5 font-accent text-base italic text-pine-dark">{q}</div>
-              ))
-            }
-          </div>
+          <p class="mt-5 text-lg text-salvia">{sara.scenesIntro}</p>
+        </div>
+        <SceneStoryboard
+          lang={lang}
+          name={sara.name}
+          avatar={sara.avatar}
+          scenes={sara.scenes ?? []}
+          handoff={sara.scenesHandoff}
+          tone="light"
+        />
+        <div class="mt-12 text-center">
           <a
             href={L('/operador')}
-            class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+            class="inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
           >
             {dict.spotMore} <span aria-hidden="true">→</span>
           </a>
@@ -511,21 +500,6 @@ const daniel = getMember('daniel', lang)!;
           </div>
         </div>
 
-        <div class="mt-14">
-          <p class="text-sm font-semibold uppercase tracking-wide text-pine-dark">{dict.postsKicker}</p>
-          <div class="mt-6 grid gap-6 sm:grid-cols-3">
-            {
-              posts.map((p) => (
-                <div>
-                  <IgPost lang={lang} img={p.img} caption={p.caption} likes={p.likes} comment={p.comment} />
-                  <p class="mt-3 font-serif text-lg font-bold">{p.step}</p>
-                  <p class="text-salvia">{p.body}</p>
-                </div>
-              ))
-            }
-          </div>
-          <p class="mt-8 text-lg text-salvia" set:html={dict.postsClose} />
-        </div>
       </div>
     </section>
 
@@ -538,26 +512,10 @@ const daniel = getMember('daniel', lang)!;
         <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
           <AgentKicker avatar={byId.daniel.avatar} name={byId.daniel.name} role={dict.danielRole} class="mb-3" />
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
-          <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.cobrosSub}</p>
-        </div>
-        <div class="mt-12 flex min-w-0 justify-center">
-          <MockFrame>
-            <PaymentsPanel lang={lang} class="w-full" />
-          </MockFrame>
-        </div>
-        <div class="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-3">
-          {
-            payments.map((p, i) => (
-              <div>
-                <span class="font-accent text-xl italic text-pine-dark">{`0${i + 1}`}</span>
-                <h3 class="mt-1 text-lg font-semibold">{p.title}</h3>
-                <p class="mt-1 text-salvia">{p.body}</p>
-              </div>
-            ))
-          }
+          <p class="mx-auto mt-5 max-w-xl text-lg text-salvia" set:html={dict.cobrosSub} />
         </div>
         <!-- Daniel te escribe: su chat real (team.ts), la misma prueba que en su ficha. -->
-        <div class="mx-auto mt-20 grid min-w-0 max-w-6xl gap-14 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+        <div class="mx-auto mt-14 grid min-w-0 max-w-6xl gap-14 md:grid-cols-[0.85fr_1.15fr] md:items-center">
           <div>
             <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.danielH3}</h3>
             <ul class="mt-6 flex flex-col gap-3">
@@ -588,6 +546,32 @@ const daniel = getMember('daniel', lang)!;
               animate
             />
           </div>
+        </div>
+        <!-- El equipo trabajando junto: Daniel detecta, tú apruebas, Sara cobra. Mismo storyboard que su ficha. -->
+        <div class="mx-auto mt-24 max-w-6xl">
+          <div class="mx-auto mb-12 max-w-2xl text-center">
+            <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={daniel.scenesTitle} />
+            <p class="mt-4 text-lg text-salvia">{daniel.scenesIntro}</p>
+          </div>
+          <SceneStoryboard
+            lang={lang}
+            name={daniel.name}
+            avatar={daniel.avatar}
+            scenes={daniel.scenes ?? []}
+            handoff={daniel.scenesHandoff}
+            tone="light"
+          />
+        </div>
+        <div class="mx-auto mt-24 grid max-w-4xl gap-6 sm:grid-cols-3">
+          {
+            payments.map((p, i) => (
+              <div>
+                <span class="font-accent text-xl italic text-pine-dark">{`0${i + 1}`}</span>
+                <h3 class="mt-1 text-lg font-semibold">{p.title}</h3>
+                <p class="mt-1 text-salvia">{p.body}</p>
+              </div>
+            ))
+          }
         </div>
         <div class="mt-12 text-center">
           <a

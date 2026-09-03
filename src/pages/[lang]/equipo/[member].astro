@@ -5,6 +5,7 @@ import Layout from '../../../layouts/Layout.astro';
 import Header from '../../../components/Header.astro';
 import Footer from '../../../components/Footer.astro';
 import ConversationDemo from '../../../components/ConversationDemo.astro';
+import SceneStoryboard from '../../../components/SceneStoryboard.astro';
 import IgPost from '../../../components/mocks/IgPost.astro';
 import ClientsStrip from '../../../components/ClientsStrip.astro';
 import CtaBand from '../../../components/CtaBand.astro';
@@ -180,7 +181,7 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
       )
     }
 
-    <!-- ══════════ ESCENAS · storyboard de chats encadenados ══════════ -->
+    <!-- ══════════ ESCENAS · storyboard de chats encadenados (componente compartido con la home) ══════════ -->
     {
       member.scenes && member.scenes.length > 0 && (
         <section class="border-b border-line bg-ink text-cream">
@@ -192,46 +193,14 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
               />
               {member.scenesIntro && <p class="mt-4 text-lg text-cream/70">{member.scenesIntro}</p>}
             </div>
-
-            <div data-chat-sequence class="relative mx-auto grid max-w-4xl gap-12 md:grid-cols-2 md:gap-16">
-              <span
-                aria-hidden="true"
-                class="absolute left-1/2 top-1/2 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-cream/20 bg-ink text-mint md:grid"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </span>
-              {member.scenes.map((s, i) => (
-                <>
-                  {i > 0 && member.scenesHandoff && (
-                    <div class="-my-4 flex flex-col items-center gap-1.5 text-center text-sm text-cream/60 md:hidden" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 text-mint">
-                        <path d="M12 5v14M6 13l6 6 6-6" />
-                      </svg>
-                      <span>{member.scenesHandoff}</span>
-                    </div>
-                  )}
-                <div data-scene-col class="scene-col flex flex-col items-center gap-5">
-                  {/* Pill: quién habla con quién (fuerte) · qué pasa (tenue). Sin wrap. */}
-                  <span class="inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border border-cream/25 px-4 py-1.5 text-sm text-cream/85">
-                    <span class="font-semibold text-cream">{s.who}</span>
-                    <span class="text-cream/40">·</span>
-                    <span class="text-cream/70">{s.label}</span>
-                  </span>
-                  <ConversationDemo
-                    lang={lang}
-                    channel="whatsapp"
-                    name={s.name ?? member.name}
-                    avatar={s.avatar ?? member.avatar}
-                    subtitle={s.subtitle}
-                    bubbles={s.bubbles}
-                    animate
-                  />
-                </div>
-                </>
-              ))}
-            </div>
+            <SceneStoryboard
+              lang={lang}
+              name={member.name}
+              avatar={member.avatar}
+              scenes={member.scenes}
+              handoff={member.scenesHandoff}
+              tone="dark"
+            />
           </div>
         </section>
       )
@@ -318,73 +287,3 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
   </main>
   <Footer lang={lang} />
 </Layout>
-
-<style>
-  /* Spotlight secuencial del storyboard: la escena activa a pleno, el resto
-     atenuado. Guía el ojo del paso 1 al 2 mientras corre la animación. */
-  .scene-col {
-    transition:
-      opacity 0.5s ease,
-      filter 0.5s ease;
-  }
-  .scene-col.is-dim {
-    opacity: 0.35;
-    filter: grayscale(0.55) saturate(0.6);
-  }
-  /* Alturas iguales: el grid estira las columnas y la tarjeta absorbe el resto. */
-  .scene-col :global(figure.chat) {
-    flex: 1;
-  }
-</style>
-
-<script>
-  // Orquesta el storyboard de escenas: los chats están lado a lado y se animan
-  // encadenados con spotlight. El primero arranca al entrar en viewport (el
-  // resto se atenúa); al terminar (chat:done) el foco pasa a la siguiente
-  // escena, y al final todas quedan a pleno para leerse. Los chats de adentro
-  // no se auto-disparan (ConversationDemo los deja esperando `chat:play`).
-  (() => {
-    document.querySelectorAll('[data-chat-sequence]').forEach((root) => {
-      const el = root as HTMLElement;
-      const figs = Array.from(el.querySelectorAll<HTMLElement>('figure.chat[data-animate]'));
-      const cols = Array.from(el.querySelectorAll<HTMLElement>('[data-scene-col]'));
-      if (!figs.length) return;
-      let next = 0;
-
-      const setFocus = (i: number | null) => {
-        cols.forEach((c, idx) => c.classList.toggle('is-dim', i !== null && idx !== i));
-      };
-
-      const playNext = () => {
-        if (next >= figs.length) return;
-        const i = next;
-        next += 1;
-        setFocus(i);
-        figs[i].dispatchEvent(new CustomEvent('chat:play'));
-      };
-
-      el.addEventListener('chat:done', () => {
-        if (next < figs.length) {
-          window.setTimeout(playNext, 1100);
-        } else {
-          // Terminó la última: todo a pleno para poder releer la secuencia.
-          window.setTimeout(() => setFocus(null), 900);
-        }
-      });
-
-      // Arranca cuando la secuencia entra en viewport.
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              playNext();
-              io.disconnect();
-            }
-          });
-        },
-        { threshold: 0.3 }
-      );
-      io.observe(el);
-    });
-  })();
-</script>

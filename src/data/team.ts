@@ -514,8 +514,8 @@ const RAW: RawMember[] = [
     },
     featureLinkLabel: { es: 'Pedir una demo', en: 'Book a demo' },
     scenesTitle: {
-      es: 'Daniel encuentra dinero por cobrar. <em class="text-pine-dark">Y Sara sale a cobrarlo.</em>',
-      en: 'Daniel finds money to collect. <em class="text-pine-dark">And Sara goes and collects it.</em>',
+      es: 'Daniel encuentra dinero por cobrar. <em class="text-pine-dark">Y&nbsp;Sara sale a&nbsp;cobrarlo.</em>',
+      en: 'Daniel finds money to collect. <em class="text-pine-dark">And Sara goes and collects&nbsp;it.</em>',
     },
     scenesHandoff: {
       es: 'Sara le escribe a cada paciente con su link de pago',
