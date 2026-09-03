@@ -20,6 +20,28 @@ interface Bubble {
   post?: { img: string; handle: string; caption: string };
 }
 
+interface Piece {
+  shape: 'post' | 'reel' | 'blog';
+  kind: string;
+  brand: string;
+  title: string;
+  body: string;
+  status: string;
+  img: string;
+  badge?: string;
+  cta?: string;
+}
+
+interface Pipeline {
+  title: string;
+  intro: string;
+  steps: { label: string; body: string }[];
+  chat: Bubble[];
+  calendar: { month: string; days: string[]; startOffset: number; daysInMonth: number; day: number; time: string; label: string };
+  ig: { caption: string; likes: string; comment: string; reply: string; published: string; reelLabel: string; reelPublished: string };
+  chatSubtitle: string;
+}
+
 interface RawMember {
   id: MemberId;
   // Identidad (no cambia por idioma)
@@ -61,6 +83,10 @@ interface RawMember {
   // Storyboard de escenas animadas (chats encadenados). Opcional por personaje.
   // name/avatar: overrides por escena (p. ej. la escena donde Sara ejecuta lo
   // que Daniel o Mia dispararon); si faltan, usa los del personaje.
+  /** Piezas producidas (solo Mia): post, reel y blog en formato real, para la home. */
+  pieces?: Record<Locale, { title: string; intro: string; items: Piece[] }>;
+  /** Secuencia (solo Mia): propone → crea → calendarizas → sale en Instagram. */
+  pipeline?: Record<Locale, Pipeline>;
   scenesTitle?: Record<Locale, string>; // admite <em> y &nbsp;
   scenesIntro?: Record<Locale, string>;
   // Texto del conector entre escena 1 y 2 (mobile, donde las columnas se apilan).
@@ -125,18 +151,22 @@ const RAW: RawMember[] = [
     chatSubtitle: { es: 'en línea · responde al instante', en: 'online · replies instantly' },
     bubbles: {
       es: [
-        { who: 'out', text: '¡Hola! Piernas enteras las tenemos en el pack de 6 sesiones a $6,900, con la primera de prueba sin costo. ¿Te agendo esa primera sesión?', t: '23:41' },
+        { who: 'out', text: '¡Hola! Piernas enteras: pack de 6 sesiones a $6,900, la primera de prueba sin costo. ¿Te agendo la primera?', t: '23:41' },
         { who: 'in', text: 'Sí, ¿tienen esta semana?', t: '23:42' },
-        { who: 'out', text: '¡Sí! Jueves 17:30 o viernes 18:00. Para dejar la reserva confirmada va un anticipo. ¿Cuál te queda mejor?', t: '23:42' },
+        { who: 'out', text: 'Jueves 17:30 o viernes 18:00. Para reservar va un anticipo, aquí el link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '23:42' },
         { who: 'in', text: 'Jueves', t: '23:43' },
-        { who: 'out', text: 'Listo, jueves 17:30 reservado. Te paso el link del anticipo y te llega el recordatorio un día antes.', t: '23:43' },
+        { who: 'out', text: 'Pago recibido. Jueves 17:30 confirmado. Un día antes te escribo para confirmar.', t: '23:43' },
+        { who: 'out', text: 'Hola, mañana jueves 17:30 tienes tu primera sesión. ¿Confirmas que vienes?', t: '10:00' },
+        { who: 'in', text: 'Sí, confirmado', t: '10:12' },
       ],
       en: [
-        { who: 'out', text: 'Hi! Full legs come in our 6-session pack at $6,900, with a free first trial session. Want me to book that first one?', t: '11:41' },
+        { who: 'out', text: 'Hi! Full legs: 6-session pack at $6,900, first trial session free. Want me to book the first one?', t: '11:41' },
         { who: 'in', text: 'Yes, anything this week?', t: '11:42' },
-        { who: 'out', text: 'Yes! Thursday 5:30pm or Friday 6:00pm. A deposit locks in the booking. Which works better?', t: '11:42' },
+        { who: 'out', text: 'Thursday 5:30pm or Friday 6:00pm. A deposit locks it in, here is the link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '11:42' },
         { who: 'in', text: 'Thursday', t: '11:43' },
-        { who: 'out', text: 'Done, Thursday 5:30pm booked. I’ll send the deposit link and a reminder a day before.', t: '11:43' },
+        { who: 'out', text: 'Payment received. Thursday 5:30pm confirmed. I’ll message you the day before to confirm.', t: '11:43' },
+        { who: 'out', text: 'Hi, tomorrow Thursday 5:30pm is your first session. Can you confirm you’re coming?', t: '10:00' },
+        { who: 'in', text: 'Yes, confirmed', t: '10:12' },
       ],
     },
     featureLinkLabel: { es: 'Ver todo lo que hace Sara', en: 'See everything Sara does' },
@@ -250,8 +280,8 @@ const RAW: RawMember[] = [
     },
     heroEyebrow: { es: 'Mia · Marketing', en: 'Mia · Marketing' },
     heroTitle: {
-      es: "Maneja todo tu marketing.<br /><em class='text-pine-dark'>Y te dice dónde&nbsp;crecer.</em>",
-      en: "Runs all your marketing.<br /><em class='text-pine-dark'>And tells you where to grow.</em>",
+      es: "<span class='md:whitespace-nowrap'>Maneja tu marketing.</span><br /><em class='text-pine-dark md:whitespace-nowrap'>Y te dice dónde&nbsp;crecer.</em>",
+      en: "<span class='md:whitespace-nowrap'>Runs your marketing.</span><br /><em class='text-pine-dark md:whitespace-nowrap'>And tells you where to&nbsp;grow.</em>",
     },
     heroLead: {
       es: 'Mia es la jefa de marketing con IA de tu negocio. Maneja tu Instagram, tus campañas de Google Ads y tu ficha de Google Business, y vive encima de los números de tu web. Cuando ve una forma de traer más pacientes, te la escribe lista para aprobar.',
@@ -268,12 +298,12 @@ const RAW: RawMember[] = [
     },
     points: {
       es: [
-        'Lleva tu Instagram: contenido, respuestas y agenda',
+        'Lleva tu Instagram: contenido, publicación y medición',
         'Corre tus campañas de Google Ads y optimiza tu ficha de Google',
         'Te escribe la propuesta y la ejecuta cuando la apruebas',
       ],
       en: [
-        'Runs your Instagram: content, replies and bookings',
+        'Runs your Instagram: content, publishing and measurement',
         'Runs your Google Ads campaigns and optimizes your Google profile',
         'Sends you the proposal and runs it once you approve',
       ],
@@ -352,6 +382,66 @@ const RAW: RawMember[] = [
             body: 'She tells you which post brought enquiries and how much you billed from each one. No vanity likes.',
           },
         ],
+      },
+    },
+    pieces: {
+      es: {
+        title: 'Lo que Mia produjo esta&nbsp;semana.',
+        intro: 'Tres piezas para tu clínica, listas en el panel. Mia escribe el texto, elige la foto, arma el reel y publica cuando le das el&nbsp;sí.',
+        items: [
+          { shape: 'post', kind: 'Post · 4:5', brand: 'clinicaaurora · Educación', title: 'Depilación láser: qué esperar en la primera sesión', body: 'Mia escribió el texto y eligió la foto. Tú solo aprobaste.', status: 'Se publica el jueves 18:00', badge: 'Lista para agendar', img: '/img/mia/post.jpg' },
+          { shape: 'reel', kind: 'Reel · 15 s', brand: 'Slide 1 de 5', title: '¿Cuántas sesiones necesitas?', body: 'Cinco fotos de tu biblioteca, un texto por slide y placa de cierre con tu marca.', status: 'Armando el reel', badge: 'Reel', cta: 'Agenda tu cita', img: '/img/mia/reel.jpg' },
+          { shape: 'blog', kind: 'Blog · 800 palabras', brand: 'Blog · Cuidados', title: '¿Cuántas sesiones de depilación láser necesito?', body: 'Responde la pregunta, suma preguntas frecuentes y SEO. Sin precios.', status: 'Publicado en tu sitio', img: '/img/mia/blog.jpg' },
+        ],
+      },
+      en: {
+        title: 'What Mia produced this&nbsp;week.',
+        intro: 'Three pieces for your clinic, ready in the dashboard. Mia writes the copy, picks the photo, builds the reel and publishes when you say&nbsp;yes.',
+        items: [
+          { shape: 'post', kind: 'Post · 4:5', brand: 'clinicaaurora · Education', title: 'Laser hair removal: what to expect at your first session', body: 'Mia wrote the copy and picked the photo. You just approved.', status: 'Goes live Thursday 6:00pm', badge: 'Ready to schedule', img: '/img/mia/post.jpg' },
+          { shape: 'reel', kind: 'Reel · 15 s', brand: 'Slide 1 of 5', title: 'How many sessions do you need?', body: 'Five photos from your library, one line per slide and a branded closing card.', status: 'Building the reel', badge: 'Reel', cta: 'Book your visit', img: '/img/mia/reel.jpg' },
+          { shape: 'blog', kind: 'Blog · 800 words', brand: 'Blog · Aftercare', title: 'How many laser hair removal sessions do I need?', body: 'Answers the question, adds FAQs and SEO. No prices.', status: 'Published on your site', img: '/img/mia/blog.jpg' },
+        ],
+      },
+    },
+    pipeline: {
+      es: {
+        title: 'Nace en un chat con Mia. <em class="text-pine-dark">Termina en tu&nbsp;Instagram.</em>',
+        intro: 'Mia propone, crea la pieza y la deja lista. Tú la pones en el calendario y se publica sola, sea post, reel o&nbsp;video.',
+        steps: [
+          { label: '1 · Mia propone', body: 'Estudia tu marca y tu feed, y te escribe con las ideas de la semana.' },
+          { label: '2 · Mia crea las piezas', body: 'Texto, foto y diseño con tu identidad. Post, reel o video.' },
+          { label: '3 · Tú calendarizas', body: 'Arrastras la pieza a un día. Nada sale sin tu aprobación.' },
+          { label: '4 · Sale en Instagram', body: 'Se publica sola al llegar la fecha. A quien responde, lo agenda Sara.' },
+        ],
+        chat: [
+          { who: 'out', text: 'Tres ideas para esta semana: qué esperar en la primera sesión de láser, cuántas sesiones necesitas, y mitos del láser. ¿Cuál armo primero?', t: '09:12' },
+          { who: 'in', text: 'La primera', t: '09:20' },
+          { who: 'out', text: 'Perfecto. En una hora la tienes lista en el panel para aprobar.', t: '09:20' },
+          { who: 'out', text: 'Lista. Tócala para verla y aprobarla:', t: '10:05', post: { img: '/img/mia/post.jpg', handle: 'clinicaaurora', caption: 'Depilación láser: qué esperar en la primera sesión' } },
+        ],
+        calendar: { month: 'Septiembre', days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], startOffset: 1, daysInMonth: 30, day: 3, time: '18:00', label: 'Post · primera sesión' },
+        ig: { caption: '<b>clinicaaurora</b> Depilación láser: qué esperar en la primera sesión. Te contamos paso a paso.', likes: '312', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', reply: '<b>clinicaaurora</b> Te escribimos por mensaje directo', published: 'Publicado · jueves 18:00', reelLabel: 'Reel', reelPublished: 'Publicado · viernes 12:00' },
+        chatSubtitle: 'Marketing',
+      },
+      en: {
+        title: 'It starts in a chat with Mia. <em class="text-pine-dark">It ends on your&nbsp;Instagram.</em>',
+        intro: 'Mia pitches, creates the piece and gets it ready. You drop it on the calendar and it publishes itself, whether post, reel or&nbsp;video.',
+        steps: [
+          { label: '1 · Mia pitches', body: 'She studies your brand and your feed, and messages you the ideas for the week.' },
+          { label: '2 · Mia creates the pieces', body: 'Copy, photo and design with your identity. Post, reel or video.' },
+          { label: '3 · You schedule', body: 'Drag the piece onto a day. Nothing goes out without your approval.' },
+          { label: '4 · It goes live on Instagram', body: 'Publishes itself when the date arrives. Whoever replies gets booked by Sara.' },
+        ],
+        chat: [
+          { who: 'out', text: 'Three ideas for this week: what to expect at your first laser session, how many sessions you need, and laser myths. Which one first?', t: '09:12' },
+          { who: 'in', text: 'The first one', t: '09:20' },
+          { who: 'out', text: 'Perfect. It will be ready to approve in your dashboard within the hour.', t: '09:20' },
+          { who: 'out', text: 'Ready. Tap to see it and approve it:', t: '10:05', post: { img: '/img/mia/post.jpg', handle: 'clinicaaurora', caption: 'Laser hair removal: what to expect at your first session' } },
+        ],
+        calendar: { month: 'September', days: ['M', 'T', 'W', 'T', 'F', 'S', 'S'], startOffset: 1, daysInMonth: 30, day: 3, time: '6:00pm', label: 'Post · first session' },
+        ig: { caption: '<b>clinicaaurora</b> Laser hair removal: what to expect at your first session. Step by step.', likes: '312', comment: '<b>camifer_</b> How much is the assessment?', reply: '<b>clinicaaurora</b> Messaging you directly', published: 'Published · Thursday 6:00pm', reelLabel: 'Reel', reelPublished: 'Published · Friday 12:00pm' },
+        chatSubtitle: 'Marketing',
       },
     },
     scenesTitle: {
@@ -434,13 +524,13 @@ const RAW: RawMember[] = [
     },
     useCases: {
       es: [
-        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Crea las publicaciones con tu marca, responde a quien comenta y lo lleva hasta la cita.' },
+        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Crea y publica los posts con tu marca y mide cuál trajo consultas.' },
         { title: 'Google Ads', logo: '/img/logos/google-ads.svg', desc: 'Arma y maneja tus campañas en Google para que te encuentren justo cuando buscan tu tratamiento.' },
         { title: 'Google Business', logo: '/img/logos/google-business.svg', desc: 'Optimiza tu ficha: fotos, reseñas y datos, para que aparezcas primero en el mapa.' },
         { title: 'Tu web y tus números', desc: 'Mira las métricas de tu sitio y te dice qué está trayendo pacientes y qué no.' },
       ],
       en: [
-        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Creates on-brand posts, replies to whoever comments and takes them to a booking.' },
+        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Creates and posts on-brand content and measures which post brought enquiries.' },
         { title: 'Google Ads', logo: '/img/logos/google-ads.svg', desc: 'Builds and runs your Google campaigns so people find you right when they search your treatment.' },
         { title: 'Google Business', logo: '/img/logos/google-business.svg', desc: 'Optimizes your profile: photos, reviews and details, so you show up first on the map.' },
         { title: 'Your site and your numbers', desc: 'Watches your website metrics and tells you what’s bringing in patients and what isn’t.' },
@@ -514,8 +604,8 @@ const RAW: RawMember[] = [
     },
     featureLinkLabel: { es: 'Pedir una demo', en: 'Book a demo' },
     scenesTitle: {
-      es: 'Daniel encuentra dinero por cobrar. <em class="text-pine-dark">Y Sara sale a cobrarlo.</em>',
-      en: 'Daniel finds money to collect. <em class="text-pine-dark">And Sara goes and collects it.</em>',
+      es: 'Daniel encuentra dinero por cobrar. <em class="text-pine-dark">Y&nbsp;Sara sale a&nbsp;cobrarlo.</em>',
+      en: 'Daniel finds money to collect. <em class="text-pine-dark">And Sara goes and collects&nbsp;it.</em>',
     },
     scenesHandoff: {
       es: 'Sara le escribe a cada paciente con su link de pago',
@@ -628,6 +718,8 @@ export interface TeamMember {
     intro: string;
     steps: { img: string; caption: string; likes: string; comment?: string; step: string; body: string }[];
   };
+  pieces?: { title: string; intro: string; items: Piece[] };
+  pipeline?: Pipeline;
   scenesTitle?: string;
   scenesIntro?: string;
   scenesHandoff?: string;
@@ -660,6 +752,8 @@ const pick = (m: RawMember, lang: Locale): TeamMember => ({
   featureLinkLabel: m.featureLinkLabel[lang],
   useCases: m.useCases ? m.useCases[lang] : undefined,
   igFlow: m.igFlow ? m.igFlow[lang] : undefined,
+  pieces: m.pieces ? m.pieces[lang] : undefined,
+  pipeline: m.pipeline ? m.pipeline[lang] : undefined,
   scenesTitle: m.scenesTitle ? m.scenesTitle[lang] : undefined,
   scenesIntro: m.scenesIntro ? m.scenesIntro[lang] : undefined,
   scenesHandoff: m.scenesHandoff ? m.scenesHandoff[lang] : undefined,

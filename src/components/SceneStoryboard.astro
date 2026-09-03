@@ -1,0 +1,147 @@
+---
+// Storyboard de escenas: dos (o más) chats lado a lado que se animan encadenados
+// con spotlight (la escena activa a pleno, el resto atenuado). Nació en la ficha
+// /equipo/[member] y ahora también lo usa la home (Acto 1 de Sara). Los datos
+// salen de `scenes` en src/data/team.ts.
+//
+// tone="dark": banda oscura (ficha). tone="light": sobre fondo claro (home).
+import ConversationDemo from './ConversationDemo.astro';
+import type { Locale } from '../i18n/config';
+import type { TeamMember } from '../data/team';
+
+type Scene = NonNullable<TeamMember['scenes']>[number];
+
+interface Props {
+  lang: Locale;
+  name: string;
+  avatar: string;
+  scenes: Scene[];
+  handoff?: string;
+  tone?: 'dark' | 'light';
+  class?: string;
+}
+const { lang, name, avatar, scenes, handoff, tone = 'dark', class: cls = '' } = Astro.props;
+const dark = tone === 'dark';
+---
+
+<div data-chat-sequence class:list={['relative mx-auto grid max-w-4xl gap-12 md:grid-cols-2 md:gap-16', cls]}>
+  <span
+    aria-hidden="true"
+    class:list={[
+      'absolute left-1/2 top-1/2 hidden h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border md:grid',
+      dark ? 'border-cream/20 bg-ink text-mint' : 'border-line bg-white text-pine',
+    ]}
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  </span>
+  {
+    scenes.map((s, i) => (
+      <>
+        {i > 0 && handoff && (
+          <div
+            class:list={['-my-4 flex flex-col items-center gap-1.5 text-center text-sm md:hidden', dark ? 'text-cream/60' : 'text-salvia']}
+            aria-hidden="true"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class:list={['h-5 w-5', dark ? 'text-mint' : 'text-pine']}>
+              <path d="M12 5v14M6 13l6 6 6-6" />
+            </svg>
+            <span>{handoff}</span>
+          </div>
+        )}
+        <div data-scene-col class="scene-col flex flex-col items-center gap-5">
+          {/* Pill: quién habla con quién (fuerte) · qué pasa (tenue). Sin wrap. */}
+          <span
+            class:list={[
+              'inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-1.5 text-sm',
+              dark ? 'border-cream/25 text-cream/85' : 'border-line bg-white text-ink',
+            ]}
+          >
+            <span class:list={['font-semibold', dark ? 'text-cream' : 'text-ink']}>{s.who}</span>
+            <span class={dark ? 'text-cream/40' : 'text-salvia/60'}>·</span>
+            <span class={dark ? 'text-cream/70' : 'text-salvia'}>{s.label}</span>
+          </span>
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name={s.name ?? name}
+            avatar={s.avatar ?? avatar}
+            subtitle={s.subtitle}
+            bubbles={s.bubbles}
+            animate
+          />
+        </div>
+      </>
+    ))
+  }
+</div>
+
+<style>
+  /* Spotlight secuencial del storyboard: la escena activa a pleno, el resto
+     atenuado. Guía el ojo del paso 1 al 2 mientras corre la animación. */
+  .scene-col {
+    transition:
+      opacity 0.5s ease,
+      filter 0.5s ease;
+  }
+  .scene-col.is-dim {
+    opacity: 0.35;
+    filter: grayscale(0.55) saturate(0.6);
+  }
+  .scene-col :global(figure.chat) {
+    flex: 1;
+  }
+</style>
+
+<script>
+  // Orquesta el storyboard: los chats están lado a lado y se animan encadenados
+  // con spotlight. El primero arranca al entrar en viewport (el resto se atenúa);
+  // al terminar (chat:done) el foco pasa a la siguiente escena, y al final todas
+  // quedan a pleno para leerse. Los chats de adentro no se auto-disparan
+  // (ConversationDemo los deja esperando `chat:play`).
+  (() => {
+    document.querySelectorAll('[data-chat-sequence]').forEach((root) => {
+      const el = root as HTMLElement;
+      if (el.dataset.sequenceReady) return;
+      el.dataset.sequenceReady = '1';
+      const figs = Array.from(el.querySelectorAll<HTMLElement>('figure.chat[data-animate]'));
+      const cols = Array.from(el.querySelectorAll<HTMLElement>('[data-scene-col]'));
+      if (!figs.length) return;
+      let next = 0;
+
+      const setFocus = (i: number | null) => {
+        cols.forEach((c, idx) => c.classList.toggle('is-dim', i !== null && idx !== i));
+      };
+
+      const playNext = () => {
+        if (next >= figs.length) return;
+        const i = next;
+        next += 1;
+        setFocus(i);
+        figs[i].dispatchEvent(new CustomEvent('chat:play'));
+      };
+
+      el.addEventListener('chat:done', () => {
+        if (next < figs.length) {
+          window.setTimeout(playNext, 1100);
+        } else {
+          window.setTimeout(() => setFocus(null), 900);
+        }
+      });
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              playNext();
+              io.disconnect();
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      io.observe(el);
+    });
+  })();
+</script>

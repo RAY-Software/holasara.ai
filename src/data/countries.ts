@@ -98,7 +98,7 @@ export const countries: Country[] = [
         lead: 'En Colombia la consulta entra por WhatsApp a cualquier hora, y la cita sin confirmar se convierte en silla vacía. Sara responde al momento, agenda en tu Google Calendar, cobra el anticipo y confirma cada cita sin que nadie levante el teléfono.',
         bullets: [
           { title: 'Confirma y recuerda sola', body: 'Recordatorio y confirmación automáticos por WhatsApp. La ausencia baja porque la cita llega recordada y pagada.' },
-          { title: 'Cobra el anticipo al reservar', body: 'Link de pago en el mismo chat. El que aparta con plata, llega.' },
+          { title: 'Cobra el anticipo al reservar', body: 'Link de pago en el mismo chat. El que aparta con dinero, llega.' },
           { title: 'Tu agenda de siempre', body: 'Sara agenda en el Google Calendar que tu clínica ya usa. Sin migrar nada.' },
         ],
         dialect: {
