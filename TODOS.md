@@ -23,3 +23,4 @@ Fuente: `docs/research/keywords-mx-us-2026-09.md` (otra sesión) y https://claud
 - [ ] EN: landing nueva `/en/appointment-reminders` ("appointment reminder" 1.4K, KD 8).
 - [ ] EN, páginas de Mia: `/en/dental-seo`, `/en/med-spa-seo`, `/en/instagram-automation`, `/en/aeo` (answer/generative engine optimization).
 - [ ] Comparativas: sumar `sara-vs-dentalink` (marca dental más buscada en MX). Doctocliq, Kura y Cloudia no traen tráfico de marca.
+- [ ] **Portada del video de la home**: es el thumbnail automático de YouTube (video -HAjxKXeltI) y muestra la placa vieja "Marketing que no depende de que tengas tiempo" con el mock de Instagram anterior. Cambiar la miniatura en YouTube Studio o servir una portada propia (public/img) en index.astro.
