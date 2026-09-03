@@ -8,6 +8,7 @@ import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
 import CallDemo from '../../components/mocks/CallDemo.astro';
+import VoiceDemo from '../../components/VoiceDemo.astro';
 import ConversationDemo from '../../components/ConversationDemo.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
 import CtaInline from '../../components/CtaInline.astro';
@@ -230,6 +231,9 @@ const { steps, estados, faqs } = dict;
     >
       <CallDemo slot="visual" lang={lang} turns={dict.heroCallTurns} timer="00:32" />
     </PageHero>
+
+    <!-- ══════════ DEMO DE VOZ EN VIVO (oculta salvo ?voice=1 mientras está en prueba) ══════════ -->
+    <VoiceDemo lang={lang} />
 
     <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
     <section class="border-b border-line bg-paper">
