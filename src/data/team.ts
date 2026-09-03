@@ -20,6 +20,18 @@ interface Bubble {
   post?: { img: string; handle: string; caption: string };
 }
 
+interface Piece {
+  shape: 'post' | 'reel' | 'blog';
+  kind: string;
+  brand: string;
+  title: string;
+  body: string;
+  status: string;
+  img: string;
+  badge?: string;
+  cta?: string;
+}
+
 interface RawMember {
   id: MemberId;
   // Identidad (no cambia por idioma)
@@ -61,6 +73,8 @@ interface RawMember {
   // Storyboard de escenas animadas (chats encadenados). Opcional por personaje.
   // name/avatar: overrides por escena (p. ej. la escena donde Sara ejecuta lo
   // que Daniel o Mia dispararon); si faltan, usa los del personaje.
+  /** Piezas producidas (solo Mia): post, reel y blog en formato real, para la home. */
+  pieces?: Record<Locale, { title: string; intro: string; items: Piece[] }>;
   scenesTitle?: Record<Locale, string>; // admite <em> y &nbsp;
   scenesIntro?: Record<Locale, string>;
   // Texto del conector entre escena 1 y 2 (mobile, donde las columnas se apilan).
@@ -358,6 +372,26 @@ const RAW: RawMember[] = [
         ],
       },
     },
+    pieces: {
+      es: {
+        title: 'Lo que Mia produjo esta&nbsp;semana.',
+        intro: 'Tres piezas para tu clínica, listas en el panel. Mia escribe el texto, elige la foto, arma el reel y publica cuando le das el&nbsp;sí.',
+        items: [
+          { shape: 'post', kind: 'Post · 4:5', brand: 'clinicaaurora · Educación', title: 'Depilación láser: qué esperar en la primera sesión', body: 'Mia escribió el texto y eligió la foto. Tú solo aprobaste.', status: 'Se publica el jueves 18:00', badge: 'Lista para agendar', img: '/img/mia/post.jpg' },
+          { shape: 'reel', kind: 'Reel · 15 s', brand: 'Slide 1 de 5', title: '¿Cuántas sesiones necesitas?', body: 'Cinco fotos de tu biblioteca, un texto por slide y placa de cierre con tu marca.', status: 'Armando el reel', badge: 'Reel', cta: 'Agenda tu cita', img: '/img/mia/reel.jpg' },
+          { shape: 'blog', kind: 'Blog · 800 palabras', brand: 'Blog · Cuidados', title: '¿Cuántas sesiones de depilación láser necesito?', body: 'Responde la pregunta, suma preguntas frecuentes y SEO. Sin precios.', status: 'Publicado en tu sitio', img: '/img/mia/blog.jpg' },
+        ],
+      },
+      en: {
+        title: 'What Mia produced this&nbsp;week.',
+        intro: 'Three pieces for your clinic, ready in the dashboard. Mia writes the copy, picks the photo, builds the reel and publishes when you say&nbsp;yes.',
+        items: [
+          { shape: 'post', kind: 'Post · 4:5', brand: 'clinicaaurora · Education', title: 'Laser hair removal: what to expect at your first session', body: 'Mia wrote the copy and picked the photo. You just approved.', status: 'Goes live Thursday 6:00pm', badge: 'Ready to schedule', img: '/img/mia/post.jpg' },
+          { shape: 'reel', kind: 'Reel · 15 s', brand: 'Slide 1 of 5', title: 'How many sessions do you need?', body: 'Five photos from your library, one line per slide and a branded closing card.', status: 'Building the reel', badge: 'Reel', cta: 'Book your visit', img: '/img/mia/reel.jpg' },
+          { shape: 'blog', kind: 'Blog · 800 words', brand: 'Blog · Aftercare', title: 'How many laser hair removal sessions do I need?', body: 'Answers the question, adds FAQs and SEO. No prices.', status: 'Published on your site', img: '/img/mia/blog.jpg' },
+        ],
+      },
+    },
     scenesTitle: {
       es: 'Mia ve la agenda floja. <em class="text-pine-dark">Y el equipo la llena.</em>',
       en: 'Mia sees a slow week. <em class="text-pine-dark">And the team fills it.</em>',
@@ -632,6 +666,7 @@ export interface TeamMember {
     intro: string;
     steps: { img: string; caption: string; likes: string; comment?: string; step: string; body: string }[];
   };
+  pieces?: { title: string; intro: string; items: Piece[] };
   scenesTitle?: string;
   scenesIntro?: string;
   scenesHandoff?: string;
@@ -664,6 +699,7 @@ const pick = (m: RawMember, lang: Locale): TeamMember => ({
   featureLinkLabel: m.featureLinkLabel[lang],
   useCases: m.useCases ? m.useCases[lang] : undefined,
   igFlow: m.igFlow ? m.igFlow[lang] : undefined,
+  pieces: m.pieces ? m.pieces[lang] : undefined,
   scenesTitle: m.scenesTitle ? m.scenesTitle[lang] : undefined,
   scenesIntro: m.scenesIntro ? m.scenesIntro[lang] : undefined,
   scenesHandoff: m.scenesHandoff ? m.scenesHandoff[lang] : undefined,

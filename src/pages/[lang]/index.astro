@@ -6,7 +6,6 @@ const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
-import InstagramShowcase from '../../components/mocks/InstagramShowcase.astro';
 import ResultsChart from '../../components/mocks/ResultsChart.astro';
 import MockFrame from '../../components/MockFrame.astro';
 import Footer from '../../components/Footer.astro';
@@ -49,11 +48,6 @@ const dict = {
       { title: 'Consulta cobrada por adelantado', body: 'El paciente paga cuando agenda, no cuando llega. Tu hora deja de ser gratis.' },
       { title: 'Gift cards', body: 'Tu paciente le regala un tratamiento a alguien que no te conoce. Cobras hoy y ganas un paciente nuevo que no te costó publicidad.' },
     ],
-    marketing: [
-      { title: 'Publicaciones listas para salir', body: 'Mia escribe el texto, elige la imagen y arma el calendario con la marca de tu clínica. Tú solo apruebas.' },
-      { title: 'El post termina en una cita', body: 'Quien comenta o escribe por una publicación, Sara lo atiende y lo agenda. Sin que el interés se enfríe.' },
-      { title: 'Sabes qué funcionó', body: 'Cada mes, en español claro: qué publicación trajo más consultas y cuánto facturaste. Sin planillas.' },
-    ],
     spotlightQuotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'],
     heroKicker: 'La recepcionista con IA para clínicas, médicos y wellness',
     heroH1: ['Más pacientes.', 'Más facturación.', 'Todo automático,', 'las 24 horas.'],
@@ -75,7 +69,14 @@ const dict = {
     saraMore: 'Conoce más sobre Sara',
     saraImgAlt: 'Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo.',
     mktH2: 'Mia lleva tu&nbsp;marketing.',
-    mktSub: 'Crea y publica los posts de tu clínica, corre tus campañas de Google y cuida tu ficha de Google Business. A quien responde, lo atiende Sara hasta&nbsp;agendar.',
+    mktSub: 'Propone las ideas, crea las piezas y los reels con tu marca, escribe el blog y llena los huecos de la agenda. Publica cuando le das el sí y mide en citas, no en&nbsp;likes.',
+    miaChatH3: 'Mia te escribe la propuesta.',
+    miaStats: [
+      { n: '14', l: 'citas traídas por el contenido' },
+      { n: '80 k', l: 'personas alcanzadas en 28 días' },
+      { n: '5.0', l: 'rating en Google' },
+    ],
+    miaStatsNote: 'Panel de Mia en ViaLaser, últimos 90 días.',
     mktMore: 'Ver cómo Mia lleva tu Instagram',
     mktImgAlt: 'Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir.',
     mktMeet: 'Conoce a Mia',
@@ -135,11 +136,6 @@ const dict = {
       { title: 'Consult paid in advance', body: 'The patient pays when they book, not when they arrive. Your time stops being free.' },
       { title: 'Gift cards', body: 'Your patient gifts a treatment to someone who doesn’t know you yet. You get paid today and gain a new patient that cost you no advertising.' },
     ],
-    marketing: [
-      { title: 'Posts ready to publish', body: 'Mia writes the copy, picks the image and builds the calendar with your clinic’s brand. You just approve.' },
-      { title: 'The post ends in an appointment', body: 'Whoever comments or messages a post, Sara answers and books them. Before the interest cools.' },
-      { title: 'You know what worked', body: 'Every month, in plain English: which post brought the most enquiries and how much you billed. No spreadsheets.' },
-    ],
     spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
     heroKicker: 'AI receptionist for clinics, doctors & wellness',
     heroH1: ['More patients.', 'More revenue.', 'All automatic,', 'around the clock.'],
@@ -161,7 +157,14 @@ const dict = {
     saraMore: 'Learn more about Sara',
     saraImgAlt: 'WhatsApp conversation: a patient enquires in the middle of the night and Sara replies, books and collects the deposit.',
     mktH2: 'Mia runs your&nbsp;marketing.',
-    mktSub: 'She creates and posts your clinic’s content, runs your Google campaigns and looks after your Google Business profile. Whoever replies, Sara takes it from there to a&nbsp;booking.',
+    mktSub: 'She pitches the ideas, creates the pieces and reels with your brand, writes the blog and fills the gaps in your calendar. She publishes when you say yes and measures in appointments, not&nbsp;likes.',
+    miaChatH3: 'Mia messages you the proposal.',
+    miaStats: [
+      { n: '14', l: 'appointments brought by content' },
+      { n: '80k', l: 'people reached in 28 days' },
+      { n: '5.0', l: 'Google rating' },
+    ],
+    miaStatsNote: 'Mia’s dashboard at ViaLaser, last 90 days.',
     mktMore: 'See how Mia runs your Instagram',
     mktImgAlt: 'A clinic’s AI-generated Instagram feed: on-brand posts, ready to publish.',
     mktMeet: 'Meet Mia',
@@ -197,13 +200,14 @@ const dict = {
   },
 }[lang];
 
-const { faqs, saraDoes, context, payments, marketing } = dict;
+const { faqs, saraDoes, context, payments } = dict;
 
 // El equipo (Sara, Mia, Daniel): caras y roles para el hero, la intro y los kickers de
 // cada acto. Fuente única: team.ts. Daniel además presta su chat al Acto 3.
 const team = getTeam(lang);
 const byId = Object.fromEntries(team.map((m) => [m.id, m])) as Record<string, (typeof team)[number]>;
 const sara = getMember('sara', lang)!;
+const mia = getMember('mia', lang)!;
 const daniel = getMember('daniel', lang)!;
 ---
 
@@ -484,24 +488,111 @@ const daniel = getMember('daniel', lang)!;
           </a>
         </div>
 
-        <div class="mt-14 grid min-w-0 gap-10 md:grid-cols-[0.68fr_1.32fr] md:items-stretch">
-          <div class="flex h-full flex-col gap-6">
+        <!-- Fila A · Mia te escribe la propuesta: su chat real (team.ts). -->
+        <div class="mt-14 grid min-w-0 gap-14 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+          <div>
+            <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.miaChatH3}</h3>
+            <ul class="mt-6 flex flex-col gap-3">
+              {
+                mia.points.map((item) => (
+                  <li class="flex items-start gap-3">
+                    <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint" />
+                    <span class="text-ink">{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="flex min-w-0 justify-center md:justify-end">
+            <ConversationDemo
+              lang={lang}
+              channel="whatsapp"
+              name={mia.name}
+              avatar={mia.avatar}
+              subtitle={mia.chatSubtitle}
+              bubbles={mia.bubbles}
+              animate
+            />
+          </div>
+        </div>
+
+        <!-- Fila B · Lo que Mia produjo: piezas en formato real. Foto con IA, tipografía y marca en CSS. -->
+        {
+          mia.pieces && (
+            <div class="mt-24">
+              <div class="max-w-2xl">
+                <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={mia.pieces.title} />
+                <p class="mt-4 text-lg text-salvia" set:html={mia.pieces.intro} />
+              </div>
+              <div class="mt-10 grid gap-6 md:grid-cols-3 md:items-start">
+                {
+                  mia.pieces.items.map((p) => (
+                    <article class="flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-[0_16px_40px_-28px_rgba(20,38,31,0.35)]">
+                      <div
+                        class:list={[
+                          'relative w-full overflow-hidden bg-cream',
+                          p.shape === 'post' && 'aspect-[4/5]',
+                          p.shape === 'reel' && 'aspect-[9/13]',
+                          p.shape === 'blog' && 'aspect-[16/10]',
+                        ]}
+                      >
+                        <img src={p.img} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+                        {p.badge && (
+                          <span class="absolute left-3 top-3 rounded-full bg-cream/95 px-2.5 py-1 text-[11px] font-semibold text-ink">{p.badge}</span>
+                        )}
+                        {p.cta && (
+                          <span class="absolute right-3 top-3 rounded-full bg-pine px-2.5 py-1 text-[11px] font-semibold text-cream">{p.cta}</span>
+                        )}
+                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 via-ink/40 to-transparent p-4 pt-12 text-cream">
+                          <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-cream/85">{p.brand}</p>
+                          <p class="mt-1 font-serif text-xl font-black leading-tight text-balance">{p.title}</p>
+                        </div>
+                      </div>
+                      <div class="flex flex-col gap-1.5 p-4">
+                        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-salvia">{p.kind}</p>
+                        <p class="text-sm text-ink">{p.body}</p>
+                        <span class="mt-1 inline-flex items-center gap-1.5 self-start rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark">
+                          <span class="dot h-2 w-2"></span>{p.status}
+                        </span>
+                      </div>
+                    </article>
+                  ))
+                }
+              </div>
+            </div>
+          )
+        }
+
+        <!-- Fila C · El equipo trabajando junto: Mia propone la promo, Sara agenda. Mismo storyboard que su ficha. -->
+        <div class="mx-auto mt-24 max-w-6xl">
+          <div class="mx-auto mb-12 max-w-2xl text-center">
+            <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={mia.scenesTitle} />
+            <p class="mt-4 text-lg text-salvia">{mia.scenesIntro}</p>
+          </div>
+          <SceneStoryboard
+            lang={lang}
+            name={mia.name}
+            avatar={mia.avatar}
+            scenes={mia.scenes ?? []}
+            handoff={mia.scenesHandoff}
+            tone="light"
+          />
+        </div>
+
+        <!-- Fila D · Se mide en citas, no en likes. -->
+        <div class="mx-auto mt-20 max-w-4xl">
+          <div class="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
             {
-              marketing.map((m) => (
-                <div class="flex flex-1 flex-col justify-center rounded-xl border border-line bg-cream p-7">
-                  <h3 class="text-xl font-semibold">{m.title}</h3>
-                  <p class="mt-2 text-salvia">{m.body}</p>
+              dict.miaStats.map((st) => (
+                <div class="bg-white px-6 py-6">
+                  <p class="font-serif text-4xl font-black text-pine-dark tabular-nums">{st.n}</p>
+                  <p class="mt-1 text-sm text-salvia">{st.l}</p>
                 </div>
               ))
             }
           </div>
-          <div class="flex min-w-0 justify-center md:justify-end">
-            <MockFrame>
-              <InstagramShowcase lang={lang} class="w-full" />
-            </MockFrame>
-          </div>
+          <p class="mt-3 text-center text-xs text-salvia">{dict.miaStatsNote}</p>
         </div>
-
       </div>
     </section>
 
