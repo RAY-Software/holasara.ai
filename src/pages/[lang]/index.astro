@@ -94,8 +94,9 @@ const dict = {
     spotBody: 'Gestiona la agenda entera y notifica a cada paciente. Las 24 horas.',
     spotImgAlt: 'Sara gestiona la agenda de la semana y reprograma todas las citas del martes, avisando a cada paciente.',
     ctaInline1: 'Cada consulta que no respondes a tiempo, agenda en&nbsp;otra clínica.',
-    cobrosH2: 'Cobra antes de atender.<br /><em class="text-pine-dark">Y sabe cuánto&nbsp;entró.</em>',
-    cobrosSub: 'Sara cobra en el chat. Daniel lleva las cuentas y te avisa lo que&nbsp;importa.',
+    cobrosH2: 'Sabes cuánto ganas.<br /><em class="text-pine-dark">Y qué te deja&nbsp;más.</em>',
+    cobrosSub: 'Daniel es el director financiero de tu clínica: cierra el mes, te dice el margen y hacia dónde va el que viene. Y cuando hay dinero por cobrar, se lo pasa a&nbsp;Sara.',
+    cobrosFormsKicker: 'Lo que Sara cobra por ti',
     cobrosMore: 'Ver todas las formas de cobrar',
     cobrosImgAlt: 'Panel de cobros: anticipos, consultas y gift cards cobrados por Sara, todos sin recepción.',
     ctaInline2: 'Ve a Sara atendiendo tu clínica, en vivo.',
@@ -179,8 +180,9 @@ const dict = {
     spotBody: 'She manages the entire calendar and notifies every patient. Around the clock.',
     spotImgAlt: 'Sara manages the week’s calendar and reschedules every Tuesday appointment, notifying each patient.',
     ctaInline1: 'Every enquiry you don’t answer in time books at&nbsp;another clinic.',
-    cobrosH2: 'Get paid before the appointment.<br /><em class="text-pine-dark">And know what came&nbsp;in.</em>',
-    cobrosSub: 'Sara collects in the chat. Daniel keeps the books and flags what&nbsp;matters.',
+    cobrosH2: 'You know what you earn.<br /><em class="text-pine-dark">And what earns you&nbsp;most.</em>',
+    cobrosSub: 'Daniel is your clinic’s finance director: he closes the month, tells you the margin and where next month is heading. And when there is money to collect, he hands it to&nbsp;Sara.',
+    cobrosFormsKicker: 'What Sara collects for you',
     cobrosMore: 'See all the ways to get paid',
     cobrosImgAlt: 'Payments dashboard: deposits, consults and gift cards collected by Sara, all without a front desk.',
     ctaInline2: 'See Sara running your clinic, live.',
@@ -562,7 +564,8 @@ const daniel = getMember('daniel', lang)!;
             tone="light"
           />
         </div>
-        <div class="mx-auto mt-24 grid max-w-4xl gap-6 sm:grid-cols-3">
+        <p class="mx-auto mt-24 max-w-4xl text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.cobrosFormsKicker}</p>
+        <div class="mx-auto mt-6 grid max-w-4xl gap-6 sm:grid-cols-3">
           {
             payments.map((p, i) => (
               <div>
