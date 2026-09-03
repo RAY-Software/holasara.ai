@@ -6,7 +6,7 @@
 // producto (getAvailableSlots / reserveSlot / rescheduleWithClaim / releaseBooking).
 // Cambiar de agenda simulada a real es cambiar este adapter, no el prompt.
 
-import type { Locale } from '../../i18n/config';
+import type { Locale } from '../../i18n/config.ts';
 import { weekdays, type VoiceClinic, type VoiceService, type Weekday } from '../../data/voiceDemoClinics.ts';
 
 export interface Slot {

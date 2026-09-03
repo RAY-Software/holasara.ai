@@ -13,7 +13,7 @@ const keyFile = `${homedir()}/.config/gemini/api-key`;
 if (!process.env.GEMINI_API_KEY && existsSync(keyFile)) process.env.GEMINI_API_KEY = readFileSync(keyFile, 'utf8').trim();
 process.env.VOICE_MAX_PER_IP_HOUR ||= '100';
 
-const { default: voiceSession } = await import('../api/voice-session.ts');
+const { default: voiceSession } = await import('../src/server/voice-session.ts');
 const ASTRO = process.env.ASTRO_URL || 'http://localhost:4321';
 const PORT = Number(process.env.PORT || 4322);
 
