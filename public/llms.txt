@@ -151,7 +151,7 @@ Con un link de pago seguro dentro de la conversación. El paciente paga desde su
 Sí: anticipo, consulta completa o ambos, y para qué tratamientos aplica.
 
 **¿El anticipo baja las ausencias de verdad?**
-Es el filtro más efectivo que existe: quien deja dinero comprometida, aparece. Se nota
+Es el filtro más efectivo que existe: quien deja dinero comprometido, aparece. Se nota
 desde el primer mes.
 
 **¿Y si el paciente prefiere pagar en la clínica?**
