@@ -18,6 +18,7 @@ import { SHOW_GRADER_CTA } from '../../lib/flags';
 import { getTeam, getMember } from '../../data/team';
 import AgentKicker from '../../components/AgentKicker.astro';
 import ConversationDemo from '../../components/ConversationDemo.astro';
+import IgPost from '../../components/mocks/IgPost.astro';
 import SceneStoryboard from '../../components/SceneStoryboard.astro';
 
 // ── Copy por idioma. EN es traducción, no calco. ──
@@ -516,48 +517,82 @@ const daniel = getMember('daniel', lang)!;
           </div>
         </div>
 
-        <!-- Fila B · Lo que Mia produjo: piezas en formato real. Foto con IA, tipografía y marca en CSS. -->
+        <!-- Fila B · La secuencia: nace en un chat con Mia y termina en Instagram. Datos en team.ts (pipeline + pieces). -->
         {
-          mia.pieces && (
+          mia.pipeline && mia.pieces && (
             <div class="mt-24">
-              <div class="max-w-2xl">
-                <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={mia.pieces.title} />
-                <p class="mt-4 text-lg text-salvia" set:html={mia.pieces.intro} />
+              <div class="mx-auto max-w-2xl text-center">
+                <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={mia.pipeline.title} />
+                <p class="mt-4 text-lg text-salvia" set:html={mia.pipeline.intro} />
               </div>
-              <div class="mt-10 grid gap-6 md:grid-cols-3 md:items-start">
-                {
-                  mia.pieces.items.map((p) => (
-                    <article class="flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-[0_16px_40px_-28px_rgba(20,38,31,0.35)]">
-                      <div
-                        class:list={[
-                          'relative w-full overflow-hidden bg-cream',
-                          p.shape === 'post' && 'aspect-[4/5]',
-                          p.shape === 'reel' && 'aspect-[9/13]',
-                          p.shape === 'blog' && 'aspect-[16/10]',
-                        ]}
-                      >
-                        <img src={p.img} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
-                        {p.badge && (
-                          <span class="absolute left-3 top-3 rounded-full bg-cream/95 px-2.5 py-1 text-[11px] font-semibold text-ink">{p.badge}</span>
-                        )}
-                        {p.cta && (
-                          <span class="absolute right-3 top-3 rounded-full bg-pine px-2.5 py-1 text-[11px] font-semibold text-cream">{p.cta}</span>
-                        )}
-                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 via-ink/40 to-transparent p-4 pt-12 text-cream">
-                          <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-cream/85">{p.brand}</p>
-                          <p class="mt-1 font-serif text-xl font-black leading-tight text-balance">{p.title}</p>
-                        </div>
+              <div class="mt-12 grid gap-8 md:grid-cols-4 md:gap-6">
+                {/* 1 · Mia propone: chat corto, sin animar */}
+                <div class="relative flex flex-col gap-4">
+                  <span class="inline-flex self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink">{mia.pipeline.steps[0].label}</span>
+                  <ConversationDemo lang={lang} channel="whatsapp" name={mia.name} avatar={mia.avatar} subtitle={mia.chatSubtitle} bubbles={mia.pipeline.chat} />
+                  <p class="text-sm text-salvia">{mia.pipeline.steps[0].body}</p>
+                  <span aria-hidden="true" class="absolute -right-5 top-1 hidden h-7 w-7 place-items-center rounded-full border border-line bg-white text-pine md:grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+                </div>
+                {/* 2 · Mia crea las piezas: post + reel listos en el panel */}
+                <div class="relative flex flex-col gap-4">
+                  <span class="inline-flex self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink">{mia.pipeline.steps[1].label}</span>
+                  <div class="rounded-2xl border border-line bg-white p-3 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
+                    <div class="grid grid-cols-2 gap-3">
+                      {
+                        mia.pieces.items.filter((it) => it.shape !== 'blog').map((it) => (
+                          <div class="flex flex-col gap-2">
+                            <div class:list={['relative overflow-hidden rounded-xl bg-cream', it.shape === 'reel' ? 'aspect-[9/16]' : 'aspect-[4/5]']}>
+                              <img src={it.img} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
+                              {it.badge && <span class="absolute left-2 top-2 rounded-full bg-cream/95 px-2 py-0.5 text-[10px] font-semibold text-ink">{it.shape === 'reel' ? it.badge : it.kind}</span>}
+                              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/85 to-transparent p-2.5 pt-8 text-cream">
+                                <p class="font-serif text-[13px] font-black leading-tight">{it.title}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      }
+                    </div>
+                    <span class="mt-3 inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark"><span class="dot h-2 w-2"></span>{mia.pieces.items[0].badge}</span>
+                  </div>
+                  <p class="text-sm text-salvia">{mia.pipeline.steps[1].body}</p>
+                  <span aria-hidden="true" class="absolute -right-5 top-1 hidden h-7 w-7 place-items-center rounded-full border border-line bg-white text-pine md:grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+                </div>
+                {/* 3 · Tú calendarizas: mini calendario con la pieza en el jueves */}
+                <div class="relative flex flex-col gap-4">
+                  <span class="inline-flex self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink">{mia.pipeline.steps[2].label}</span>
+                  <div class="rounded-2xl border border-line bg-white p-4 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
+                    <p class="text-xs font-semibold uppercase tracking-[0.1em] text-salvia">{mia.pipeline.calendar.month}</p>
+                    <div class="mt-3 grid grid-cols-7 gap-1 text-center text-[11px] text-salvia">
+                      {mia.pipeline.calendar.days.map((d) => <span>{d}</span>)}
+                    </div>
+                    <div class="mt-1 grid grid-cols-7 gap-1">
+                      {
+                        mia.pipeline.calendar.days.map((_, i) => (
+                          <div class:list={['flex aspect-square items-center justify-center rounded-lg text-sm tabular-nums', i === mia.pipeline!.calendar.dayIndex ? 'bg-pine font-bold text-cream' : 'bg-paper text-ink']}>{i + 1}</div>
+                        ))
+                      }
+                    </div>
+                    <div class="mt-3 flex items-center gap-2.5 rounded-xl border border-pine/30 bg-mint/10 p-2">
+                      <img src={mia.pieces.items[0].img} alt="" loading="lazy" decoding="async" class="h-10 w-8 rounded-md object-cover" />
+                      <div class="min-w-0">
+                        <p class="truncate text-xs font-semibold text-ink">{mia.pipeline.calendar.label}</p>
+                        <p class="text-[11px] text-salvia">{mia.pipeline.calendar.days[mia.pipeline.calendar.dayIndex]} {mia.pipeline.calendar.dayIndex + 1} · {mia.pipeline.calendar.time}</p>
                       </div>
-                      <div class="flex flex-col gap-1.5 p-4">
-                        <p class="text-xs font-semibold uppercase tracking-[0.08em] text-salvia">{p.kind}</p>
-                        <p class="text-sm text-ink">{p.body}</p>
-                        <span class="mt-1 inline-flex items-center gap-1.5 self-start rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark">
-                          <span class="dot h-2 w-2"></span>{p.status}
-                        </span>
-                      </div>
-                    </article>
-                  ))
-                }
+                    </div>
+                    <p class="mt-3 text-[11px] text-salvia">{mia.pipeline.calendar.note}</p>
+                  </div>
+                  <p class="text-sm text-salvia">{mia.pipeline.steps[2].body}</p>
+                  <span aria-hidden="true" class="absolute -right-5 top-1 hidden h-7 w-7 place-items-center rounded-full border border-line bg-white text-pine md:grid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><path d="M5 12h14M13 6l6 6-6 6" /></svg></span>
+                </div>
+                {/* 4 · Sale en Instagram: el post real, con el chrome de Instagram */}
+                <div class="flex flex-col gap-4">
+                  <span class="inline-flex items-center gap-2 self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink"><img src="/img/logos/instagram.svg" alt="" class="h-4 w-4" />{mia.pipeline.steps[3].label}</span>
+                  <div class="flex flex-col gap-2">
+                    <IgPost lang={lang} img={mia.pieces.items[0].img} caption={mia.pipeline.ig.caption} likes={mia.pipeline.ig.likes} comment={mia.pipeline.ig.comment} />
+                    <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark"><span class="dot h-2 w-2"></span>{mia.pipeline.ig.published}</span>
+                  </div>
+                  <p class="text-sm text-salvia">{mia.pipeline.steps[3].body}</p>
+                </div>
               </div>
             </div>
           )

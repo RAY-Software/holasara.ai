@@ -32,6 +32,15 @@ interface Piece {
   cta?: string;
 }
 
+interface Pipeline {
+  title: string;
+  intro: string;
+  steps: { label: string; body: string }[];
+  chat: Bubble[];
+  calendar: { month: string; days: string[]; dayIndex: number; time: string; label: string; note: string };
+  ig: { caption: string; likes: string; comment: string; published: string };
+}
+
 interface RawMember {
   id: MemberId;
   // Identidad (no cambia por idioma)
@@ -75,6 +84,8 @@ interface RawMember {
   // que Daniel o Mia dispararon); si faltan, usa los del personaje.
   /** Piezas producidas (solo Mia): post, reel y blog en formato real, para la home. */
   pieces?: Record<Locale, { title: string; intro: string; items: Piece[] }>;
+  /** Secuencia (solo Mia): propone → crea → calendarizas → sale en Instagram. */
+  pipeline?: Record<Locale, Pipeline>;
   scenesTitle?: Record<Locale, string>; // admite <em> y &nbsp;
   scenesIntro?: Record<Locale, string>;
   // Texto del conector entre escena 1 y 2 (mobile, donde las columnas se apilan).
@@ -268,8 +279,8 @@ const RAW: RawMember[] = [
     },
     heroEyebrow: { es: 'Mia · Marketing', en: 'Mia · Marketing' },
     heroTitle: {
-      es: "Maneja todo tu marketing.<br /><em class='text-pine-dark'>Y te dice dónde&nbsp;crecer.</em>",
-      en: "Runs all your marketing.<br /><em class='text-pine-dark'>And tells you where to grow.</em>",
+      es: "<span class='md:whitespace-nowrap'>Maneja tu marketing.</span><br /><em class='text-pine-dark md:whitespace-nowrap'>Y te dice dónde&nbsp;crecer.</em>",
+      en: "<span class='md:whitespace-nowrap'>Runs your marketing.</span><br /><em class='text-pine-dark md:whitespace-nowrap'>And tells you where to&nbsp;grow.</em>",
     },
     heroLead: {
       es: 'Mia es la jefa de marketing con IA de tu negocio. Maneja tu Instagram, tus campañas de Google Ads y tu ficha de Google Business, y vive encima de los números de tu web. Cuando ve una forma de traer más pacientes, te la escribe lista para aprobar.',
@@ -390,6 +401,42 @@ const RAW: RawMember[] = [
           { shape: 'reel', kind: 'Reel · 15 s', brand: 'Slide 1 of 5', title: 'How many sessions do you need?', body: 'Five photos from your library, one line per slide and a branded closing card.', status: 'Building the reel', badge: 'Reel', cta: 'Book your visit', img: '/img/mia/reel.jpg' },
           { shape: 'blog', kind: 'Blog · 800 words', brand: 'Blog · Aftercare', title: 'How many laser hair removal sessions do I need?', body: 'Answers the question, adds FAQs and SEO. No prices.', status: 'Published on your site', img: '/img/mia/blog.jpg' },
         ],
+      },
+    },
+    pipeline: {
+      es: {
+        title: 'Nace en un chat con Mia. <em class="text-pine-dark">Termina en tu&nbsp;Instagram.</em>',
+        intro: 'Mia propone, crea la pieza y la deja lista. Tú la pones en el calendario y se publica sola, sea post, reel o&nbsp;video.',
+        steps: [
+          { label: '1 · Mia propone', body: 'Estudia tu marca y tu feed, y te escribe con las ideas de la semana.' },
+          { label: '2 · Mia crea las piezas', body: 'Texto, foto y diseño con tu identidad. Post, reel o video.' },
+          { label: '3 · Tú calendarizas', body: 'Arrastras la pieza a un día. Nada sale sin tu aprobación.' },
+          { label: '4 · Sale en Instagram', body: 'Se publica sola al llegar la fecha. A quien responde, lo agenda Sara.' },
+        ],
+        chat: [
+          { who: 'out', text: 'Tres ideas para esta semana: qué esperar en la primera sesión de láser, cuántas sesiones necesitas, y un reel de mitos. ¿Cuáles armo?', t: '09:12' },
+          { who: 'in', text: 'La primera y el reel', t: '09:20' },
+          { who: 'out', text: 'Perfecto. En una hora las tienes listas en el panel para aprobar.', t: '09:20' },
+        ],
+        calendar: { month: 'Septiembre', days: ['L', 'M', 'M', 'J', 'V', 'S', 'D'], dayIndex: 3, time: '18:00', label: 'Post · primera sesión', note: 'Programado: se publica solo al llegar la fecha.' },
+        ig: { caption: '<b>clinicaaurora</b> Depilación láser: qué esperar en la primera sesión. Te contamos paso a paso.', likes: '312', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', published: 'Publicado · jueves 18:00' },
+      },
+      en: {
+        title: 'It starts in a chat with Mia. <em class="text-pine-dark">It ends on your&nbsp;Instagram.</em>',
+        intro: 'Mia pitches, creates the piece and gets it ready. You drop it on the calendar and it publishes itself, whether post, reel or&nbsp;video.',
+        steps: [
+          { label: '1 · Mia pitches', body: 'She studies your brand and your feed, and messages you the ideas for the week.' },
+          { label: '2 · Mia creates the pieces', body: 'Copy, photo and design with your identity. Post, reel or video.' },
+          { label: '3 · You schedule', body: 'Drag the piece onto a day. Nothing goes out without your approval.' },
+          { label: '4 · It goes live on Instagram', body: 'Publishes itself when the date arrives. Whoever replies gets booked by Sara.' },
+        ],
+        chat: [
+          { who: 'out', text: 'Three ideas for this week: what to expect at your first laser session, how many sessions you need, and a myths reel. Which ones should I build?', t: '09:12' },
+          { who: 'in', text: 'The first one and the reel', t: '09:20' },
+          { who: 'out', text: 'Perfect. They will be ready to approve in your dashboard within the hour.', t: '09:20' },
+        ],
+        calendar: { month: 'September', days: ['M', 'T', 'W', 'T', 'F', 'S', 'S'], dayIndex: 3, time: '6:00pm', label: 'Post · first session', note: 'Scheduled: publishes itself when the date arrives.' },
+        ig: { caption: '<b>clinicaaurora</b> Laser hair removal: what to expect at your first session. Step by step.', likes: '312', comment: '<b>camifer_</b> How much is the assessment?', published: 'Published · Thursday 6:00pm' },
       },
     },
     scenesTitle: {
@@ -667,6 +714,7 @@ export interface TeamMember {
     steps: { img: string; caption: string; likes: string; comment?: string; step: string; body: string }[];
   };
   pieces?: { title: string; intro: string; items: Piece[] };
+  pipeline?: Pipeline;
   scenesTitle?: string;
   scenesIntro?: string;
   scenesHandoff?: string;
@@ -700,6 +748,7 @@ const pick = (m: RawMember, lang: Locale): TeamMember => ({
   useCases: m.useCases ? m.useCases[lang] : undefined,
   igFlow: m.igFlow ? m.igFlow[lang] : undefined,
   pieces: m.pieces ? m.pieces[lang] : undefined,
+  pipeline: m.pipeline ? m.pipeline[lang] : undefined,
   scenesTitle: m.scenesTitle ? m.scenesTitle[lang] : undefined,
   scenesIntro: m.scenesIntro ? m.scenesIntro[lang] : undefined,
   scenesHandoff: m.scenesHandoff ? m.scenesHandoff[lang] : undefined,
