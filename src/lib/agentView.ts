@@ -24,6 +24,7 @@ export function buildAgentMarkdown(llmsBody = ''): string {
     '',
     '> La secretaria con IA para clínicas: atiende WhatsApp e Instagram las 24 horas,',
     '> informa tratamientos y precios, agenda la cita, cobra el anticipo y baja las ausencias.',
+    '> Con Mia (marketing) y Daniel (finanzas).',
     '',
     '## Empezá acá',
     `- [Probar gratis](${abs('/prueba')})`,

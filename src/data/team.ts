@@ -268,12 +268,12 @@ const RAW: RawMember[] = [
     },
     points: {
       es: [
-        'Lleva tu Instagram: contenido, respuestas y agenda',
+        'Lleva tu Instagram: contenido, publicación y campañas',
         'Corre tus campañas de Google Ads y optimiza tu ficha de Google',
         'Te escribe la propuesta y la ejecuta cuando la apruebas',
       ],
       en: [
-        'Runs your Instagram: content, replies and bookings',
+        'Runs your Instagram: content, publishing and campaigns',
         'Runs your Google Ads campaigns and optimizes your Google profile',
         'Sends you the proposal and runs it once you approve',
       ],
@@ -434,13 +434,13 @@ const RAW: RawMember[] = [
     },
     useCases: {
       es: [
-        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Crea las publicaciones con tu marca, responde a quien comenta y lo lleva hasta la cita.' },
+        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Crea y publica las publicaciones con tu marca y mide cuál trajo consultas.' },
         { title: 'Google Ads', logo: '/img/logos/google-ads.svg', desc: 'Arma y maneja tus campañas en Google para que te encuentren justo cuando buscan tu tratamiento.' },
         { title: 'Google Business', logo: '/img/logos/google-business.svg', desc: 'Optimiza tu ficha: fotos, reseñas y datos, para que aparezcas primero en el mapa.' },
         { title: 'Tu web y tus números', desc: 'Mira las métricas de tu sitio y te dice qué está trayendo pacientes y qué no.' },
       ],
       en: [
-        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Creates on-brand posts, replies to whoever comments and takes them to a booking.' },
+        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Creates and posts on-brand content and measures which post brought enquiries.' },
         { title: 'Google Ads', logo: '/img/logos/google-ads.svg', desc: 'Builds and runs your Google campaigns so people find you right when they search your treatment.' },
         { title: 'Google Business', logo: '/img/logos/google-business.svg', desc: 'Optimizes your profile: photos, reviews and details, so you show up first on the map.' },
         { title: 'Your site and your numbers', desc: 'Watches your website metrics and tells you what’s bringing in patients and what isn’t.' },
