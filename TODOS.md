@@ -8,3 +8,4 @@ Diferidos por /autoplan (2026-09-03, home "Sara y su equipo"):
 - [ ] **Pregunta abierta:** ¿Mia y Daniel se contratan hoy sobre la misma cuenta que Sara o se activan en la demo? Define la FAQ de la home y el llms.txt.
 - [ ] **Codex:** `codex login` para que /autoplan y /review vuelvan a tener segunda voz.
 - [ ] **Medición:** la campaña arranca sin tráfico previo, así que no hay línea base. Franco deja una anotación en Analytics en la fecha del deploy; comparar CTR y conversión a /demo a los 14 y 30 días desde ahí.
+- [ ] **Cierre del rediseño de la home (pedido de Franco):** revisar que `public/llms.txt` refleje la home final (tres actos, qué hace cada agente, piezas de Mia) y que el schema JSON-LD esté al día: qué schema tiene la home hoy (Layout: Organization + WebSite) y si conviene sumar algo por la home nueva; y que `/equipo` y las fichas `/equipo/*` tengan schema propio (hoy solo heredan el del Layout).
