@@ -94,6 +94,15 @@ jobs:
           PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      # Vercel detecta las funciones de api/ al ARRANCAR `vercel build`, antes de correr el
+      # build command. api/voice-session.js es generado (esbuild desde src/server/), así que
+      # tiene que existir antes: se empaqueta acá, con la key ya inyectada arriba.
+      - name: Empaquetar funciones TS (api/voice-session.js)
+        run: |
+          npm ci --no-audit --no-fund
+          node scripts/build-api.mjs
+          test -s api/voice-session.js
+
       - name: Build
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy (prebuilt → production)
