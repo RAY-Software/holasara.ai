@@ -12,7 +12,8 @@
 //   compact  home: una fila de tiles + botón, sin toggle, transcript plegado hasta que arranca.
 // Uso: <VoiceDemo lang={lang} /> · <VoiceDemo lang={lang} variant="compact" />
 import { defaultLocale, localePath, type Locale } from '../i18n/config';
-import { voiceIntents } from '../data/voiceDemoClinics.ts';
+import { voiceIntents, voiceDemoClinics } from '../data/voiceDemoClinics.ts';
+import { whatsappLink } from '../lib/whatsapp';
 
 interface Props {
   lang?: Locale;
@@ -50,6 +51,11 @@ const dict = {
       'daily cap reached': 'La demo alcanzó su cupo de hoy. Vuelve mañana o pide una demo con el equipo.',
     },
     langLabel: 'Idioma',
+    waKicker: '¿Prefieres escribir?',
+    waTitle: 'Sara también atiende por WhatsApp.',
+    waBody: '',
+    waCta: 'Escribirle',
+    waMsg: 'Hola Sara, quiero pedir una cita en {clinic}.',
   },
   en: {
     kicker: 'Try it now',
@@ -79,6 +85,11 @@ const dict = {
       'daily cap reached': 'The demo hit its daily cap. Come back tomorrow or book a demo with the team.',
     },
     langLabel: 'Language',
+    waKicker: '',
+    waTitle: '',
+    waBody: '',
+    waCta: '',
+    waMsg: '',
   },
 } as const;
 const t = dict[lang];
@@ -89,6 +100,16 @@ const icons: Record<(typeof voiceIntents)[number], string> = {
   consultorio: '<path d="M6 3v6a5 5 0 0010 0V3"/><path d="M4.5 3h3M14.5 3h3"/><path d="M11 14v2.5a4.5 4.5 0 009 0V15"/><circle cx="20" cy="12.5" r="2"/>',
 };
 const demoHref = localePath('/demo', lang);
+
+// "¿Prefieres escribir?": segundo camino, solo en español (docs/voice.md §4). Click-to-chat a
+// la línea SDR con el marcador `[demo:<intent>]` ANTES de `[src:hs]`: el enhancer del Layout
+// corta el texto en esa etiqueta y reescribe el sufijo, así que lo que va antes sobrevive.
+// El scrapper lee el marcador y pone la conversación en modo "demo paciente".
+const showWa = lang === 'es';
+const waMsgFor = (intent: (typeof voiceIntents)[number]) =>
+  `${t.waMsg.replace('{clinic}', voiceDemoClinics[intent].name.es)} [demo:${intent}]`;
+const waHref = showWa ? whatsappLink(waMsgFor('estetica')) : '';
+const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(i)])) : {};
 ---
 
 <section id="voice-demo" class="border-b border-line bg-cream" data-lang={lang} data-variant={variant} hidden>
@@ -165,6 +186,19 @@ const demoHref = localePath('/demo', lang);
         </div>
       </div>
     </div>
+
+    {showWa && (
+      <div class="vd-wa mx-auto mt-8 flex max-w-2xl flex-col items-center gap-3 text-center sm:flex-row sm:justify-center sm:gap-5">
+        <p class="text-ink">
+          <span class="font-display text-xl">{t.waKicker}</span>
+          <span class="ml-2 text-salvia">{t.waTitle}</span>
+        </p>
+        <a id="vd-wa" href={waHref} target="_blank" rel="noopener" class="vd-btn vd-btn--wa" data-msgs={JSON.stringify(waMsgs)}>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.6.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.9 11.9 0 004.6 4c.6.3 1.1.4 1.5.5a3.6 3.6 0 001.6-.1 2.7 2.7 0 001.8-1.3 2.2 2.2 0 00.2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>
+          <span>{t.waCta}</span>
+        </a>
+      </div>
+    )}
   </div>
 </section>
 
@@ -233,9 +267,28 @@ const demoHref = localePath('/demo', lang);
       langBtns.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.lang === lang)));
     }
 
+    const waLink = document.getElementById('vd-wa') as HTMLAnchorElement | null;
+    const waMsgs: Record<string, string> = waLink ? JSON.parse(waLink.dataset.msgs || '{}') : {};
+
+    // El texto de wa.me lleva "<mensaje> [demo:intent] [src:hs]<atribución>". Al cambiar de
+    // clínica reescribimos solo la parte anterior a [src:hs], que es lo que el Layout respeta.
+    function syncWaLink() {
+      if (!waLink || !waMsgs[intent]) return;
+      try {
+        const u = new URL(waLink.href);
+        const text = u.searchParams.get('text') || '';
+        const at = text.indexOf('[src:hs]');
+        const suffix = at >= 0 ? text.slice(at) : '[src:hs]';
+        u.searchParams.set('text', `${waMsgs[intent]} ${suffix}`);
+        waLink.href = u.toString();
+      } catch {}
+    }
+    waLink?.addEventListener('click', () => trackVoice('voice_demo_cta', { intent, lang, target: 'whatsapp', mid_call: !!client }));
+
     function selectTile(next: VoiceIntent) {
       intent = next;
       tiles.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.intent === intent)));
+      syncWaLink();
     }
 
     function reset() {
@@ -408,6 +461,9 @@ const demoHref = localePath('/demo', lang);
   #voice-demo .vd-btn--start { background: var(--color-pine); color: #fff; }
   #voice-demo .vd-btn--start:hover:not(:disabled) { background: var(--color-pine-dark); }
   #voice-demo .vd-btn--stop { background: #fde8e6; color: #b3261e; }
+  #voice-demo .vd-btn--wa { border: 1px solid var(--color-line); background: #fff; color: var(--color-ink); padding: 0.55rem 1rem; font-size: 0.9rem; }
+  #voice-demo .vd-btn--wa svg { color: #25d366; }
+  #voice-demo .vd-btn--wa:hover { border-color: var(--color-ink); }
   #voice-demo .vd-btn--ghost { border: 1px solid var(--color-line); color: var(--color-ink); background: #fff; }
   #voice-demo .vd-wave { display: flex; align-items: center; gap: 0.35rem; height: 3.5rem; }
   #voice-demo .vd-wave i { display: block; width: 0.45rem; height: 100%; border-radius: 999px; background: var(--color-ink); transform: scaleY(0.15); transform-origin: center; transition: transform 0.08s linear; }

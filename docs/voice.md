@@ -146,32 +146,77 @@ En la demo no hay pago real. La seña se representa así: `book_appointment` en 
 
 ---
 
-## 4. "Escribime": el lead
+## 4. "¿Prefieres escribir?": el segundo camino, por WhatsApp (solo ES)
 
-`api/voice-notify.js`, body `{ sessionId, phone, consent: true, intent, lang, booking? , name? }`.
+Decisión 2026-09-03: no es "mandame la confirmación". Es el camino para el visitante que no va a
+hablar (oficina, sin ganas, sin mic): chatea con Sara como paciente de la misma clínica ficticia,
+y queda como lead. Igual que el "Prefer to text?" de Hello Patient. Solo español y WhatsApp; SMS
+para US queda fuera hasta tener número.
 
-1. Validar E.164, consentimiento, país. Rate limit: 1 por sesión, 3 por número por día, 10 por IP por día.
-2. **ES (AR, MX):** `POST https://<scrapper>/inbound/sdr-lead` con header `x-inbound-secret`, body
-   `{ name, whatsappPhone, country, inboundSource: 'voice-demo', calculator: { intent, lang, booked, durationSec } }`.
-   Hoy ese endpoint exige `name` y `country` en `AR|MX` (`RAY-Scrapper/server/routes.js:15903`), da de
-   alta el lead como `raised-hand` con `whatsappSource: 'inbound-form'`, y la secuencia SDR lo contacta
-   con su template. No manda nada al instante. Para que el primer WhatsApp sea la "confirmación" de la
-   cita de la demo hace falta una template nueva en scrapper (`voice_demo_confirmacion`) que la secuencia
-   use cuando `inboundSource === 'voice-demo'`. Es un cambio chico en scrapper, y es el único.
-   El `name` sale del que dio al agendar; si no dio, se pide en la pantalla final.
-3. **EN (US):** scrapper rechaza `country` fuera de `AR|MX`, así que dos opciones:
-   - a) extender scrapper para aceptar `US` (RAY ya opera en US, `isAmericasPhone` acepta +1), y que la
-     secuencia le escriba por WhatsApp. En US casi nadie usa WhatsApp: llega poco.
-   - b) SMS por Twilio desde `api/voice-notify.js` con la confirmación y un link a `/en/demo`, y el lead a
-     scrapper igual con `country: 'US'` para que quede en el CRM. Recomiendo b); requiere número US con
-     toll-free verificado o A2P 10DLC (empezar el trámite el día 1).
-4. El teléfono no se guarda en holasara.ai: va al scrapper y a un evento de tracking sin el número.
+### 4.1 Entrada: click-to-chat, no formulario
 
-Separación de líneas: el widget flotante de holasara.ai ya va a la línea SDR compartida con RAY. El
-"escribime" entra por el mismo pipeline, marcado `voice-demo`, así la Sara SDR sabe que el lead ya vio
-la demo de voz y no arranca de cero.
+El visitante toca "Escribirle a Sara por WhatsApp" y se abre `wa.me` a la línea SDR (ruteo AR/MX
+que ya hace `src/lib/whatsapp.ts`) con el texto precargado:
 
----
+    Hola Sara, quiero pedir una cita en Lumen Estética. [src:hs][demo:estetica]
+
+Por qué así y no un campo de número como Hello Patient:
+- El visitante manda el primer mensaje → se abre la ventana de 24 h de Meta → Sara responde en
+  texto libre al instante. Con un campo de número, el primer mensaje tiene que ser una template
+  aprobada por Meta y el envío inmediato hoy no existe en el scrapper (el planner ni siquiera
+  contacta leads inbound fuera de campaña).
+- Cero infra nueva en holasara.ai: ni endpoint, ni consentimiento, ni validación de número.
+- En celular abre WhatsApp directo; es el gesto nativo del canal.
+- El marcador `[demo:<intent>]` viaja en el texto igual que `[src:hs]` y los click-ids, y el
+  scrapper ya tiene el patrón para leerlo (`extractSource`, `extractClickId`).
+
+En la home y en `/llamadas`, el bloque va al lado del botón de voz desde el primer momento, no en
+la pantalla final. Evento `voice_demo_cta` con `target: 'whatsapp'`. En `/en` no se muestra.
+
+### 4.2 Scrapper: modo "demo paciente"
+
+Implementado en `RAY-Scrapper` (branch `claude/sdr-patient-demo`, `server/services/sdrPatientDemo.js`).
+Todo en `RAY-Scrapper`, sobre la línea y el pipeline que ya existen. Sin staging: se prueba con
+`sender.dryRun`, `previewReply` y tests con mocks (`server/__tests__/sdrReplyHandler.*.test.js`).
+
+1. **Detección**: `extractDemoIntent(text)` → `[demo:(estetica|dental|consultorio)]`. En
+   `handleInbound`, si la conversación no tiene modo y el texto trae el marcador:
+   `conversation.mode = 'patient-demo'`, `conversation.demoScenario = { intent, clinic, slots, booking }`.
+2. **Modelo**: `SdrConversation` suma `mode` (`sales` | `patient-demo`, default `sales`),
+   `demoScenario` (Mixed) y `demoPivotedAt`. `SdrLead` suma `inboundSource: 'voice-demo'` como valor
+   válido; el lead se crea en el primer inbound si no existe (hoy solo se busca), con
+   `whatsappSource: 'inbound-form'`, `priorityFactors.reason: 'raised-hand'`.
+3. **Clínicas ficticias**: `server/data/patientDemoClinics.json`, generado desde
+   `src/data/voiceDemoClinics.ts` de holasara.ai por `scripts/export-voice-clinics.mjs` (misma
+   fuente, dos repos; el script evita que diverjan). La agenda simulada se genera al entrar en modo
+   demo (próximos 7 días, horarios de la clínica, ocupación pseudoaleatoria) y se guarda en
+   `demoScenario.slots`; el modelo elige por índice, nunca por fecha libre.
+4. **Prompt**: un segundo system prompt `docs/sdr-ai-patient-demo-prompt.md` (Sara recepcionista de
+   la clínica, español neutro, cita/anticipo, no inventar) elegido por modo en `loadSystemPrompt`
+   (hoy cachea uno solo). User prompt con datos de la clínica, agenda, cita actual e historial.
+   Reusa `RESPONSE_SCHEMA` con acciones `reply | book | reschedule | cancel | demo_complete`.
+5. **Validador**: `validateAiOutput` hoy rechaza cualquier precio que no sea el piso de RAY y limita
+   templates y palabras. Se le pasa un ruleset por modo: en demo, precios de la clínica ficticia
+   permitidos, sin templates, tope 120 palabras.
+6. **Bypass de lo comercial**: en modo demo `handleInbound` no llama a knowledge/site knowledge/
+   grader, no toca Google Calendar (`confirm_slot` real), no sube conversiones a Ads/Meta, no
+   pasa por `markDemoBooked` ni HubSpot. Solo: historial → decisión → `sendBubbles` → outbox.
+7. **Pivot a venta**: cuando el modelo devuelve `demo_complete` (el paciente se despidió o ya
+   reservó), cuando el visitante pregunta por Sara o el producto, o al turno 12: `mode = 'sales'`,
+   `demoPivotedAt`, y un mensaje puente en el mismo hilo: "Eso que acabas de vivir es lo que Sara
+   hace en tu clínica, todos los días…" seguido de la pregunta de calificación habitual. Desde el
+   siguiente inbound corre el flujo SDR normal, con el historial completo como contexto.
+8. **Handoff y opt-out** siguen funcionando igual: `handed_off` y `opted_out` cortan antes del modo.
+
+### 4.3 Lo que hay que mirar al implementar
+
+- `handleYCloudInbound` no deduplica por `ycloudMessageId`: un retry de YCloud dispara dos
+  respuestas. Conviene arreglarlo de paso (índice único o check previo).
+- El webhook de YCloud es fail-open sin `YCLOUD_WEBHOOK_SECRET`. No es de este cambio, pero anotarlo.
+- `resolveVertical` debe mapear `demo` → `health`, para que el pivot a venta arranque con el
+  framing de clínicas.
+- Zapier `ZAPIER_SDR_INBOUND_WEBHOOK` se dispara en el primer mensaje: decidir si un demo cuenta
+  como "primer mensaje" comercial o recién al pivot.
 
 ## 5. Humano y fuera de horario
 
