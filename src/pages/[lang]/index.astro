@@ -484,9 +484,9 @@ const daniel = getMember('daniel', lang)!;
                 <div class="relative flex min-w-0 flex-col gap-4">
                   <span class="inline-flex self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink">{mia.pipeline.steps[1].label}</span>
                   <div class="flow-visual flex flex-col gap-3 rounded-2xl border border-line bg-white p-3 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
-                    <div class="grid flex-1 grid-cols-2 gap-3">
+                    <div class="grid flex-1 grid-cols-1 gap-3">
                       {
-                        mia.pieces.items.filter((it) => it.shape !== 'blog').map((it) => (
+                        mia.pieces.items.filter((it) => it.shape === 'post').map((it) => (
                           <div class:list={['relative min-h-[11rem] overflow-hidden rounded-xl bg-cream', it.shape === 'reel' ? 'md:min-h-0' : 'md:min-h-0']}>
                             <img src={it.img} alt="" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover" />
                             <span class="absolute left-2 top-2 rounded-full bg-cream/95 px-2 py-0.5 text-[10px] font-semibold text-ink">{it.shape === 'reel' ? it.badge : it.kind}</span>
