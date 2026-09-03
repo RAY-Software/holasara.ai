@@ -194,6 +194,7 @@ const byId = Object.fromEntries(team.map((m) => [m.id, m])) as Record<string, (t
 const sara = getMember('sara', lang)!;
 const mia = getMember('mia', lang)!;
 const cal = mia.pipeline?.calendar;
+const ig = mia.pipeline?.ig;
 const calCells = cal ? Array.from({ length: 35 }, (_, i) => i - cal.startOffset + 1) : [];
 const daniel = getMember('daniel', lang)!;
 ---
@@ -560,8 +561,8 @@ const daniel = getMember('daniel', lang)!;
                 <div class="flex flex-col gap-4">
                   <span class="inline-flex items-center gap-2 self-start whitespace-nowrap rounded-full border border-line bg-white px-3.5 py-1.5 text-sm font-semibold text-ink"><img src="/img/logos/instagram.svg" alt="" class="h-4 w-4" />{mia.pipeline.steps[3].label}</span>
                   <div class="flex flex-col gap-2">
-                    <IgPost lang={lang} img={mia.pieces.items[0].img} caption={mia.pipeline.ig.caption} likes={mia.pipeline.ig.likes} comment={mia.pipeline.ig.comment} reply={mia.pipeline.ig.reply} />
-                    <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark"><span class="dot h-2 w-2"></span>{mia.pipeline.ig.published}</span>
+                    <IgPost lang={lang} img={mia.pieces.items[0].img} caption={ig!.caption} likes={ig!.likes} comment={ig!.comment} reply={ig!.reply} />
+                    <span class="inline-flex items-center gap-1.5 self-start rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-semibold text-pine-dark"><span class="dot h-2 w-2"></span>{ig!.published}</span>
                     {
                       mia.pieces.items.filter((it) => it.shape === 'reel').map((it) => (
                         <div class="mt-2 flex items-center gap-3 rounded-xl border border-line bg-white p-2 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
@@ -570,9 +571,9 @@ const daniel = getMember('daniel', lang)!;
                             <span class="absolute inset-0 grid place-items-center text-white"><svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 drop-shadow"><path d="M8 5v14l11-7z" /></svg></span>
                           </div>
                           <div class="min-w-0">
-                            <p class="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-salvia"><img src="/img/logos/instagram.svg" alt="" class="h-3 w-3" />{mia.pipeline.ig.reelLabel} · clinicaaurora</p>
+                            <p class="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-salvia"><img src="/img/logos/instagram.svg" alt="" class="h-3 w-3" />{ig!.reelLabel} · clinicaaurora</p>
                             <p class="truncate text-xs font-semibold text-ink">{it.title}</p>
-                            <p class="text-[11px] text-pine-dark">{mia.pipeline.ig.reelPublished}</p>
+                            <p class="text-[11px] text-pine-dark">{ig!.reelPublished}</p>
                           </div>
                         </div>
                       ))
