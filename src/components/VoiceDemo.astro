@@ -4,8 +4,8 @@
 // magnet con clínicas FICTICIAS (src/data/voiceDemoClinics.ts), no una clínica real.
 // Misma idea que la demo de Hello Patient: tiles, transcript en vivo, timer.
 //
-// Se renderiza oculta y se muestra solo con ?voice=1 mientras está en prueba
-// (el script de abajo lo resuelve).
+// Pública desde el 2026-09-03. `?voice=0` la esconde en esa sesión del navegador (para
+// capturas o pruebas); `?voice=1` la vuelve a mostrar.
 //
 // Dos variantes:
 //   full     (default) /llamadas: tiles en columna, toggle de idioma, transcript siempre visible.
@@ -112,7 +112,7 @@ const waHref = showWa ? whatsappLink(waMsgFor('estetica')) : '';
 const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(i)])) : {};
 ---
 
-<section id="voice-demo" class="border-b border-line bg-cream" data-lang={lang} data-variant={variant} hidden>
+<section id="voice-demo" class="border-b border-line bg-cream" data-lang={lang} data-variant={variant}>
   <div class:list={['mx-auto max-w-6xl px-5', compact ? 'py-12 sm:py-14' : 'py-16 sm:py-20']}>
     <header class:list={['mx-auto max-w-2xl text-center', compact ? 'mb-7' : 'mb-10']}>
       <p class="kicker mb-3">{t.kicker}</p>
@@ -212,15 +212,14 @@ const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(
 
   const root = document.getElementById('voice-demo');
   if (root) {
-    // Flag de prueba: ?voice=1 lo activa y queda pegado a la sesión del navegador, así
-    // sobrevive al cambio de idioma y a la navegación interna (?voice=0 lo apaga).
+    // Interruptor por sesión del navegador: ?voice=0 esconde la demo, ?voice=1 la vuelve a mostrar.
     const params = new URLSearchParams(location.search);
     let flag = params.get('voice');
     try {
       if (flag === '1' || flag === '0') sessionStorage.setItem('sara_voice', flag);
       else flag = sessionStorage.getItem('sara_voice');
     } catch {}
-    if (flag === '1') root.hidden = false;
+    if (flag === '0') root.hidden = true;
 
     const i18n = JSON.parse(document.getElementById('vd-i18n')!.textContent || '{}');
     let lang = (root.dataset.lang as Locale) || 'es';

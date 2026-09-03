@@ -225,7 +225,7 @@ export function createAgenda({ clinic, lang, now, seed }: AgendaOptions) {
         requiresDeposit,
         depositAmount: depositLabel || undefined,
         nextStep: requiresDeposit
-          ? (lang === 'en' ? 'tell them you will send the deposit link by text message; ask for their mobile number if you do not have it' : 'dile que le envías por WhatsApp el link del anticipo (di "anticipo", nunca "seña"); pídele el celular si no lo tienes')
+          ? (lang === 'en' ? 'tell them the clinic will text them the deposit link; ask for their mobile number if you do not have it' : 'dile que la clínica le manda por WhatsApp el link del anticipo (di "anticipo", nunca "seña"); pídele el celular si no lo tienes')
           : (lang === 'en' ? 'tell them they will get the confirmation by text message' : 'dile que le llega la confirmación por WhatsApp'),
       };
     },
