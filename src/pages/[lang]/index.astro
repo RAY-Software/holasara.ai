@@ -20,6 +20,7 @@ import AgentKicker from '../../components/AgentKicker.astro';
 import ConversationDemo from '../../components/ConversationDemo.astro';
 import IgPost from '../../components/mocks/IgPost.astro';
 import SceneStoryboard from '../../components/SceneStoryboard.astro';
+import VoiceDemo from '../../components/VoiceDemo.astro';
 
 // ── Copy por idioma. EN es traducción, no calco. ──
 const dict = {
@@ -287,6 +288,9 @@ const daniel = getMember('daniel', lang)!;
     </section>
 
     <ClientsStrip tone="paper" lang={lang} />
+
+    <!-- ══════════ DEMO DE VOZ EN VIVO (compacta; oculta salvo ?voice=1 mientras está en prueba) ══════════ -->
+    <VoiceDemo lang={lang} variant="compact" />
 
     <!-- ══════════ VIDEO ══════════ -->
     <section id="video" class="border-t border-line bg-paper">

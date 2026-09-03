@@ -84,8 +84,15 @@ jobs:
           fi
           printf "export const PLACES_API_KEY = '%s';\n" "$PLACES_API_KEY" > api/_key.js
           echo "  api/_key.js escrito (${#PLACES_API_KEY} caracteres)"
+          # Demo de voz (api/voice-session.ts). Sin key la demo devuelve 503, no rompe el build.
+          if [ -z "$GEMINI_API_KEY" ]; then
+            echo "::warning::falta el secret GEMINI_API_KEY — la demo de voz quedaría apagada"
+          fi
+          printf "export const GEMINI_API_KEY = '%s';\n" "$GEMINI_API_KEY" > api/_gemini-key.js
+          echo "  api/_gemini-key.js escrito (${#GEMINI_API_KEY} caracteres)"
         env:
           PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Build
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}

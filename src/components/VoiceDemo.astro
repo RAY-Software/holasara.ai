@@ -1,0 +1,430 @@
+---
+// Demo de voz en vivo: el visitante elige tipo de clínica e idioma y habla con Sara
+// desde el browser (Gemini Live, token efímero de api/voice-session). Es un lead
+// magnet con clínicas FICTICIAS (src/data/voiceDemoClinics.ts), no una clínica real.
+// Misma idea que la demo de Hello Patient: tiles, transcript en vivo, timer.
+//
+// Se renderiza oculta y se muestra solo con ?voice=1 mientras está en prueba
+// (el script de abajo lo resuelve).
+//
+// Dos variantes:
+//   full     (default) /llamadas: tiles en columna, toggle de idioma, transcript siempre visible.
+//   compact  home: una fila de tiles + botón, sin toggle, transcript plegado hasta que arranca.
+// Uso: <VoiceDemo lang={lang} /> · <VoiceDemo lang={lang} variant="compact" />
+import { defaultLocale, localePath, type Locale } from '../i18n/config';
+import { voiceIntents } from '../data/voiceDemoClinics.ts';
+
+interface Props {
+  lang?: Locale;
+  variant?: 'full' | 'compact';
+}
+const { lang = defaultLocale, variant = 'full' } = Astro.props;
+const compact = variant === 'compact';
+
+const dict = {
+  es: {
+    kicker: 'Pruébala ahora',
+    title: 'Habla con Sara como si fueras paciente.',
+    lead: 'Elige un tipo de clínica, toca el botón y pídele una cita. La clínica es de prueba, pero la agenda, los precios y la conversación son reales.',
+    tiles: { estetica: 'Estética', dental: 'Dental', consultorio: 'Consultorio médico' },
+    start: 'Hablar con Sara',
+    connecting: 'Conectando…',
+    live: 'En llamada',
+    listening: 'Sara te escucha',
+    speaking: 'Sara habla',
+    hangup: 'Colgar',
+    transcript: 'Transcripción en vivo',
+    you: 'TÚ',
+    sara: 'SARA',
+    micNote: 'Necesitas permitir el micrófono. La conversación se transcribe para mejorar a Sara. Dura hasta 4 minutos.',
+    endTitle: 'Así atiende Sara.',
+    endBooked: 'Cita agendada:',
+    endNoBooking: 'Terminó la llamada.',
+    endHuman: 'Pediste hablar con una persona: en tu clínica, el equipo recibiría el aviso al instante.',
+    endCta: 'Quiero esto en mi clínica',
+    endAgain: 'Probar de nuevo',
+    errors: {
+      mic: 'No pudimos acceder al micrófono. Revisa los permisos del navegador.',
+      generic: 'No se pudo abrir la llamada. Inténtalo de nuevo en un momento.',
+      'too many sessions, try again later': 'Hiciste varias pruebas seguidas. Espera un momento y vuelve a intentar.',
+      'daily cap reached': 'La demo alcanzó su cupo de hoy. Vuelve mañana o pide una demo con el equipo.',
+    },
+    langLabel: 'Idioma',
+  },
+  en: {
+    kicker: 'Try it now',
+    title: 'Talk to Sara as if you were a patient.',
+    lead: 'Pick a type of clinic, tap the button and ask for an appointment. The clinic is fictional, but the schedule, prices and conversation are real.',
+    tiles: { estetica: 'Aesthetics', dental: 'Dental', consultorio: 'Medical practice' },
+    start: 'Talk to Sara',
+    connecting: 'Connecting…',
+    live: 'On call',
+    listening: 'Sara is listening',
+    speaking: 'Sara is speaking',
+    hangup: 'Hang up',
+    transcript: 'Live transcript',
+    you: 'YOU',
+    sara: 'SARA',
+    micNote: 'You will need to allow the microphone. The conversation is transcribed to improve Sara. Up to 4 minutes.',
+    endTitle: 'See? That is how Sara answers.',
+    endBooked: 'Booked:',
+    endNoBooking: 'The call ended.',
+    endHuman: 'You asked for a person: at your clinic, the team would get the alert right away.',
+    endCta: 'I want this at my clinic',
+    endAgain: 'Try again',
+    errors: {
+      mic: 'We could not access the microphone. Check your browser permissions.',
+      generic: 'Could not open the call. Please try again in a moment.',
+      'too many sessions, try again later': 'You ran several tests in a row. Wait a bit and try again.',
+      'daily cap reached': 'The demo hit its daily cap. Come back tomorrow or book a demo with the team.',
+    },
+    langLabel: 'Language',
+  },
+} as const;
+const t = dict[lang];
+
+const icons: Record<(typeof voiceIntents)[number], string> = {
+  estetica: '<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3z"/><path d="M5 17l.8 2 2 .8-2 .8L5 22l-.8-2-2-.8 2-.8L5 17z"/>',
+  dental: '<path d="M7.5 3.5c1.6 0 2.6.8 4.5.8s2.9-.8 4.5-.8c2.7 0 4 2.4 3.3 5.2-.6 2.4-1.5 3.3-1.9 6.2-.3 2.4-.6 5.6-2.1 5.6-1.4 0-1.6-3.6-3.8-3.6S10.2 20.5 8.8 20.5c-1.5 0-1.8-3.2-2.1-5.6-.4-2.9-1.3-3.8-1.9-6.2C4.1 5.9 4.8 3.5 7.5 3.5z"/>',
+  consultorio: '<path d="M6 3v6a5 5 0 0010 0V3"/><path d="M4.5 3h3M14.5 3h3"/><path d="M11 14v2.5a4.5 4.5 0 009 0V15"/><circle cx="20" cy="12.5" r="2"/>',
+};
+const demoHref = localePath('/demo', lang);
+---
+
+<section id="voice-demo" class="border-b border-line bg-cream" data-lang={lang} data-variant={variant} hidden>
+  <div class:list={['mx-auto max-w-6xl px-5', compact ? 'py-12 sm:py-14' : 'py-16 sm:py-20']}>
+    <header class:list={['mx-auto max-w-2xl text-center', compact ? 'mb-7' : 'mb-10']}>
+      <p class="kicker mb-3">{t.kicker}</p>
+      <h2 class:list={['font-display text-ink', compact ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl']}>{t.title}</h2>
+      <p class="mt-4 text-salvia">{t.lead}</p>
+    </header>
+
+    <div class:list={['grid gap-6', compact ? 'mx-auto max-w-4xl' : 'lg:grid-cols-[260px_1fr]']}>
+      <!-- Selector -->
+      <aside class="flex flex-col gap-3">
+        <div class:list={['grid grid-cols-3 gap-3', compact ? '' : 'lg:grid-cols-1']} role="radiogroup" aria-label="clinic">
+          {voiceIntents.map((intent, i) => (
+            <button
+              type="button"
+              class="vd-tile"
+              data-intent={intent}
+              role="radio"
+              aria-checked={i === 0 ? 'true' : 'false'}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={icons[intent]} />
+              <span>{t.tiles[intent]}</span>
+            </button>
+          ))}
+        </div>
+        <div class="mt-1 flex items-center justify-between rounded-2xl border border-line bg-paper px-4 py-2 text-sm" role="radiogroup" aria-label={t.langLabel} hidden={compact}>
+          <span class="text-salvia">{t.langLabel}</span>
+          <span class="flex gap-1">
+            <button type="button" class="vd-lang" data-lang="es" role="radio" aria-checked={lang === 'es' ? 'true' : 'false'}>ES</button>
+            <button type="button" class="vd-lang" data-lang="en" role="radio" aria-checked={lang === 'en' ? 'true' : 'false'}>EN</button>
+          </span>
+        </div>
+      </aside>
+
+      <!-- Escenario -->
+      <div class:list={['relative flex flex-col rounded-3xl border border-line bg-paper p-5 sm:p-7', compact ? 'min-h-[260px]' : 'min-h-[520px]']}>
+        <div class="flex items-center justify-between text-xs uppercase tracking-[0.14em] text-salvia">
+          <span id="vd-status">{t.listening}</span>
+          <span id="vd-timer" class="tabular-nums">0:00</span>
+        </div>
+
+        <div class="my-6 flex flex-col items-center gap-5">
+          <div id="vd-wave" class="vd-wave" aria-hidden="true">
+            {Array.from({ length: 11 }).map(() => <i></i>)}
+          </div>
+          <button id="vd-start" type="button" class="vd-btn vd-btn--start">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>
+            <span>{t.start}</span>
+          </button>
+          <button id="vd-stop" type="button" class="vd-btn vd-btn--stop" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            <span>{t.hangup}</span>
+          </button>
+          <p id="vd-note" class="max-w-md text-center text-sm text-salvia">{t.micNote}</p>
+          <p id="vd-error" class="max-w-md text-center text-sm text-red-700" hidden></p>
+        </div>
+
+        <div class="vd-transcript-box flex-1 rounded-2xl border border-line bg-white p-4 sm:p-5">
+          <p class="mb-3 text-xs uppercase tracking-[0.14em] text-salvia">{t.transcript}</p>
+          <ol id="vd-transcript" class="vd-transcript" aria-live="polite"></ol>
+        </div>
+
+        <div id="vd-end" class="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-3xl bg-paper/95 p-8 text-center" hidden>
+          <h3 class="font-display text-2xl text-ink sm:text-3xl">{t.endTitle}</h3>
+          <p id="vd-end-summary" class="max-w-md text-salvia"></p>
+          <p id="vd-end-human" class="max-w-md text-sm text-salvia" hidden>{t.endHuman}</p>
+          <div class="mt-2 flex flex-wrap justify-center gap-3">
+            <a href={demoHref} class="vd-btn vd-btn--start">{t.endCta}</a>
+            <button id="vd-again" type="button" class="vd-btn vd-btn--ghost">{t.endAgain}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="vd-i18n" set:html={JSON.stringify({ es: dict.es, en: dict.en })} />
+
+<script>
+  import { VoiceClient, type EndReason } from '../scripts/voice-client.ts';
+  import { trackVoice } from '../lib/voiceDemo/track.ts';
+  import type { VoiceIntent } from '../data/voiceDemoClinics.ts';
+  import type { Locale } from '../i18n/config';
+
+  const root = document.getElementById('voice-demo');
+  if (root) {
+    // Flag de prueba: ?voice=1 lo activa y queda pegado a la sesión del navegador, así
+    // sobrevive al cambio de idioma y a la navegación interna (?voice=0 lo apaga).
+    const params = new URLSearchParams(location.search);
+    let flag = params.get('voice');
+    try {
+      if (flag === '1' || flag === '0') sessionStorage.setItem('sara_voice', flag);
+      else flag = sessionStorage.getItem('sara_voice');
+    } catch {}
+    if (flag === '1') root.hidden = false;
+
+    const i18n = JSON.parse(document.getElementById('vd-i18n')!.textContent || '{}');
+    let lang = (root.dataset.lang as Locale) || 'es';
+    let intent: VoiceIntent = 'estetica';
+    let client: VoiceClient | null = null;
+    let t = i18n[lang];
+    let startedAt = 0;
+    let turns = 0;
+    let lastBooking: any = null;
+
+    // Embudo: la sección entró en pantalla (una vez).
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) { trackVoice('voice_demo_visible', { lang }); io.disconnect(); }
+      }, { threshold: 0.3 });
+      io.observe(root);
+    }
+
+    const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+    const status = $('vd-status');
+    const timer = $('vd-timer');
+    const wave = $('vd-wave');
+    const bars = Array.from(wave.querySelectorAll('i'));
+    const startBtn = $<HTMLButtonElement>('vd-start');
+    const stopBtn = $<HTMLButtonElement>('vd-stop');
+    const note = $('vd-note');
+    const error = $('vd-error');
+    const list = $('vd-transcript');
+    const end = $('vd-end');
+    const endSummary = $('vd-end-summary');
+    const endHuman = $('vd-end-human');
+    const tiles = Array.from(root.querySelectorAll<HTMLButtonElement>('.vd-tile'));
+    const langBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.vd-lang'));
+
+    const fmt = (sec: number) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
+
+    function applyLang() {
+      t = i18n[lang];
+      startBtn.querySelector('span')!.textContent = t.start;
+      stopBtn.querySelector('span')!.textContent = t.hangup;
+      note.textContent = t.micNote;
+      status.textContent = t.listening;
+      tiles.forEach((b) => (b.querySelector('span')!.textContent = t.tiles[b.dataset.intent!]));
+      langBtns.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.lang === lang)));
+    }
+
+    function selectTile(next: VoiceIntent) {
+      intent = next;
+      tiles.forEach((b) => b.setAttribute('aria-checked', String(b.dataset.intent === intent)));
+    }
+
+    function reset() {
+      delete root.dataset.live;
+      list.innerHTML = '';
+      timer.textContent = '0:00';
+      end.hidden = true;
+      error.hidden = true;
+      stopBtn.hidden = true;
+      startBtn.hidden = false;
+      note.hidden = false;
+      wave.dataset.mode = '';
+      bars.forEach((b) => (b.style.transform = ''));
+      status.textContent = t.listening;
+    }
+
+    function row(role: 'user' | 'sara', text: string, final: boolean) {
+      if (final && role === 'user') turns += 1;
+      const cls = `vd-row vd-row--${role}`;
+      let li = list.querySelector<HTMLLIElement>(`li.draft[data-role="${role}"]`);
+      if (!li) {
+        // Un parcial nuevo cierra cualquier otro parcial abierto.
+        list.querySelectorAll('li.draft').forEach((d) => d.classList.remove('draft'));
+        li = document.createElement('li');
+        li.className = `${cls} draft`;
+        li.dataset.role = role;
+        li.innerHTML = `<span class="vd-who"></span><span class="vd-text"></span>`;
+        li.querySelector('.vd-who')!.textContent = role === 'user' ? t.you : t.sara;
+        list.appendChild(li);
+      }
+      li.querySelector('.vd-text')!.textContent = text;
+      if (final) {
+        li.classList.remove('draft');
+        // Gemini a veces reenvía la transcripción de un turno ya cerrado: no repetirla.
+        const same = Array.from(list.querySelectorAll<HTMLLIElement>(`li[data-role="${role}"]:not(.draft)`));
+        const prev = same[same.length - 2];
+        if (prev && prev.querySelector('.vd-text')!.textContent === text) li.remove();
+      }
+      list.scrollTop = list.scrollHeight;
+    }
+
+    function showEnd(reason: EndReason, summary: { booking: any; humanRequested: string | null }) {
+      if (reason === 'error') return;
+      const b = summary.booking;
+      endSummary.textContent = b ? `${t.endBooked} ${b.slot.service}, ${b.slot.label}, ${b.slot.professional}.` : t.endNoBooking;
+      endHuman.hidden = !summary.humanRequested;
+      end.hidden = false;
+    }
+
+    function start() {
+      reset();
+      startBtn.disabled = true;
+      startedAt = Date.now();
+      turns = 0;
+      lastBooking = null;
+      trackVoice('voice_demo_start', { intent, lang });
+      client = new VoiceClient({
+        intent,
+        lang,
+        on: {
+          status: (s, detail) => {
+            if (s === 'connecting') status.textContent = t.connecting;
+            if (s === 'live') {
+              root.dataset.live = '1';
+              trackVoice('voice_demo_connected', { intent, lang, connect_ms: Date.now() - startedAt });
+              status.textContent = t.listening;
+              startBtn.hidden = true;
+              stopBtn.hidden = false;
+              note.hidden = true;
+            }
+            if (s === 'error') {
+              trackVoice('voice_demo_error', { intent, lang, detail: detail || 'unknown' });
+              status.textContent = t.listening;
+              error.textContent = t.errors[detail || ''] || (/(permission|denied|NotAllowed|mic)/i.test(detail || '') ? t.errors.mic : t.errors.generic);
+              error.hidden = false;
+              startBtn.hidden = false;
+              startBtn.disabled = false;
+              stopBtn.hidden = true;
+            }
+          },
+          transcript: row,
+          tool: (name, _args, result: any) => {
+            trackVoice('voice_demo_tool', { intent, lang, tool: name, ok: result?.ok !== false });
+            if (name === 'book_appointment' && result?.ok) {
+              lastBooking = result;
+              trackVoice('voice_demo_booked', { intent, lang, service: result.service, requires_deposit: !!result.requiresDeposit });
+            }
+          },
+          speaking: (on) => {
+            wave.dataset.mode = on ? 'sara' : '';
+            status.textContent = on ? t.speaking : t.listening;
+          },
+          level: (v) => {
+            if (wave.dataset.mode === 'sara') return;
+            bars.forEach((b, i) => {
+              const k = 1 - Math.abs(i - 5) / 6;
+              b.style.transform = `scaleY(${0.15 + v * k * 1.6})`;
+            });
+          },
+          tick: (sec) => (timer.textContent = fmt(sec)),
+          ended: (reason, summary) => {
+            delete root.dataset.live;
+            trackVoice('voice_demo_ended', {
+              intent, lang, reason,
+              duration_sec: summary.durationSec,
+              booked: !!summary.booking,
+              human_requested: !!summary.humanRequested,
+              turns,
+            });
+            startBtn.disabled = false;
+            stopBtn.hidden = true;
+            startBtn.hidden = false;
+            wave.dataset.mode = '';
+            bars.forEach((b) => (b.style.transform = ''));
+            showEnd(reason, summary);
+            client = null;
+          },
+        },
+      });
+      (window as any).__voiceClient = client;
+      client.start();
+    }
+
+    startBtn.addEventListener('click', start);
+    stopBtn.addEventListener('click', () => client?.stop('user'));
+    $('vd-again').addEventListener('click', () => { trackVoice('voice_demo_cta', { intent, lang, target: 'again' }); reset(); startBtn.disabled = false; });
+    end.querySelector('a')?.addEventListener('click', () => trackVoice('voice_demo_cta', { intent, lang, target: 'demo', booked: !!lastBooking }));
+    tiles.forEach((b) => b.addEventListener('click', () => {
+      const next = b.dataset.intent as VoiceIntent;
+      if (next === intent) return;
+      trackVoice('voice_demo_switch', { kind: 'intent', from: intent, to: next, mid_call: !!client });
+      selectTile(next);
+      // Cambiar de clínica en medio de la llamada corta y abre otra (como Hello Patient).
+      if (client) { client.stop('user'); start(); }
+    }));
+    langBtns.forEach((b) => b.addEventListener('click', () => {
+      const next = b.dataset.lang as Locale;
+      if (next === lang) return;
+      trackVoice('voice_demo_switch', { kind: 'lang', from: lang, to: next, mid_call: !!client });
+      lang = next;
+      applyLang();
+      if (client) { client.stop('user'); start(); }
+    }));
+
+    selectTile(intent);
+    applyLang();
+  }
+</script>
+
+<style is:global>
+  #voice-demo .kicker { font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-pine); }
+  #voice-demo .vd-tile {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem;
+    min-height: 7.5rem; border-radius: 1.25rem; border: 1px solid var(--color-line); background: var(--color-paper);
+    color: var(--color-ink); font-weight: 600; font-size: 0.95rem; transition: background 0.15s, color 0.15s, transform 0.15s;
+  }
+  #voice-demo .vd-tile svg { width: 1.75rem; height: 1.75rem; }
+  #voice-demo .vd-tile:hover { transform: translateY(-1px); }
+  #voice-demo .vd-tile[aria-checked='true'] { background: var(--color-ink); color: var(--color-cream); border-color: var(--color-ink); }
+  #voice-demo .vd-lang { padding: 0.25rem 0.6rem; border-radius: 999px; font-weight: 600; color: var(--color-salvia); }
+  #voice-demo .vd-lang[aria-checked='true'] { background: var(--color-ink); color: var(--color-cream); }
+  #voice-demo .vd-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.9rem 1.5rem; border-radius: 999px;
+    font-weight: 600; font-size: 1rem; transition: transform 0.15s, opacity 0.15s;
+  }
+  #voice-demo .vd-btn svg { width: 1.25rem; height: 1.25rem; }
+  #voice-demo .vd-btn:disabled { opacity: 0.6; }
+  #voice-demo .vd-btn--start { background: var(--color-pine); color: #fff; }
+  #voice-demo .vd-btn--start:hover:not(:disabled) { background: var(--color-pine-dark); }
+  #voice-demo .vd-btn--stop { background: #fde8e6; color: #b3261e; }
+  #voice-demo .vd-btn--ghost { border: 1px solid var(--color-line); color: var(--color-ink); background: #fff; }
+  #voice-demo .vd-wave { display: flex; align-items: center; gap: 0.35rem; height: 3.5rem; }
+  #voice-demo .vd-wave i { display: block; width: 0.45rem; height: 100%; border-radius: 999px; background: var(--color-ink); transform: scaleY(0.15); transform-origin: center; transition: transform 0.08s linear; }
+  #voice-demo .vd-wave[data-mode='sara'] i { animation: vd-talk 0.9s ease-in-out infinite; background: var(--color-pine); }
+  #voice-demo .vd-wave[data-mode='sara'] i:nth-child(2n) { animation-delay: 0.15s; }
+  #voice-demo .vd-wave[data-mode='sara'] i:nth-child(3n) { animation-delay: 0.3s; }
+  #voice-demo .vd-wave[data-mode='sara'] i:nth-child(5n) { animation-delay: 0.45s; }
+  @keyframes vd-talk { 0%, 100% { transform: scaleY(0.25); } 50% { transform: scaleY(1); } }
+  #voice-demo .vd-transcript { display: flex; flex-direction: column; gap: 0.9rem; max-height: 17rem; overflow-y: auto; }
+  #voice-demo .vd-row { display: flex; flex-direction: column; gap: 0.15rem; }
+  #voice-demo .vd-who { font-size: 0.7rem; letter-spacing: 0.14em; color: var(--color-salvia); }
+  #voice-demo .vd-row--user .vd-text { color: var(--color-pine-dark); }
+  #voice-demo .vd-row--sara .vd-text { color: var(--color-ink); }
+  #voice-demo .vd-row.draft .vd-text { opacity: 0.75; }
+  /* Compacta (home): tiles bajas en fila, transcript plegado hasta que arranca la llamada. */
+  #voice-demo[data-variant='compact'] .vd-tile { min-height: 5rem; flex-direction: row; gap: 0.6rem; }
+  #voice-demo[data-variant='compact'] .vd-tile svg { width: 1.4rem; height: 1.4rem; }
+  #voice-demo[data-variant='compact']:not([data-live]) .vd-transcript-box { display: none; }
+  #voice-demo[data-variant='compact'] .vd-wave { height: 2.5rem; }
+  #voice-demo[data-variant='compact'] .vd-transcript { max-height: 13rem; }
+  @media (max-width: 640px) { #voice-demo[data-variant='compact'] .vd-tile { flex-direction: column; gap: 0.35rem; font-size: 0.85rem; } }
+  @media (prefers-reduced-motion: reduce) { .vd-wave[data-mode='sara'] i { animation: none; transform: scaleY(0.6); } }
+</style>
