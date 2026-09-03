@@ -20,7 +20,9 @@ import ClientsStrip from '../../components/ClientsStrip.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
 import { whatsappLink, whatsappText } from '../../lib/whatsapp';
 import { SHOW_GRADER_CTA } from '../../lib/flags';
-import { getTeam } from '../../data/team';
+import { getTeam, getMember } from '../../data/team';
+import AgentKicker from '../../components/AgentKicker.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
 
 // ── Copy por idioma. EN es traducción, no calco. ──
 const dict = {
@@ -60,11 +62,11 @@ const dict = {
       { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Desliza para ver el paso a paso 👉', comment: '<b>camifer_</b> ¿Cuánto sale la valoración?', step: '2 · Alguien responde', body: 'Comenta o escribe, y Sara lo atiende al instante.' },
       { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> Te escribimos por mensaje ahora mismo 💬', step: '3 · Reserva y paga', body: 'Agenda la cita y deja la seña. Confirmada.' },
     ],
-    loop: ['Te encuentran', 'Chatean', 'Agenda', 'Cobra la seña', 'Dejan Google Review'],
     spotlightQuotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'],
     heroKicker: 'La recepcionista con IA para clínicas, médicos y wellness',
     heroH1: ['Más pacientes.', 'Más facturación.', 'Todo automático,', 'las 24 horas.'],
     heroSub: 'Sara responde, agenda, cobra el anticipo y baja las ausencias, por WhatsApp, Instagram, SMS y teléfono. Sin cambiar tu agenda ni tocar tu historia&nbsp;clínica. Y su equipo te avisa cuando hay algo que&nbsp;decidir.',
+    heroImgAlt: 'Sara, Mia y Daniel, el equipo con IA de tu clínica. Sara al frente.',
     demoCta: 'Pedir demo',
     scanCta: 'Escanear mi negocio',
     talkCta: 'Habla con Sara',
@@ -80,29 +82,30 @@ const dict = {
     saraSub: 'Trabaja de noche, los fines de semana y en los picos. Sin sumar una persona más a recepción.',
     saraMore: 'Conoce más sobre Sara',
     saraImgAlt: 'Conversación de WhatsApp: una paciente consulta de madrugada y Sara responde, agenda y cobra el anticipo.',
-    mktKicker: 'Mia · Marketing',
     mktH2: 'Mia lleva<br />tu marketing.',
     mktSub: 'Crea y publica los posts de tu clínica, corre tus campañas de Google y cuida tu ficha de Google Business. A quien responde, lo atiende Sara hasta&nbsp;agendar.',
     mktMore: 'Ver cómo Mia lleva tu Instagram',
     mktImgAlt: 'Feed de Instagram de una clínica generado con IA: publicaciones con la marca, listas para salir.',
     mktMeet: 'Conoce a Mia',
-    teamKicker: 'Sara y su equipo',
-    teamH2: 'Sara no trabaja&nbsp;sola.',
-    teamSub: 'Mia publica y mide. Daniel lleva las cuentas. Los dos te escriben a&nbsp;ti.',
+    teamKicker: 'Tu equipo con IA',
+    teamLine: 'Sara atiende. Mia trae pacientes. Daniel cuida la plata. Los tres trabajan solos y te&nbsp;escriben.',
     teamMore: 'Conoce al equipo',
     teamMeetPrefix: 'Conoce a',
-    cobrosDaniel: 'Daniel te dice cuánto entró y qué falta cobrar.',
-    cobrosDanielLink: 'Conoce a Daniel',
+    saraRole: 'Recepción',
+    miaRole: 'Marketing',
+    danielRole: 'Finanzas',
+    danielH3: 'Daniel te escribe con los números.',
+    danielPoints: ['Cuánto facturaste y cuánto te quedó', 'Qué anticipos faltan cobrar', 'Qué tratamiento deja más margen'],
+    danielMore: 'Conoce a Daniel',
     postsKicker: 'Del post a la cita, paso a paso',
     postsClose: 'Instagram, el chat y el cobro, en un mismo lugar. Nadie más cierra ese&nbsp;círculo.',
-    spotKicker: 'Spotlight · Sara',
-    spotH2: 'Atiende y vende.<br /><em class="text-pine-dark">También es<br />tu secretaria.</em>',
+    spotH2: 'Y le pides cosas<br /><em class="text-pine-dark">por WhatsApp.</em>',
+    spotMore: 'Ver el modo operador',
     spotBody: 'Gestiona la agenda entera y notifica a cada paciente. Las 24 horas.',
     spotImgAlt: 'Sara gestiona la agenda de la semana y reprograma todas las citas del martes, avisando a cada paciente.',
     ctaInline1: 'Cada consulta que no respondes a tiempo, agenda en&nbsp;otra clínica.',
-    cobrosKicker: 'Cobros',
-    cobrosH2: 'Cobra antes de&nbsp;atender.',
-    cobrosSub: 'Tres formas de que entre dinero sin que nadie lo persiga.',
+    cobrosH2: 'Cobra antes de atender.<br /><em class="text-pine-dark">Y sabe cuánto&nbsp;entró.</em>',
+    cobrosSub: 'Sara cobra en el chat. Daniel lleva las cuentas y te avisa lo que&nbsp;importa.',
     cobrosMore: 'Ver todas las formas de cobrar',
     cobrosImgAlt: 'Panel de cobros: anticipos, consultas y gift cards cobrados por Sara, todos sin recepción.',
     ctaInline2: 'Ve a Sara atendiendo tu clínica, en vivo.',
@@ -151,11 +154,11 @@ const dict = {
       { img: '/img/tenants/physiup.jpg', likes: '208', caption: '<b>clinicaaurora</b> Swipe to see the step by step 👉', comment: '<b>camifer_</b> How much is the assessment?', step: '2 · Someone replies', body: 'They comment or message, and Sara answers instantly.' },
       { img: '/img/tenants/sorace.jpg', likes: '176', caption: '<b>clinicaaurora</b> We’re messaging you right now 💬', step: '3 · They book and pay', body: 'She books the appointment and takes the deposit. Confirmed.' },
     ],
-    loop: ['They find you', 'They chat', 'Books', 'Takes deposit', 'Google review'],
     spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
     heroKicker: 'AI receptionist for clinics, doctors & wellness',
     heroH1: ['More patients.', 'More revenue.', 'All automatic,', 'around the clock.'],
     heroSub: 'Sara answers, books, collects the deposit and cuts no-shows, on WhatsApp, Instagram, SMS and the phone. Without changing your calendar or touching your medical&nbsp;records. And her team lets you know when there is something to&nbsp;decide.',
+    heroImgAlt: 'Sara, Mia and Daniel, your clinic’s AI team. Sara up front.',
     demoCta: 'Book a demo',
     scanCta: 'Scan my business',
     talkCta: 'Talk to Sara',
@@ -171,29 +174,30 @@ const dict = {
     saraSub: 'She works nights, weekends and peak hours. Without adding one more person to the front desk.',
     saraMore: 'Learn more about Sara',
     saraImgAlt: 'WhatsApp conversation: a patient enquires in the middle of the night and Sara replies, books and collects the deposit.',
-    mktKicker: 'Mia · Marketing',
     mktH2: 'Mia runs<br />your marketing.',
     mktSub: 'She creates and posts your clinic’s content, runs your Google campaigns and looks after your Google Business profile. Whoever replies, Sara takes it from there to a&nbsp;booking.',
     mktMore: 'See how Mia runs your Instagram',
     mktImgAlt: 'A clinic’s AI-generated Instagram feed: on-brand posts, ready to publish.',
     mktMeet: 'Meet Mia',
-    teamKicker: 'Sara and her team',
-    teamH2: 'Sara doesn’t work&nbsp;alone.',
-    teamSub: 'Mia posts and measures. Daniel keeps the books. Both message you&nbsp;directly.',
+    teamKicker: 'Your AI team',
+    teamLine: 'Sara answers. Mia brings in patients. Daniel minds the money. All three work on their own and message&nbsp;you.',
     teamMore: 'Meet the team',
     teamMeetPrefix: 'Meet',
-    cobrosDaniel: 'Daniel tells you what came in and what is still owed.',
-    cobrosDanielLink: 'Meet Daniel',
+    saraRole: 'Reception',
+    miaRole: 'Marketing',
+    danielRole: 'Finance',
+    danielH3: 'Daniel messages you with the numbers.',
+    danielPoints: ['What you billed and what you kept', 'Which deposits are still owed', 'Which treatment leaves the most margin'],
+    danielMore: 'Meet Daniel',
     postsKicker: 'From post to appointment, step by step',
     postsClose: 'Instagram, the chat and the payment, all in one place. No one else closes that&nbsp;loop.',
-    spotKicker: 'Spotlight · Sara',
-    spotH2: 'She answers, sells<br />and runs<br /><em class="text-pine-dark">your calendar.</em>',
+    spotH2: 'And you ask her<br /><em class="text-pine-dark">for things on WhatsApp.</em>',
+    spotMore: 'See operator mode',
     spotBody: 'She manages the entire calendar and notifies every patient. Around the clock.',
     spotImgAlt: 'Sara manages the week’s calendar and reschedules every Tuesday appointment, notifying each patient.',
     ctaInline1: 'Every enquiry you don’t answer in time books at&nbsp;another clinic.',
-    cobrosKicker: 'Payments',
-    cobrosH2: 'Get paid before the&nbsp;appointment.',
-    cobrosSub: 'Three ways to bring money in without anyone chasing it.',
+    cobrosH2: 'Get paid before the appointment.<br /><em class="text-pine-dark">And know what came&nbsp;in.</em>',
+    cobrosSub: 'Sara collects in the chat. Daniel keeps the books and flags what&nbsp;matters.',
     cobrosMore: 'See all the ways to get paid',
     cobrosImgAlt: 'Payments dashboard: deposits, consults and gift cards collected by Sara, all without a front desk.',
     ctaInline2: 'See Sara running your clinic, live.',
@@ -210,32 +214,11 @@ const dict = {
 
 const { faqs, saraDoes, context, payments, marketing, posts } = dict;
 
-// El equipo de Sara (Mia y Daniel) para la sección "Sara no trabaja sola". Fuente única: team.ts.
-const teamMates = getTeam(lang).filter((m) => m.id !== 'sara');
-
-// Overlay del hero: el circuito de Sara, sin recepción. Con logos reales de plataformas.
-const dot = 'inline-block h-6 w-6 shrink-0';
-const gWA = `<img src="/img/logos/whatsapp.svg" class="${dot}" alt="WhatsApp" loading="eager" decoding="async" />`;
-const gIG = `<img src="/img/logos/instagram.svg" class="${dot}" alt="Instagram" loading="eager" decoding="async" />`;
-const gG = `<img src="/img/logos/google.svg" class="${dot}" alt="Google" loading="eager" decoding="async" />`;
-const svgAgenda =
-  '<svg class="h-7 w-7 text-pine" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
-const svgSena =
-  '<svg class="h-7 w-7 text-pine" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 9.8h19" stroke="currentColor" stroke-width="1.8"/></svg>';
-const svgResena =
-  '<svg class="h-7 w-7" viewBox="0 0 24 24" fill="#f5b50a" aria-hidden="true"><path d="M12 3.5l2.6 5.27 5.82.85-4.21 4.1.99 5.8L12 16.8 6.8 19.52l.99-5.8-4.21-4.1 5.82-.85z"/></svg>';
-
-// Los 5 pasos, en anillo. Etiquetas cortas + logo real. Posición sobre un círculo (radio 34%).
-const loop = [
-  { icon: `<span class="flex items-center gap-1">${gG}${gIG}</span>`, t: dict.loop[0] },
-  { icon: `<span class="flex items-center gap-1">${gWA}${gIG}</span>`, t: dict.loop[1] },
-  { icon: svgAgenda, t: dict.loop[2] },
-  { icon: svgSena, t: dict.loop[3] },
-  { icon: svgResena, t: dict.loop[4] },
-].map((s, i) => {
-  const a = ((-90 + i * 72) * Math.PI) / 180;
-  return { ...s, x: 50 + 34 * Math.cos(a), y: 50 + 34 * Math.sin(a) };
-});
+// El equipo (Sara, Mia, Daniel): caras y roles para el hero, la intro y los kickers de
+// cada acto. Fuente única: team.ts. Daniel además presta su chat al Acto 3.
+const team = getTeam(lang);
+const byId = Object.fromEntries(team.map((m) => [m.id, m])) as Record<string, (typeof team)[number]>;
+const daniel = getMember('daniel', lang)!;
 ---
 
 <Layout ogImage={`/og/home-${lang}.jpg`} lang={lang}>
@@ -298,50 +281,27 @@ const loop = [
         </div>
 
         <div class="flex justify-center md:justify-end">
-          <div class="relative w-full max-w-lg rounded-3xl border border-line bg-gradient-to-br from-cream to-mint/40 p-7 shadow-[0_24px_60px_-30px_rgba(20,38,31,0.4)] sm:p-8">
-            <div class="relative mx-auto aspect-square w-full max-w-[19rem]">
-              <!-- Anillo del loop: círculo punteado con flecha, gira y vuelve al paso 1 -->
-              <svg class="pointer-events-none absolute inset-0 h-full w-full text-pine/40" viewBox="0 0 100 100" fill="none" aria-hidden="true">
-                <defs>
-                  <marker id="loopArrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
-                    <path d="M0 0 10 5 0 10z" fill="currentColor" />
-                  </marker>
-                </defs>
-                <path d="M62.7 18.5 A34 34 0 1 1 37.3 18.5" stroke="currentColor" stroke-width="1.2" stroke-dasharray="1.4 3" stroke-linecap="round" marker-end="url(#loopArrow)" />
-              </svg>
-              <!-- Centro: el thumb de Sara (el mismo del webchat), eje de su circuito -->
-              <div class="absolute inset-0 grid place-items-center">
-                <img
-                  src="/agents/sara-thumb.png"
-                  width="280"
-                  height="280"
-                  alt="Sara"
-                  class="h-[5.5rem] w-[5.5rem] rounded-full border-2 border-cream object-cover shadow-[0_6px_18px_-8px_rgba(20,38,31,0.5)]"
-                  loading="eager"
-                  decoding="async"
-                />
+          <!-- El equipo, Sara al frente: tres retratos reales (los mismos de /equipo). -->
+          <div class="relative w-full max-w-lg">
+            <div class="relative mx-auto aspect-[5/4] w-full max-w-[30rem]" role="img" aria-label={dict.heroImgAlt}>
+              <div class="absolute left-0 top-4 w-[44%] -rotate-6 overflow-hidden rounded-2xl border border-line bg-cream shadow-[0_18px_40px_-24px_rgba(20,38,31,0.45)]">
+                <img src={byId.daniel.poster} width="464" height="688" alt="" loading="eager" decoding="async" class="aspect-[3/4] w-full object-cover object-top" />
+                <span class="absolute top-3 left-3 flex items-center gap-1.5 whitespace-nowrap rounded-full bg-cream/95 px-3 py-1.5 text-xs font-semibold text-ink shadow">
+                  <span class="dot h-2 w-2"></span>{byId.daniel.name}<span class="hidden sm:inline"> · {dict.danielRole}</span>
+                </span>
               </div>
-              {
-                loop.map((n, i) => (
-                  <div class="absolute -translate-x-1/2 -translate-y-1/2" style={`left:${n.x}%;top:${n.y}%`}>
-                    <div class="relative grid h-16 w-16 place-items-center rounded-full border border-line bg-cream shadow-[0_6px_16px_-8px_rgba(20,38,31,0.45)]">
-                      <span class="absolute -left-1.5 -top-1.5 grid h-5 w-5 place-items-center rounded-full bg-pine text-[11px] font-bold text-cream tabular-nums">{i + 1}</span>
-                      <span class="flex items-center" set:html={n.icon} />
-                    </div>
-                    <span
-                      class:list={[
-                        'absolute w-max text-[13px] font-semibold leading-tight text-ink',
-                        i === 0 && 'bottom-full left-1/2 mb-2 max-w-[6.5rem] -translate-x-1/2 text-center',
-                        i === 1 && 'left-full top-1/2 ml-2 max-w-[5rem] -translate-y-1/2 text-left',
-                        i === 4 && 'right-full top-1/2 mr-2 max-w-[5rem] -translate-y-1/2 text-right',
-                        (i === 2 || i === 3) && 'left-1/2 top-full mt-2 max-w-[6.5rem] -translate-x-1/2 text-center',
-                      ]}
-                    >
-                      {n.t}
-                    </span>
-                  </div>
-                ))
-              }
+              <div class="absolute right-0 top-4 w-[44%] rotate-6 overflow-hidden rounded-2xl border border-line bg-cream shadow-[0_18px_40px_-24px_rgba(20,38,31,0.45)]">
+                <img src={byId.mia.poster} width="464" height="688" alt="" loading="eager" decoding="async" class="aspect-[3/4] w-full object-cover object-top" />
+                <span class="absolute top-3 right-3 flex items-center gap-1.5 whitespace-nowrap rounded-full bg-cream/95 px-3 py-1.5 text-xs font-semibold text-ink shadow">
+                  <span class="dot h-2 w-2"></span>{byId.mia.name}<span class="hidden sm:inline"> · {dict.miaRole}</span>
+                </span>
+              </div>
+              <div class="absolute bottom-0 left-1/2 w-[54%] -translate-x-1/2 overflow-hidden rounded-3xl border-2 border-cream bg-cream shadow-[0_28px_60px_-28px_rgba(20,38,31,0.55)]">
+                <img src={byId.sara.poster} width="464" height="688" alt="" loading="eager" decoding="async" class="aspect-[3/4] w-full object-cover object-top" />
+                <span class="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-cream/95 px-3 py-1.5 text-xs font-semibold text-ink shadow">
+                  <span class="dot h-2 w-2"></span>{byId.sara.name}<span class="hidden sm:inline"> · {dict.saraRole}</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -426,11 +386,38 @@ const loop = [
       </div>
     </section>
 
-    <!-- ══════════ CONOCE A SARA ══════════ -->
+    <!-- ══════════ TU EQUIPO (intro de los tres actos) ══════════ -->
+    <section id="equipo" class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-6 px-5 py-14 md:flex-row md:items-center md:justify-between">
+        <div class="max-w-2xl">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.teamKicker}</p>
+          <p class="font-serif text-2xl font-black leading-snug text-balance md:text-3xl" set:html={dict.teamLine} />
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          {
+            team.map((m) => (
+              <a
+                href={L(`${m.href}?ref=home`)}
+                class="flex items-center gap-2.5 rounded-full border border-line bg-white py-1.5 pl-1.5 pr-4 text-sm font-semibold text-ink transition-colors hover:border-pine/40 hover:text-pine-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pine/50"
+              >
+                <img src={m.avatar} alt="" width="36" height="36" loading="lazy" decoding="async" class="h-9 w-9 rounded-full object-cover" />
+                {m.name}
+                <span class="font-normal text-salvia">{m.role}</span>
+              </a>
+            ))
+          }
+          <a href={L('/equipo?ref=home')} class="inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+            {dict.teamMore} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ ACTO 1 · SARA · RECEPCIÓN ══════════ -->
     <section id="sara" class="border-t border-line bg-paper">
       <div class="reveal mx-auto grid min-w-0 max-w-6xl gap-14 px-5 py-24 md:grid-cols-[0.85fr_1.15fr] md:items-center">
         <div>
-          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.saraKicker}</p>
+          <AgentKicker avatar={byId.sara.avatar} name={byId.sara.name} role={dict.saraRole} class="mb-3" />
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.saraH2} />
           <p class="mt-5 text-lg text-salvia">{dict.saraSub}</p>
           <ul class="mt-8 flex flex-col gap-3.5">
@@ -457,85 +444,38 @@ const loop = [
           </MockFrame>
         </div>
       </div>
-    </section>
 
-    <!-- ══════════ SPOTLIGHT · OPERADORA ══════════ -->
-    <section class="border-t border-line">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <div class="mx-auto max-w-3xl text-center">
-          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.spotKicker}</p>
-          <h2 class="font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.spotH2} />
-          <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.spotBody}</p>
-        </div>
-        <div class="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
-          {
-            dict.spotlightQuotes.map((q) => (
-              <div class="rounded-xl border border-line bg-paper px-4 py-3 text-center font-accent text-base italic text-pine-dark">
-                {q}
-              </div>
-            ))
-          }
-        </div>
-        <div class="mt-12 flex min-w-0 justify-center">
+      <!-- Segunda prueba de Sara: el modo operador (antes era el Spotlight "secretaria"). -->
+      <div class="reveal mx-auto grid min-w-0 max-w-6xl gap-14 px-5 pb-24 md:grid-cols-[1.15fr_0.85fr] md:items-center">
+        <div class="order-2 flex min-w-0 justify-center md:order-1 md:justify-start">
           <MockFrame>
             <OperatorPanel lang={lang} class="w-full" />
           </MockFrame>
         </div>
-      </div>
-    </section>
-
-    <!-- ══════════ SARA Y SU EQUIPO ══════════ -->
-    <section id="equipo" class="border-t border-line bg-paper">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.teamKicker}</p>
-        <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.teamH2} />
-        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.teamSub} />
-
-        <div class="mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
-          {
-            teamMates.map((m) => (
-              <a
-                href={L(`${m.href}?ref=home`)}
-                class="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-all duration-300 hover:border-pine/40 hover:shadow-[0_16px_40px_-24px_rgba(20,38,31,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pine/50"
-              >
-                <img
-                  src={m.poster}
-                  width="464"
-                  height="688"
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  class="h-auto w-full bg-cream transition-transform duration-500 group-hover:scale-[1.03]"
-                />
-                <div class="flex flex-1 flex-col p-6">
-                  <div class="flex items-baseline gap-2">
-                    <h3 class="font-serif text-2xl font-black text-ink">{m.name}</h3>
-                    <span class="text-sm font-semibold text-pine">{m.role}</span>
-                  </div>
-                  <p class="mt-2 text-salvia">{m.oneliner}</p>
-                  <span class="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-pine-dark transition-colors group-hover:text-ink">
-                    {dict.teamMeetPrefix} {m.name}
-                    <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
-                  </span>
-                </div>
-              </a>
-            ))
-          }
+        <div class="order-1 md:order-2">
+          <h2 class="font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.spotH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.spotBody}</p>
+          <div class="mt-6 flex flex-col gap-2.5">
+            {
+              dict.spotlightQuotes.map((q) => (
+                <div class="rounded-xl border border-line bg-white px-4 py-2.5 font-accent text-base italic text-pine-dark">{q}</div>
+              ))
+            }
+          </div>
+          <a
+            href={L('/operador')}
+            class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+          >
+            {dict.spotMore} <span aria-hidden="true">→</span>
+          </a>
         </div>
-
-        <a
-          href={L('/equipo?ref=home')}
-          class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
-        >
-          {dict.teamMore} <span aria-hidden="true">→</span>
-        </a>
       </div>
     </section>
 
-    <!-- ══════════ MARKETING ══════════ -->
+    <!-- ══════════ ACTO 2 · MIA · MARKETING ══════════ -->
     <section class="border-t border-line">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.mktKicker}</p>
+        <AgentKicker avatar={byId.mia.avatar} name={byId.mia.name} role={dict.miaRole} class="mb-3" />
         <h2 class="max-w-2xl font-serif text-4xl font-black leading-tight tracking-tight text-balance md:text-5xl" set:html={dict.mktH2} />
         <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.mktSub} />
         <div class="mt-5 flex flex-wrap items-center gap-x-8 gap-y-2">
@@ -592,11 +532,11 @@ const loop = [
     <!-- CTA intercalado -->
     <CtaInline title={dict.ctaInline1} lang={lang} />
 
-    <!-- ══════════ COBROS ══════════ -->
+    <!-- ══════════ ACTO 3 · DANIEL · FINANZAS ══════════ -->
     <section id="cobros" class="border-t border-line">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <div class="mx-auto max-w-3xl text-center">
-          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.cobrosKicker}</p>
+        <div class="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <AgentKicker avatar={byId.daniel.avatar} name={byId.daniel.name} role={dict.danielRole} class="mb-3" />
           <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.cobrosH2} />
           <p class="mx-auto mt-5 max-w-xl text-lg text-salvia">{dict.cobrosSub}</p>
         </div>
@@ -616,13 +556,40 @@ const loop = [
             ))
           }
         </div>
-        <p class="mx-auto mt-10 max-w-xl text-center text-salvia">
-          {dict.cobrosDaniel}
-          <a href={L('/equipo/daniel?ref=home')} class="inline-flex items-center gap-1.5 whitespace-nowrap font-semibold text-pine-dark transition-colors hover:text-ink">
-            {dict.cobrosDanielLink} <span aria-hidden="true">→</span>
-          </a>
-        </p>
-        <div class="mt-8 text-center">
+        <!-- Daniel te escribe: su chat real (team.ts), la misma prueba que en su ficha. -->
+        <div class="mx-auto mt-20 grid min-w-0 max-w-6xl gap-14 md:grid-cols-[0.85fr_1.15fr] md:items-center">
+          <div>
+            <h3 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.danielH3}</h3>
+            <ul class="mt-6 flex flex-col gap-3">
+              {
+                dict.danielPoints.map((item) => (
+                  <li class="flex items-start gap-3">
+                    <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint" />
+                    <span class="text-ink">{item}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <a
+              href={L('/equipo/daniel?ref=home')}
+              class="mt-8 inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"
+            >
+              {dict.danielMore} <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div class="flex min-w-0 justify-center md:justify-end">
+            <ConversationDemo
+              lang={lang}
+              channel="whatsapp"
+              name={daniel.name}
+              avatar={daniel.avatar}
+              subtitle={daniel.chatSubtitle}
+              bubbles={daniel.bubbles}
+              animate
+            />
+          </div>
+        </div>
+        <div class="mt-12 text-center">
           <a
             href={L('/cobros')}
             class="inline-flex items-center gap-1.5 text-base font-semibold text-pine-dark transition-colors hover:text-ink"

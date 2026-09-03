@@ -1,0 +1,26 @@
+---
+// Kicker de sección con la cara del integrante del equipo: "[foto] Sara · Recepción".
+// Reemplaza al kicker de texto plano en los bloques de la home que pertenecen a un
+// agente (Sara, Mia, Daniel), para que cada acto tenga su cara. Los datos salen de
+// src/data/team.ts (avatar, name, role); acá solo se renderiza.
+interface Props {
+  avatar: string;
+  name: string;
+  role: string;
+  class?: string;
+}
+const { avatar, name, role, class: cls = '' } = Astro.props;
+---
+
+<p class:list={['flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark', cls]}>
+  <img
+    src={avatar}
+    alt=""
+    width="32"
+    height="32"
+    loading="lazy"
+    decoding="async"
+    class="h-8 w-8 shrink-0 rounded-full border-2 border-cream object-cover shadow-[0_4px_12px_-6px_rgba(20,38,31,0.5)]"
+  />
+  <span>{name} <span aria-hidden="true">·</span> {role}</span>
+</p>
