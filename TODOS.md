@@ -7,4 +7,4 @@ Diferidos por /autoplan (2026-09-03, home "Sara y su equipo"):
 - [ ] **Unificar "recepcionista" vs "secretaria"** en kicker, meta, nav, llms.txt, JSON-LD, spotlight y agentView. PR aparte.
 - [ ] **Pregunta abierta:** ¿Mia y Daniel se contratan hoy sobre la misma cuenta que Sara o se activan en la demo? Define la FAQ de la home y el llms.txt.
 - [ ] **Codex:** `codex login` para que /autoplan y /review vuelvan a tener segunda voz.
-- [ ] **Medición:** guardar CTR y conversión a /demo de los 14 días previos al deploy (Meta y Google Ads) y comparar a los 14 días.
+- [ ] **Medición:** la campaña arranca sin tráfico previo, así que no hay línea base. Franco deja una anotación en Analytics en la fecha del deploy; comparar CTR y conversión a /demo a los 14 y 30 días desde ahí.
