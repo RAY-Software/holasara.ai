@@ -12,6 +12,8 @@ Diferidos por /autoplan (2026-09-03, home "Sara y su equipo"):
 
 ## SEO: landings nuevas (investigación Ahrefs MX/US, 3-sep-2026)
 
+**Convención nueva (Franco, 3-sep-2026): los slugs se localizan por idioma.** Las landings de esta lista nacen con slug en su idioma (`/es/recordatorio-de-citas-por-whatsapp` <-> `/en/appointment-reminders`, `/en/ai-receptionist`, `/en/dental-seo`). Trabajo técnico previo, de una sola vez: `getStaticPaths` con mapa de slug por idioma, `localePath` resolviendo el slug según el idioma, hreflang y canonical emparejando ambas URLs, y 301 de los slugs viejos donde ya haya algo indexado (hoy casi nada). Las páginas existentes (`/en/llamadas`, `/en/agenda`, etc.) migran en esa misma tarea.
+
 Fuente: `docs/research/keywords-mx-us-2026-09.md` (otra sesión) y https://claude.ai/code/artifact/65cd0f82-c68a-4078-ab4c-a323fd663660. El sitio arranca de cero en orgánico (51 impresiones en 90 días, todas de marca). El cluster "recepcionista virtual" en español casi no tiene volumen (40/mes): se mantiene en la home por message match con Ads, no por SEO. La demanda orgánica real en MX está en recordatorios y agenda por WhatsApp; en US (10x volumen) en "ai receptionist", "medical answering service", "appointment reminders" y las páginas de Mia (dental SEO, med spa SEO, Instagram automation, AEO/GEO). Los datos respaldan la dirección B (Mia se sostiene con páginas propias en /en, no cambiando la home).
 
 - [ ] ES: landing nueva `/es/recordatorio-de-citas-por-whatsapp` ("recordatorio de citas por whatsapp" 200/mes, KD 26, SERP débil). Hoy es un ancla dentro de /agenda.
