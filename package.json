@@ -7,11 +7,12 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/build-api.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "voice:dev": "node scripts/voice-dev.mjs",
-    "test": "node --test \"src/**/*.test.ts\""
+    "test": "node --test \"src/**/*.test.ts\"",
+    "build:api": "node scripts/build-api.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

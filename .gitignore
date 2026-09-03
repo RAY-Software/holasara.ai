@@ -22,3 +22,6 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 .vercel
+
+# Bundle generado por scripts/build-api.mjs
+api/voice-session.js

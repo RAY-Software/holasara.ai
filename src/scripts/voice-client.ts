@@ -12,7 +12,7 @@
 //   tool(name, args, result)
 //   ended(reason)          'user' | 'sara' | 'max' | 'hidden' | 'error' | 'closed'
 
-import type { Locale } from '../i18n/config';
+import type { Locale } from '../i18n/config.ts';
 import { voiceDemoClinics, type VoiceIntent } from '../data/voiceDemoClinics.ts';
 import { createAgenda, runDemoTool, type Agenda } from '../lib/voiceDemo/agenda.ts';
 

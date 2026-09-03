@@ -2,7 +2,7 @@
 // (api/voice-session.ts): el resultado se fija dentro del token efímero con
 // liveConnectConstraints, así el browser no puede cambiar ni el prompt ni los tools.
 
-import type { Locale } from '../../i18n/config';
+import type { Locale } from '../../i18n/config.ts';
 import type { VoiceClinic } from '../../data/voiceDemoClinics.ts';
 
 /** Modelo y voz por idioma. Elegidos a oído el 2026-09-03 sobre muestras del spike. */

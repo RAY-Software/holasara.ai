@@ -1,5 +1,10 @@
 // POST /api/voice-session — abre una sesión de la demo de voz.
 //
+// FUENTE de la función. No vive en api/ porque Vercel no reescribe imports de TS: se
+// empaqueta con esbuild a api/voice-session.js en `npm run build` (scripts/build-api.mjs),
+// que además inyecta la key desde api/_gemini-key.js (escrito por el deploy). En dev,
+// scripts/voice-dev.mjs importa esta fuente directo y la key sale de la env.
+//
 // El browser manda { intent, lang } y recibe un token efímero de Gemini Live con TODA la
 // config fijada del lado del server (modelo, voz, prompt de la clínica ficticia y tools),
 // vía liveConnectConstraints. Con ese token el browser abre el WebSocket directo contra
@@ -12,9 +17,11 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { GoogleGenAI } from '@google/genai';
-import { GEMINI_API_KEY } from './_gemini-key.js';
-import { voiceDemoClinics, isVoiceIntent } from '../src/data/voiceDemoClinics.ts';
-import { buildLiveConfig, greetingTrigger, VOICE_MAX_SEC } from '../src/lib/voiceDemo/prompt.ts';
+import { voiceDemoClinics, isVoiceIntent } from '../data/voiceDemoClinics.ts';
+import { buildLiveConfig, greetingTrigger, VOICE_MAX_SEC } from '../lib/voiceDemo/prompt.ts';
+
+// En el bundle de prod esbuild reemplaza esta expresión por la key literal (define).
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY_BUNDLED || '';
 
 const ORIGENES = new Set([
   'https://holasara.ai',

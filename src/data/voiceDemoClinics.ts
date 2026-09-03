@@ -7,7 +7,7 @@
 // Los precios se hablan en la moneda del idioma: ES → MXN (la clínica está en México),
 // EN → USD (la clínica está en Miami). Son cifras verosímiles, no reales.
 
-import type { Locale } from '../i18n/config';
+import type { Locale } from '../i18n/config.ts';
 
 export type VoiceIntent = 'estetica' | 'dental' | 'consultorio';
 export const voiceIntents: readonly VoiceIntent[] = ['estetica', 'dental', 'consultorio'];
