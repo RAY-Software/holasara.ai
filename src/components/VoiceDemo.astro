@@ -229,6 +229,8 @@ const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(
     let startedAt = 0;
     let turns = 0;
     let lastBooking: any = null;
+    let sessionId = '';
+    let transcriptLog: Array<{ role: 'user' | 'sara'; text: string }> = [];
 
     // Embudo: la sección entró en pantalla (una vez).
     if ('IntersectionObserver' in window) {
@@ -305,8 +307,29 @@ const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(
       status.textContent = t.listening;
     }
 
+    // Resumen al colgar → /api/voice-end → scrapper → Slack #hola-sara. Solo en producción:
+    // desde localhost no queremos avisos de prueba. Best-effort, nunca bloquea la UI.
+    function reportEnd(reason: EndReason, summary: { booking: any; humanRequested: string | null; durationSec: number }) {
+      if (!/holasara\.ai$/.test(location.hostname)) return;
+      if (!sessionId) return;
+      const b = summary.booking;
+      const body = {
+        sessionId, intent, lang, reason,
+        durationSec: summary.durationSec, turns,
+        clinicName: client?.clinicName || '',
+        page: location.pathname,
+        humanRequested: !!summary.humanRequested,
+        booking: b ? { service: b.slot?.service, label: b.slot?.label, professional: b.slot?.professional, name: b.name } : null,
+        transcript: transcriptLog.slice(-80),
+      };
+      try {
+        fetch('/api/voice-end', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), keepalive: true }).catch(() => {});
+      } catch {}
+    }
+
     function row(role: 'user' | 'sara', text: string, final: boolean) {
       if (final && role === 'user') turns += 1;
+      if (final) transcriptLog.push({ role, text });
       const cls = `vd-row vd-row--${role}`;
       let li = list.querySelector<HTMLLIElement>(`li.draft[data-role="${role}"]`);
       if (!li) {
@@ -345,6 +368,8 @@ const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(
       startedAt = Date.now();
       turns = 0;
       lastBooking = null;
+      sessionId = '';
+      transcriptLog = [];
       trackVoice('voice_demo_start', { intent, lang });
       client = new VoiceClient({
         intent,
@@ -353,6 +378,7 @@ const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(
           status: (s, detail) => {
             if (s === 'connecting') status.textContent = t.connecting;
             if (s === 'live') {
+              sessionId = client?.sessionId || '';
               root.dataset.live = '1';
               trackVoice('voice_demo_connected', { intent, lang, connect_ms: Date.now() - startedAt });
               status.textContent = t.listening;
@@ -392,6 +418,7 @@ const waMsgs = showWa ? Object.fromEntries(voiceIntents.map((i) => [i, waMsgFor(
           tick: (sec) => (timer.textContent = fmt(sec)),
           ended: (reason, summary) => {
             delete root.dataset.live;
+            reportEnd(reason, summary);
             trackVoice('voice_demo_ended', {
               intent, lang, reason,
               duration_sec: summary.durationSec,

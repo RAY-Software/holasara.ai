@@ -96,6 +96,8 @@ export class VoiceClient {
   private onVisibility = () => { if (document.hidden) this.stop('hidden'); };
 
   status: VoiceStatus = 'idle';
+  get sessionId(): string { return this.session?.sessionId || ''; }
+  get clinicName(): string { return this.session?.clinicName || ''; }
 
   constructor(opts: Options) {
     this.opts = opts;
