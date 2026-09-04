@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # Bundle generado por scripts/build-api.mjs
 api/voice-session.js
+api/voice-end.js

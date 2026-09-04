@@ -14,11 +14,13 @@ if (!process.env.GEMINI_API_KEY && existsSync(keyFile)) process.env.GEMINI_API_K
 process.env.VOICE_MAX_PER_IP_HOUR ||= '100';
 
 const { default: voiceSession } = await import('../src/server/voice-session.ts');
+const { default: voiceEnd } = await import('../src/server/voice-end.ts');
 const ASTRO = process.env.ASTRO_URL || 'http://localhost:4321';
 const PORT = Number(process.env.PORT || 4322);
 
 const server = http.createServer((req, res) => {
   if (req.url?.startsWith('/api/voice-session')) return void voiceSession(req, res);
+  if (req.url?.startsWith('/api/voice-end')) return void voiceEnd(req, res);
   const target = new URL(req.url || '/', ASTRO);
   const p = http.request(target, { method: req.method, headers: { ...req.headers, host: target.host } }, (r) => {
     res.writeHead(r.statusCode || 502, r.headers);

@@ -90,9 +90,15 @@ jobs:
           fi
           printf "export const GEMINI_API_KEY = '%s';\n" "$GEMINI_API_KEY" > api/_gemini-key.js
           echo "  api/_gemini-key.js escrito (${#GEMINI_API_KEY} caracteres)"
+          # Aviso a Slack al terminar una demo de voz (api/voice-end → scrapper). Sin secret, sin aviso.
+          if [ -z "$SCRAPPER_INBOUND_SECRET" ]; then
+            echo "::warning::falta el secret SCRAPPER_INBOUND_SECRET — no habrá aviso a Slack de las demos de voz"
+          fi
+          printf "export const SCRAPPER_INBOUND_SECRET = '%s';\n" "$SCRAPPER_INBOUND_SECRET" > api/_scrapper-key.js
         env:
           PLACES_API_KEY: ${{ secrets.PLACES_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SCRAPPER_INBOUND_SECRET: ${{ secrets.SCRAPPER_INBOUND_SECRET }}
 
       # Vercel detecta las funciones de api/ al ARRANCAR `vercel build`, antes de correr el
       # build command. api/voice-session.js es generado (esbuild desde src/server/), así que
