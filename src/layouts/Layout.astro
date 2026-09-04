@@ -28,10 +28,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const siteUrl = (Astro.site?.toString() ?? 'https://holasara.ai/').replace(/\/$/, '');
 
 // hreflang: alterna el segmento de idioma del path actual (/es/foo ↔ /en/foo).
+// En la raíz de cada idioma, stripLocale es "/" → apuntamos a "/es/" y "/en/" CON barra
+// final (las canónicas). Sin la barra, /es y /en redirigen y el hreflang quedaría a una
+// URL no canónica (error de auditoría "Hreflang to non-canonical").
 const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
 const altUrls = locales.map((l) => ({
   lang: l,
-  href: new URL(`/${l}${stripLocale === '/' ? '' : stripLocale}`, Astro.site).toString(),
+  href: new URL(`/${l}${stripLocale === '/' ? '/' : stripLocale}`, Astro.site).toString(),
 }));
 const ogLocale = lang === 'en' ? 'en_US' : 'es_LA';
 

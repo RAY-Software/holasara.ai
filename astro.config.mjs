@@ -14,8 +14,18 @@ export default defineConfig({
   redirects: {
     '/recordatorios': '/es/agenda#recordatorios',
   },
-  // La /agent es la vista para LLMs (noindex) → fuera del sitemap.
-  integrations: [sitemap({ filter: (page) => !page.includes('/agent') })],
+  // Fuera del sitemap (evita errores de auditoría por URLs no indexables/redirigidas):
+  //  - /agent: la vista Markdown para LLMs (noindex).
+  //  - la raíz "/": el middleware la redirige (307) al idioma; la canónica es /es/.
+  //  - /wa: el bridge de WhatsApp (noindex, redirige a wa.me).
+  integrations: [
+    sitemap({
+      filter: (page) => {
+        const path = new URL(page).pathname;
+        return !path.includes('/agent') && path !== '/' && !path.startsWith('/wa');
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
