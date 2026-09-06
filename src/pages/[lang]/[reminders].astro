@@ -1,0 +1,411 @@
+---
+import { localizedStaticPaths, toLocale, localePath } from '../../i18n/config';
+// Slug localizado: /es/recordatorio-de-citas-por-whatsapp ↔ /en/appointment-reminders
+// (src/i18n/slugs.ts). Landing SEO: "recordatorio de citas por whatsapp" (MX) y
+// "appointment reminders" / "medical appointment reminder service" (US).
+export function getStaticPaths() {
+  return localizedStaticPaths('reminders');
+}
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es inglés nativo, no calco. ──
+// Ángulo: enviar el recordatorio es la mitad; lo que baja la ausencia es la
+// confirmación, la reprogramación en el mismo chat y el anticipo al reservar.
+const dict = {
+  es: {
+    metaTitle: 'Recordatorio de citas por WhatsApp para clínicas · Sara',
+    metaDescription:
+      'Sara envía el recordatorio de citas por WhatsApp, pide confirmación y reprograma si el paciente no puede. Para consultorios médicos, dentales y de estética.',
+    heroEyebrow: 'Agenda · Recordatorio de citas por WhatsApp',
+    heroTitle: "El recordatorio de citas por WhatsApp<br /><em class='text-pine-dark'>que sí&nbsp;confirma.</em>",
+    heroLead:
+      'Enviar el recordatorio es la mitad. Sara escribe por WhatsApp un día antes, pide que el paciente confirme con una palabra y, si no puede, le propone otro horario en el mismo chat. La agenda llega al día llena, sin que recepción llame a nadie.',
+    heroImageAlt: 'Una paciente confirma su cita desde el teléfono, con una taza de té al lado, en un ambiente cálido.',
+    strip: [
+      { t: 'Recuerda un día antes', b: 'Fecha, hora, dirección y lo que hay que traer, en el WhatsApp del paciente.' },
+      { t: 'Pide confirmación', b: 'El paciente responde SÍ y la cita queda confirmada en tu agenda.' },
+      { t: 'Reprograma si no puede', b: 'Ofrece otro horario en el mismo chat y libera la hora para la lista de espera.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'Un recordatorio de citas por WhatsApp, tal cual lo recibe el&nbsp;paciente.',
+    howP1:
+      'Esto es un recordatorio real. Sara escribe con el tono de tu clínica, con los datos de la cita y una pregunta concreta. El paciente responde en segundos, sin apps ni links raros.',
+    howP2:
+      'Si confirma, en tu panel la cita pasa a <span class="font-semibold text-pine-dark">✅ Confirmado</span>. Si no responde, Sara vuelve a preguntar. Si no puede, reprograma. Nadie en recepción tiene que levantar el&nbsp;teléfono.',
+    howBubbles: [
+      { who: 'out', text: 'Hola, Paula. Te recuerdo tu cita de mañana jueves a las 14:00 en Clínica Aurora, Av. Reforma 120. ¿Confirmas que vienes? Responde SÍ y queda lista.', t: '18:00' },
+      { who: 'in', text: 'Sí, ahí estaré', t: '18:41' },
+      { who: 'out', text: 'Confirmada, Paula. Mañana a las 14:00. Si algo cambia, escríbeme por aquí y buscamos otro horario.', t: '18:41' },
+    ],
+    stepsH2: 'De una cita agendada a un paciente que&nbsp;llega.',
+    steps: [
+      { n: '01', title: 'La cita entra en tu agenda', body: 'La reserva Sara desde el chat o la carga tu equipo en Google Calendar. Da igual: Sara la ve y la cuida.' },
+      { n: '02', title: 'Sara recuerda y confirma', body: 'Un día antes escribe por WhatsApp, pide confirmación y vuelve a preguntar si no hay respuesta. Con criterio, no en ráfaga.' },
+      { n: '03', title: 'La agenda llega llena', body: 'Confirmadas, reprogramadas o liberadas para la lista de espera. Sin llamadas de recepción y sin sorpresas a las 9 de la mañana.' },
+    ],
+    row1Eyebrow: 'Confirmación',
+    row1Title: "Confirma con una palabra <em class='text-pine-dark'>y queda en tu&nbsp;agenda.</em>",
+    row1Body:
+      'El paciente responde SÍ y la cita pasa a confirmada en tu panel y en tu Google Calendar. Si no responde, Sara vuelve a preguntar unas horas después. Si sigue en silencio, tu equipo la ve marcada y decide qué hacer.',
+    row1Points: [
+      'Confirmación con un SÍ, sin apps ni formularios',
+      'Un segundo intento si no hay respuesta',
+      'El estado se ve en tu panel y en tu calendario',
+    ],
+    row1Bubbles: [
+      { who: 'out', text: 'Hola, Laura. Mañana miércoles a las 11:00 tienes tu limpieza facial en Clínica Aurora. ¿Confirmas que vienes?', t: 'Mar 17:00' },
+      { who: 'out', text: 'Hola de nuevo, Laura. No quiero que se te pase: ¿nos confirmas la cita de mañana a las 11:00? Responde SÍ y queda lista.', t: 'Mar 20:30' },
+      { who: 'in', text: 'Sí, perdón, no había visto el mensaje', t: 'Mar 20:52' },
+      { who: 'out', text: 'Sin problema. Confirmada para mañana a las 11:00. Te esperamos.', t: 'Mar 20:52' },
+    ],
+    row2Eyebrow: 'Reprogramación',
+    row2Title: "Si no puede, <em class='text-pine-dark'>reprograma en el mismo&nbsp;chat.</em>",
+    row2Body:
+      'Un "no puedo" no es una hora perdida. Sara propone dos horarios concretos, mueve la cita en tu calendario y ofrece el hueco que quedó libre a la lista de espera. Todo en la misma conversación.',
+    row2Points: [
+      'Propone horarios reales, no un "escríbenos para reagendar"',
+      'La hora que se libera va a la lista de espera',
+      'Sin que recepción coordine nada',
+    ],
+    row2Bubbles: [
+      { who: 'out', text: 'Hola, Marco. Te recuerdo tu cita de mañana jueves a las 16:00. ¿Confirmas que vienes?', t: '18:00' },
+      { who: 'in', text: 'Uy, mañana no voy a poder. ¿Se puede cambiar?', t: '18:20' },
+      { who: 'out', text: 'Claro. Tengo el viernes a las 10:30 o el lunes a las 17:00. ¿Cuál te queda mejor?', t: '18:20' },
+      { who: 'in', text: 'Lunes 17:00', t: '18:22' },
+      { who: 'out', text: 'Listo, movida al lunes a las 17:00. Te escribo el domingo para recordártela.', t: '18:22' },
+    ],
+    row3Eyebrow: 'Consultorios médicos',
+    row3Title: "Recordatorio de citas médicas <em class='text-pine-dark'>con&nbsp;indicaciones.</em>",
+    row3Body:
+      'Para consultas y estudios, el recordatorio lleva lo que el paciente necesita saber: profesional, ayuno, documentos, dónde presentarse. Menos mensajes de "¿tengo que ir en ayunas?" y menos citas que se caen por un detalle.',
+    row3Points: [
+      'Indicaciones por tipo de consulta o estudio',
+      'Nombre del profesional y piso o consultorio',
+      'Sirve para consultorios, centros médicos y laboratorios',
+    ],
+    row3Bubbles: [
+      { who: 'out', text: 'Hola, Andrés. Te recuerdo tu consulta de mañana viernes a las 9:30 con la Dra. Ruiz. Ven en ayunas y trae tus últimos estudios. ¿Confirmas que vienes?', t: '17:00' },
+      { who: 'in', text: 'Confirmo. ¿La dirección sigue siendo la misma?', t: '17:25' },
+      { who: 'out', text: 'Sí, Av. Reforma 120, piso 2. Te esperamos mañana a las 9:30.', t: '17:25' },
+    ],
+    row4Eyebrow: 'Consultorios dentales',
+    row4Title: "Recordatorio de citas dentales, <em class='text-pine-dark'>y el control de los seis&nbsp;meses.</em>",
+    row4Body:
+      'En odontología, la cita que más se pierde es la de control. Sara recuerda la cita de mañana y, cuando toca, escribe para agendar la limpieza o el control que quedó pendiente. La agenda del consultorio no depende de que el paciente se acuerde.',
+    row4Points: [
+      'Recordatorio de limpiezas, controles y ortodoncia',
+      'Reactiva al que no volvió al control',
+      'Convive con lo que carga tu recepción',
+    ],
+    row4Bubbles: [
+      { who: 'out', text: 'Hola, Sofía. Te recuerdo tu cita de mañana martes a las 12:30 con el Dr. Peña para el ajuste de ortodoncia. ¿Confirmas que vienes?', t: '18:00' },
+      { who: 'in', text: 'Sí, confirmo', t: '18:05' },
+      { who: 'out', text: 'Perfecto. Te esperamos mañana a las 12:30. Recuerda traer tu retenedor.', t: '18:05' },
+      { who: 'in', text: 'Gracias. ¿Y la limpieza la agendo ahí mismo?', t: '18:06' },
+      { who: 'out', text: 'Sí, el Dr. Peña te la agenda en la consulta, o me escribes cuando quieras y te busco horario.', t: '18:06' },
+    ],
+    row5Eyebrow: 'El anticipo',
+    row5Title: "El recordatorio que más funciona <em class='text-pine-dark'>se cobra al&nbsp;reservar.</em>",
+    row5Body:
+      'El mensaje recuerda; el anticipo compromete. Cuando el paciente deja un anticipo al agendar, la ausencia casi desaparece: quien pagó, viene. Sara lo cobra con un link de pago dentro del mismo chat, antes de dar la cita.',
+    row5Points: [
+      'Anticipo o consulta por adelantado, tú decides',
+      'Link de pago seguro dentro de WhatsApp',
+      'Menos ausencias desde el primer mes',
+      `<a href="${L('/cobros')}" class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">Ver cómo cobra Sara</a>`,
+    ],
+    row5Bubbles: [
+      { who: 'out', text: 'Te dejo el jueves a las 17:30 con la Dra. Ruiz. Para confirmar la reserva va un anticipo, aquí el link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '10:12' },
+      { who: 'in', text: 'Listo, ya pagué', t: '10:15' },
+      { who: 'out', text: 'Pago recibido. Jueves 17:30 confirmado. Un día antes te escribo para recordártela.', t: '10:15' },
+    ],
+    ctaInline: 'Que la agenda de mañana llegue confirmada&nbsp;hoy.',
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada recordatorio deja&nbsp;estado.',
+    panelLead:
+      'En la bandeja de Chats ves de un vistazo qué citas de mañana están confirmadas, cuáles se movieron y cuáles siguen sin respuesta. Sin llamar a nadie para&nbsp;saberlo.',
+    estados: [
+      { tag: '⏰ Recordatorio', desc: 'Sara envió el recordatorio de la cita de mañana.' },
+      { tag: '✅ Confirmado', desc: 'El paciente respondió que viene. La hora es tuya.' },
+      { tag: '📨 Seguimiento', desc: 'No respondió y Sara volvió a preguntar. El contador muestra cuántas veces.' },
+      { tag: 'Reprogramó', desc: 'El paciente no podía y Sara movió la cita a otro horario en tu calendario.' },
+    ],
+    faqs: [
+      { q: '¿Cómo envía Sara el recordatorio de citas por WhatsApp?', a: 'Desde una línea de WhatsApp Business conectada a tu clínica. Toma la cita de tu Google Calendar y escribe un día antes con fecha, hora, dirección y las indicaciones que definas. No hay que exportar listas ni copiar mensajes.' },
+      { q: '¿Cuánto tiempo antes lo envía?', a: 'Por defecto, un día antes, en un horario en que la gente responde. Se puede ajustar por clínica y por tipo de cita (por ejemplo, dos avisos para estudios con preparación). Lo definimos en la implementación.' },
+      { q: '¿Qué pasa si el paciente no responde?', a: 'Sara vuelve a preguntar unas horas después. Si sigue sin responder, la cita queda marcada en tu panel para que tu equipo decida. Y si el paciente responde a cualquier hora, aunque sea a las 23:00, Sara le contesta.' },
+      { q: '¿Sirve para recordatorio de citas médicas y dentales?', a: 'Sí. Es el mismo recordatorio con distinto contenido: indicaciones de ayuno o estudios para consultas médicas, retenedor o control de seis meses para odontología, sin maquillaje para tratamientos estéticos. Se configura por tipo de cita.' },
+      { q: '¿Necesito cambiar mi agenda o mi software?', a: 'No. Sara lee y escribe en tu Google Calendar. Si tu clínica usa otra agenda, lo vemos en la demo. No se migra nada.' },
+      { q: '¿Puedo personalizar el mensaje?', a: 'Sí. El tono, el nombre de la clínica, los datos que incluye y las indicaciones por tratamiento se definen contigo. Y es una conversación, no un envío masivo: si el paciente pregunta algo, Sara le responde.' },
+      { q: '¿El recordatorio de citas por WhatsApp se cobra aparte?', a: 'No. Es parte de lo que hace Sara, junto con atender, agendar y cobrar. No se cobra por mensaje ni por cita: es una suscripción mensual que se arma para cada clínica y se comparte en la demo.' },
+      { q: '¿Baja las ausencias de verdad?', a: 'El recordatorio las baja; el anticipo las casi elimina. Sara puede pedir un anticipo o la consulta por adelantado al reservar, con un link de pago en el mismo chat. Tú decides para qué tratamientos aplica.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Appointment Reminders by Text and WhatsApp · Sara',
+    metaDescription:
+      'Sara sends appointment reminders by text or WhatsApp, gets the patient to confirm and reschedules if they can’t. For medical, dental and med spa practices.',
+    heroEyebrow: 'Scheduling · Appointment reminders',
+    heroTitle: "Appointment reminders<br /><em class='text-pine-dark'>patients actually&nbsp;confirm.</em>",
+    heroLead:
+      'Sending the reminder is half the job. Sara texts the day before, asks the patient to confirm with one word and, if they can’t make it, offers another time in the same thread. Your schedule arrives full, and nobody at the front desk has to call anyone.',
+    heroImageAlt: 'A patient confirms her appointment from her phone, a cup of tea beside her, in a warm room.',
+    strip: [
+      { t: 'Reminds the day before', b: 'Date, time, address and what to bring, in the patient’s text or WhatsApp thread.' },
+      { t: 'Gets a confirmation', b: 'The patient replies YES and the appointment is confirmed in your calendar.' },
+      { t: 'Reschedules if they can’t', b: 'Offers another time in the same thread and frees the slot for the waitlist.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: 'A medical appointment reminder, exactly as the patient gets&nbsp;it.',
+    howP1:
+      'This is a real reminder. Sara writes in your practice’s tone, with the appointment details and one clear question. The patient answers in seconds, with no app to download and no portal to log into.',
+    howP2:
+      'If they confirm, the appointment turns to <span class="font-semibold text-pine-dark">✅ Confirmed</span> in your dashboard. If they go quiet, Sara asks again. If they can’t make it, she reschedules. Nobody at the front desk picks up the&nbsp;phone.',
+    howBubbles: [
+      { who: 'out', text: 'Hi Paula, this is a reminder of your appointment tomorrow, Thursday at 2:00 pm at Aurora Clinic, 120 Reforma Ave. Can you confirm you’re coming? Reply YES and you’re set.', t: '6:00 pm' },
+      { who: 'in', text: 'Yes, I’ll be there', t: '6:41 pm' },
+      { who: 'out', text: 'Confirmed, Paula. Tomorrow at 2:00 pm. If anything changes, text me here and we’ll find another time.', t: '6:41 pm' },
+    ],
+    stepsH2: 'From a booked appointment to a patient who shows&nbsp;up.',
+    steps: [
+      { n: '01', title: 'The appointment lands in your calendar', body: 'Sara books it from the chat, or your team adds it to Google Calendar. Either way, Sara sees it and looks after it.' },
+      { n: '02', title: 'Sara reminds and confirms', body: 'The day before, she texts, asks for a confirmation and follows up if there’s no reply. With judgment, not a barrage.' },
+      { n: '03', title: 'The schedule arrives full', body: 'Confirmed, rescheduled or released to the waitlist. No front-desk calls and no surprises at 9 am.' },
+    ],
+    row1Eyebrow: 'Confirmation',
+    row1Title: "One word to confirm, <em class='text-pine-dark'>straight into your&nbsp;calendar.</em>",
+    row1Body:
+      'The patient replies YES and the appointment turns to confirmed in your dashboard and your Google Calendar. If there’s no reply, Sara asks again a few hours later. If it stays quiet, your team sees it flagged and decides what to do.',
+    row1Points: [
+      'Confirm with a YES, no apps or forms',
+      'A second nudge when there’s no reply',
+      'The status shows in your dashboard and your calendar',
+    ],
+    row1Bubbles: [
+      { who: 'out', text: 'Hi Laura, tomorrow Wednesday at 11:00 am you have your facial at Aurora Clinic. Can you confirm you’re coming?', t: 'Tue 5:00 pm' },
+      { who: 'out', text: 'Hi again, Laura. I don’t want it to slip by: can you confirm tomorrow at 11:00 am? Reply YES and you’re set.', t: 'Tue 8:30 pm' },
+      { who: 'in', text: 'Yes, sorry, I hadn’t seen the message', t: 'Tue 8:52 pm' },
+      { who: 'out', text: 'No problem. Confirmed for tomorrow at 11:00 am. See you then.', t: 'Tue 8:52 pm' },
+    ],
+    row2Eyebrow: 'Rescheduling',
+    row2Title: "If they can’t make it, <em class='text-pine-dark'>she reschedules in the same&nbsp;thread.</em>",
+    row2Body:
+      'A “can’t make it” isn’t a lost hour. Sara offers two specific times, moves the appointment in your calendar and offers the freed slot to the waitlist. All in the same conversation.',
+    row2Points: [
+      'Offers real times, not a “call us to reschedule”',
+      'The freed slot goes to the waitlist',
+      'Nothing for the front desk to coordinate',
+    ],
+    row2Bubbles: [
+      { who: 'out', text: 'Hi Marco, a reminder of your appointment tomorrow, Thursday at 4:00 pm. Can you confirm you’re coming?', t: '6:00 pm' },
+      { who: 'in', text: 'Oh no, I can’t make it tomorrow. Can I move it?', t: '6:20 pm' },
+      { who: 'out', text: 'Of course. I have Friday at 10:30 am or Monday at 5:00 pm. Which works better?', t: '6:20 pm' },
+      { who: 'in', text: 'Monday 5 pm', t: '6:22 pm' },
+      { who: 'out', text: 'Done, moved to Monday at 5:00 pm. I’ll text you Sunday to remind you.', t: '6:22 pm' },
+    ],
+    row3Eyebrow: 'Medical practices',
+    row3Title: "Medical appointment reminders <em class='text-pine-dark'>with&nbsp;instructions.</em>",
+    row3Body:
+      'For consults and procedures, the reminder carries what the patient needs to know: the provider, fasting, paperwork, where to check in. Fewer “do I need to fast?” calls and fewer appointments lost over a detail.',
+    row3Points: [
+      'Instructions per consult or procedure type',
+      'Provider name and suite or floor',
+      'Works for medical practices, clinics and labs',
+    ],
+    row3Bubbles: [
+      { who: 'out', text: 'Hi Andrés, a reminder of your consult tomorrow, Friday at 9:30 am with Dr. Ruiz. Please come fasting and bring your latest lab results. Can you confirm you’re coming?', t: '5:00 pm' },
+      { who: 'in', text: 'Confirmed. Is the address still the same?', t: '5:25 pm' },
+      { who: 'out', text: 'Yes, 120 Reforma Ave, 2nd floor. See you tomorrow at 9:30 am.', t: '5:25 pm' },
+    ],
+    row4Eyebrow: 'Dental offices',
+    row4Title: "Dental appointment reminders, <em class='text-pine-dark'>and the six-month&nbsp;recall.</em>",
+    row4Body:
+      'In dentistry, the appointment that slips the most is the recall. Sara reminds tomorrow’s appointment and, when it’s due, reaches out to book the cleaning or check-up that got left behind. Your schedule doesn’t depend on the patient remembering.',
+    row4Points: [
+      'Reminders for cleanings, check-ups and orthodontics',
+      'Brings back the patient who missed the recall',
+      'Works alongside what your front desk books',
+    ],
+    row4Bubbles: [
+      { who: 'out', text: 'Hi Sofía, a reminder of your appointment tomorrow, Tuesday at 12:30 pm with Dr. Peña for your braces adjustment. Can you confirm you’re coming?', t: '6:00 pm' },
+      { who: 'in', text: 'Yes, confirmed', t: '6:05 pm' },
+      { who: 'out', text: 'Perfect. See you tomorrow at 12:30 pm. Remember to bring your retainer.', t: '6:05 pm' },
+      { who: 'in', text: 'Thanks. Can I book the cleaning while I’m there?', t: '6:06 pm' },
+      { who: 'out', text: 'Yes, Dr. Peña can book it at your visit, or text me anytime and I’ll find you a time.', t: '6:06 pm' },
+    ],
+    row5Eyebrow: 'The deposit',
+    row5Title: "The reminder that works best <em class='text-pine-dark'>is collected at&nbsp;booking.</em>",
+    row5Body:
+      'The message reminds; the deposit commits. When a patient leaves a deposit at booking, the no-show all but disappears: people who paid show up. Sara collects it with a payment link inside the same thread, before giving the slot.',
+    row5Points: [
+      'Deposit or prepaid consult, your call',
+      'Secure payment link inside the chat',
+      'Fewer no-shows from the first month',
+      `<a href="${L('/cobros')}" class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">See how Sara collects payments</a>`,
+    ],
+    row5Bubbles: [
+      { who: 'out', text: 'You’re set for Thursday at 5:30 pm with Dr. Ruiz. A deposit locks in the booking, here’s the link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '10:12 am' },
+      { who: 'in', text: 'Done, just paid', t: '10:15 am' },
+      { who: 'out', text: 'Payment received. Thursday 5:30 pm confirmed. I’ll text you the day before to remind you.', t: '10:15 am' },
+    ],
+    ctaInline: 'Let tomorrow’s schedule arrive confirmed&nbsp;today.',
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every reminder leaves a&nbsp;status.',
+    panelLead:
+      'In the Chats inbox you see at a glance which of tomorrow’s appointments are confirmed, which moved and which are still unanswered. Without calling anyone to find&nbsp;out.',
+    estados: [
+      { tag: '⏰ Reminder', desc: 'Sara sent the reminder for tomorrow’s appointment.' },
+      { tag: '✅ Confirmed', desc: 'The patient replied they’re coming. The slot is yours.' },
+      { tag: '📨 Follow-up', desc: 'No reply, so Sara asked again. The counter shows how many times.' },
+      { tag: 'Rescheduled', desc: 'The patient couldn’t make it and Sara moved the appointment to another time in your calendar.' },
+    ],
+    faqs: [
+      { q: 'How does Sara send appointment reminders?', a: 'By text message or WhatsApp, from a line connected to your practice. She takes the appointment from your Google Calendar and writes the day before with the date, time, address and any instructions you define. No lists to export, no messages to copy.' },
+      { q: 'How far in advance does she send them?', a: 'By default, the day before, at a time when people actually reply. It can be adjusted per practice and per appointment type (for example, two notices for procedures that need prep). We set it up together during onboarding.' },
+      { q: 'What happens if the patient doesn’t reply?', a: 'Sara asks again a few hours later. If it stays quiet, the appointment is flagged in your dashboard so your team can decide. And if the patient replies at any hour, even 11 pm, Sara answers.' },
+      { q: 'Does it work as a medical appointment reminder service and for dental offices?', a: 'Yes. It’s the same reminder with different content: fasting or paperwork for medical consults, retainers and six-month recalls for dental, no makeup for aesthetic treatments. It’s configured per appointment type.' },
+      { q: 'Do I need to change my scheduling software?', a: 'No. Sara reads and writes in your Google Calendar. If your practice uses another scheduling system, we look at it in the demo. Nothing gets migrated.' },
+      { q: 'Can I customize the message?', a: 'Yes. The tone, your practice’s name, the details it includes and the instructions per treatment are defined with you. And it’s a conversation, not a blast: if the patient asks something, Sara answers.' },
+      { q: 'Is there a per-message fee for reminders?', a: 'No. Reminders are part of what Sara does, along with answering, booking and collecting. There’s no per-message or per-appointment fee: it’s a monthly subscription built for each practice and shared in the demo.' },
+      { q: 'Does this actually reduce no-show appointments?', a: 'The reminder cuts them; the deposit almost removes them. Sara can ask for a deposit or a prepaid consult at booking, with a payment link in the same thread. You decide which treatments it applies to.' },
+    ],
+  },
+}[lang];
+
+const { steps, estados, faqs } = dict;
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/recordatorios-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1600}
+      imageH={1194}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA (lo que hace, no stats) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        {
+          dict.strip.map((s, i) => (
+            <div class={`py-2 ${i > 0 ? 'sm:border-l sm:border-line sm:pl-8' : ''}`}>
+              <p class="font-serif text-lg font-black text-ink">{s.t}</p>
+              <p class="mt-1 text-salvia">{s.b}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · recordatorio real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.howP1}</p>
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.howBubbles} animate />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES · filas alternadas (copy + chat real) ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow eyebrow={dict.row1Eyebrow} title={dict.row1Title} body={dict.row1Body} points={dict.row1Points}>
+          <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row1Bubbles} />
+        </FeatureRow>
+
+        <FeatureRow flip eyebrow={dict.row2Eyebrow} title={dict.row2Title} body={dict.row2Body} points={dict.row2Points}>
+          <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row2Bubbles} />
+        </FeatureRow>
+
+        <div id="medicas" class="scroll-mt-24">
+          <FeatureRow eyebrow={dict.row3Eyebrow} title={dict.row3Title} body={dict.row3Body} points={dict.row3Points}>
+            <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row3Bubbles} />
+          </FeatureRow>
+        </div>
+
+        <div id="dentales" class="scroll-mt-24">
+          <FeatureRow flip eyebrow={dict.row4Eyebrow} title={dict.row4Title} body={dict.row4Body} points={dict.row4Points}>
+            <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row4Bubbles} />
+          </FeatureRow>
+        </div>
+
+        <div id="anticipo" class="scroll-mt-24">
+          <FeatureRow eyebrow={dict.row5Eyebrow} title={dict.row5Title} body={dict.row5Body} points={dict.row5Points}>
+            <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row5Bubbles} />
+          </FeatureRow>
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelLead} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
