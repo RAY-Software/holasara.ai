@@ -17,7 +17,12 @@ export type ProductIcon =
   | 'card'
   | 'gift'
   | 'camera'
-  | 'star';
+  | 'star'
+  | 'bell'
+  | 'badge'
+  | 'search'
+  | 'robot'
+  | 'chart';
 
 export type BusinessIcon =
   | 'laser'
@@ -72,10 +77,18 @@ const productGroupsRaw: RawGroup[] = [
         icon: 'chat',
       },
       {
+        // Slug localizado: /es/llamadas ↔ /en/medical-answering-service (src/i18n/slugs.ts).
         href: '/llamadas',
-        name: { es: 'Atiende el teléfono', en: 'Answers the phone' },
-        desc: { es: 'Contesta las llamadas por voz, 24/7.', en: 'Picks up voice calls, 24/7.' },
+        name: { es: 'Atiende el teléfono', en: 'Medical answering service' },
+        desc: { es: 'Contesta las llamadas por voz, 24/7.', en: 'Answers every call, 24/7, and books it.' },
         icon: 'phone',
+      },
+      {
+        // Slug localizado: /es/recepcionista-virtual ↔ /en/ai-receptionist.
+        href: '/recepcionista-virtual',
+        name: { es: 'Recepcionista virtual', en: 'AI receptionist' },
+        desc: { es: 'Para consultorios dentales y clínicas de estética.', en: 'For dental offices and med spas.' },
+        icon: 'badge',
       },
       {
         href: '/operador',
@@ -105,6 +118,13 @@ const productGroupsRaw: RawGroup[] = [
           en: 'Books itself, reminds and confirms, no double bookings.',
         },
         icon: 'calendar',
+      },
+      {
+        // Slug localizado: /es/recordatorio-de-citas-por-whatsapp ↔ /en/appointment-reminders.
+        href: '/recordatorio-de-citas-por-whatsapp',
+        name: { es: 'Recordatorios por WhatsApp', en: 'Appointment reminders' },
+        desc: { es: 'Recuerda, confirma y reprograma sola.', en: 'Reminds, confirms and reschedules on her own.' },
+        icon: 'bell',
       },
     ],
   },
@@ -139,6 +159,39 @@ const productGroupsRaw: RawGroup[] = [
         name: { es: 'Reseñas', en: 'Reviews' },
         desc: { es: 'Más reseñas de 5 estrellas, solas.', en: 'More 5-star reviews, on their own.' },
         icon: 'star',
+      },
+      {
+        // Slug localizado: /es/seo-dental ↔ /en/dental-seo.
+        href: '/seo-dental',
+        name: { es: 'SEO dental', en: 'Dental SEO' },
+        desc: { es: 'Mia posiciona tu consultorio en Google.', en: 'Mia gets your practice found on Google.' },
+        icon: 'search',
+      },
+      {
+        // Slug localizado: /es/seo-para-clinicas-de-estetica ↔ /en/med-spa-seo.
+        href: '/seo-para-clinicas-de-estetica',
+        name: { es: 'SEO para estética', en: 'Med spa SEO' },
+        desc: { es: 'Que te encuentren antes que a la competencia.', en: 'Get found before the med spa down the street.' },
+        icon: 'search',
+      },
+      {
+        // Slug localizado: /es/aeo ↔ /en/aeo.
+        href: '/aeo',
+        name: { es: 'Aparecer en ChatGPT (AEO)', en: 'AEO: show up in ChatGPT' },
+        desc: { es: 'Que los asistentes con IA te recomienden.', en: 'Get recommended by AI assistants.' },
+        icon: 'robot',
+      },
+    ],
+  },
+  {
+    label: { es: 'Finanzas', en: 'Finance' },
+    items: [
+      {
+        // Slug localizado: /es/contabilidad-para-clinicas ↔ /en/medical-practice-bookkeeping.
+        href: '/contabilidad-para-clinicas',
+        name: { es: 'Contabilidad de la clínica', en: 'Practice bookkeeping' },
+        desc: { es: 'Daniel lleva las cuentas con Plaid y QuickBooks.', en: 'Daniel keeps the books with Plaid and QuickBooks.' },
+        icon: 'chart',
       },
     ],
   },
@@ -226,6 +279,12 @@ const topLinksRaw: RawLink[] = [
     href: '/implementacion',
     name: { es: 'Cómo funciona', en: 'How it works' },
     desc: { es: 'Conectas tu calendario y listo.', en: 'Connect your calendar and you are set.' },
+  },
+  {
+    // Slug localizado: /es/integraciones ↔ /en/integrations.
+    href: '/integraciones',
+    name: { es: 'Integraciones', en: 'Integrations' },
+    desc: { es: 'Con lo que tu clínica ya usa.', en: 'With the tools your clinic already uses.' },
   },
 ];
 // "Precios" salió del top menu a pedido de Franco (ago 2026): prefiere no

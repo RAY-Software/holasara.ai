@@ -26,6 +26,11 @@
       "source": "/precios",
       "destination": "/es/demo",
       "permanent": true
+    },
+    {
+      "source": "/en/llamadas",
+      "destination": "/en/medical-answering-service",
+      "permanent": true
     }
   ]
 }

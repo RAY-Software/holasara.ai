@@ -1,6 +1,9 @@
 ---
-import { getStaticPaths, toLocale } from '../../i18n/config';
-export { getStaticPaths };
+import { localizedStaticPaths, toLocale } from '../../i18n/config';
+// Slug localizado: /es/llamadas ↔ /en/medical-answering-service (src/i18n/slugs.ts).
+export function getStaticPaths() {
+  return localizedStaticPaths('answering');
+}
 const lang = toLocale(Astro.params.lang);
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';

@@ -27,7 +27,8 @@ const teamNav =
 const L = (p: string) => localePath(p, lang);
 
 const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
-const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`;
+// Slugs localizados (src/i18n/slugs.ts): el switch lleva a la misma página en el otro idioma.
+const langHref = (l: Locale) => (stripLocale === '/' ? `/${l}` : localePath(stripLocale, l));
 
 const triggerClass =
   'mega-trigger inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm font-medium text-ink transition-colors';
