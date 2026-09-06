@@ -1,6 +1,7 @@
 // Diccionario de la "chrome" compartida del sitio: header, footer, CTAs comunes
 // y los defaults de <Layout>. El copy específico de cada página vive en su propio
-// módulo (src/i18n/pages/*). Una entrada por idioma; EN es traducción, no calco.
+// módulo (src/i18n/pages/*). Una entrada por idioma. EN no es traducción: es el sitio
+// del producto para clínicas de Estados Unidos (equipo completo, Plaid y QuickBooks).
 
 import type { Locale } from './config';
 
@@ -53,36 +54,36 @@ export const ui = {
   },
   en: {
     // Layout / meta
-    'meta.title': 'Sara · The front desk that never closes',
+    'meta.title': 'Sara AI · AI receptionist, marketing and books for your practice',
     'meta.description':
-      'Sara, the AI receptionist for clinics, doctors and wellness: answers, books, collects and cuts no-shows on WhatsApp, Instagram and phone. With Mia and Daniel.',
+      'Sara answers calls and texts, books and collects. Mia brings in patients. Daniel keeps the books with Plaid and QuickBooks. For dental offices and med spas.',
 
     // Header
     'nav.product': 'Product',
-    'nav.business': 'Businesses',
-    'nav.byIndustry': 'By industry',
+    'nav.business': 'Industries',
+    'nav.byIndustry': 'By specialty',
     'nav.bySize': 'By size',
     'header.scanCta': 'Scan my business',
     'header.demoCta': 'Book a demo',
     'header.openMenu': 'Open menu',
     'header.closeMenu': 'Close menu',
     'header.homeAria': 'Sara, home',
-    'header.caseKicker': 'Real case',
-    'header.caseTitleProduct': 'ViaLaser already works with Sara',
-    'header.caseTitleBusiness': 'A laser-clinic chain already works with Sara',
-    'header.caseTitleSecond': 'See clinics already working with Sara',
+    'header.caseKicker': 'Case study',
+    'header.caseTitleProduct': 'ViaLaser already runs on Sara',
+    'header.caseTitleBusiness': 'A laser-clinic chain already runs on Sara',
+    'header.caseTitleSecond': 'See practices already running on Sara',
     'header.caseCta': 'See the case',
     'header.caseImgAlt': 'Real results from ViaLaser with Sara',
 
     // Footer
-    'footer.tagline': 'The front desk that never closes.',
+    'footer.tagline': 'Front desk, marketing and books. One AI team.',
     'footer.talkToSara': 'Talk to Sara',
     'footer.features': 'Features',
-    'footer.business': 'Businesses',
+    'footer.business': 'Industries',
     'footer.bySize': 'By size',
     'footer.company': 'Sara',
     'footer.about': 'About us',
-    'footer.cases': 'Cases',
+    'footer.cases': 'Case studies',
     'footer.compare': '2026 comparison',
     'footer.pricing': 'Pricing',
     'footer.terms': 'Terms & conditions',

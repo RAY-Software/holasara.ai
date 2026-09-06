@@ -69,7 +69,7 @@ const baseSchema = {
       logo: `${siteUrl}/brand/sara-mark-512.png`,
       description:
         lang === 'en'
-          ? 'The AI receptionist for clinics: she handles WhatsApp and Instagram 24/7, books appointments and collects the deposit. With Mia (marketing) and Daniel (finance).'
+          ? 'The AI team for dental offices, med spas and medical practices: Sara (AI receptionist: answers calls and texts, books appointments, collects deposits), Mia (marketing: Instagram, Google Ads, Google Business Profile) and Daniel (bookkeeping, connected to Plaid and QuickBooks).'
           : 'La secretaria con IA para clínicas: atiende WhatsApp e Instagram las 24 horas, agenda y cobra el anticipo. Con Mia (marketing) y Daniel (finanzas).',
     },
     {
@@ -87,8 +87,22 @@ const baseSchema = {
       operatingSystem: 'Web',
       description:
         lang === 'en'
-          ? 'An AI front desk for aesthetic and health clinics. She answers, books, collects the deposit and cuts no-shows on WhatsApp and Instagram.'
+          ? 'AI front desk, marketing and bookkeeping for dental offices, med spas and medical practices. Sara answers calls, texts, WhatsApp and Instagram DMs 24/7, books into Google Calendar and collects deposits. Mia runs Instagram, Google Ads and the Google Business Profile. Daniel reconciles the bank through Plaid and keeps QuickBooks current.'
           : 'Recepción con IA para clínicas de estética y salud. Atiende, agenda, cobra el anticipo y baja las ausencias en WhatsApp e Instagram.',
+      // Solo en EN: lista de capacidades del equipo (schema.org featureList). En ES no
+      // se emite nada, así el JSON-LD en español queda exactamente igual.
+      ...(lang === 'en'
+        ? {
+            featureList: [
+              'AI receptionist for phone, SMS, WhatsApp and Instagram DMs, 24/7',
+              'Appointment scheduling, reminders and confirmations in Google Calendar',
+              'Deposit and consult fee collection with a payment link',
+              'Patient win-back and waitlist',
+              'Instagram content, Google Ads and Google Business Profile (Mia)',
+              'Bookkeeping with Plaid bank feeds and QuickBooks sync (Daniel)',
+            ],
+          }
+        : {}),
       publisher: { '@id': `${siteUrl}/#organization` },
     },
   ],

@@ -1,7 +1,9 @@
 // Fuente única del elenco de Sara AI: Sara (recepción), Mia (marketing) y
 // Daniel (finanzas). La usan el mega menú del Header, la página /equipo y las
-// páginas internas /equipo/[member]. Bilingüe (ES principal, EN traducción, no
-// calco): los textos traen las dos variantes y se eligen con getTeam/getMember.
+// páginas internas /equipo/[member]. Bilingüe: los textos traen las dos variantes y
+// se eligen con getTeam/getMember. EN no es traducción del ES: es el producto para
+// clínicas de Estados Unidos (front desk, med spa, dental office; Daniel con Plaid y
+// QuickBooks). Los mocks en EN usan montos y nombres plausibles para ese mercado.
 //
 // Framing del vertical: son empleados con IA que TRABAJAN SOLOS y te escriben
 // ellos. Nada de "chatbots que responden" ni "preguntales lo que quieras".
@@ -104,37 +106,37 @@ const RAW: RawMember[] = [
     poster: '/equipo/sara.jpg',
     avatar: '/equipo/sara-avatar.jpg',
     featureHref: '/sara',
-    role: { es: 'Recepción', en: 'Reception' },
+    role: { es: 'Recepción', en: 'Front desk' },
     tag: { es: 'Trabajando ahora', en: 'Working now' },
     oneliner: {
       es: 'Atiende, agenda y cobra. Con el criterio de tu clínica.',
-      en: 'Answers, books and collects. With your clinic’s judgment.',
+      en: 'Answers, books and collects. With your practice’s judgment.',
     },
     metaTitle: {
       es: 'Sara · Recepción con IA que atiende, agenda y cobra',
-      en: 'Sara · AI reception that answers, books and collects',
+      en: 'Sara · AI receptionist for dental offices, med spas and medical practices',
     },
     metaDescription: {
       es: 'Sara es la recepcionista con IA de tu clínica. Atiende WhatsApp e Instagram 24/7, informa con precios reales, agenda y cobra el anticipo. Sin sumar a nadie a recepción.',
-      en: 'Sara is your clinic’s AI receptionist. She answers WhatsApp and Instagram 24/7, quotes real prices, books and takes the deposit. Without adding anyone to your front desk.',
+      en: 'Your practice’s AI receptionist: answers calls, texts, WhatsApp and Instagram DMs 24/7, quotes real fees, books the appointment and collects the deposit.',
     },
-    heroEyebrow: { es: 'Sara · Recepción', en: 'Sara · Reception' },
+    heroEyebrow: { es: 'Sara · Recepción', en: 'Sara · Front desk' },
     heroTitle: {
       es: "Tu recepción.<br /><em class='text-pine-dark'>Y tu secretaria.</em>",
-      en: "Your front desk.<br /><em class='text-pine-dark'>And your secretary.</em>",
+      en: "Your front desk.<br /><em class='text-pine-dark'>And your assistant.</em>",
     },
     heroLead: {
       es: 'Sara es la recepcionista y la secretaria con IA de tu clínica. Atiende, vende, agenda y cobra por WhatsApp, Instagram y teléfono. Y le pides lo que necesites (bloquear tu agenda, reagendar, reactivar pacientes) y lo hace. De noche, los fines de semana y en los picos.',
-      en: 'Sara is your clinic’s AI receptionist and secretary. She answers, sells, books and collects over WhatsApp, Instagram and phone. And you ask her for whatever you need (block your calendar, reschedule, win patients back) and she does it. At night, on weekends and at peak times.',
+      en: 'Sara is your practice’s AI receptionist and assistant. She answers, sells, books and collects over the phone, text, WhatsApp and Instagram. And you text her whatever you need (block your calendar, reschedule a day, win patients back) and she does it. Nights, weekends and the lunch-hour rush.',
     },
     kicker: { es: 'Cómo trabaja Sara', en: 'How Sara works' },
     h2: {
       es: 'No es un bot.<br /><em class="text-pine-dark">Atiende como<br />tu mejor recepción.</em>',
-      en: 'Not a bot.<br /><em class="text-pine-dark">She answers like<br />your best front desk.</em>',
+      en: 'Not a phone tree.<br /><em class="text-pine-dark">She answers like<br />your best front desk.</em>',
     },
     paragraph: {
       es: 'Responde WhatsApp, Instagram y el chat de tu web a toda hora. Informa con precios reales, arma la propuesta que conviene, agenda la cita y cobra el anticipo en la misma conversación. Sin sumar a nadie a recepción.',
-      en: 'She replies on WhatsApp, Instagram and your website chat around the clock. She quotes real prices, builds the offer that fits, books the appointment and takes the deposit in the same conversation. Without adding anyone to your front desk.',
+      en: 'She picks up calls, texts, WhatsApp, Instagram and your website chat around the clock. She quotes real fees, builds the offer that fits, books the appointment and collects the deposit in the same conversation. Without adding anyone to your front desk.',
     },
     points: {
       es: [
@@ -145,7 +147,7 @@ const RAW: RawMember[] = [
       en: [
         'Answers and sells with the judgment you set',
         'Books, reminds and confirms with no double bookings',
-        'Takes the deposit before giving the slot',
+        'Collects the deposit before giving the slot',
       ],
     },
     chatSubtitle: { es: 'en línea · responde al instante', en: 'online · replies instantly' },
@@ -160,27 +162,27 @@ const RAW: RawMember[] = [
         { who: 'in', text: 'Sí, confirmado', t: '10:12' },
       ],
       en: [
-        { who: 'out', text: 'Hi! Full legs: 6-session pack at $6,900, first trial session free. Want me to book the first one?', t: '11:41' },
+        { who: 'out', text: 'Hi! Full legs are $1,950 for a package of 6 sessions, and your first session is free. Want me to book it?', t: '11:41' },
         { who: 'in', text: 'Yes, anything this week?', t: '11:42' },
-        { who: 'out', text: 'Thursday 5:30pm or Friday 6:00pm. A deposit locks it in, here is the link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '11:42' },
+        { who: 'out', text: 'Thursday 5:30 pm or Friday 6:00 pm. A deposit holds the spot, here is the link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '11:42' },
         { who: 'in', text: 'Thursday', t: '11:43' },
-        { who: 'out', text: 'Payment received. Thursday 5:30pm confirmed. I’ll message you the day before to confirm.', t: '11:43' },
-        { who: 'out', text: 'Hi, tomorrow Thursday 5:30pm is your first session. Can you confirm you’re coming?', t: '10:00' },
+        { who: 'out', text: 'Payment received. Thursday 5:30 pm is confirmed. I will text you the day before to confirm.', t: '11:43' },
+        { who: 'out', text: 'Hi, tomorrow Thursday at 5:30 pm is your first session. Can you confirm you are coming?', t: '10:00' },
         { who: 'in', text: 'Yes, confirmed', t: '10:12' },
       ],
     },
     featureLinkLabel: { es: 'Ver todo lo que hace Sara', en: 'See everything Sara does' },
     scenesTitle: {
       es: 'Le pides algo a Sara. <em class="text-pine-dark">Y ella sale a resolverlo.</em>',
-      en: 'You ask Sara for something. <em class="text-pine-dark">And she goes and gets it done.</em>',
+      en: 'You text Sara. <em class="text-pine-dark">She goes and gets it done.</em>',
     },
     scenesHandoff: {
       es: 'Sara le escribe a cada paciente',
-      en: 'Sara messages each patient',
+      en: 'Sara texts each patient',
     },
     scenesIntro: {
       es: 'Así se ve en la vida real: el doctor le pide reagendar una tarde entera, y Sara habla con cada paciente hasta dejar todo resuelto.',
-      en: 'Here’s what it looks like in real life: the doctor asks her to reschedule a whole afternoon, and Sara talks to each patient until everything is sorted.',
+      en: 'Here is what it looks like in real life: the doctor asks her to reschedule a whole afternoon, and Sara talks to each patient until everything is sorted.',
     },
     scenes: {
       es: [
@@ -214,14 +216,14 @@ const RAW: RawMember[] = [
         {
           who: '1 · You and Sara',
           label: 'you ask her to reschedule',
-          subtitle: 'your secretary on WhatsApp',
+          subtitle: 'your assistant, by text',
           bubbles: [
-            { who: 'in', text: 'Sara, a surgery came up on Tuesday afternoon. Reschedule my patients that day after 2pm.', t: '11:02' },
-            { who: 'out', text: 'Of course, doctor. Tuesday after 2pm you have 3 patients: Laura G. (2:30, cleaning), Marco P. (3:30, assessment) and Sofía T. (5:00, follow-up). Shall I offer them Thursday or Friday?', t: '11:02' },
-            { who: 'in', text: 'Yes, prioritize Thursday', t: '11:04' },
-            { who: 'out', text: 'Perfect. I am messaging all three now with Thursday options and I will confirm as each one closes.', t: '11:04' },
+            { who: 'in', text: 'Sara, a surgery came up Tuesday afternoon. Reschedule my patients that day after 2 pm.', t: '11:02' },
+            { who: 'out', text: 'Sure thing, Dr. Reyes. Tuesday after 2 pm you have 3 patients: Laura G. (2:30, cleaning), Mark P. (3:30, consult) and Sophia T. (5:00, follow-up). Should I offer them Thursday or Friday?', t: '11:02' },
+            { who: 'in', text: 'Yes, Thursday first', t: '11:04' },
+            { who: 'out', text: 'Got it. I am texting all three now with Thursday openings and I will confirm as each one lands.', t: '11:04' },
             { who: 'in', text: 'Let me know if anyone cannot make it this week', t: '11:05' },
-            { who: 'out', text: 'Noted. If someone cannot, I will offer next week and leave it flagged on your calendar so you see it.', t: '11:05' },
+            { who: 'out', text: 'Will do. If someone cannot, I will offer next week and leave it flagged on your calendar so you see it.', t: '11:05' },
           ],
         },
         {
@@ -229,11 +231,11 @@ const RAW: RawMember[] = [
           label: 'she sorts it out',
           subtitle: 'with your patient',
           bubbles: [
-            { who: 'out', text: 'Hi Laura, it is the clinic. The doctor had to move his Tuesday schedule and we need to reschedule your 2:30 cleaning. Would Thursday 3:00 or 5:30 work?', t: '11:07' },
-            { who: 'in', text: 'Oh, sure. Thursday 5:30 works great', t: '11:15' },
-            { who: 'out', text: 'Done, Thursday 5:30 confirmed. Your cleaning stays exactly as it was and you will get a reminder the day before.', t: '11:15' },
+            { who: 'out', text: 'Hi Laura, this is the office. Dr. Reyes had to move his Tuesday schedule and we need to reschedule your 2:30 cleaning. Would Thursday at 3:00 or 5:30 work?', t: '11:07' },
+            { who: 'in', text: 'Oh, sure. Thursday at 5:30 works great', t: '11:15' },
+            { who: 'out', text: 'Done, Thursday at 5:30 is confirmed. Your cleaning stays exactly as it was and you will get a reminder the day before.', t: '11:15' },
             { who: 'in', text: 'Great, thanks for the heads-up', t: '11:16' },
-            { who: 'out', text: 'Thank you for being flexible. Anything you need, just write me here. See you Thursday.', t: '11:16' },
+            { who: 'out', text: 'Thank you for being flexible. Anything you need, just text me here. See you Thursday.', t: '11:16' },
           ],
         },
       ],
@@ -248,12 +250,12 @@ const RAW: RawMember[] = [
         { title: 'Reactiva pacientes', icon: 'refresh', desc: 'Trae de vuelta a los que no vuelven y llena los huecos de la agenda.' },
       ],
       en: [
-        { title: 'Your secretary', icon: 'chat', desc: 'You ask her over WhatsApp, like "block Friday" or "move Juan", and she does it instantly.' },
-        { title: 'WhatsApp & Instagram', logo: '/img/logos/whatsapp.svg', desc: 'Answers instantly wherever they message you, 24/7, with your clinic’s judgment.' },
-        { title: 'Answers the phone', icon: 'phone', desc: 'Picks up voice calls, informs and books, with no busy tone.' },
+        { title: 'Your assistant', icon: 'chat', desc: 'You text her, like "block Friday" or "move Mark to Thursday", and she does it instantly.' },
+        { title: 'Answers the phone', icon: 'phone', desc: 'Picks up every call, quotes and books, with no hold music and no voicemail.' },
+        { title: 'Texts, WhatsApp & Instagram', logo: '/img/logos/whatsapp.svg', desc: 'Answers instantly wherever patients message you, 24/7, with your practice’s judgment.' },
         { title: 'Scheduling & reminders', icon: 'calendar', desc: 'Books in your calendar, reminds and confirms. No double bookings.' },
-        { title: 'Takes the deposit', icon: 'card', desc: 'Charges the deposit or consult in the same chat, before the appointment.' },
-        { title: 'Wins patients back', icon: 'refresh', desc: 'Brings back those who don’t return and fills the gaps in your calendar.' },
+        { title: 'Collects the deposit', icon: 'card', desc: 'Charges the deposit or consult fee in the same conversation, before the visit.' },
+        { title: 'Wins patients back', icon: 'refresh', desc: 'Brings back those who have not returned and fills the gaps in your schedule.' },
       ],
     },
   },
@@ -268,15 +270,15 @@ const RAW: RawMember[] = [
     tag: { es: 'Trabajando ahora', en: 'Working now' },
     oneliner: {
       es: 'Tu marketing completo: web, Google e Instagram. Y te dice dónde crecer.',
-      en: 'Your whole marketing: web, Google and Instagram. And tells you where to grow.',
+      en: 'Your whole marketing: website, Google and Instagram. And she tells you where to grow.',
     },
     metaTitle: {
       es: 'Mia · Marketing con IA: web, Google Business, campañas e Instagram',
-      en: 'Mia · AI marketing: website, Google Business, campaigns and Instagram',
+      en: 'Mia · AI marketing for your practice: Instagram, Google Ads and Google Business Profile',
     },
     metaDescription: {
       es: 'Mia es la jefa de marketing con IA de tu negocio. Maneja tu Instagram, corre tus campañas de Google Ads, optimiza tu ficha de Google Business y mira los números de tu web. Y como es proactiva, te escribe la propuesta para traer más pacientes.',
-      en: 'Mia is your business’s AI head of marketing. She runs your Instagram, runs your Google Ads campaigns, optimizes your Google Business profile and watches your website numbers. And since she’s proactive, she sends you the proposal to bring in more patients.',
+      en: 'Mia is your practice’s AI head of marketing. She runs your Instagram, your Google Ads campaigns and your Google Business Profile, and watches your website numbers. And because she is proactive, she sends you the proposal to bring in more patients.',
     },
     heroEyebrow: { es: 'Mia · Marketing', en: 'Mia · Marketing' },
     heroTitle: {
@@ -285,7 +287,7 @@ const RAW: RawMember[] = [
     },
     heroLead: {
       es: 'Mia es la jefa de marketing con IA de tu negocio. Maneja tu Instagram, tus campañas de Google Ads y tu ficha de Google Business, y vive encima de los números de tu web. Cuando ve una forma de traer más pacientes, te la escribe lista para aprobar.',
-      en: 'Mia is your business’s AI head of marketing. She runs your Instagram, your Google Ads campaigns and your Google Business profile, and lives on top of your website numbers. When she sees a way to bring in more patients, she sends it to you ready to approve.',
+      en: 'Mia is your practice’s AI head of marketing. She runs your Instagram, your Google Ads campaigns and your Google Business Profile, and lives on top of your website numbers. When she sees a way to bring in more patients, she sends it to you ready to approve.',
     },
     kicker: { es: 'Cómo trabaja Mia', en: 'How Mia works' },
     h2: {
@@ -294,7 +296,7 @@ const RAW: RawMember[] = [
     },
     paragraph: {
       es: 'Mia lleva tu marketing de punta a punta: crea y publica tu Instagram, corre tus campañas de Google Ads, optimiza tu ficha de Google Business y mira las métricas de tu web. Y como es proactiva, no espera a que le pidas: cuando ve una forma de traer más pacientes (una ficha que bajó, una campaña que rinde, una semana floja) te escribe la propuesta lista. La apruebas por chat y ella la ejecuta.',
-      en: 'Mia runs your marketing end to end: she creates and posts your Instagram, runs your Google Ads campaigns, optimizes your Google Business profile and watches your website metrics. And since she’s proactive, she doesn’t wait to be asked: when she sees a way to bring in more patients (a profile that slipped, a campaign that’s working, a slow week) she sends you the proposal, ready to go. You approve over chat and she runs it.',
+      en: 'Mia runs your marketing end to end: she creates and posts your Instagram, runs your Google Ads campaigns, keeps your Google Business Profile current and watches your website metrics. And because she is proactive, she does not wait to be asked: when she sees a way to bring in more patients (a profile that slipped, a campaign that is working, a slow week) she sends you the proposal, ready to go. You approve by text and she runs it.',
     },
     points: {
       es: [
@@ -304,7 +306,7 @@ const RAW: RawMember[] = [
       ],
       en: [
         'Runs your Instagram: content, publishing and measurement',
-        'Runs your Google Ads campaigns and optimizes your Google profile',
+        'Runs your Google Ads campaigns and keeps your Google Business Profile current',
         'Sends you the proposal and runs it once you approve',
       ],
     },
@@ -317,8 +319,8 @@ const RAW: RawMember[] = [
         { who: 'out', text: 'Listo. Fotos arriba y campaña activa con $100 semanales. El jueves te paso los primeros resultados y quién llamó.', t: '09:21' },
       ],
       en: [
-        { who: 'out', text: 'Week recap. Your website: +18% visits from Google. Your Google profile showed in 2,400 searches and drove 9 calls. Instagram: +320 followers.', t: '09:12' },
-        { who: 'out', text: 'Two moves for this week: I add 6 fresh photos to your Google profile (untouched for 40 days, it slipped on the map) and launch a Google Ads campaign for "botox + your area" with a $150 test. Shall we?', t: '09:12' },
+        { who: 'out', text: 'Week recap. Your website: +18% visits from Google. Your Google Business Profile showed up in 2,400 searches and drove 9 calls. Instagram: +320 followers.', t: '09:12' },
+        { who: 'out', text: 'Two moves for this week: I add 6 fresh photos to your Google Business Profile (untouched for 40 days, it slipped on the map) and launch a Google Ads campaign for "botox + your area" with a $150 test. Sound good?', t: '09:12' },
         { who: 'in', text: 'Do the photos. Start the campaign at $100', t: '09:20' },
         { who: 'out', text: 'Done. Photos up and campaign live at $100 a week. Thursday I’ll send the first results and who called.', t: '09:21' },
       ],
@@ -357,12 +359,12 @@ const RAW: RawMember[] = [
       en: {
         title: 'Your Instagram, <em class="text-pine-dark">end to end.</em>',
         intro:
-          'Mia understands your brand’s feed, pitches the ideas, creates the content and publishes it. And every month she tells you which post brought enquiries and how much you billed from each one.',
+          'Mia understands your brand’s feed, pitches the ideas, creates the content and publishes it. And every month she tells you which post brought inquiries and how much you billed from each one.',
         steps: [
           {
             img: '/img/tenants/faceup.jpg',
             likes: '312',
-            caption: '<b>clinicaaurora</b> Lip hyaluronic acid: what to expect in week one',
+            caption: '<b>clinicaaurora</b> Lip filler: what to expect in week one',
             step: '1 · Understands your feed and pitches',
             body: 'She studies your brand and your feed, and pitches the month’s calendar with ideas ready to approve.',
           },
@@ -370,16 +372,16 @@ const RAW: RawMember[] = [
             img: '/img/tenants/physiup.jpg',
             likes: '208',
             caption: '<b>clinicaaurora</b> Swipe to see the step by step',
-            comment: '<b>camifer_</b> How much is the assessment?',
+            comment: '<b>camifer_</b> How much is a consult?',
             step: '2 · Creates and publishes',
             body: 'She writes the copy, builds the piece with your identity and publishes it. Nothing goes out without your approval.',
           },
           {
             img: '/img/tenants/sorace.jpg',
             likes: '176',
-            caption: '<b>clinicaaurora</b> Book your assessment by message',
+            caption: '<b>clinicaaurora</b> Book your consult by DM',
             step: '3 · Measures what it billed',
-            body: 'She tells you which post brought enquiries and how much you billed from each one. No vanity likes.',
+            body: 'She tells you which post brought inquiries and how much you billed from each one. No vanity likes.',
           },
         ],
       },
@@ -440,7 +442,7 @@ const RAW: RawMember[] = [
           { who: 'out', text: 'Ready. Tap to see it and approve it:', t: '10:05', post: { img: '/img/mia/post.jpg', handle: 'clinicaaurora', caption: 'Laser hair removal: what to expect at your first session' } },
         ],
         calendar: { month: 'September', days: ['M', 'T', 'W', 'T', 'F', 'S', 'S'], startOffset: 1, daysInMonth: 30, day: 3, time: '6:00pm', label: 'Post · first session' },
-        ig: { caption: '<b>clinicaaurora</b> Laser hair removal: what to expect at your first session. Step by step.', likes: '312', comment: '<b>camifer_</b> How much is the assessment?', reply: '<b>clinicaaurora</b> Messaging you directly', published: 'Published · Thursday 6:00pm', reelLabel: 'Reel', reelPublished: 'Published · Friday 12:00pm' },
+        ig: { caption: '<b>clinicaaurora</b> Laser hair removal: what to expect at your first session. Step by step.', likes: '312', comment: '<b>camifer_</b> How much is a consult?', reply: '<b>clinicaaurora</b> Sending you a DM', published: 'Published · Thursday 6:00 pm', reelLabel: 'Reel', reelPublished: 'Published · Friday 12:00 pm' },
         chatSubtitle: 'Marketing',
       },
     },
@@ -454,7 +456,7 @@ const RAW: RawMember[] = [
     },
     scenesIntro: {
       es: 'Así se ve en la vida real: Mia detecta los días flojos y te propone la promo. La apruebas, ella la publica, y a quien responde lo agenda Sara con el anticipo cobrado.',
-      en: 'Here’s what it looks like in real life: Mia catches the slow days and pitches the promo. You approve, she publishes, and whoever replies gets booked by Sara, deposit collected.',
+      en: 'Here is what it looks like in real life: Mia catches the slow days and pitches the promo. You approve, she publishes, and whoever replies gets booked by Sara, deposit collected.',
     },
     scenes: {
       es: [
@@ -513,11 +515,11 @@ const RAW: RawMember[] = [
             { who: 'in', text: 'Hi! I saw the botox promo on Instagram. Is it still on?', t: '13:47' },
             { who: 'out', text: 'It is. Valid Thursday and Friday: book with a deposit and get 30% off the second area. Would this be your first time with us?', t: '13:47' },
             { who: 'in', text: 'Yes, first time', t: '13:51' },
-            { who: 'out', text: 'Perfect, then the doctor does a short assessment in the same visit, at no extra cost. I have Thursday 4:00pm or Friday 11:30am. Which works better?', t: '13:51' },
+            { who: 'out', text: 'Perfect, then the doctor does a short consult in the same visit, at no extra cost. I have Thursday at 4:00 pm or Friday at 11:30 am. Which works better?', t: '13:51' },
             { who: 'in', text: 'Friday 11:30', t: '13:52' },
-            { who: 'out', text: 'Done, Friday 11:30am booked. Here is the link to pay the deposit, and that confirms it.', t: '13:52', link: 'holasara.ai/pago/8k2f' },
+            { who: 'out', text: 'Done, Friday at 11:30 am is booked. Here is the link to pay the deposit, and that confirms it.', t: '13:52', link: 'holasara.ai/pago/8k2f' },
             { who: 'in', text: 'All set, paid', t: '13:56' },
-            { who: 'out', text: 'Payment received. Your Friday 11:30am appointment is confirmed and you will get a reminder the day before. See you.', t: '13:56' },
+            { who: 'out', text: 'Payment received. Your Friday 11:30 am appointment is confirmed and you will get a reminder the day before. See you then.', t: '13:56' },
           ],
         },
       ],
@@ -530,10 +532,10 @@ const RAW: RawMember[] = [
         { title: 'Tu web y tus números', desc: 'Mira las métricas de tu sitio y te dice qué está trayendo pacientes y qué no.' },
       ],
       en: [
-        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Creates and posts on-brand content and measures which post brought enquiries.' },
+        { title: 'Instagram', logo: '/img/logos/instagram.svg', desc: 'Creates and posts on-brand content and measures which post brought inquiries.' },
         { title: 'Google Ads', logo: '/img/logos/google-ads.svg', desc: 'Builds and runs your Google campaigns so people find you right when they search your treatment.' },
-        { title: 'Google Business', logo: '/img/logos/google-business.svg', desc: 'Optimizes your profile: photos, reviews and details, so you show up first on the map.' },
-        { title: 'Your site and your numbers', desc: 'Watches your website metrics and tells you what’s bringing in patients and what isn’t.' },
+        { title: 'Google Business Profile', logo: '/img/logos/google-business.svg', desc: 'Keeps your profile current: photos, reviews and details, so you show up first on the map.' },
+        { title: 'Your website and your numbers', desc: 'Watches your website metrics and tells you what is bringing in patients and what is not.' },
       ],
     },
   },
@@ -547,33 +549,33 @@ const RAW: RawMember[] = [
     tag: { es: 'Trabajando ahora', en: 'Working now' },
     oneliner: {
       es: 'Lleva las cuentas de tu clínica y te avisa lo que importa.',
-      en: 'Keeps your clinic’s books and flags what matters.',
+      en: 'Keeps your books through Plaid and QuickBooks, and flags what matters.',
     },
     metaTitle: {
       es: 'Daniel · Finanzas con IA que lleva las cuentas de tu clínica',
-      en: 'Daniel · AI finance that keeps your clinic’s books',
+      en: 'Daniel · AI bookkeeping for medical and dental practices, with Plaid and QuickBooks',
     },
     metaDescription: {
       es: 'Daniel es el analista de finanzas con IA de tu clínica. Lleva las cuentas y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen.',
-      en: 'Daniel is your clinic’s AI finance analyst. He keeps the books and flags what matters: how much you billed, what’s still to collect and which treatment leaves the most margin.',
+      en: 'AI bookkeeping for your practice: bank feeds through Plaid, QuickBooks reconciled, month closed. Daniel flags what is owed and which treatment earns the most.',
     },
     heroEyebrow: { es: 'Daniel · Finanzas', en: 'Daniel · Finance' },
     heroTitle: {
       es: "Te dice cómo va el dinero.<br /><em class='text-pine-dark'>Antes de que&nbsp;preguntes.</em>",
-      en: "Tells you how the money’s doing.<br /><em class='text-pine-dark'>Before you ask.</em>",
+      en: "Books closed.<br /><em class='text-pine-dark'>Before you ask.</em>",
     },
     heroLead: {
       es: 'Daniel es el analista de finanzas con IA de tu clínica. Lleva las cuentas y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen. Sin abrir un solo Excel.',
-      en: 'Daniel is your clinic’s AI finance analyst. He keeps the books and flags what matters: how much you billed, what’s still to collect and which treatment leaves the most margin. Without opening a single spreadsheet.',
+      en: 'Daniel is your practice’s AI bookkeeper. He connects to your bank accounts through Plaid and to QuickBooks, reconciles every transaction and closes the month. Then he tells you what matters: what you billed, what is still owed and which treatment leaves the most margin. No spreadsheets.',
     },
     kicker: { es: 'Cómo trabaja Daniel', en: 'How Daniel works' },
     h2: {
       es: 'Daniel te dice cómo va el dinero. <em class="text-pine-dark">Antes de que preguntes.</em>',
-      en: 'Daniel tells you how the money’s doing. <em class="text-pine-dark">Before you ask.</em>',
+      en: 'Daniel tells you how the money is doing. <em class="text-pine-dark">Before you ask.</em>',
     },
     paragraph: {
       es: 'Daniel lleva las cuentas de tu clínica y te avisa lo que importa: cuánto facturaste, qué te falta cobrar y qué tratamiento deja más margen. Cuando hay algo para hacer, te lo propone y el equipo lo ejecuta. Sin abrir un solo Excel.',
-      en: 'Daniel keeps your clinic’s books and flags what matters: how much you billed, what’s still to collect, and which treatment leaves the most margin. When there’s something to do, he pitches it and the team runs it. Without opening a single spreadsheet.',
+      en: 'Daniel pulls every transaction from your bank through Plaid, keeps QuickBooks current and flags what matters: what you billed, what is still to collect, and which treatment leaves the most margin. When there is something to do, he pitches it and the team runs it. Without opening a single spreadsheet.',
     },
     points: {
       es: [
@@ -582,7 +584,7 @@ const RAW: RawMember[] = [
         'Te dice qué tratamiento deja más margen',
       ],
       en: [
-        'Sums up your billing without you opening a spreadsheet',
+        'Reconciles your bank through Plaid and keeps QuickBooks current',
         'Catches deposits and payments still to be collected',
         'Tells you which treatment leaves the most margin',
       ],
@@ -596,10 +598,10 @@ const RAW: RawMember[] = [
         { who: 'out', text: 'A este ritmo, noviembre cierra en unos $290,000. Viene un poco más lento por los feriados, pero la segunda quincena ya está 70% llena. Si algo se mueve, te aviso.', t: '08:42' },
       ],
       en: [
-        { who: 'out', text: 'Closed October. You billed $312,000 and spent $187,400: a 40% margin, three points up from September.', t: '08:30' },
-        { who: 'out', text: 'Laser drove most of it: $96,000 billed at a 68% margin. The assessment consult is still your lowest earner. The full detail is in your dashboard.', t: '08:30' },
+        { who: 'out', text: 'October is closed and reconciled in QuickBooks. You billed $312,000 and spent $187,400: a 40% margin, three points up from September.', t: '08:30' },
+        { who: 'out', text: 'Laser drove most of it: $96,000 billed at a 68% margin. Consults are still your lowest earner. Every bank transaction came in through Plaid; the full detail is in your dashboard.', t: '08:30' },
         { who: 'in', text: 'And how is November looking?', t: '08:41' },
-        { who: 'out', text: 'At this pace, November lands around $290,000. A bit slower with the holidays, but the second half of the month is already 70% booked. If anything shifts, I will let you know.', t: '08:42' },
+        { who: 'out', text: 'At this pace, November lands around $290,000. A bit slower with Thanksgiving, but the second half of the month is already 70% booked. If anything shifts, I will let you know.', t: '08:42' },
       ],
     },
     featureLinkLabel: { es: 'Pedir una demo', en: 'Book a demo' },
@@ -609,11 +611,11 @@ const RAW: RawMember[] = [
     },
     scenesHandoff: {
       es: 'Sara le escribe a cada paciente con su link de pago',
-      en: 'Sara messages each patient with their payment link',
+      en: 'Sara texts each patient their payment link',
     },
     scenesIntro: {
       es: 'Así trabaja el equipo junto: Daniel detecta anticipos sin cobrar, tú apruebas con un mensaje, y Sara le escribe a cada paciente hasta recuperarlos.',
-      en: 'Here’s the team working together: Daniel spots uncollected deposits, you approve with one message, and Sara writes each patient until the money comes in.',
+      en: 'Here is the team working together: Daniel spots unpaid deposits, you approve with one text, and Sara writes each patient until the money comes in.',
     },
     scenes: {
       es: [
@@ -650,8 +652,8 @@ const RAW: RawMember[] = [
           label: 'flags unpaid deposits',
           subtitle: 'flags how the numbers are doing',
           bubbles: [
-            { who: 'out', text: 'Went over the week. You have $18,400 in uncollected deposits across 7 upcoming appointments.', t: '08:30' },
-            { who: 'out', text: 'The three largest: Laura G. ($4,500, Thursday), Marco P. ($3,800, Friday) and Sofía T. ($2,900, Saturday). If you want, I will hand them to Sara to collect over WhatsApp today.', t: '08:30' },
+            { who: 'out', text: 'Went over the week. Your bank feed came in overnight, and you have $18,400 in deposits still unpaid across 7 upcoming appointments.', t: '08:30' },
+            { who: 'out', text: 'The three largest: Laura G. ($4,500, Thursday), Mark P. ($3,800, Friday) and Sophia T. ($2,900, Saturday). If you want, I will hand them to Sara to collect by text today.', t: '08:30' },
             { who: 'in', text: 'Yes, go ahead. How much did we recover last month this way?', t: '08:41' },
             { who: 'out', text: 'Last month Sara recovered $21,300 out of $24,000 pending, almost all within 48 hours. I am sending her the list now and I will let you know as payments come in.', t: '08:41' },
             { who: 'in', text: 'Perfect, thanks', t: '08:42' },
@@ -664,11 +666,11 @@ const RAW: RawMember[] = [
           avatar: '/equipo/sara-avatar.jpg',
           subtitle: 'with your patient',
           bubbles: [
-            { who: 'out', text: 'Hi Laura, it is the clinic. The deposit for your Thursday 5:30pm appointment is still pending. Here is the link to pay it and keep your spot.', t: '09:05', link: 'holasara.ai/pago/3d7q' },
+            { who: 'out', text: 'Hi Laura, this is the office. The deposit for your Thursday 5:30 pm appointment is still pending. Here is the link to pay it and keep your spot.', t: '09:05', link: 'holasara.ai/pago/3d7q' },
             { who: 'in', text: 'Oh, it completely slipped my mind. Until when can I pay it?', t: '09:18' },
             { who: 'out', text: 'No worries. If you pay today, your appointment stays exactly as it is. If you prefer, I can also move you to another time.', t: '09:18' },
             { who: 'in', text: 'No, Thursday is fine. Paying now', t: '09:19' },
-            { who: 'out', text: 'Payment received. Your Thursday 5:30pm appointment is confirmed and you will get a reminder the day before. Thank you, Laura.', t: '09:22' },
+            { who: 'out', text: 'Payment received. Your Thursday 5:30 pm appointment is confirmed and you will get a reminder the day before. Thank you, Laura.', t: '09:22' },
           ],
         },
       ],
@@ -681,10 +683,12 @@ const RAW: RawMember[] = [
         { title: 'Alertas', icon: 'bell', desc: 'Si algo se mueve, un gasto raro o una caída de ingresos, te avisa a tiempo.' },
       ],
       en: [
-        { title: 'Monthly close', icon: 'chart', desc: 'Sums up how much you billed and how you’re tracking vs last month, no spreadsheets.' },
-        { title: 'Money to collect', icon: 'card', desc: 'Spots unpaid deposits and payments and hands them over to recover.' },
-        { title: 'Profitability', icon: 'coin', desc: 'Tells you which treatment leaves the most margin and which isn’t paying off.' },
-        { title: 'Alerts', icon: 'bell', desc: 'If something shifts, an odd expense or a dip in revenue, he flags it in time.' },
+        { title: 'Bank feeds via Plaid', icon: 'bank', desc: 'Connects to your business accounts and pulls every transaction as it clears. Nothing to export.' },
+        { title: 'QuickBooks, current', icon: 'book', desc: 'Keeps QuickBooks reconciled and up to date, so your CPA opens a clean set of books.' },
+        { title: 'Monthly close', icon: 'chart', desc: 'Sums up what you billed and how you are tracking vs last month, no spreadsheets.' },
+        { title: 'Money to collect', icon: 'card', desc: 'Spots unpaid deposits and balances and hands them to Sara to recover.' },
+        { title: 'Profitability', icon: 'coin', desc: 'Tells you which treatment leaves the most margin and which is not paying off.' },
+        { title: 'Alerts', icon: 'bell', desc: 'An odd expense, a dip in revenue, a bill that doubled: he flags it in time.' },
       ],
     },
   },

@@ -1,9 +1,11 @@
 // Arquitectura de información del sitio. Fuente única para el mega menú (desktop
 // + mobile), el footer y los índices. Cada feature es una página dedicada.
 //
-// Bilingüe: el `href` es el path base (sin prefijo de idioma — se prefija al
-// render con localePath). `name`/`desc` traen las dos variantes. EN es traducción,
-// no calco.
+// Bilingüe: el `href` es el path base (sin prefijo de idioma, se prefija al
+// render con localePath). `name`/`desc` traen las dos variantes. EN no es traducción:
+// es el sitio del producto para clínicas de Estados Unidos (front desk, med spa,
+// dental office, bookkeeping). Las landings con slug localizado se linkean por su
+// slug ES (localePath lo traduce, ver src/i18n/slugs.ts).
 
 import type { Locale } from '../i18n/config';
 
@@ -62,18 +64,18 @@ interface RawGroup {
 
 const productGroupsRaw: RawGroup[] = [
   {
-    label: { es: 'Atiende', en: 'Answers' },
+    label: { es: 'Atiende', en: 'Front desk' },
     items: [
       {
         href: '/sara',
         name: { es: 'Conoce a Sara', en: 'Meet Sara' },
-        desc: { es: 'La secretaria con IA, de punta a punta.', en: 'The AI receptionist, end to end.' },
+        desc: { es: 'La secretaria con IA, de punta a punta.', en: 'Your AI receptionist, end to end.' },
         icon: 'spark',
       },
       {
         href: '/canales',
-        name: { es: 'WhatsApp e Instagram 24/7', en: 'WhatsApp & Instagram 24/7' },
-        desc: { es: 'Responde donde te escriben, siempre.', en: 'Replies wherever they message you, always.' },
+        name: { es: 'WhatsApp e Instagram 24/7', en: 'WhatsApp & Instagram DMs' },
+        desc: { es: 'Responde donde te escriben, siempre.', en: 'Answers wherever patients message you, 24/7.' },
         icon: 'chat',
       },
       {
@@ -93,7 +95,7 @@ const productGroupsRaw: RawGroup[] = [
       {
         href: '/operador',
         name: { es: 'Modo operador', en: 'Operator mode' },
-        desc: { es: 'Tu equipo le pide cosas por WhatsApp.', en: 'Your team asks her for things over WhatsApp.' },
+        desc: { es: 'Tu equipo le pide cosas por WhatsApp.', en: 'Your team texts her, she gets it done.' },
         icon: 'headset',
       },
     ],
@@ -112,10 +114,10 @@ const productGroupsRaw: RawGroup[] = [
       },
       {
         href: '/agenda',
-        name: { es: 'Agenda automática', en: 'Automatic scheduling' },
+        name: { es: 'Agenda automática', en: 'Scheduling & reminders' },
         desc: {
           es: 'Agenda sola, recuerda y confirma, sin dobles reservas.',
-          en: 'Books itself, reminds and confirms, no double bookings.',
+          en: 'Books, reminds and confirms. No double bookings.',
         },
         icon: 'calendar',
       },
@@ -133,8 +135,8 @@ const productGroupsRaw: RawGroup[] = [
     items: [
       {
         href: '/cobros',
-        name: { es: 'Anticipo y consulta', en: 'Deposits & consults' },
-        desc: { es: 'Cobra antes de atender.', en: 'Get paid before the appointment.' },
+        name: { es: 'Anticipo y consulta', en: 'Deposits & consult fees' },
+        desc: { es: 'Cobra antes de atender.', en: 'Get paid before the visit.' },
         icon: 'card',
       },
       {
@@ -150,13 +152,13 @@ const productGroupsRaw: RawGroup[] = [
     items: [
       {
         href: '/instagram',
-        name: { es: 'Instagram con IA', en: 'Instagram with AI' },
-        desc: { es: 'Publica y agenda a quien responde.', en: 'Posts and books whoever replies.' },
+        name: { es: 'Instagram con IA', en: 'Instagram on autopilot' },
+        desc: { es: 'Publica y agenda a quien responde.', en: 'Mia posts, Sara books whoever replies.' },
         icon: 'camera',
       },
       {
         href: '/resenas',
-        name: { es: 'Reseñas', en: 'Reviews' },
+        name: { es: 'Reseñas', en: 'Google reviews' },
         desc: { es: 'Más reseñas de 5 estrellas, solas.', en: 'More 5-star reviews, on their own.' },
         icon: 'star',
       },
@@ -203,13 +205,13 @@ const industryLinksRaw: RawLink[] = [
     name: { es: 'Depilación láser', en: 'Laser hair removal' },
     desc: {
       es: 'La agenda llena entre sesiones, sin ausencias.',
-      en: 'A full calendar between sessions, no no-shows.',
+      en: 'A full schedule between sessions, no no-shows.',
     },
     icon: 'laser',
   },
   {
     href: '/negocios/medicina-estetica',
-    name: { es: 'Medicina estética', en: 'Aesthetic medicine' },
+    name: { es: 'Medicina estética', en: 'Med spas & aesthetics' },
     desc: {
       es: 'Consultas y tratamientos, cobrados por adelantado.',
       en: 'Consults and treatments, paid up front.',
@@ -218,16 +220,16 @@ const industryLinksRaw: RawLink[] = [
   },
   {
     href: '/negocios/implante-capilar',
-    name: { es: 'Implante capilar', en: 'Hair transplant' },
+    name: { es: 'Implante capilar', en: 'Hair restoration' },
     desc: {
       es: 'Diagnósticos agendados y fechas aseguradas con anticipo.',
-      en: 'Assessments booked and dates secured with a deposit.',
+      en: 'Consults booked and dates secured with a deposit.',
     },
     icon: 'hair',
   },
   {
     href: '/negocios/odontologia',
-    name: { es: 'Odontología', en: 'Dentistry' },
+    name: { es: 'Odontología', en: 'Dental offices' },
     desc: {
       es: 'Turnos que se confirman solos, sin recepción saturada.',
       en: 'Appointments that confirm themselves, no swamped front desk.',
@@ -236,10 +238,10 @@ const industryLinksRaw: RawLink[] = [
   },
   {
     href: '/negocios/estetica-spa',
-    name: { es: 'Estética y spa', en: 'Beauty & spa' },
+    name: { es: 'Estética y spa', en: 'Spa & wellness' },
     desc: {
       es: 'Reservas 24/7 por WhatsApp e Instagram.',
-      en: '24/7 bookings over WhatsApp and Instagram.',
+      en: '24/7 bookings by text, WhatsApp and Instagram.',
     },
     icon: 'flower',
   },
@@ -251,7 +253,7 @@ const sizeLinksRaw: RawLink[] = [
     name: { es: 'Multi-local', en: 'Multi-location' },
     desc: {
       es: 'Varias sedes, una sola Sara y todo en un panel.',
-      en: 'Many locations, one Sara, everything in one dashboard.',
+      en: 'Several locations, one Sara, one dashboard.',
     },
     icon: 'buildings',
   },
@@ -263,7 +265,7 @@ const sizeLinksRaw: RawLink[] = [
   },
   {
     href: '/negocios/independiente',
-    name: { es: 'Profesional independiente', en: 'Solo professional' },
+    name: { es: 'Profesional independiente', en: 'Solo practitioner' },
     desc: {
       es: 'Atiende y agenda mientras estás con un paciente.',
       en: 'Answers and books while you are with a patient.',

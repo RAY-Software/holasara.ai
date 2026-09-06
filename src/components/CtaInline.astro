@@ -12,7 +12,7 @@ interface Props {
 const { lang = defaultLocale } = Astro.props;
 const copy = {
   es: { title: 'Que la próxima consulta no espere a&nbsp;mañana.', cta: 'Pedir demo', talk: 'Habla con Sara' },
-  en: { title: "Don't make the next enquiry wait until&nbsp;tomorrow.", cta: 'Book a demo', talk: 'Talk to Sara' },
+  en: { title: "Don't make the next patient wait until&nbsp;tomorrow.", cta: 'Book a demo', talk: 'Talk to Sara' },
 }[lang];
 const { title = copy.title, cta = copy.cta } = Astro.props;
 ---
