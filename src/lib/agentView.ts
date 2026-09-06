@@ -1,4 +1,5 @@
-import { getProductGroups, getTopLinks } from '../data/nav';
+import { getProductGroups, getTopLinks } from '../data/nav.ts';
+import { localePath } from '../i18n/config.ts';
 
 // El agent view se publica en español (idioma principal del sitio).
 const productGroups = getProductGroups('es');
@@ -15,6 +16,10 @@ const SITE = 'https://holasara.ai';
 const WHATSAPP = 'https://wa.me/526144659466';
 
 const abs = (href: string) => (href.startsWith('http') ? href : SITE + href);
+// Links a páginas: siempre con prefijo /es/ (la vista se publica en español). Sin el
+// prefijo, el Edge Middleware localiza por cookie/Accept-Language y un slug ES bajo
+// /en/ no existe (404) desde que los slugs se localizan por idioma (i18n/slugs.ts).
+const page = (href: string) => abs(localePath(href, 'es'));
 
 /** El sitio → Markdown para agentes. `llmsBody` = el cuerpo del /llms.txt (sin su
  *  título ni intro) para dar profundidad sin duplicar la fuente. */
@@ -27,20 +32,20 @@ export function buildAgentMarkdown(llmsBody = ''): string {
     '> Con Mia (marketing) y Daniel (finanzas).',
     '',
     '## Empezá acá',
-    `- [Probar gratis](${abs('/prueba')})`,
-    `- [Ver una demo](${abs('/demo')})`,
+    `- [Probar gratis](${page('/prueba')})`,
+    `- [Ver una demo](${page('/demo')})`,
     '',
     '## Producto',
   ];
 
   for (const g of productGroups) {
     lines.push(`### ${g.label}`);
-    for (const it of g.items) lines.push(`- [${it.name}](${abs(it.href)}): ${it.desc}`);
+    for (const it of g.items) lines.push(`- [${it.name}](${page(it.href)}): ${it.desc}`);
     lines.push('');
   }
 
   lines.push('## Más');
-  for (const it of topLinks) lines.push(`- [${it.name}](${abs(it.href)}): ${it.desc}`);
+  for (const it of topLinks) lines.push(`- [${it.name}](${page(it.href)}): ${it.desc}`);
   lines.push('');
 
   lines.push(

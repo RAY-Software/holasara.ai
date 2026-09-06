@@ -111,6 +111,12 @@ const { name = 'chat', size = 24 } = Astro.props;
       <path d="M6.5 16v-4M11 16V8M15.5 16v-6M20 16V5" />
     </>
   )}
+  {name === 'globe' && (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M3.5 12h17M12 3.5c2.7 2.5 2.7 14.5 0 17M12 3.5c-2.7 2.5-2.7 14.5 0 17" />
+    </>
+  )}
   {name === 'laser' && (
     <>
       <circle cx="5.6" cy="18.4" r="1.7" />

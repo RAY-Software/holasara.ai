@@ -1,0 +1,70 @@
+---
+// Diagrama de integraciones para el hero de /integraciones: el equipo (Sara, Mia,
+// Daniel) al centro y las herramientas que menciona el copy alrededor, unidas por
+// líneas. Solo HTML/SVG/Tailwind; logos de public/img/logos donde existen, íconos
+// de línea o monogramas donde no.
+import NavIcon from '../NavIcon.astro';
+import { getMember, type MemberId } from '../../data/team';
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+const en = lang === 'en';
+const members = (['sara', 'mia', 'daniel'] as MemberId[]).map((id) => getMember(id, lang)!);
+
+type Node = { label: string; logo?: string; icon?: 'phone'; mono?: string };
+const nodes: Node[] = [
+  { label: 'WhatsApp', logo: '/img/logos/whatsapp.svg' },
+  { label: 'Instagram', logo: '/img/logos/instagram.svg' },
+  { label: en ? 'Phone' : 'Teléfono', icon: 'phone' },
+  { label: 'Google Calendar', logo: '/img/logos/google.svg' },
+  { label: 'Google Business', logo: '/img/logos/google-business.svg' },
+  { label: 'Google Ads', logo: '/img/logos/google-ads.svg' },
+  { label: en ? 'Plaid · bank' : 'Plaid · banco', mono: 'P' },
+  { label: 'QuickBooks', mono: 'QB' },
+];
+// Posiciones en círculo (porcentaje del contenedor), arrancando arriba.
+const R = 40;
+const placed = nodes.map((n, i) => {
+  const a = (-90 + (360 / nodes.length) * i) * (Math.PI / 180);
+  return { ...n, x: 50 + R * Math.cos(a), y: 50 + R * Math.sin(a) };
+});
+const teamLabel = en ? 'Your AI team' : 'Tu equipo con IA';
+---
+
+<figure class={`relative aspect-square w-full max-w-[26rem] ${cls}`} aria-label={teamLabel}>
+  <!-- líneas -->
+  <svg class="absolute inset-0 h-full w-full" viewBox="0 0 100 100" aria-hidden="true">
+    {placed.map((n) => <line x1="50" y1="50" x2={n.x} y2={n.y} stroke="#1f7a5c" stroke-opacity="0.28" stroke-width="0.6" stroke-dasharray="1.6 1.6" />)}
+    <circle cx="50" cy="50" r={R} fill="none" stroke="#e4e8e4" stroke-width="0.4" />
+  </svg>
+
+  <!-- centro: el equipo -->
+  <div class="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 rounded-2xl border border-line bg-white px-4 py-3 shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)]">
+    <div class="flex -space-x-2">
+      {members.map((m) => <img src={m.avatar} alt={m.name} width="36" height="36" class="h-9 w-9 rounded-full border-2 border-white object-cover" loading="eager" decoding="async" />)}
+    </div>
+    <span class="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.12em] text-pine-dark">{teamLabel}</span>
+  </div>
+
+  <!-- nodos -->
+  {
+    placed.map((n) => (
+      <div class="absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5" style={`left:${n.x}%; top:${n.y}%`}>
+        <span class="grid h-12 w-12 place-items-center rounded-xl border border-line bg-white shadow-[0_8px_24px_-16px_rgba(20,38,31,0.4)]">
+          {n.logo ? (
+            <img src={n.logo} alt="" width="26" height="26" class="h-6.5 w-6.5 object-contain" loading="eager" decoding="async" />
+          ) : n.icon ? (
+            <span class="text-pine-dark"><NavIcon name={n.icon} size={24} /></span>
+          ) : (
+            <span class="font-serif text-sm font-black text-pine-dark">{n.mono}</span>
+          )}
+        </span>
+        <span class="whitespace-nowrap rounded-full bg-white/90 px-1.5 text-[11px] font-medium text-ink">{n.label}</span>
+      </div>
+    ))
+  }
+</figure>

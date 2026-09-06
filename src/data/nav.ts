@@ -24,7 +24,8 @@ export type ProductIcon =
   | 'badge'
   | 'search'
   | 'robot'
-  | 'chart';
+  | 'chart'
+  | 'globe';
 
 export type BusinessIcon =
   | 'laser'
@@ -235,7 +236,7 @@ const industryLinksRaw: RawLink[] = [
     href: '/negocios/odontologia',
     name: { es: 'Odontología', en: 'Dental offices' },
     desc: {
-      es: 'Turnos que se confirman solos, sin recepción saturada.',
+      es: 'Citas que se confirman solas, sin recepción saturada.',
       en: 'Appointments that confirm themselves, no swamped front desk.',
     },
     icon: 'tooth',
