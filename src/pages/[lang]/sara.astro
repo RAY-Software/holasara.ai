@@ -14,7 +14,7 @@ import FeatureFaq from '../../components/FeatureFaq.astro';
 import CtaInline from '../../components/CtaInline.astro';
 import CtaBand from '../../components/CtaBand.astro';
 
-// ── Copy por idioma. EN es traducción, no calco. ──
+// ── Copy por idioma. EN no es traducción: es la página de Sara para Estados Unidos. ──
 const dict = {
   es: {
     metaTitle: 'Conoce a Sara · La recepcionista con IA para clínicas, médicos y wellness',
@@ -106,92 +106,96 @@ const dict = {
     ],
   },
   en: {
-    metaTitle: 'Meet Sara · AI receptionist for clinics, doctors & wellness',
+    // Página de nicho para Estados Unidos: "ai dental receptionist", "ai receptionist for
+    // med spa", "virtual medical receptionist". No pelea la cabeza "ai receptionist".
+    metaTitle: 'Meet Sara · AI receptionist for dental offices, med spas and medical practices',
     metaDescription:
-      'Sara handles WhatsApp and Instagram around the clock, shares real prices, sells with the judgment you define and books while collecting the deposit. Without adding anyone to your front desk.',
-    heroEyebrow: 'Answers · Meet Sara',
-    heroTitle: "Answers, advises<br class='md:hidden' /> and gets paid.",
+      'AI receptionist for dental offices, med spas and medical practices. Answers calls and texts 24/7, quotes real fees, books and collects the deposit.',
+    heroEyebrow: 'Front desk · Meet Sara',
+    heroTitle: "Answers, advises<br class='md:hidden' /> and collects.<br /><em class='text-pine-dark'>By your&nbsp;rules.</em>",
     heroLead:
-      "Sara is your clinic's AI receptionist. She works nights, weekends and peak hours: she answers, builds the right offer, books and gets paid. Without adding anyone to your front desk.",
+      'Sara is the AI receptionist for dental offices, med spas and medical practices. She works nights, weekends and the lunch-hour rush: answers the call or the text, builds the right offer, books and collects. Without adding anyone to your front desk.',
     heroImageAlt:
       'A receptionist at an aesthetics clinic smiling, phone in hand, in a bright space with sage plants.',
     strip: [
-      { t: 'Answers 24/7', b: 'Replies instantly on WhatsApp, Instagram and your website.' },
-      { t: 'Sells with judgment', b: 'Offers the right plan, with real prices. Never makes things up.' },
-      { t: 'Books and gets paid', b: 'Books the appointment and collects the deposit in the same chat.' },
+      { t: 'Answers 24/7', b: 'Picks up calls and texts, WhatsApp, Instagram and your website chat.' },
+      { t: 'Sells with judgment', b: 'Offers the right plan, with real fees. Never makes things up.' },
+      { t: 'Books and collects', b: 'Books the appointment and takes the deposit in the same conversation.' },
     ],
     howKicker: 'How Sara does it',
-    howH2: "11:41 pm an enquiry comes in. 11:43 pm it's paid and&nbsp;booked.",
+    howH2: '11:41 pm a text comes in. 11:43 pm it is paid and&nbsp;booked.',
     howP1:
-      'A real late-night enquiry, exactly as it comes in over WhatsApp. Sara answers, builds the offer, proposes a time and leaves the booking paid, without anyone on your team being&nbsp;awake.',
+      'A real late-night inquiry, exactly as it comes in. Sara answers, builds the offer, proposes a time and leaves the booking paid, without anyone on your team being&nbsp;awake.',
     howP2:
-      "The same happens at 3 in the afternoon at peak time, when the front desk can't keep up. Sara never makes anyone&nbsp;wait.",
+      'The same happens at 3 in the afternoon, when the front desk is on another call. Sara never puts anyone on&nbsp;hold.',
     howBubbles: [
       { who: 'in', text: 'Hi, I saw your laser hair removal. How much for full legs?', t: '11:41 pm' },
-      { who: 'out', text: 'Hi there! Full legs come in our 6-session pack for $6,900. Paying per session would cost double, so the pack saves you 50%. Plus, your first trial session is free. Want me to book that first session so you can try the treatment?', t: '11:41 pm' },
-      { who: 'in', text: "Yes, I'm interested. Any openings this week?", t: '11:42 pm' },
-      { who: 'out', text: 'Yes! I have Thursday at 5:30 pm or Friday at 6:00 pm. To confirm the booking there’s a deposit. Which works better for you?', t: '11:42 pm' },
+      { who: 'out', text: 'Hi there! Full legs are $1,950 for a package of 6 sessions. Per session it would run almost double, so the package saves you close to half. And your first session is free. Want me to book it so you can try the treatment?', t: '11:41 pm' },
+      { who: 'in', text: 'Yes, I am interested. Any openings this week?', t: '11:42 pm' },
+      { who: 'out', text: 'Yes! I have Thursday at 5:30 pm or Friday at 6:00 pm. A deposit holds the spot. Which works better for you?', t: '11:42 pm' },
       { who: 'in', text: 'Thursday', t: '11:43 pm' },
-      { who: 'out', text: "Done! Thursday at 5:30 pm booked ✅ I'll send you the deposit link and you'll get a reminder the day before.", t: '11:43 pm' },
+      { who: 'out', text: 'Done! Thursday at 5:30 pm is booked. I will text you the deposit link and a reminder the day before.', t: '11:43 pm' },
     ],
     stepsH2: 'Everything a front desk handles,<br />without a front&nbsp;desk.',
     steps: [
-      { n: '01', title: 'The patient messages', body: 'Over WhatsApp, Instagram or your website chat, almost always outside front-desk hours. Sara replies instantly.' },
-      { n: '02', title: 'Informs, advises and sells', body: "She explains treatments, gives real prices and builds the right offer, in your clinic's tone. She never makes anything up." },
-      { n: '03', title: 'Books and gets paid', body: 'She books the appointment in your calendar and collects the consult fee or deposit in the same conversation. Then she reminds and confirms.' },
+      { n: '01', title: 'The patient calls or texts', body: 'By phone, text, WhatsApp, Instagram or your website chat, often after hours. Sara answers on the first ring.' },
+      { n: '02', title: 'Informs, advises and sells', body: 'She explains treatments, quotes real fees and builds the right offer, in your practice’s tone. She never makes anything up.' },
+      { n: '03', title: 'Books and collects', body: 'She books the appointment in your calendar and collects the consult fee or deposit in the same conversation. Then she reminds and confirms.' },
     ],
     row1Eyebrow: 'Sells with judgment',
-    row1Title: "Not a bot with buttons. <em class='text-pine-dark'>She advises.</em>",
+    row1Title: "Not a phone tree. <em class='text-pine-dark'>She advises.</em>",
     row1Body:
-      'She understands what the patient needs, offers the plan that truly fits and shows the savings versus paying per session. When it makes sense, she proposes a free trial session to lower the barrier.',
+      'She understands what the patient needs, offers the plan that truly fits and shows the savings versus paying per session. When it makes sense, she offers a free first session to lower the barrier.',
     row1Points: [
       'Builds the offer around what they ask',
-      'Shows the pack savings, not just the price',
+      'Shows the package savings, not just the price',
       'Offers the trial session to close',
     ],
     row1Bubbles: [
       { who: 'in', text: 'I want underarms and bikini', t: '1:02 pm' },
-      { who: 'out', text: 'Great choice! For those two areas the combo pack is your best bet: 6 sessions of underarms + bikini for $3,900. Separately it would cost almost double, so you save 50%. Your first underarm session is on us. Want me to book your first session?', t: '1:02 pm' },
+      { who: 'out', text: 'Great choice! For those two areas the combo package is your best bet: 6 sessions of underarms + bikini for $1,650. Separately it would run almost double. Your first underarm session is on us. Want me to book your first visit?', t: '1:02 pm' },
       { who: 'in', text: 'Yes, what days do you have?', t: '1:04 pm' },
     ],
     row2Eyebrow: 'With clear limits',
     row2Title: "She never invents a price <em class='text-pine-dark'>or a promise.</em>",
     row2Body:
-      "Sara only works with what you loaded. If someone asks for something she doesn't have (an extra discount, a special condition), she doesn't improvise: she says so naturally and passes the question to your team.",
+      'Sara only works with what you loaded. If someone asks for something she does not have (an extra discount, a special condition), she does not improvise: she says so naturally and passes the question to your team.',
     row2Points: [
-      'Only prices and terms you loaded',
-      "If she doesn't have it, she says so and won't promise",
-      'Hands off to a human when needed',
+      'Only fees and terms you loaded',
+      'If she does not have it, she says so and will not promise',
+      'Hands off to a person when needed',
     ],
     row2Bubbles: [
       { who: 'in', text: 'Any discount if I pay for all 6 today?', t: '5:20 pm' },
-      { who: 'out', text: "Here's what I have on file: the 6-session pack already includes 50% savings. I can't confirm an additional discount myself, but I'll pass your question to the team to look into. Sound good?", t: '5:20 pm' },
+      { who: 'out', text: 'Here is what I have on file: the 6-session package already includes the savings. I cannot confirm an additional discount myself, but I will pass your question to the team to look into. Sound good?', t: '5:20 pm' },
       { who: 'in', text: 'Yes, perfect', t: '5:21 pm' },
     ],
-    row3Eyebrow: "She's your secretary too",
-    row3Title: "You talk to her like your team, <em class='text-pine-dark'>and she gets it done.</em>",
+    row3Eyebrow: 'She is your assistant too',
+    row3Title: "You text her like your team, <em class='text-pine-dark'>and she gets it done.</em>",
     row3Body:
-      'Beyond answering and selling, Sara manages your calendar. You ask for something in your own words and she handles it, notifying every patient. Around the clock.',
-    row3Quotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday and let them know.”'],
+      'Beyond answering and selling, Sara manages your schedule. You ask for something in your own words and she handles it, notifying every patient. Around the clock.',
+    row3Quotes: ['“Block my calendar on Friday.”', '“Move Mark to Thursday at 10.”', '“Reschedule everyone from Tuesday and let them know.”'],
     row3Link: 'See operator mode',
-    ctaInline: "This exact thing, with your clinic's&nbsp;name.",
-    configKicker: 'Configured per clinic',
+    ctaInline: 'This exact thing, with your practice’s&nbsp;name.',
+    configKicker: 'Configured per practice',
     configH2: 'You define how she answers and&nbsp;sells.',
     configLead:
-      "Sara doesn't come with a factory personality. From the dashboard you adjust her style, her strategy and her tone, and it changes instantly across your whole&nbsp;clinic.",
+      'Sara does not come with a factory personality. From the dashboard you adjust her style, her strategy and her tone, and it changes instantly across your whole&nbsp;practice.',
     config: [
-      { t: 'Booking style', b: "Have her ask the patient's preference and confirm, or offer the available times directly. However you prefer." },
-      { t: 'Sales strategy', b: 'Ready-made presets (Strong, Consultative or No selling) or fine-tune every lever: what she offers first, combo upsells, whether she gives away the first session, whether she shows the pack savings.' },
-      { t: 'Tone', b: "Sales-driven, neutral, clinical or warm. Sara speaks in your clinic's voice, not a bot's." },
-      { t: 'Special instructions', b: "Specific rules in your own words. Sara follows them, but never promises prices or terms you didn't load." },
+      { t: 'Booking style', b: 'Have her ask the patient’s preference and confirm, or offer the open times directly. However you prefer.' },
+      { t: 'Sales strategy', b: 'Ready-made presets (Strong, Consultative or No selling) or fine-tune every lever: what she offers first, combo upsells, whether she gives away the first session, whether she shows the package savings.' },
+      { t: 'Tone', b: 'Sales-driven, neutral, clinical or warm. Sara speaks in your practice’s voice, not a bot’s.' },
+      { t: 'Special instructions', b: 'Specific rules in your own words. Sara follows them, but never promises fees or terms you did not load.' },
     ],
     faqs: [
-      { q: "Can people tell it's an AI?", a: "Sara introduces herself naturally and replies in the tone you chose for your clinic. Patients feel they're talking to someone who knows their stuff, not a bot with buttons." },
-      { q: 'Does she only work during my hours?', a: 'She works around the clock, on weekends and at peak times. Right when your front desk is out, which is when most enquiries come in.' },
-      { q: 'Can she make up a price or a promo?', a: "No. Sara only works with what you loaded: prices, packs and terms. If someone asks for something she doesn't have, she says so and passes the question to your team. She never promises what doesn't exist." },
-      { q: 'How much control do I have over how she sells?', a: 'Full control. You pick a preset (Strong, Consultative or No selling) or adjust every lever: what she offers first, whether she upsells combos, whether she mentions installments, whether she gives away the first session. It’s configured per clinic.' },
-      { q: 'Does she replace my front desk?', a: "She frees it from the repetitive part (answering the same questions, confirming appointments, chasing payments) so it can focus on the patient who's in the clinic." },
-      { q: 'Does she speak like people in my country?', a: "Yes. Sara adapts her register to your clinic's country, so she sounds natural to your patients." },
+      { q: 'Can patients tell it is an AI?', a: 'Sara introduces herself naturally and talks in the tone you chose for your practice. Patients feel they are talking to someone who knows the office, not a phone tree.' },
+      { q: 'Does she only work during office hours?', a: 'She works around the clock, on weekends and at peak times. Right when your front desk is out, which is when most inquiries come in.' },
+      { q: 'Is Sara a good fit for a dental office?', a: 'Yes. She answers new-patient calls and texts, books cleanings and consults, sends reminders and collects deposits for bigger treatments. She books into Google Calendar and never touches patient records; if your office runs on another scheduler, we go through it on the demo.' },
+      { q: 'And for a med spa?', a: 'That is where she started. Laser, injectables, facials: she quotes packages, shows the savings, offers a first session and collects the deposit that keeps the appointment from turning into a no-show.' },
+      { q: 'Can she make up a price or a promo?', a: 'No. Sara only works with what you loaded: fees, packages and terms. If someone asks for something she does not have, she says so and passes the question to your team. She never promises what does not exist.' },
+      { q: 'How much control do I have over how she sells?', a: 'Full control. You pick a preset (Strong, Consultative or No selling) or adjust every lever: what she offers first, whether she upsells combos, whether she mentions payment plans, whether she gives away the first session. It is configured per practice.' },
+      { q: 'Does she replace my front desk?', a: 'She takes the repetitive part (answering the same questions, confirming appointments, chasing deposits) so your team can focus on the patient who is in the office.' },
+      { q: 'Does she speak Spanish?', a: 'Yes. Sara works in English and Spanish, and follows the language the patient uses, on the phone and by text.' },
     ],
   },
 }[lang];
