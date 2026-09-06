@@ -113,6 +113,13 @@ jobs:
           node scripts/build-api.mjs
           test -s api/voice-session.js
 
+      # Guarda de tests: la lógica de routing/i18n (slugs localizados, hreflang, 301,
+      # vista de agente) está bajo node:test. Un slug mal renombrado o un hreflang roto
+      # falla acá y aborta el deploy, en vez de llegar a producción. Usa el node_modules
+      # que instaló el paso anterior (npm ci).
+      - name: Tests (routing, i18n, vista de agente)
+        run: npm test
+
       - name: Build
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
       - name: Deploy (prebuilt → production)
