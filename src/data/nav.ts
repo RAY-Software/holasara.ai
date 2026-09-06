@@ -245,6 +245,14 @@ const topLinksRaw: RawLink[] = [
     name: { es: 'Cómo funciona', en: 'How it works' },
     desc: { es: 'Conectas tu calendario y listo.', en: 'Connect your calendar and you are set.' },
   },
+  // Free trial self-serve (sep 2026): /prueba existía pero no estaba enlazada desde ningún
+  // lado del sitio. Entra por nav y footer, no por el hero: el primer scroll de la home
+  // sigue siendo el de "Pedir demo" mientras corren los Ads (message match).
+  {
+    href: '/prueba',
+    name: { es: 'Probar gratis', en: 'Try it free' },
+    desc: { es: 'Tu sitio con Sara en vivo, en segundos.', en: 'Your site with Sara live, in seconds.' },
+  },
 ];
 // "Precios" salió del top menu a pedido de Franco (ago 2026): prefiere no
 // mostrar precios en la navegación. La página /precios sigue viva por si hay
