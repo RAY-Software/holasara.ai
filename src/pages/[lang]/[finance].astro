@@ -1,0 +1,505 @@
+---
+import { localizedStaticPaths, toLocale, localePath } from '../../i18n/config';
+// Slug localizado: /es/contabilidad-para-clinicas ↔ /en/medical-practice-bookkeeping (src/i18n/slugs.ts).
+export function getStaticPaths() {
+  return localizedStaticPaths('finance');
+}
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import PaymentsPanel from '../../components/mocks/PaymentsPanel.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// Link inline dentro de strings con set:html (howP2, points).
+const linkCls = 'font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine';
+
+// ── Copy por idioma. EN es inglés nativo, no calco. ──
+// Ángulo: Daniel no es "otro software contable". Es el analista que se conecta al
+// banco (Plaid), mantiene QuickBooks al día y te escribe lo que importa por WhatsApp.
+// No hace impuestos ni nómina; tu contador recibe libros limpios.
+const dict = {
+  es: {
+    metaTitle: 'Contabilidad para clínicas al día, con Daniel · Sara',
+    metaDescription:
+      'Contabilidad para clínicas con Daniel: conecta tu banco por Plaid, mantiene QuickBooks al día y te escribe el cierre del mes y qué tratamiento deja margen.',
+    heroEyebrow: 'Daniel · Finanzas de la clínica',
+    heroTitle: "Contabilidad para clínicas, <em class='text-pine-dark'>sin abrir un&nbsp;Excel.</em>",
+    heroLead:
+      'Daniel es el analista de finanzas con IA de tu clínica. Se conecta a tu banco por Plaid, mantiene QuickBooks al día y te escribe lo que importa: cuánto facturaste, cuánto gastaste, qué tratamiento deja más margen y qué falta cobrar. La contabilidad para clínicas, sin que abras una hoja de cálculo.',
+    heroImageAlt: 'Un escritorio sereno con una laptop abierta y un gráfico abstracto: las cuentas de la clínica, en orden.',
+    strip: [
+      { t: 'Se conecta a tu banco por Plaid', b: 'Lee los movimientos de las cuentas de la clínica, sin que cargues nada a mano.' },
+      { t: 'Mantiene QuickBooks al día', b: 'Concilia y categoriza cada semana. Tu contador recibe los libros limpios.' },
+      { t: 'Te escribe lo que importa', b: 'El cierre del mes, el margen por tratamiento y lo que falta cobrar, antes de que preguntes.' },
+    ],
+    howKicker: 'Cómo lo hace Daniel',
+    howH2: "El cierre del mes, <em class='text-pine-dark'>en un mensaje de&nbsp;WhatsApp.</em>",
+    howP1:
+      'Así te escribe Daniel cuando cierra el mes. Ya concilió el banco, categorizó cada gasto en QuickBooks y cruzó los ingresos con lo que cobró Sara. Lo que te llega es la conclusión, no la planilla.',
+    howP2: `Y si le preguntas cómo viene el mes que viene, proyecta con lo que ya está agendado y cobrado. <a href="${L('/equipo/daniel')}" class="${linkCls}">Conoce a Daniel</a>, el analista de finanzas del equipo de&nbsp;Sara.`,
+    danielSub: 'te avisa cómo van los números',
+    howBubbles: [
+      { who: 'out', text: 'Cerré julio. Facturaste $284,000 y gastaste $166,500: margen de 41%, dos puntos arriba de junio. Ya quedó todo conciliado en QuickBooks.', t: '08:30' },
+      { who: 'out', text: 'Lo que más empujó fue la ortodoncia: $92,000 con 63% de margen. Los blanqueamientos siguen dejando poco, 22%. Te dejé el detalle por tratamiento en el panel.', t: '08:31' },
+      { who: 'in', text: '¿Y agosto cómo viene?', t: '08:47' },
+      { who: 'out', text: 'Con lo que ya está agendado y los anticipos que cobró Sara, agosto cierra en unos $270,000. Baja un poco por las vacaciones, pero la última semana ya está casi llena. Si algo se mueve, te aviso.', t: '08:48' },
+      { who: 'in', text: 'Perfecto, gracias', t: '08:49' },
+    ],
+    stepsH2: "Contabilidad para clínicas, <em class='text-pine-dark'>en tres&nbsp;tiempos.</em>",
+    steps: [
+      { n: '01', title: 'Conectas el banco y&nbsp;QuickBooks', body: 'Autorizas las cuentas de la clínica por Plaid y conectas tu QuickBooks. Sin migrar nada ni cargar movimientos a mano.' },
+      { n: '02', title: 'Daniel concilia y categoriza cada&nbsp;semana', body: 'Cruza cada movimiento del banco con los cobros de Sara, lo categoriza por línea de tratamiento y deja los libros al día.' },
+      { n: '03', title: 'Te escribe el cierre y lo que hay que&nbsp;hacer', body: 'Cuánto facturaste, cuánto gastaste, qué margen te quedó y qué falta cobrar. Si hay anticipos pendientes, se los pasa a Sara.' },
+    ],
+    row1Eyebrow: 'Cierre del mes',
+    row1Title: "El mes cerrado, <em class='text-pine-dark'>sin abrir un&nbsp;Excel.</em>",
+    row1Body:
+      'Daniel cierra el mes solo y te lo cuenta en tres líneas: cuánto facturaste, cuánto gastaste y qué margen te quedó, comparado con el mes anterior. Si quieres el detalle, está en el panel. Si no, con el mensaje alcanza.',
+    row1Points: [
+      'Facturación, gastos y margen del mes',
+      'Comparado con el mes anterior',
+      'Todo conciliado en QuickBooks antes de escribirte',
+    ],
+    closeTitle: 'Cierre de julio',
+    closeTag: 'Conciliado',
+    closeRows: [
+      { k: 'Facturado', v: '$284,000', d: '+6% vs junio' },
+      { k: 'Gastado', v: '$166,500', d: '+1% vs junio' },
+      { k: 'Margen', v: '41%', d: '+2 puntos' },
+    ],
+    closeNote: 'Lo que más empujó: ortodoncia. Lo que menos rinde: blanqueamiento.',
+    closeFrom: 'Daniel · hoy 08:30',
+    row2Eyebrow: 'Margen por tratamiento',
+    row2Title: "Qué tratamiento deja margen <em class='text-pine-dark'>y cuál no&nbsp;rinde.</em>",
+    row2Body:
+      'Facturar mucho no es lo mismo que ganar. Daniel cruza los gastos de cada línea con lo que cobró Sara (anticipos, consultas y gift cards por Stripe) y te dice qué deja margen de verdad. En una clínica dental: limpiezas, implantes u ortodoncia. En un med spa: Botox, láser o faciales.',
+    row2Points: [
+      'Margen real por línea de tratamiento',
+      'Cruza los gastos con los cobros de Sara',
+      'Clínica dental o med spa, el mismo análisis',
+    ],
+    row3Eyebrow: 'QuickBooks al día',
+    row3Title: "QuickBooks para consultorios dentales y med spa, <em class='text-pine-dark'>listo para tu&nbsp;contador.</em>",
+    row3Body:
+      'Daniel categoriza cada movimiento por línea de tratamiento, no en una cuenta genérica de ingresos, y concilia el banco con QuickBooks cada semana. Tu contador recibe libros limpios y al día; tú dejas de pasar el fin de mes juntando comprobantes.',
+    row3Points: [
+      'Categorías por línea de tratamiento, no una sola cuenta de ingresos',
+      'Conciliación bancaria semanal',
+      'Tu contador entra a un QuickBooks limpio',
+    ],
+    connTitle: 'Conexiones de Daniel',
+    connStatus: 'Conectado',
+    connections: [
+      { name: 'Plaid', desc: 'Banco conectado' },
+      { name: 'QuickBooks', desc: 'Libros al día' },
+      { name: 'Stripe', desc: 'Cobros de Sara' },
+    ],
+    connNote: 'Última conciliación: hoy 07:00',
+    row4Eyebrow: 'Dinero por cobrar',
+    row4Title: "Daniel encuentra dinero por cobrar. <em class='text-pine-dark'>Sara sale a&nbsp;cobrarlo.</em>",
+    row4Body:
+      'Cada semana Daniel revisa qué anticipos y pagos quedaron pendientes. Te los muestra, tú apruebas con un mensaje y Sara le escribe a cada paciente con su link de pago hasta que entra. Nadie de recepción tiene que llamar a nadie.',
+    row4Points: [
+      'Detecta anticipos y pagos pendientes',
+      'Tú apruebas con un mensaje',
+      `Sara los cobra por WhatsApp con link de pago, <a href="${L('/cobros')}" class="${linkCls}">como cualquier anticipo</a>`,
+    ],
+    row4Bubbles: [
+      { who: 'out', text: 'Hola Valentina, te escribo de la clínica. Quedó pendiente el anticipo de tu cita del martes 16:00. Te dejo el link para pagarlo y dejar tu lugar asegurado.', t: '09:05', link: 'pay.rayhealth.app/c/aurora-4821' },
+      { who: 'in', text: 'Ay, se me pasó. ¿Lo puedo pagar ahora?', t: '09:20' },
+      { who: 'out', text: 'Sí, claro. Con el link queda listo en un minuto y tu cita sigue tal cual.', t: '09:20' },
+      { who: 'in', text: 'Listo, ya pagué', t: '09:24' },
+      { who: 'out', text: 'Pago recibido. Tu cita del martes 16:00 queda confirmada y te llega el recordatorio un día antes. Gracias, Valentina.', t: '09:24' },
+    ],
+    row5Eyebrow: 'Alertas y proyección',
+    row5Title: "Si algo se mueve, <em class='text-pine-dark'>te avisa a&nbsp;tiempo.</em>",
+    row5Body:
+      'Un gasto que no cuadra, un proveedor que cobró dos veces, una semana con menos ingresos que de costumbre: Daniel lo ve en el banco y te lo dice ese día, no en el cierre. Y con lo que ya está agendado y cobrado, te proyecta cómo cierra el mes que viene.',
+    row5Points: [
+      'Gastos raros o duplicados',
+      'Caídas de ingresos frente a lo habitual',
+      'Proyección del mes que viene con la agenda y los anticipos de Sara',
+    ],
+    row5Bubbles: [
+      { who: 'out', text: 'Aviso rápido: hoy salieron dos cargos de $6,800 del mismo proveedor de insumos, con dos horas de diferencia. Parece duplicado. ¿Fue una sola compra?', t: '11:12' },
+      { who: 'in', text: 'Sí, una sola. Lo reclamo yo con el proveedor', t: '11:30' },
+      { who: 'out', text: 'Perfecto. Lo dejé marcado en QuickBooks como cargo a revisar, así no ensucia el cierre. Cuando entre la devolución, te aviso.', t: '11:30' },
+      { who: 'out', text: 'Otra cosa: esta semana los ingresos vienen 18% abajo de lo habitual. Es por la agenda del jueves, que quedó a medio llenar. Con lo agendado para las próximas dos semanas, el mes igual cierra parecido al anterior.', t: '11:31' },
+      { who: 'in', text: 'Perfecto, gracias', t: '11:34' },
+    ],
+    ctaInline: 'Las cuentas de tu clínica al día, sin que las lleves&nbsp;tú.',
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada movimiento deja&nbsp;rastro.',
+    panelLead:
+      'En tu panel, cada movimiento que revisa Daniel lleva un estado. De un vistazo sabes qué está conciliado, qué falta cobrar y qué te marcó para&nbsp;revisar.',
+    estados: [
+      { tag: 'Conciliado', desc: 'El movimiento del banco ya está cruzado y categorizado en QuickBooks.' },
+      { tag: 'Por cobrar', desc: 'Un anticipo o pago pendiente que Daniel detectó. Con tu ok, Sara sale a cobrarlo.' },
+      { tag: 'Alerta', desc: 'Un gasto raro, un cargo duplicado o una caída de ingresos que Daniel te marcó ese día.' },
+      { tag: 'Cierre del mes', desc: 'El resumen mensual: facturación, gastos, margen y qué tratamiento empujó. El mismo que te llega por WhatsApp.' },
+    ],
+    faqs: [
+      { q: '¿Daniel reemplaza a mi contador?', a: 'No. Daniel lleva el día a día: concilia el banco, categoriza cada movimiento y deja QuickBooks al día. Tu contador sigue haciendo impuestos, nómina y todo lo que requiere su firma, con la diferencia de que recibe libros limpios en vez de una caja de comprobantes.' },
+      { q: '¿Qué necesito para empezar?', a: 'Conectar las cuentas bancarias de la clínica a través de Plaid y tu QuickBooks. No se migra nada ni se carga a mano. La implementación se hace acompañada.' },
+      { q: '¿Funciona con mi banco?', a: 'Daniel lee los movimientos a través de Plaid, que se conecta con miles de bancos. Qué bancos y países cubre para tu clínica lo revisamos en la demo.' },
+      { q: '¿Daniel ve mis datos clínicos?', a: 'No. Daniel solo trabaja con movimientos bancarios y con los cobros que registra Sara. No accede a historias clínicas ni a información médica de los pacientes; eso queda donde está hoy.' },
+      { q: '¿Y si no uso QuickBooks?', a: 'Hoy Daniel mantiene los libros en QuickBooks. Si tu clínica usa otro sistema contable, lo vemos en la demo.' },
+      { q: '¿Cómo sabe el margen por tratamiento?', a: 'Cruza dos fuentes: los gastos que categoriza desde el banco (insumos, servicios, honorarios) y los cobros que hace Sara por Stripe, que ya vienen con el tratamiento asociado. Con eso arma el margen por línea: limpiezas, implantes, ortodoncia, láser, faciales, lo que haga tu clínica.' },
+      { q: '¿Cuánto cuesta?', a: 'El precio se arma para cada clínica y se comparte en la demo. Es una suscripción mensual; qué incluye el plan con Daniel también se define ahí.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Medical Practice Bookkeeping, Done by Daniel · Sara',
+    metaDescription:
+      "Medical practice bookkeeping by Daniel: connects your bank through Plaid, keeps QuickBooks current and messages you the close and margin per treatment.",
+    heroEyebrow: 'Daniel · Practice finance',
+    heroTitle: "Medical practice bookkeeping, <em class='text-pine-dark'>done before you&nbsp;ask.</em>",
+    heroLead:
+      "Daniel is your practice's AI finance analyst. He connects to your bank accounts through Plaid, keeps QuickBooks current and messages you what matters: what you billed, what you spent, which treatment leaves the most margin and what's still to collect. Medical practice bookkeeping that never asks you to open a spreadsheet.",
+    heroImageAlt: "A calm desk with an open laptop and an abstract chart: the practice's books, in order.",
+    strip: [
+      { t: 'Connects to your bank through Plaid', b: "Reads your practice's bank activity, with nothing to enter by hand." },
+      { t: 'Keeps QuickBooks current', b: 'Reconciles and categorizes every week. Your accountant gets clean books.' },
+      { t: 'Messages you what matters', b: "The month-end close, margin per treatment and what's left to collect, before you ask." },
+    ],
+    howKicker: 'How Daniel does it',
+    howH2: "The month-end close, <em class='text-pine-dark'>in one WhatsApp&nbsp;message.</em>",
+    howP1:
+      'This is how Daniel messages you when he closes the month. He has already reconciled the bank, categorized every expense in QuickBooks and matched revenue against what Sara collected. What reaches you is the conclusion, not the spreadsheet.',
+    howP2: `And if you ask how next month is looking, he projects from what is already booked and collected. <a href="${L('/equipo/daniel')}" class="${linkCls}">Meet Daniel</a>, the finance analyst on Sara's&nbsp;team.`,
+    danielSub: 'flags how the numbers are doing',
+    howBubbles: [
+      { who: 'out', text: 'Closed July. You billed $284,000 and spent $166,500: a 41% margin, two points up from June. Everything is reconciled in QuickBooks.', t: '8:30 am' },
+      { who: 'out', text: 'Orthodontics drove most of it: $92,000 at a 63% margin. Whitening is still your thinnest line at 22%. The per-treatment breakdown is in your dashboard.', t: '8:31 am' },
+      { who: 'in', text: 'How is August looking?', t: '8:47 am' },
+      { who: 'out', text: "With what's already booked and the deposits Sara collected, August lands around $270,000. A little lower with vacations, but the last week is nearly full. If anything shifts, I'll let you know.", t: '8:48 am' },
+      { who: 'in', text: 'Perfect, thanks', t: '8:49 am' },
+    ],
+    stepsH2: "Accounting for medical practices, <em class='text-pine-dark'>in three&nbsp;steps.</em>",
+    steps: [
+      { n: '01', title: 'Connect your bank and&nbsp;QuickBooks', body: "Authorize your practice's accounts through Plaid and connect your QuickBooks. Nothing to migrate, nothing to enter by hand." },
+      { n: '02', title: 'Daniel reconciles and categorizes every&nbsp;week', body: 'He matches each bank transaction against what Sara collected, categorizes it by treatment line and keeps the books current.' },
+      { n: '03', title: 'He messages you the close and what to&nbsp;do', body: "What you billed, what you spent, the margin you kept and what's still to collect. If there are unpaid deposits, he hands them to Sara." },
+    ],
+    row1Eyebrow: 'Month-end close',
+    row1Title: "The month closed, <em class='text-pine-dark'>without opening a&nbsp;spreadsheet.</em>",
+    row1Body:
+      "Daniel closes the month on his own and tells you in three lines: what you billed, what you spent and the margin you kept, against the month before. If you want the detail, it's in the dashboard. If not, the message is enough.",
+    row1Points: [
+      'Revenue, expenses and margin for the month',
+      'Compared with the month before',
+      'Reconciled in QuickBooks before he messages you',
+    ],
+    closeTitle: 'July close',
+    closeTag: 'Reconciled',
+    closeRows: [
+      { k: 'Billed', v: '$284,000', d: '+6% vs June' },
+      { k: 'Spent', v: '$166,500', d: '+1% vs June' },
+      { k: 'Margin', v: '41%', d: '+2 points' },
+    ],
+    closeNote: 'Driven by orthodontics. Thinnest line: whitening.',
+    closeFrom: 'Daniel · today 8:30 am',
+    row2Eyebrow: 'Margin per treatment',
+    row2Title: "Which treatment makes money <em class='text-pine-dark'>and which one&nbsp;doesn't.</em>",
+    row2Body:
+      "Billing a lot isn't the same as earning. Daniel matches each line's expenses against what Sara collected (deposits, consults and gift cards through Stripe) and tells you what actually leaves a margin. In a dental practice: cleanings, implants or orthodontics. In a med spa: Botox, laser or facials.",
+    row2Points: [
+      'Real margin per treatment line',
+      "Expenses matched against Sara's payments",
+      'Dental practice or med spa, same analysis',
+    ],
+    row3Eyebrow: 'QuickBooks, kept current',
+    row3Title: "QuickBooks for dental practices and med spas, <em class='text-pine-dark'>ready for your&nbsp;accountant.</em>",
+    row3Body:
+      'Daniel categorizes every transaction by treatment line, not a single catch-all revenue account, and reconciles the bank against QuickBooks every week. Your accountant gets clean, current books; you stop spending month-end chasing receipts.',
+    row3Points: [
+      'Categories by treatment line, not one revenue bucket',
+      'Weekly bank reconciliation',
+      'Your accountant opens a clean QuickBooks',
+    ],
+    connTitle: "Daniel's connections",
+    connStatus: 'Connected',
+    connections: [
+      { name: 'Plaid', desc: 'Bank connected' },
+      { name: 'QuickBooks', desc: 'Books current' },
+      { name: 'Stripe', desc: "Sara's payments" },
+    ],
+    connNote: 'Last reconciliation: today 7:00 am',
+    row4Eyebrow: 'Money to collect',
+    row4Title: "Daniel finds money to collect. <em class='text-pine-dark'>Sara goes and collects&nbsp;it.</em>",
+    row4Body:
+      'Every week Daniel checks which deposits and payments are still outstanding. He shows them to you, you approve with one message, and Sara writes each patient with their payment link until it comes in. No one at the front desk has to call anyone.',
+    row4Points: [
+      'Spots unpaid deposits and outstanding payments',
+      'You approve with one message',
+      `Sara collects over WhatsApp with a payment link, <a href="${L('/cobros')}" class="${linkCls}">like any deposit</a>`,
+    ],
+    row4Bubbles: [
+      { who: 'out', text: "Hi Valentina, it's the clinic. The deposit for your Tuesday 4:00 pm appointment is still pending. Here's the link to pay it and keep your spot.", t: '9:05 am', link: 'pay.rayhealth.app/c/aurora-4821' },
+      { who: 'in', text: 'Oh, it slipped my mind. Can I pay it now?', t: '9:20 am' },
+      { who: 'out', text: 'Of course. The link takes a minute and your appointment stays exactly as it is.', t: '9:20 am' },
+      { who: 'in', text: 'Done, just paid', t: '9:24 am' },
+      { who: 'out', text: "Payment received. Your Tuesday 4:00 pm appointment is confirmed and you'll get a reminder the day before. Thank you, Valentina.", t: '9:24 am' },
+    ],
+    row5Eyebrow: 'Alerts and forecast',
+    row5Title: "If something shifts, <em class='text-pine-dark'>he flags it in&nbsp;time.</em>",
+    row5Body:
+      "An expense that doesn't add up, a vendor that charged twice, a week with less revenue than usual: Daniel sees it in the bank feed and tells you that day, not at the close. And with what's already booked and collected, he projects how next month will close.",
+    row5Points: [
+      'Odd or duplicate expenses',
+      'Revenue dips against your usual',
+      "Next month's forecast from the calendar and Sara's deposits",
+    ],
+    row5Bubbles: [
+      { who: 'out', text: 'Quick heads-up: two $6,800 charges went out today to the same supplies vendor, two hours apart. Looks like a duplicate. Was it a single purchase?', t: '11:12 am' },
+      { who: 'in', text: "Yes, just one. I'll take it up with the vendor", t: '11:30 am' },
+      { who: 'out', text: "Perfect. I flagged it in QuickBooks as a charge under review so it doesn't muddy the close. When the refund lands, I'll let you know.", t: '11:30 am' },
+      { who: 'out', text: "One more thing: revenue this week is running 18% below your usual. It's Thursday's calendar, which was left half empty. With what's booked for the next two weeks, the month still closes close to last month's.", t: '11:31 am' },
+      { who: 'in', text: 'Perfect, thanks', t: '11:34 am' },
+    ],
+    ctaInline: "Your practice's books kept current, without you keeping&nbsp;them.",
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every transaction leaves a&nbsp;trail.',
+    panelLead:
+      "In your dashboard, every transaction Daniel reviews carries a state. At a glance you know what's reconciled, what's still to collect and what he flagged for&nbsp;review.",
+    estados: [
+      { tag: 'Reconciled', desc: 'The bank transaction is matched and categorized in QuickBooks.' },
+      { tag: 'To collect', desc: 'A deposit or payment still outstanding that Daniel spotted. With your ok, Sara goes and collects it.' },
+      { tag: 'Alert', desc: 'An odd expense, a duplicate charge or a revenue dip Daniel flagged that day.' },
+      { tag: 'Month-end close', desc: 'The monthly summary: revenue, expenses, margin and which treatment drove it. The same one you get on WhatsApp.' },
+    ],
+    faqs: [
+      { q: 'Does Daniel replace my accountant?', a: 'No. Daniel handles the day to day: reconciles the bank, categorizes every transaction and keeps QuickBooks current. Your accountant or CPA still does taxes, payroll and everything that needs their signature, except they now get clean books instead of a box of receipts.' },
+      { q: 'What do I need to get started?', a: "Connect your practice's bank accounts through Plaid and your QuickBooks. Nothing gets migrated or entered by hand. Onboarding is done with you." },
+      { q: 'Does it work with my bank?', a: 'Daniel reads transactions through Plaid, which connects to thousands of banks. Which banks and countries are covered for your practice is something we check in the demo.' },
+      { q: 'Does Daniel see my clinical data?', a: "No. Daniel only works with bank transactions and the payments Sara records. He doesn't access patient charts or any medical information; that stays where it is today." },
+      { q: "What if I don't use QuickBooks?", a: "Today Daniel keeps the books in QuickBooks. If your practice runs on another accounting system, let's look at it in the demo." },
+      { q: 'How does he know the margin per treatment?', a: 'He matches two sources: the expenses he categorizes from the bank (supplies, services, provider fees) and the payments Sara takes through Stripe, which already carry the treatment. From that he builds the margin per line: cleanings, implants, orthodontics, laser, facials, whatever your practice does.' },
+      { q: 'How much does it cost?', a: "Pricing is built for each practice and shared in the demo. It's a monthly subscription; what the plan with Daniel includes is defined there too." },
+    ],
+  },
+}[lang];
+
+const { steps, estados, faqs, closeRows, connections } = dict;
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/contabilidad-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1024}
+      imageH={768}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA (no son stats: es lo que hace) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE DANIEL · cierre del mes por WhatsApp ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia">
+            {dict.howP1}
+          </p>
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name="Daniel"
+            avatar="/equipo/daniel-avatar.jpg"
+            subtitle={dict.danielSub}
+            bubbles={dict.howBubbles}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream" set:html={s.title} />
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES · filas alternadas (copy + visual) ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <!-- Resumen del mes, tal como lo deja Daniel: bloque inline, sin librerías. -->
+          <div class="w-full max-w-md rounded-2xl border border-line bg-cream p-6 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] md:p-7">
+            <div class="flex items-center justify-between gap-4">
+              <p class="text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.closeTitle}</p>
+              <span class="inline-flex shrink-0 items-center gap-2 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1 text-xs font-medium text-pine-dark">
+                <span class="h-2 w-2 rounded-full bg-mint"></span>{dict.closeTag}
+              </span>
+            </div>
+            <dl class="mt-5 divide-y divide-line border-y border-line">
+              {
+                closeRows.map((r) => (
+                  <div class="flex items-baseline justify-between gap-4 py-3.5">
+                    <dt class="text-salvia">{r.k}</dt>
+                    <dd class="text-right">
+                      <span class="font-serif text-2xl font-black text-ink tabular-nums">{r.v}</span>
+                      <span class="ml-2 text-sm text-pine-dark">{r.d}</span>
+                    </dd>
+                  </div>
+                ))
+              }
+            </dl>
+            <p class="mt-4 text-ink">{dict.closeNote}</p>
+            <p class="mt-3 text-xs text-salvia">{dict.closeFrom}</p>
+          </div>
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row2Eyebrow}
+          title={dict.row2Title}
+          body={dict.row2Body}
+          points={dict.row2Points}
+        >
+          <PaymentsPanel lang={lang} class="w-full" />
+        </FeatureRow>
+
+        <div id="quickbooks" class="scroll-mt-24">
+          <FeatureRow
+            eyebrow={dict.row3Eyebrow}
+            title={dict.row3Title}
+            body={dict.row3Body}
+            points={dict.row3Points}
+          >
+            <!-- Conexiones de Daniel: tres tarjetas de texto, sin logos. -->
+            <div class="w-full max-w-md rounded-2xl border border-line bg-cream p-6 shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)] md:p-7">
+              <p class="text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.connTitle}</p>
+              <ul class="mt-5 flex flex-col gap-3">
+                {
+                  connections.map((c) => (
+                    <li class="flex items-center justify-between gap-4 rounded-xl border border-line bg-white px-5 py-4">
+                      <div class="min-w-0">
+                        <p class="font-serif text-lg font-black text-ink">{c.name}</p>
+                        <p class="text-sm text-salvia">{c.desc}</p>
+                      </div>
+                      <span class="inline-flex shrink-0 items-center gap-2 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1 text-xs font-medium text-pine-dark">
+                        <span class="h-2 w-2 rounded-full bg-mint"></span>{dict.connStatus}
+                      </span>
+                    </li>
+                  ))
+                }
+              </ul>
+              <p class="mt-4 text-xs text-salvia">{dict.connNote}</p>
+            </div>
+          </FeatureRow>
+        </div>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row4Eyebrow}
+          title={dict.row4Title}
+          body={dict.row4Body}
+          points={dict.row4Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.row4Bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.row5Eyebrow}
+          title={dict.row5Title}
+          body={dict.row5Body}
+          points={dict.row5Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name="Daniel"
+            avatar="/equipo/daniel-avatar.jpg"
+            subtitle={dict.danielSub}
+            bubbles={dict.row5Bubbles}
+          />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelLead} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
