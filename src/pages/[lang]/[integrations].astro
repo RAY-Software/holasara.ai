@@ -1,0 +1,488 @@
+---
+import { localizedStaticPaths, toLocale, localePath } from '../../i18n/config';
+import { getMember, type MemberId } from '../../data/team';
+// Slug localizado: /es/integraciones ↔ /en/integrations (src/i18n/slugs.ts).
+// Página directorio: con qué se conecta cada agente (Sara, Mia, Daniel), por
+// categoría. Solo lista lo que el sitio ya afirma (team.ts, páginas de feature,
+// llms.txt). No distingue nativo vs API a propósito: eso lo confirma Franco.
+export function getStaticPaths() {
+  return localizedStaticPaths('integrations');
+}
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+interface Item {
+  name: string;
+  /** Logo de marca (public/img/logos). Si falta, se pinta el monograma `mono`. */
+  logo?: string;
+  mono?: string;
+  agents: MemberId[];
+  desc: string;
+  /** Qué hace falta para conectarlo (una línea). */
+  needs?: string;
+  href: string;
+  hrefLabel: string;
+}
+interface Category {
+  id: string;
+  kicker: string;
+  title: string; // admite <em> y &nbsp;
+  lead: string;
+  items: Item[];
+}
+
+const dict = {
+  es: {
+    metaTitle: 'Integraciones: WhatsApp, Google, Stripe y QuickBooks · Sara',
+    metaDescription:
+      'Con qué se conecta cada agente: WhatsApp Business, Instagram, teléfono, Google Calendar, Stripe, Google Business, Google Ads, Plaid y QuickBooks. Sin migrar nada.',
+    heroEyebrow: 'Integraciones',
+    heroTitle: "Se conecta con lo que tu clínica <em class='text-pine-dark'>ya&nbsp;usa.</em>",
+    heroLead:
+      'Sara, Mia y Daniel trabajan sobre tus herramientas de siempre: el WhatsApp y el Instagram de la clínica, tu teléfono, tu Google Calendar, tu ficha de Google, tu banco y QuickBooks. Sin migrar datos ni cambiar de sistema.',
+    heroImageAlt: 'Un teléfono, una laptop y una libreta sobre una mesa crema, unidos por líneas de luz.',
+    strip: [
+      { t: 'Sin migrar nada', b: 'Tu calendario, tu número y tus cuentas siguen donde están.' },
+      { t: 'Cada agente, sus conexiones', b: 'Sara atiende y cobra, Mia publica y mide, Daniel lleva los libros.' },
+      { t: 'Sin tocar la historia clínica', b: 'Ningún agente lee ni guarda información médica.' },
+    ],
+    jumpLabel: 'Ir a',
+    usedBy: 'Lo usa',
+    needsLabel: 'Necesitas',
+    categories: [
+      {
+        id: 'comunicacion',
+        kicker: 'Comunicación',
+        title: 'Los canales por donde te escriben <em class="text-pine-dark">y te&nbsp;llaman.</em>',
+        lead: 'Sara atiende todos los canales con un solo historial por paciente. Mia se ocupa de lo que se publica.',
+        items: [
+          {
+            name: 'WhatsApp Business',
+            logo: '/img/logos/whatsapp.svg',
+            agents: ['sara'],
+            desc: 'Sara atiende las conversaciones las 24 horas, informa tratamientos, agenda, cobra el anticipo con un link y envía recordatorios y reactivaciones por el mismo chat.',
+            needs: 'Una línea de WhatsApp Business conectada a la clínica. Se coordina en la implementación; no cambias tu teléfono personal.',
+            href: '/canales',
+            hrefLabel: 'Ver WhatsApp e Instagram 24/7',
+          },
+          {
+            name: 'Instagram',
+            logo: '/img/logos/instagram.svg',
+            agents: ['sara', 'mia'],
+            desc: 'Sara responde los mensajes directos y a quien comenta una publicación, y lo lleva hasta la cita. Mia crea y publica el contenido con la marca de la clínica y mide qué post trajo consultas.',
+            needs: 'La cuenta de Instagram de la clínica autorizada.',
+            href: '/instagram',
+            hrefLabel: 'Ver Instagram con IA',
+          },
+          {
+            name: 'Teléfono',
+            mono: '☏',
+            agents: ['sara'],
+            desc: 'Sara contesta las llamadas por voz sobre tu número de siempre, agenda dentro de la llamada y pasa el link del anticipo al chat. Y los recordatorios también pueden salir por mensaje de texto (SMS) donde WhatsApp no es la norma.',
+            needs: 'Tu línea actual. Se conecta en la implementación para que las llamadas que no toma recepción entren a Sara, o todas.',
+            href: '/llamadas',
+            hrefLabel: 'Ver cómo atiende el teléfono',
+          },
+          {
+            name: 'Chat de tu sitio web',
+            mono: '💬',
+            agents: ['sara'],
+            desc: 'La misma Sara atiende el chat de tu web, con el mismo historial que WhatsApp e Instagram. Quien escribe desde tu sitio termina con la cita agendada.',
+            needs: 'Un fragmento de código en tu sitio. Lo dejamos listo contigo.',
+            href: '/canales',
+            hrefLabel: 'Ver los canales',
+          },
+        ],
+      },
+      {
+        id: 'agenda-y-cobros',
+        kicker: 'Agenda y cobros',
+        title: 'Tu calendario y tus cobros, <em class="text-pine-dark">sin cambiar de&nbsp;sistema.</em>',
+        lead: 'Sara reserva sobre disponibilidad real y cobra dentro de la conversación.',
+        items: [
+          {
+            name: 'Google Calendar',
+            logo: '/img/logos/google.svg',
+            agents: ['sara'],
+            desc: 'Sara lee y escribe en el calendario que ya usas: agenda solo sobre horarios libres, sin dobles reservas, por profesional y por sucursal. Lo que carga tu equipo también queda cuidado con recordatorio y confirmación.',
+            needs: 'Autorizar el calendario de la clínica. Es un clic.',
+            href: '/agenda',
+            hrefLabel: 'Ver la agenda automática',
+          },
+          {
+            name: 'Stripe',
+            mono: 'S',
+            agents: ['sara', 'daniel'],
+            desc: 'Los links de pago que Sara manda en el chat (anticipo, consulta por adelantado, gift cards) se cobran por Stripe. En el panel ves cuánto entró y a qué cita corresponde, y Daniel lo cruza con los gastos.',
+            needs: 'Una cuenta de Stripe a nombre de la clínica.',
+            href: '/cobros',
+            hrefLabel: 'Ver cómo cobra Sara',
+          },
+        ],
+      },
+      {
+        id: 'marketing',
+        kicker: 'Marketing',
+        title: 'Donde te buscan, <em class="text-pine-dark">Mia trabaja.</em>',
+        lead: 'Mia lleva la presencia de la clínica en Google y en Instagram, y te escribe la propuesta antes de ejecutarla.',
+        items: [
+          {
+            name: 'Google Business Profile',
+            logo: '/img/logos/google-business.svg',
+            agents: ['mia', 'sara'],
+            desc: 'Mia mantiene tu ficha de Google completa y al día: fotos nuevas, información, publicaciones, horarios. Y cuando la ficha baja en el mapa, actúa. Sara pide la reseña después de cada cita.',
+            needs: 'Acceso a la ficha de la clínica.',
+            href: '/seo-dental',
+            hrefLabel: 'Ver SEO con Mia',
+          },
+          {
+            name: 'Google Ads',
+            logo: '/img/logos/google-ads.svg',
+            agents: ['mia'],
+            desc: 'Cuando conviene, Mia arma y corre la campaña, la ajusta y te dice qué llamadas y consultas trajo. Tú apruebas el presupuesto por chat.',
+            needs: 'La cuenta de Google Ads de la clínica, o una nueva.',
+            href: '/equipo/mia',
+            hrefLabel: 'Conoce a Mia',
+          },
+          {
+            name: 'Tu sitio web',
+            mono: '🌐',
+            agents: ['mia'],
+            desc: 'Mia publica en tu sitio artículos con preguntas frecuentes que responden lo que buscan los pacientes, y mira las métricas: qué páginas traen consultas y desde dónde llegan.',
+            needs: 'Acceso para publicar en el sitio de la clínica.',
+            href: '/aeo',
+            hrefLabel: 'Ver cómo aparecer en ChatGPT',
+          },
+        ],
+      },
+      {
+        id: 'finanzas',
+        kicker: 'Finanzas',
+        title: 'Las cuentas de la clínica, <em class="text-pine-dark">al&nbsp;día.</em>',
+        lead: 'Daniel se conecta al banco y a los libros, y te avisa lo que importa.',
+        items: [
+          {
+            name: 'Plaid',
+            mono: 'P',
+            agents: ['daniel'],
+            desc: 'A través de Plaid, Daniel lee los movimientos de las cuentas bancarias de la clínica para conciliar, categorizar y detectar gastos raros o caídas de ingresos.',
+            needs: 'Autorizar las cuentas del banco a través de Plaid. Qué bancos y países cubre lo revisamos en la demo.',
+            href: '/contabilidad-para-clinicas',
+            hrefLabel: 'Ver la contabilidad con Daniel',
+          },
+          {
+            name: 'QuickBooks',
+            mono: 'QB',
+            agents: ['daniel'],
+            desc: 'Daniel mantiene QuickBooks al día: cruza los movimientos del banco con los cobros de Sara, categoriza por línea de tratamiento y deja los libros listos para tu contador. No hace impuestos ni nómina.',
+            needs: 'La cuenta de QuickBooks de la clínica.',
+            href: '/contabilidad-para-clinicas',
+            hrefLabel: 'Ver la contabilidad con Daniel',
+          },
+        ],
+      },
+    ] as Category[],
+    notKicker: 'A propósito',
+    notH2: 'Lo que no&nbsp;integramos.',
+    notLead:
+      'Sara no se conecta al software clínico ni a la historia clínica (Dentrix, Open Dental, Doctocliq, Dentalink, AgendaPro y similares). Trabaja sobre la conversación y el calendario, y ningún agente lee ni guarda información médica. Si tu clínica agenda en otro sistema, lo vemos en la demo antes de arrancar.',
+    ctaInline: 'Conectas lo que ya usas y el equipo empieza a&nbsp;trabajar.',
+    faqs: [
+      { q: '¿Qué necesito para empezar con Sara?', a: 'El Google Calendar de la clínica y una línea de WhatsApp Business. Con eso Sara atiende, agenda y cobra. El teléfono, Instagram y el chat de la web se suman cuando quieras. Todo se hace acompañado, sin migrar datos.' },
+      { q: '¿Tengo que cambiar mi número de WhatsApp o de teléfono?', a: 'No. Sara atiende sobre una línea de WhatsApp Business conectada a la clínica y sobre tu número de teléfono actual. Se coordina en la implementación; no tocas tu teléfono personal.' },
+      { q: '¿Se integra con mi software clínico o mi historia clínica?', a: 'No, a propósito. Sara trabaja sobre Google Calendar y la conversación, y no almacena historia clínica ni información médica. Si tu agenda vive en otro sistema, lo revisamos en la demo.' },
+      { q: '¿Y si no uso Google Calendar?', a: 'Hoy Sara agenda sobre Google Calendar. En la mayoría de las clínicas alcanza con conectar una cuenta de Google a la operación y te ayudamos a dejarla lista. Cuéntanos qué usas y te decimos si encaja antes de empezar.' },
+      { q: '¿Qué necesitan Mia y Daniel?', a: 'Mia, acceso a la cuenta de Instagram, a la ficha de Google Business, a Google Ads y a tu sitio para publicar. Daniel, autorizar las cuentas del banco a través de Plaid y la cuenta de QuickBooks. Se suman sobre la misma cuenta de la clínica cuando quieras.' },
+      { q: '¿Plaid funciona con mi banco y en mi país?', a: 'Plaid se conecta con muchos bancos, pero la cobertura cambia según el país. Qué bancos y qué países cubre para tu clínica lo revisamos en la demo.' },
+      { q: '¿Cómo se hacen las conexiones?', a: 'Acompañados por nuestro equipo en la implementación. Autorizar Google Calendar es un clic; el resto es cargar la información de la clínica, conectar las cuentas y afinar el tono. Sin instalar nada.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Integrations: WhatsApp, Google, Stripe & QuickBooks · Sara',
+    metaDescription:
+      'What each agent connects to: WhatsApp Business, Instagram, phone, Google Calendar, Stripe, Google Business Profile, Google Ads, Plaid and QuickBooks. Nothing to migrate.',
+    heroEyebrow: 'Integrations',
+    heroTitle: "Connects with the tools your clinic <em class='text-pine-dark'>already&nbsp;uses.</em>",
+    heroLead:
+      'Sara, Mia and Daniel work on top of what you already have: the clinic’s WhatsApp and Instagram, your phone line, your Google Calendar, your Google Business Profile, your bank and QuickBooks. No data migration, no new system.',
+    heroImageAlt: 'A phone, a laptop and a notebook on a cream table, joined by thin lines of light.',
+    strip: [
+      { t: 'Nothing to migrate', b: 'Your calendar, your number and your accounts stay where they are.' },
+      { t: 'Each agent, its connections', b: 'Sara answers and collects, Mia publishes and measures, Daniel keeps the books.' },
+      { t: 'No medical records touched', b: 'No agent reads or stores medical information.' },
+    ],
+    jumpLabel: 'Jump to',
+    usedBy: 'Used by',
+    needsLabel: 'You need',
+    categories: [
+      {
+        id: 'communication',
+        kicker: 'Communication',
+        title: 'The channels patients use to message <em class="text-pine-dark">and call&nbsp;you.</em>',
+        lead: 'Sara covers every channel with one history per patient. Mia takes care of what gets published.',
+        items: [
+          {
+            name: 'WhatsApp Business',
+            logo: '/img/logos/whatsapp.svg',
+            agents: ['sara'],
+            desc: 'Sara handles conversations around the clock, answers treatment questions, books, collects the deposit with a link and sends reminders and win-back messages in the same thread.',
+            needs: 'A WhatsApp Business line connected to the clinic. We set it up during onboarding; your personal phone stays out of it.',
+            href: '/canales',
+            hrefLabel: 'See WhatsApp & Instagram 24/7',
+          },
+          {
+            name: 'Instagram',
+            logo: '/img/logos/instagram.svg',
+            agents: ['sara', 'mia'],
+            desc: 'Sara replies to DMs and to whoever comments on a post, and takes them all the way to a booked appointment. Mia creates and publishes the content with your brand and measures which post brought inquiries.',
+            needs: 'The clinic’s Instagram account, authorized.',
+            href: '/instagram',
+            hrefLabel: 'See Instagram with AI',
+          },
+          {
+            name: 'Phone',
+            mono: '☏',
+            agents: ['sara'],
+            desc: 'Sara answers voice calls on your existing number, books within the call and sends the deposit link to the chat. Reminders can also go out by text message (SMS) where WhatsApp isn’t the norm.',
+            needs: 'Your current line. We connect it during onboarding so the calls the front desk misses go to Sara, or all of them.',
+            href: '/llamadas',
+            hrefLabel: 'See the medical answering service',
+          },
+          {
+            name: 'Your website chat',
+            mono: '💬',
+            agents: ['sara'],
+            desc: 'The same Sara answers your website chat, with the same history as WhatsApp and Instagram. Whoever writes from your site ends up with an appointment booked.',
+            needs: 'A snippet of code on your site. We set it up with you.',
+            href: '/canales',
+            hrefLabel: 'See the channels',
+          },
+        ],
+      },
+      {
+        id: 'scheduling-and-payments',
+        kicker: 'Scheduling and payments',
+        title: 'Your calendar and your payments, <em class="text-pine-dark">without switching&nbsp;systems.</em>',
+        lead: 'Sara books on real availability and collects inside the conversation.',
+        items: [
+          {
+            name: 'Google Calendar',
+            logo: '/img/logos/google.svg',
+            agents: ['sara'],
+            desc: 'Sara reads and writes in the calendar you already use: she books only open slots, with no double bookings, per provider and per location. What your team adds gets a reminder and a confirmation too.',
+            needs: 'Authorize the clinic’s calendar. One click.',
+            href: '/agenda',
+            hrefLabel: 'See automatic scheduling',
+          },
+          {
+            name: 'Stripe',
+            mono: 'S',
+            agents: ['sara', 'daniel'],
+            desc: 'The payment links Sara sends in the chat (deposit, prepaid consult, gift cards) are processed by Stripe. In the dashboard you see what came in and which appointment it belongs to, and Daniel matches it against expenses.',
+            needs: 'A Stripe account in the clinic’s name.',
+            href: '/cobros',
+            hrefLabel: 'See how Sara collects payments',
+          },
+        ],
+      },
+      {
+        id: 'marketing',
+        kicker: 'Marketing',
+        title: 'Wherever patients search, <em class="text-pine-dark">Mia is&nbsp;working.</em>',
+        lead: 'Mia runs the clinic’s presence on Google and Instagram, and sends you the proposal before running it.',
+        items: [
+          {
+            name: 'Google Business Profile',
+            logo: '/img/logos/google-business.svg',
+            agents: ['mia', 'sara'],
+            desc: 'Mia keeps your Google profile complete and current: fresh photos, information, posts, hours. And when the profile slips on the map, she acts. Sara asks for the review after every appointment.',
+            needs: 'Access to the clinic’s profile.',
+            href: '/seo-dental',
+            hrefLabel: 'See SEO with Mia',
+          },
+          {
+            name: 'Google Ads',
+            logo: '/img/logos/google-ads.svg',
+            agents: ['mia'],
+            desc: 'When it makes sense, Mia builds and runs the campaign, adjusts it and tells you which calls and inquiries it brought. You approve the budget over chat.',
+            needs: 'The clinic’s Google Ads account, or a new one.',
+            href: '/equipo/mia',
+            hrefLabel: 'Meet Mia',
+          },
+          {
+            name: 'Your website',
+            mono: '🌐',
+            agents: ['mia'],
+            desc: 'Mia publishes articles with FAQs on your site that answer what patients are searching for, and watches the metrics: which pages bring inquiries and where visitors come from.',
+            needs: 'Access to publish on the clinic’s site.',
+            href: '/aeo',
+            hrefLabel: 'See how to show up in ChatGPT',
+          },
+        ],
+      },
+      {
+        id: 'finance',
+        kicker: 'Finance',
+        title: 'The clinic’s books, <em class="text-pine-dark">up to&nbsp;date.</em>',
+        lead: 'Daniel connects to the bank and the books, and flags what matters.',
+        items: [
+          {
+            name: 'Plaid',
+            mono: 'P',
+            agents: ['daniel'],
+            desc: 'Through Plaid, Daniel reads the transactions in the clinic’s bank accounts to reconcile, categorize and catch odd expenses or dips in revenue.',
+            needs: 'Authorize the bank accounts through Plaid. Which banks and countries are covered is reviewed in the demo.',
+            href: '/contabilidad-para-clinicas',
+            hrefLabel: 'See bookkeeping with Daniel',
+          },
+          {
+            name: 'QuickBooks',
+            mono: 'QB',
+            agents: ['daniel'],
+            desc: 'Daniel keeps QuickBooks current: matches bank transactions with Sara’s payments, categorizes by treatment line and leaves the books ready for your accountant. No taxes, no payroll.',
+            needs: 'The clinic’s QuickBooks account.',
+            href: '/contabilidad-para-clinicas',
+            hrefLabel: 'See bookkeeping with Daniel',
+          },
+        ],
+      },
+    ] as Category[],
+    notKicker: 'On purpose',
+    notH2: 'What we don’t&nbsp;integrate.',
+    notLead:
+      'Sara doesn’t connect to practice management software or medical records (Dentrix, Open Dental, Doctocliq, Dentalink, AgendaPro and the like). She works on the conversation and the calendar, and no agent reads or stores medical information. If your clinic schedules in another system, we look at it in the demo before starting.',
+    ctaInline: 'Connect what you already use and the team gets to&nbsp;work.',
+    faqs: [
+      { q: 'What do I need to get started with Sara?', a: 'The clinic’s Google Calendar and a WhatsApp Business line. With that, Sara answers, books and collects. The phone, Instagram and website chat can be added whenever you want. It’s all done with you, with no data migration.' },
+      { q: 'Do I have to change my WhatsApp or phone number?', a: 'No. Sara answers on a WhatsApp Business line connected to the clinic and on your current phone number. We coordinate it during onboarding; your personal phone stays out of it.' },
+      { q: 'Does it integrate with my practice management software or medical records?', a: 'No, on purpose. Sara works on Google Calendar and the conversation, and doesn’t store medical records or medical information. If your schedule lives in another system, we review it in the demo.' },
+      { q: 'What if I don’t use Google Calendar?', a: 'Today Sara books on Google Calendar. For most clinics, connecting a Google account to the operation is enough, and we help you get it ready. Tell us what you use and we’ll tell you if it fits before you start.' },
+      { q: 'What do Mia and Daniel need?', a: 'Mia needs access to the Instagram account, the Google Business Profile, Google Ads and your site to publish. Daniel needs the bank accounts authorized through Plaid and the QuickBooks account. They join on the clinic’s same account whenever you want.' },
+      { q: 'Does Plaid work with my bank and in my country?', a: 'Plaid connects with many banks, but coverage varies by country. Which banks and countries it covers for your clinic is reviewed in the demo.' },
+      { q: 'How are the connections set up?', a: 'With our team, during onboarding. Authorizing Google Calendar is one click; the rest is loading the clinic’s information, connecting the accounts and tuning the tone. Nothing to install.' },
+    ],
+  },
+}[lang];
+
+const { categories, faqs } = dict;
+const members = Object.fromEntries(
+  (['sara', 'mia', 'daniel'] as MemberId[]).map((id) => [id, getMember(id, lang)!]),
+) as Record<MemberId, NonNullable<ReturnType<typeof getMember>>>;
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/integraciones-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1024}
+      imageH={768}
+    />
+
+    <!-- ══════════ TIRA (lo que implica conectarse, no stats) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        {
+          dict.strip.map((s, i) => (
+            <div class={`py-2 ${i > 0 ? 'sm:border-l sm:border-line sm:pl-8' : ''}`}>
+              <p class="font-serif text-lg font-black text-ink">{s.t}</p>
+              <p class="mt-1 text-salvia">{s.b}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ══════════ ÍNDICE DE CATEGORÍAS ══════════ -->
+    <nav class="border-b border-line" aria-label={dict.jumpLabel}>
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-5 py-4 text-sm">
+        <span class="font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.jumpLabel}</span>
+        {
+          categories.map((c) => (
+            <a href={`#${c.id}`} class="rounded-full border border-line px-3.5 py-1.5 font-medium text-ink transition-colors hover:border-ink/30">
+              {c.kicker}
+            </a>
+          ))
+        }
+      </div>
+    </nav>
+
+    <!-- ══════════ CATEGORÍAS · un bloque por integración ══════════ -->
+    {
+      categories.map((c, ci) => (
+        <section id={c.id} class={`scroll-mt-24 border-t border-line ${ci % 2 === 1 ? 'bg-paper' : ''}`}>
+          <div class="reveal mx-auto max-w-6xl px-5 py-20">
+            <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{c.kicker}</p>
+            <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={c.title} />
+            <p class="mt-4 max-w-2xl text-lg text-salvia">{c.lead}</p>
+            <div class="mt-10 grid gap-6 md:grid-cols-2">
+              {c.items.map((it) => (
+                <article class="flex flex-col rounded-2xl border border-line bg-white p-7 shadow-[0_10px_30px_-24px_rgba(20,38,31,0.3)]">
+                  <div class="flex items-center gap-4">
+                    <span class="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-line bg-cream">
+                      {it.logo ? (
+                        <img src={it.logo} alt="" width="28" height="28" loading="lazy" decoding="async" class="h-7 w-7 object-contain" />
+                      ) : (
+                        <span class="font-serif text-base font-black text-pine-dark">{it.mono}</span>
+                      )}
+                    </span>
+                    <div class="min-w-0">
+                      <h3 class="font-serif text-xl font-black leading-tight text-ink">{it.name}</h3>
+                      <p class="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-salvia">
+                        <span>{dict.usedBy}</span>
+                        {it.agents.map((id) => (
+                          <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper py-0.5 pl-0.5 pr-2 font-medium text-ink">
+                            <img src={members[id].avatar} alt="" width="18" height="18" loading="lazy" decoding="async" class="h-[18px] w-[18px] rounded-full object-cover" />
+                            {members[id].name}
+                          </span>
+                        ))}
+                      </p>
+                    </div>
+                  </div>
+                  <p class="mt-5 text-salvia">{it.desc}</p>
+                  {it.needs && (
+                    <p class="mt-4 rounded-xl bg-mint/[0.09] px-4 py-3 text-sm text-ink">
+                      <span class="font-semibold text-pine-dark">{dict.needsLabel}: </span>
+                      {it.needs}
+                    </p>
+                  )}
+                  <a href={L(it.href)} class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-pine-dark transition-colors hover:text-ink">
+                    {it.hrefLabel} <span aria-hidden="true">→</span>
+                  </a>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))
+    }
+
+    <!-- ══════════ LO QUE NO INTEGRAMOS (honesto, a propósito) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-20">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-mint">{dict.notKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.notH2} />
+        <p class="mt-5 max-w-3xl text-lg text-cream/70">{dict.notLead}</p>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
