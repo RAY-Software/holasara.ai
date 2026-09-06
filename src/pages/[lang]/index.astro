@@ -105,31 +105,35 @@ const dict = {
     caseImgAlt: 'Citas de ViaLaser por canal y conversaciones por semana atendidas por Sara.',
   },
   en: {
+    // Sitio de producto para clínicas de Estados Unidos, no traducción del ES. Lidera con
+    // el equipo (recepción + marketing + finanzas con Plaid y QuickBooks) y apunta a los
+    // nichos de la investigación de keywords (dental office, med spa, medical practice).
     faqs: [
-      { q: 'Can people tell it’s an AI?', a: 'Sara introduces herself naturally and replies in your clinic’s tone. Patients feel they’re talking to someone who knows their stuff, not a bot with buttons.' },
-      { q: 'Does she use my current WhatsApp number?', a: 'Sara works over a WhatsApp Business line connected to your clinic. We sort out the number during onboarding; you don’t have to change your personal phone.' },
-      { q: 'Does she replace my front desk?', a: 'She frees it from the repetitive part: answering the same questions, confirming appointments, chasing payments. Your team focuses on the patient who’s in the clinic.' },
-      { q: 'Does she touch my medical records?', a: 'No. No medical history or clinical information about your patients is stored. That stays exactly where it is today.' },
-      { q: 'What do I need to get started?', a: 'Connect your Google Calendar and a WhatsApp line. We handle onboarding with you; you don’t migrate data or switch systems.' },
+      { q: 'Can patients tell it is an AI?', a: 'Sara introduces herself naturally and talks in your practice’s tone, on the phone and by text. Patients feel they are talking to someone who knows the office, not a phone tree.' },
+      { q: 'Does Sara answer on my existing phone number?', a: 'Yes. Calls your front desk cannot pick up, and every call after hours, roll over to Sara. Texts, WhatsApp and Instagram DMs connect to the accounts you already have. Nobody changes numbers.' },
+      { q: 'Does she replace my front desk?', a: 'She takes the repetitive part: answering the same questions, confirming appointments, chasing deposits. Your team stays with the patient who is in the office.' },
+      { q: 'Does Sara touch patient records?', a: 'No. Sara never stores medical records or clinical notes. She works on the conversation and the calendar; your records stay in the system you use today.' },
+      { q: 'What does Daniel connect to?', a: 'Your bank accounts through Plaid and your books in QuickBooks. He reads the transactions, reconciles the month and flags what changed. When there is money to collect, Sara goes and collects it.' },
+      { q: 'What do I need to get started?', a: 'A Google Calendar and the phone line or WhatsApp number patients already use. We run onboarding with you; you do not migrate data or switch systems. If your practice runs on another scheduler, we go through it on the demo.' },
       { q: 'Can I start with just Sara?', a: 'Yes. Sara is the way in. Mia and Daniel join whenever you want, on the same account.' },
     ],
     saraDoes: [
-      'Replies instantly, on WhatsApp and Instagram.',
-      'Explains treatments, prices and real availability.',
-      'Books the appointment and collects the consult fee or deposit.',
-      'Reminds, confirms and reschedules with no one stepping in.',
-      'Wins back patients who haven’t returned in months.',
+      'Picks up every call and text, 24/7. Phone, SMS, WhatsApp and Instagram DMs.',
+      'Quotes your treatments, fees and real openings. Never makes anything up.',
+      'Books the appointment and collects the deposit or consult fee in the same conversation.',
+      'Sends reminders, confirms and reschedules with no one stepping in.',
+      'Wins back patients who have not been in for months.',
     ],
     context: [
-      { n: '01', title: 'They message, they don’t call', body: 'First contact comes in over WhatsApp or Instagram, almost always outside front-desk hours.' },
-      { n: '02', title: 'They wait minutes, not hours', body: 'If the reply lands the next day, the interest has cooled and the decision is already made.' },
-      { n: '03', title: 'They book with whoever answers first', body: 'They compare a handful of options and book at the clinic that replies soonest.' },
+      { n: '01', title: 'They call, then they text', body: 'Most first contacts come in by phone or text, and a big share land after hours or while your front desk is already on a call.' },
+      { n: '02', title: 'They wait minutes, not hours', body: 'A callback tomorrow is a booking somewhere else. Interest cools fast, and the decision gets made without you.' },
+      { n: '03', title: 'Whoever answers first, wins', body: 'They compare two or three practices and book the one that picks up.' },
     ],
-    spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Juan to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
-    heroKicker: 'AI receptionist for clinics, doctors & wellness',
-    heroH1: ['More patients.', 'More revenue.', 'All automatic,', 'around the clock.'],
-    heroSub: 'Sara answers, books, collects the deposit and cuts no-shows, on WhatsApp, Instagram, SMS and the phone. Without changing your calendar or touching your medical&nbsp;records. And her team lets you know when there is something to&nbsp;decide.',
-    heroImgAlt: 'Sara, Mia and Daniel, your clinic’s AI team. Sara up front.',
+    spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Mark to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
+    heroKicker: 'The AI team for dental offices, med spas and medical practices',
+    heroH1: ['Your front desk,', 'your marketing,', 'your books.', 'One AI team.'],
+    heroSub: 'Sara answers every call and text, books the appointment and collects the deposit. Mia brings in new patients. Daniel reads your bank through Plaid, keeps QuickBooks current and tells you what you actually made. All three work on their own and message you when there is something to&nbsp;decide.',
+    heroImgAlt: 'Sara, Mia and Daniel, your practice’s AI team. Sara up front.',
     demoCta: 'Book a demo',
     scanCta: 'Scan my business',
     talkCta: 'Talk to Sara',
@@ -137,47 +141,47 @@ const dict = {
     videoH2: 'See Sara in 60&nbsp;seconds.',
     videoAlt: 'Video: Sara in action, in 60 seconds',
     videoPlay: 'Play the Sara video',
-    ctxKicker: 'The context',
-    ctxH2: 'They already decided<br /><em class="text-mint">how</em> to book.',
-    ctxSub: 'They expect what they get everywhere else: an instant reply. The clinic that answers first keeps the&nbsp;patient.',
+    ctxKicker: 'Why now',
+    ctxH2: 'Patients already decided <em class="text-mint">how</em> they reach&nbsp;you.',
+    ctxSub: 'They expect what they get everywhere else: an instant answer. The practice that answers first keeps the&nbsp;patient.',
     saraKicker: 'Meet Sara',
-    saraH2: '11:41 pm, enquiry.<br /><em class="text-pine-dark">11:43 pm, booked.</em>',
-    saraSub: 'She works nights, weekends and peak hours. Without adding one more person to the front desk.',
-    saraMore: 'Learn more about Sara',
-    saraImgAlt: 'WhatsApp conversation: a patient enquires in the middle of the night and Sara replies, books and collects the deposit.',
+    saraH2: '11:41 pm, a text.<br /><em class="text-pine-dark">11:43 pm, booked<br />and paid.</em>',
+    saraSub: 'Nights, weekends and the lunch-hour rush. Without adding one more person to the front desk.',
+    saraMore: 'Everything Sara does',
+    saraImgAlt: 'WhatsApp conversation: a patient texts in the middle of the night and Sara replies, books and collects the deposit.',
     mktH2: 'Mia runs your&nbsp;marketing.',
-    mktSub: 'She pitches the ideas, creates the pieces and reels with your brand, writes the blog and fills the gaps in your calendar. She publishes when you say yes and measures in appointments, not&nbsp;in&nbsp;likes.',
+    mktSub: 'Instagram, Google Ads and your Google Business Profile. She pitches the ideas, creates the posts and reels with your brand, writes the blog and fills the gaps in your schedule. She publishes when you say yes and measures in appointments, not&nbsp;likes.',
     miaStats: [
-      { n: '14', l: 'appointments brought by content' },
+      { n: '14', l: 'appointments brought in by content' },
       { n: '80k', l: 'people reached in 28 days' },
       { n: '5.0', l: 'Google rating' },
     ],
     miaStatsNote: 'Mia’s dashboard at ViaLaser, last 90 days.',
     mktMore: 'See how Mia runs your Instagram',
-    mktImgAlt: 'A clinic’s AI-generated Instagram feed: on-brand posts, ready to publish.',
+    mktImgAlt: 'A practice’s AI-generated Instagram feed: on-brand posts, ready to publish.',
     mktMeet: 'Meet Mia',
     teamKicker: 'Your AI team',
-    teamLine: 'Sara answers. Mia brings in patients. Daniel minds the money. All three work on their own and message&nbsp;you.',
+    teamLine: 'Sara runs the front desk. Mia brings in patients. Daniel keeps the books. All three work on their own and message&nbsp;you.',
     teamMore: 'Meet the team',
     teamMeetPrefix: 'Meet',
-    saraRole: 'Reception',
+    saraRole: 'Front desk',
     miaRole: 'Marketing',
     danielRole: 'Finance',
-    danielPoints: ['What you billed and what you kept', 'Which deposits are still owed', 'Which treatment leaves the most margin'],
+    danielPoints: ['What you billed and what you kept', 'Margin by treatment', 'Deposits still owed', 'Month closed in QuickBooks'],
     danielMore: 'Meet Daniel',
-    spotH2: 'And you ask her<br /><em class="text-pine-dark">for things on WhatsApp.</em>',
+    spotH2: 'And you text her<br /><em class="text-pine-dark">like a teammate.</em>',
     spotMore: 'See operator mode',
-    spotBody: 'She manages the entire calendar and notifies every patient. Around the clock.',
-    spotImgAlt: 'Sara manages the week’s calendar and reschedules every Tuesday appointment, notifying each patient.',
-    ctaInline1: 'Sara, Mia and Daniel can start at your clinic this&nbsp;week.',
-    cobrosH2: 'You know what you earn.<br /><em class="text-pine-dark">And what earns you&nbsp;most.</em>',
-    cobrosSub: 'Daniel is your clinic’s finance director: he closes the month, tells you the margin and where next month is heading. And when there is money to collect, he hands it to&nbsp;Sara.',
+    spotBody: 'She manages the whole schedule and notifies every patient. Around the clock.',
+    spotImgAlt: 'Sara manages the week’s schedule and reschedules every Tuesday appointment, notifying each patient.',
+    ctaInline1: 'Sara, Mia and Daniel can start at your practice this&nbsp;week.',
+    cobrosH2: 'You know what you made.<br /><em class="text-pine-dark">And what made you the&nbsp;most.</em>',
+    cobrosSub: 'Daniel is your practice’s AI bookkeeper. He connects to your bank through Plaid and to QuickBooks, reconciles every transaction, closes the month and tells you the margin by treatment and where next month is heading. When there is money to collect, he hands it to&nbsp;Sara.',
     cobrosMore: 'See all the ways to get paid',
-    cobrosImgAlt: 'Payments dashboard: deposits, consults and gift cards collected by Sara, all without a front desk.',
-    ctaInline2: 'See Sara running your clinic, live.',
+    cobrosImgAlt: 'Payments dashboard: deposits, consult fees and gift cards collected by Sara, all without a front desk.',
+    ctaInline2: 'See Sara answering for your practice, live.',
     ctaInline2Cta: 'Book my demo',
-    caseKicker: 'Success story',
-    caseH2: 'It’s already <span class="whitespace-nowrap">running in</span><br />real clinics.',
+    caseKicker: 'Case study',
+    caseH2: 'Already <span class="whitespace-nowrap">running in</span><br />real clinics.',
     caseStat1: 'conversations handled by Sara, without the front desk touching a thing.',
     caseStat2Num: '7 of 10',
     caseStat2: 'appointments booked by Sara across WhatsApp, Instagram and the web.',
@@ -198,6 +202,19 @@ const cal = mia.pipeline?.calendar;
 const ig = mia.pipeline?.ig;
 const calCells = cal ? Array.from({ length: 35 }, (_, i) => i - cal.startOffset + 1) : [];
 const daniel = getMember('daniel', lang)!;
+
+// Solo en inglés. (a) El video de la home está en español (YouTube -HAjxKXeltI), así que
+// en /en no se muestra. (b) El acto de Daniel suma las integraciones del producto en
+// Estados Unidos (Plaid + QuickBooks); en ES el arreglo queda vacío y no se pinta nada.
+const showVideo = lang === 'es';
+const danielIntegrationsLabel = 'Connected to';
+const danielIntegrations: { name: string; icon: string }[] =
+  lang === 'en'
+    ? [
+        { name: 'Plaid', icon: '<path d="M3 10.5 12 5l9 5.5M5 10.5V19M9.5 10.5V19M14.5 10.5V19M19 10.5V19M3 19h18" />' },
+        { name: 'QuickBooks', icon: '<circle cx="12" cy="12" r="9" /><path d="M9.5 8.5v7M9.5 8.5h1.6a2.2 2.2 0 0 1 0 4.4H9.5M14.5 15.5v-7M14.5 15.5h-1.6a2.2 2.2 0 0 1 0-4.4h1.6" />' },
+      ]
+    : [];
 ---
 
 <Layout ogImage={`/og/home-${lang}.jpg`} lang={lang}>
@@ -293,38 +310,43 @@ const daniel = getMember('daniel', lang)!;
     <VoiceDemo lang={lang} variant="compact" />
 
     <!-- ══════════ VIDEO ══════════ -->
-    <section id="video" class="border-t border-line bg-paper">
-      <div class="reveal mx-auto max-w-5xl px-5 py-24 text-center">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.videoKicker}</p>
-        <h2 class="mx-auto max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.videoH2} />
+    {/* Solo en ES: el video de YouTube está en español, en /en no se muestra. */}
+    {
+      showVideo && (
+      <section id="video" class="border-t border-line bg-paper">
+        <div class="reveal mx-auto max-w-5xl px-5 py-24 text-center">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.videoKicker}</p>
+          <h2 class="mx-auto max-w-2xl font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.videoH2} />
 
-        <!-- Video demo: portada liviana (thumbnail YouTube); el iframe se carga recién al clic -->
-        <div
-          id="video-embed"
-          data-yt="-HAjxKXeltI"
-          class="group relative mt-10 aspect-video cursor-pointer overflow-hidden rounded-2xl border border-line bg-ink shadow-[0_16px_40px_-26px_rgba(20,38,31,0.38)]"
-        >
-          <img
-            src="https://img.youtube.com/vi/-HAjxKXeltI/maxresdefault.jpg"
-            alt={dict.videoAlt}
-            class="absolute inset-0 h-full w-full object-cover opacity-95 transition group-hover:opacity-100"
-            loading="lazy"
-            decoding="async"
-          />
-          <button
-            type="button"
-            class="absolute inset-0 flex items-center justify-center bg-ink/25 transition group-hover:bg-ink/15"
-            aria-label={dict.videoPlay}
+          <!-- Video demo: portada liviana (thumbnail YouTube); el iframe se carga recién al clic -->
+          <div
+            id="video-embed"
+            data-yt="-HAjxKXeltI"
+            class="group relative mt-10 aspect-video cursor-pointer overflow-hidden rounded-2xl border border-line bg-ink shadow-[0_16px_40px_-26px_rgba(20,38,31,0.38)]"
           >
-            <span class="grid h-20 w-20 place-items-center rounded-full bg-mint shadow-lg transition-transform duration-300 group-hover:scale-110">
-              <svg width="26" height="30" viewBox="0 0 26 30" fill="none" aria-hidden="true">
-                <path d="M25 13.27a2 2 0 0 1 0 3.46L3 29.32A2 2 0 0 1 0 27.6V2.4A2 2 0 0 1 3 .68l22 12.6Z" fill="#14261F" />
-              </svg>
-            </span>
-          </button>
+            <img
+              src="https://img.youtube.com/vi/-HAjxKXeltI/maxresdefault.jpg"
+              alt={dict.videoAlt}
+              class="absolute inset-0 h-full w-full object-cover opacity-95 transition group-hover:opacity-100"
+              loading="lazy"
+              decoding="async"
+            />
+            <button
+              type="button"
+              class="absolute inset-0 flex items-center justify-center bg-ink/25 transition group-hover:bg-ink/15"
+              aria-label={dict.videoPlay}
+            >
+              <span class="grid h-20 w-20 place-items-center rounded-full bg-mint shadow-lg transition-transform duration-300 group-hover:scale-110">
+                <svg width="26" height="30" viewBox="0 0 26 30" fill="none" aria-hidden="true">
+                  <path d="M25 13.27a2 2 0 0 1 0 3.46L3 29.32A2 2 0 0 1 0 27.6V2.4A2 2 0 0 1 3 .68l22 12.6Z" fill="#14261F" />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      )
+    }
 
     <script is:inline>
       (function () {
@@ -628,6 +650,19 @@ const daniel = getMember('daniel', lang)!;
               ))
             }
           </ul>
+          {
+            danielIntegrations.length > 0 && (
+              <div class="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+                <span class="text-xs font-semibold uppercase tracking-[0.14em] text-salvia">{danielIntegrationsLabel}</span>
+                {danielIntegrations.map((it) => (
+                  <span class="inline-flex items-center gap-2 rounded-full border border-pine/30 bg-mint/10 px-3.5 py-1.5 text-sm font-bold text-pine-dark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true" set:html={it.icon} />
+                    {it.name}
+                  </span>
+                ))}
+              </div>
+            )
+          }
         </div>
         <!-- El equipo trabajando junto: Daniel detecta, tú apruebas, Sara cobra. Mismo storyboard que su ficha. -->
         <div class="mx-auto mt-24 max-w-6xl">
