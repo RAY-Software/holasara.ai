@@ -1,7 +1,7 @@
 import { rewrite, next } from '@vercel/edge';
 // Mapa de slugs localizados (src/i18n/slugs.ts). Edge-safe: ese archivo solo trae un
 // `import type`, así que el bundle de Vercel no arrastra nada de runtime.
-import { localizedSlugs } from './src/i18n/slugs';
+import { localizedSlugs } from './src/i18n/slugs.ts';
 
 // El 2º arg del middleware trae waitUntil (para tareas fire-and-forget que el
 // runtime termina después de responder). Lo tipamos estructuralmente para no
