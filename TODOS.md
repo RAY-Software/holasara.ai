@@ -12,15 +12,17 @@ Diferidos por /autoplan (2026-09-03, home "Sara y su equipo"):
 
 ## SEO: landings nuevas (investigación Ahrefs MX/US, 3-sep-2026)
 
-**Convención nueva (Franco, 3-sep-2026): los slugs se localizan por idioma.** Las landings de esta lista nacen con slug en su idioma (`/es/recordatorio-de-citas-por-whatsapp` <-> `/en/appointment-reminders`, `/en/ai-receptionist`, `/en/dental-seo`). Trabajo técnico previo, de una sola vez: `getStaticPaths` con mapa de slug por idioma, `localePath` resolviendo el slug según el idioma, hreflang y canonical emparejando ambas URLs, y 301 de los slugs viejos donde ya haya algo indexado (hoy casi nada). Las páginas existentes (`/en/llamadas`, `/en/agenda`, etc.) migran en esa misma tarea.
+**Convención nueva (Franco, 3-sep-2026): los slugs se localizan por idioma.** Hecho (sep 2026, rama `claude/seo-landings-nicho-integraciones`): mapa en `src/i18n/slugs.ts`, `localePath` traduce el slug, hreflang/canonical y switch de idioma emparejan ambas URLs, 301 de `/en/llamadas`. Las páginas con slug localizado viven en `src/pages/[lang]/[<key>].astro` y usan `export function getStaticPaths() { return localizedStaticPaths('<key>') }` (la forma arrow `export const` rompe el dev server). Pendiente: migrar las páginas históricas (`/en/agenda`, `/en/cobros`, etc.) a slugs EN propios cuando se decida cuáles.
 
 Fuente: `docs/research/keywords-mx-us-2026-09.md` (otra sesión) y https://claude.ai/code/artifact/65cd0f82-c68a-4078-ab4c-a323fd663660. El sitio arranca de cero en orgánico (51 impresiones en 90 días, todas de marca). El cluster "recepcionista virtual" en español casi no tiene volumen (40/mes): se mantiene en la home por message match con Ads, no por SEO. La demanda orgánica real en MX está en recordatorios y agenda por WhatsApp; en US (10x volumen) en "ai receptionist", "medical answering service", "appointment reminders" y las páginas de Mia (dental SEO, med spa SEO, Instagram automation, AEO/GEO). Los datos respaldan la dirección B (Mia se sostiene con páginas propias en /en, no cambiando la home).
 
-- [ ] ES: landing nueva `/es/recordatorio-de-citas-por-whatsapp` ("recordatorio de citas por whatsapp" 200/mes, KD 26, SERP débil). Hoy es un ancla dentro de /agenda.
+- [x] ES: landing nueva `/es/recordatorio-de-citas-por-whatsapp` (hecha, `[reminders].astro`, también genera `/en/appointment-reminders`) ("recordatorio de citas por whatsapp" 200/mes, KD 26, SERP débil). Hoy es un ancla dentro de /agenda.
 - [ ] ES: reenfocar `/es/agenda` a "agenda de citas con whatsapp para clínicas y consultorios" (KD 1-2).
-- [ ] EN: landing nueva `/en/ai-receptionist` (medical + dental; "ai receptionist" 7.8K, "virtual medical receptionist" 1K KD 7) con sección "AI vs human virtual medical receptionist".
-- [ ] EN: reescribir `/en/llamadas` hacia "medical answering service" (2K, KD 0; "hipaa compliant medical answering service" 450, KD 4).
-- [ ] EN: landing nueva `/en/appointment-reminders` ("appointment reminder" 1.4K, KD 8).
-- [ ] EN, páginas de Mia: `/en/dental-seo`, `/en/med-spa-seo`, `/en/instagram-automation`, `/en/aeo` (answer/generative engine optimization).
+- [x] EN: landing nueva `/en/ai-receptionist` (hecha, `[receptionist].astro`, ES `/es/recepcionista-virtual`) (medical + dental; "ai receptionist" 7.8K, "virtual medical receptionist" 1K KD 7) con sección "AI vs human virtual medical receptionist".
+- [x] EN: reescribir `/en/llamadas` hacia "medical answering service" (hecho: `/en/medical-answering-service`, `[answering].astro`) (2K, KD 0; "hipaa compliant medical answering service" 450, KD 4).
+- [x] EN: landing nueva `/en/appointment-reminders` (misma fuente que la ES de recordatorios) ("appointment reminder" 1.4K, KD 8).
+- [x] EN, páginas de Mia: `/en/dental-seo`, `/en/med-spa-seo` y `/en/aeo` hechas (con hermanas ES). Pendiente: `/en/instagram-automation`.
+- [x] EN, Daniel: `/en/medical-practice-bookkeeping` (ES `/es/contabilidad-para-clinicas`), con Plaid y QuickBooks.
+- [x] Integraciones: `/es/integraciones` ↔ `/en/integrations` (lista pendiente de confirmar por Franco: qué es nativo y qué es vía API; SMS y chat web incluidos porque el sitio ya los afirma).
 - [ ] Comparativas: sumar `sara-vs-dentalink` (marca dental más buscada en MX). Doctocliq, Kura y Cloudia no traen tráfico de marca.
 - [ ] **Portada del video de la home**: es el thumbnail automático de YouTube (video -HAjxKXeltI) y muestra la placa vieja "Marketing que no depende de que tengas tiempo" con el mock de Instagram anterior. Cambiar la miniatura en YouTube Studio o servir una portada propia (public/img) en index.astro.
