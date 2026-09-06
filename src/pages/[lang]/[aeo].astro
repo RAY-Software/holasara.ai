@@ -7,9 +7,11 @@ export function getStaticPaths() {
 const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
+import { inlineLinkClass } from '../../lib/ui';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
+import AiChatPhone from '../../components/mocks/AiChatPhone.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
 import ConversationDemo from '../../components/ConversationDemo.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
@@ -18,7 +20,7 @@ import CtaBand from '../../components/CtaBand.astro';
 
 // Link inline dentro de copy (se renderiza con set:html).
 const a = (href: string, label: string) =>
-  `<a href="${href}" class="font-medium text-pine-dark underline decoration-pine/40 underline-offset-2 transition-colors hover:decoration-pine">${label}</a>`;
+  `<a href="${href}" class="${inlineLinkClass}">${label}</a>`;
 
 // ── Copy por idioma. EN es inglés nativo, no calco. ──
 // Ángulo: GUÍA para dueño de clínica (qué leen ChatGPT, Gemini y los resúmenes
@@ -31,10 +33,9 @@ const dict = {
     metaDescription:
       'Cómo aparecer en ChatGPT y en Google con IA (AEO), para dueños de clínica: qué leen los asistentes cuando un paciente pregunta y qué hace Mia cada semana.',
     heroEyebrow: 'Marketing · Aparecer en ChatGPT',
-    heroTitle: "Aparece cuando un paciente <em class='text-pine-dark'>le pregunta a&nbsp;ChatGPT.</em>",
+    heroTitle: "Aparece cuando preguntan <em class='text-pine-dark'>en&nbsp;ChatGPT.</em>",
     heroLead:
       'Cada vez más pacientes ya no eligen entre diez links: le preguntan a ChatGPT, a Gemini o al resumen con IA de Google qué clínica agendar. Aparecer en ChatGPT y en Google con IA (lo que se llama AEO, answer engine optimization) es que tu clínica esté en esa respuesta. Aquí te contamos qué leen esos asistentes, en palabras simples, y qué hace Mia cada semana para que te encuentren.',
-    heroImageAlt: 'Un teléfono con una interfaz de chat abstracta: la pregunta de un paciente y la respuesta de un asistente con IA.',
     strip: [
       { t: 'Ficha completa y al día', b: 'Lo primero que leen Google y los asistentes. Mia la mantiene.' },
       { t: 'Respuestas directas en tu sitio', b: 'Artículos y preguntas frecuentes en el formato que los asistentes citan.' },
@@ -48,8 +49,9 @@ const dict = {
       'No es magia ni un truco nuevo. Los asistentes arman su respuesta con lo que ya existe sobre ti en internet: tu ficha de Google Business, tus reseñas recientes, el contenido de tu sitio y lo que dicen otros sitios de ti. Si esa información está completa, actualizada y dice lo mismo en todos lados, tienes chances. Si está a medias, te saltan.',
     whatSeeAlso: `¿Tu clínica es dental o de estética? Mira también ${a(L('/seo-dental'), 'SEO dental')} y ${a(L('/seo-para-clinicas-de-estetica'), 'SEO para clínicas de estética')}.`,
     aiCard: {
-      title: 'Asistente con IA',
+      title: 'ChatGPT',
       badge: 'Ejemplo',
+      disclaimer: 'ChatGPT puede cometer errores. Comprueba la información importante.',
       q: '¿Qué clínica en Monterrey hace depilación láser los sábados?',
       a: 'Según su ficha de Google y su página de preguntas frecuentes, Clínica Aurora hace depilación láser y atiende los sábados de 9:00 a 14:00. Tiene reseñas recientes y puedes agendar por WhatsApp.',
       sourcesLabel: 'Fuentes',
@@ -182,7 +184,6 @@ const dict = {
     heroTitle: "Show up when patients <em class='text-pine-dark'>ask&nbsp;ChatGPT.</em>",
     heroLead:
       "More and more patients skip the ten blue links and ask ChatGPT, Gemini or Google's AI overview which clinic to book. Answer engine optimization (AEO) is how your practice shows up in that answer. Here is what those assistants actually read, in plain words, and what Mia, your AI marketing agent, does about it every week.",
-    heroImageAlt: "A phone showing an abstract chat interface: a patient's question and an AI assistant's answer.",
     strip: [
       { t: 'A complete, current profile', b: 'The first thing Google and the assistants read. Mia keeps it that way.' },
       { t: 'Direct answers on your site', b: 'Articles and FAQs in the format assistants actually quote.' },
@@ -196,8 +197,9 @@ const dict = {
       'It is not magic and it is not a new trick. Assistants build their answer from what already exists about you online: your Google Business Profile, your recent reviews, the content on your website and what other sites say about you. If that information is complete, current and consistent everywhere, you have a real shot. If it is half done, they skip you.',
     whatSeeAlso: `Dental office or med spa? See also ${a(L('/seo-dental'), 'dental SEO')} and ${a(L('/seo-para-clinicas-de-estetica'), 'med spa SEO')}.`,
     aiCard: {
-      title: 'AI assistant',
+      title: 'ChatGPT',
       badge: 'Example',
+      disclaimer: 'ChatGPT can make mistakes. Check important info.',
       q: 'Which med spa in Austin does laser hair removal with weekend hours?',
       a: "Based on its Google Business Profile and FAQ page, Clínica Aurora offers laser hair removal and is open Saturdays from 9 am to 2 pm. It has recent reviews and you can book over WhatsApp.",
       sourcesLabel: 'Sources',
@@ -257,7 +259,7 @@ const dict = {
       footer: '6 new photos this week',
     },
     row2Eyebrow: 'Content that gets quoted',
-    row2Title: "Content written the way <em class='text-pine-dark'>assistants&nbsp;quote it.</em>",
+    row2Title: "Content written the way <em class='text-pine-dark'>assistants quote&nbsp;it.</em>",
     row2Body:
       'An assistant does not quote filler paragraphs: it quotes the direct answer to a specific question. Mia publishes articles on your site that answer what your patients actually ask, with the answer at the top and the detail below, plus an FAQ section. No prices, and nothing goes live without your approval.',
     row2Points: [
@@ -275,7 +277,7 @@ const dict = {
       status: 'Published on your site · written by Mia',
     },
     row3Eyebrow: 'Reviews and facts',
-    row3Title: "Recent reviews and the same facts <em class='text-pine-dark'>everywhere.</em>",
+    row3Title: "Recent reviews and the same facts <em class='text-pine-dark'>everywhere they&nbsp;look.</em>",
     row3Body:
       'Two things that weigh more than they seem. Recent reviews tell the assistant the clinic is active and how patients are treated; Sara asks for them after every appointment, with the direct link. And your name, address, phone and hours have to say the same thing on your profile, your site and your Instagram: Mia checks them and fixes them.',
     row3Points: [
@@ -335,11 +337,19 @@ const { steps, estados, faqs, aiCard, gb, blog } = dict;
       eyebrow={dict.heroEyebrow}
       title={dict.heroTitle}
       lead={dict.heroLead}
-      image="/img/hero/aeo-hero.jpg"
-      imageAlt={dict.heroImageAlt}
-      imageW={1024}
-      imageH={768}
-    />
+    >
+      <!-- El hero muestra la conversación con el asistente (pedido de Franco): el paciente pregunta y la clínica aparece en la respuesta. -->
+      <AiChatPhone
+        slot="visual"
+        title={aiCard.title}
+        q={aiCard.q}
+        a={aiCard.a}
+        sourcesLabel={aiCard.sourcesLabel}
+        sources={aiCard.sources}
+        compose={aiCard.compose}
+        disclaimer={aiCard.disclaimer}
+      />
+    </PageHero>
 
     <!-- ══════════ TIRA DE MECÁNICA (qué leen los asistentes; no son stats) ══════════ -->
     <section class="border-b border-line bg-paper">
@@ -371,69 +381,23 @@ const { steps, estados, faqs, aiCard, gb, blog } = dict;
             <p class="mt-4 text-salvia" set:html={dict.whatSeeAlso} />
           </div>
 
-          <!-- Mock de respuesta de un asistente con IA (sin logos de marcas). -->
-          <div class="flex justify-center md:justify-end">
-            <figure class="w-full max-w-md overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)]">
-              <div class="flex items-center gap-2.5 border-b border-line px-4 py-3">
-                <span class="grid h-7 w-7 place-items-center rounded-full bg-ink text-cream" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
-                    <path d="M12 2l1.8 5.7L19.5 9.5l-5.7 1.8L12 17l-1.8-5.7L4.5 9.5l5.7-1.8L12 2zM5 16l.9 2.6L8.5 19.5l-2.6.9L5 23l-.9-2.6L1.5 19.5l2.6-.9L5 16z" />
-                  </svg>
-                </span>
-                <span class="text-sm font-semibold text-ink">{aiCard.title}</span>
-                <span class="ml-auto rounded-full border border-line bg-paper px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-salvia">{aiCard.badge}</span>
-              </div>
-              <div class="flex flex-col gap-5 px-4 py-5">
-                <p class="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-paper px-4 py-2.5 text-sm text-ink">{aiCard.q}</p>
-                <div class="flex gap-3">
-                  <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-mint/20 text-pine-dark" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="h-3.5 w-3.5">
-                      <path d="M12 2l1.8 5.7L19.5 9.5l-5.7 1.8L12 17l-1.8-5.7L4.5 9.5l5.7-1.8L12 2z" />
-                    </svg>
-                  </span>
-                  <div class="min-w-0">
-                    <p class="text-sm leading-relaxed text-ink">{aiCard.a}</p>
-                    <p class="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-salvia">{aiCard.sourcesLabel}</p>
-                    <div class="mt-1.5 flex flex-wrap gap-1.5">
-                      {
-                        aiCard.sources.map((s) => (
-                          <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-medium text-ink">
-                            <span class="h-1.5 w-1.5 rounded-full bg-pine" aria-hidden="true" />
-                            {s}
-                          </span>
-                        ))
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="flex items-center gap-2 border-t border-line px-4 py-2.5">
-                <span class="flex-1 rounded-full border border-line bg-paper px-3.5 py-2 text-xs text-salvia">{aiCard.compose}</span>
-                <span class="grid h-8 w-8 place-items-center rounded-full bg-ink text-cream" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </span>
-              </div>
-            </figure>
-          </div>
-        </div>
-
-        <!-- Mini tabla SEO vs AEO/GEO -->
-        <div class="mt-16 max-w-3xl">
+          <!-- Tabla SEO vs AEO/GEO (la conversación con el asistente vive en el hero). -->
+          <div class="min-w-0">
           <h3 class="font-serif text-2xl font-black leading-tight text-balance" set:html={dict.tableH3} />
           <div class="mt-6 overflow-x-auto rounded-2xl border border-line">
             <table class="w-full min-w-[560px] border-collapse text-sm">
               <thead>
                 <tr class="border-b border-line bg-mint/[0.07] text-left">
-                  <th class="px-4 py-3"></th>
-                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{dict.tableHead[0]}</th>
-                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{dict.tableHead[1]}</th>
+                  <th scope="col" class="px-4 py-3"><span class="sr-only">{lang === 'en' ? 'Aspect' : 'Aspecto'}</span></th>
+                  <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{dict.tableHead[0]}</th>
+                  <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{dict.tableHead[1]}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-line">
                 {
                   dict.tableRows.map((r, i) => (
                     <tr class={i % 2 ? 'bg-mint/[0.03]' : ''}>
-                      <td class="whitespace-nowrap px-4 py-3 align-top font-medium text-ink">{r.label}</td>
+                      <th scope="row" class="whitespace-nowrap px-4 py-3 text-left align-top font-medium text-ink">{r.label}</th>
                       <td class="px-4 py-3 align-top text-salvia">{r.seo}</td>
                       <td class="px-4 py-3 align-top text-ink">{r.aeo}</td>
                     </tr>
@@ -441,6 +405,7 @@ const { steps, estados, faqs, aiCard, gb, blog } = dict;
                 }
               </tbody>
             </table>
+          </div>
           </div>
         </div>
       </div>
@@ -599,16 +564,16 @@ const { steps, estados, faqs, aiCard, gb, blog } = dict;
             <table class="w-full min-w-[440px] border-collapse text-sm">
               <thead>
                 <tr class="border-b border-line bg-mint/[0.07] text-left">
-                  <th class="px-4 py-3"></th>
-                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{dict.cmpHead[0]}</th>
-                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{dict.cmpHead[1]}</th>
+                  <th scope="col" class="px-4 py-3"><span class="sr-only">{lang === 'en' ? 'Aspect' : 'Aspecto'}</span></th>
+                  <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{dict.cmpHead[0]}</th>
+                  <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{dict.cmpHead[1]}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-line">
                 {
                   dict.cmpRows.map((r, i) => (
                     <tr class={i % 2 ? 'bg-mint/[0.03]' : ''}>
-                      <td class="px-4 py-3 align-top font-medium text-ink">{r.label}</td>
+                      <th scope="row" class="px-4 py-3 text-left align-top font-medium text-ink">{r.label}</th>
                       <td class="px-4 py-3 align-top text-salvia">{r.agency}</td>
                       <td class="px-4 py-3 align-top text-ink" set:html={r.mia} />
                     </tr>

@@ -11,7 +11,7 @@
 // Ojo: las páginas históricas (agenda, cobros, etc.) siguen con el mismo slug en ambos
 // idiomas; migran a este mapa cuando alguien les defina un slug EN propio.
 
-import type { Locale } from './config.ts';
+import type { Locale } from './locales.ts';
 
 export const localizedSlugs = {
   /** Recordatorios de citas por WhatsApp (MX) ↔ appointment reminders (US). */

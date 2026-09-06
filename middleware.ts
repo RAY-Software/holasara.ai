@@ -1,4 +1,7 @@
 import { rewrite, next } from '@vercel/edge';
+// Mapa de slugs localizados (src/i18n/slugs.ts). Edge-safe: ese archivo solo trae un
+// `import type`, así que el bundle de Vercel no arrastra nada de runtime.
+import { localizedSlugs } from './src/i18n/slugs';
 
 // El 2º arg del middleware trae waitUntil (para tareas fire-and-forget que el
 // runtime termina después de responder). Lo tipamos estructuralmente para no
@@ -191,7 +194,20 @@ export default function middleware(request: Request, context: EdgeContext) {
 
   // Sin prefijo → redirigir al idioma detectado, preservando path y query.
   const locale = detectLocale(request);
-  url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
+  // Slugs localizados: si el primer segmento es un slug conocido en cualquier idioma,
+  // traducirlo al idioma detectado. Sin esto, `/ai-receptionist` con idioma es →
+  // `/es/ai-receptionist` (404, el slug ES es `/es/recepcionista-virtual`). Ver
+  // src/i18n/slugs.ts. El resto del path (subpaths, query) se conserva.
+  const rest = pathname.split('/').slice(2).join('/');
+  let localizedFirst = firstSegment;
+  for (const pair of Object.values(localizedSlugs)) {
+    if (pair.es === firstSegment || pair.en === firstSegment) {
+      localizedFirst = pair[locale];
+      break;
+    }
+  }
+  const localizedPath = pathname === '/' ? '' : `/${localizedFirst}${rest ? `/${rest}` : ''}`;
+  url.pathname = `/${locale}${localizedPath}`;
   const redirect = new Response(null, {
     status: 307,
     headers: {

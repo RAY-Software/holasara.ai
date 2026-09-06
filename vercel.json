@@ -31,6 +31,11 @@
       "source": "/en/llamadas",
       "destination": "/en/medical-answering-service",
       "permanent": true
+    },
+    {
+      "source": "/en/llamadas/",
+      "destination": "/en/medical-answering-service",
+      "permanent": true
     }
   ]
 }
