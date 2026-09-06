@@ -9,12 +9,29 @@ interface Props {
   title?: string;
   items: QA[];
   lang?: Locale;
+  /** Emite el JSON-LD FAQPage con las mismas preguntas visibles. Pasar `false`
+   *  en páginas que ya lo publican por su cuenta vía <Layout schema>. */
+  schema?: boolean;
 }
-const { lang = defaultLocale, items } = Astro.props;
+const { lang = defaultLocale, items, schema = true } = Astro.props;
+
+// JSON-LD: FAQPage para que Google y los asistentes de IA (AEO) lean las preguntas.
+// Va en el body; es válido para schema.org y Google lo acepta igual que en <head>.
+const strip = (s: string) => s.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((it) => ({
+    '@type': 'Question',
+    name: strip(it.q),
+    acceptedAnswer: { '@type': 'Answer', text: strip(it.a) },
+  })),
+};
 const { title = lang === 'en' ? 'Frequently asked questions' : 'Preguntas frecuentes' } = Astro.props;
 ---
 
 <section class="border-t border-line">
+  {schema && items.length > 0 && <script type="application/ld+json" is:inline set:html={JSON.stringify(faqSchema)} />}
   <div class="reveal mx-auto max-w-3xl px-5 py-24 max-lg:pr-20 max-lg:pb-28">
     <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{title}</h2>
     <div class="mt-10 divide-y divide-line border-t border-line">
