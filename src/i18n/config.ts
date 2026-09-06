@@ -4,11 +4,12 @@
 // que NO usamos el i18n nativo de Astro (chocaría con el param [lang]).
 
 import { localizedSlugs, slugKeyOf, type SlugKey } from './slugs.ts';
+import { locales, defaultLocale, type Locale } from './locales.ts';
 
-export const locales = ['es', 'en'] as const;
-export type Locale = (typeof locales)[number];
-
-export const defaultLocale: Locale = 'es';
+// Los locales viven en ./locales.ts (módulo hoja) y se re-exportan desde acá
+// para que el resto del sitio siga importando todo de i18n/config.
+export { locales, defaultLocale };
+export type { Locale };
 
 /** ¿El string es un locale soportado? Type guard para leer Astro.params.lang. */
 export function isLocale(value: unknown): value is Locale {
@@ -41,9 +42,17 @@ export function localePath(path: string, lang: Locale): string {
   return `/${lang}${clean}`;
 }
 
-/** Slug de una página localizada en un idioma dado (sin prefijo de idioma). */
-export function slugFor(key: SlugKey, lang: Locale): string {
-  return localizedSlugs[key][lang];
+const localePrefix = new RegExp(`^/(${locales.join('|')})(?=/|$)`);
+
+/**
+ * La misma página en otro idioma, a partir del pathname actual:
+ * '/es/llamadas' → '/en/medical-answering-service', '/es/agenda' → '/en/agenda',
+ * '/es' o '/es/' → '/en'. La usan el hreflang del Layout y el switch de idioma
+ * del Header. La raíz vuelve sin barra final; el Layout la agrega (canónica).
+ */
+export function alternatePath(pathname: string, lang: Locale): string {
+  const stripped = pathname.replace(localePrefix, '') || '/';
+  return stripped === '/' ? `/${lang}` : localePath(stripped, lang);
 }
 
 /**
@@ -57,9 +66,13 @@ export function getStaticPaths() {
 /**
  * getStaticPaths para páginas con slug localizado. El archivo se llama
  * src/pages/[lang]/[<key>].astro y hace:
- *   export const getStaticPaths = () => localizedStaticPaths('reminders');
- * Genera /es/<slug es> y /en/<slug en>; el dev server ignora las combinaciones
- * que no estén acá (404), así que /es/<slug en> no existe.
+ *   export function getStaticPaths() {
+ *     return localizedStaticPaths('reminders');
+ *   }
+ * OJO: tiene que ser `export function`. La forma `export const getStaticPaths =
+ * () => ...` rompe el dev server (Astro.params llega undefined y todas las rutas
+ * responden 500). Genera /es/<slug es> y /en/<slug en>; el dev server ignora las
+ * combinaciones que no estén acá (404), así que /es/<slug en> no existe.
  */
 export function localizedStaticPaths(key: SlugKey) {
   return locales.map((lang) => ({ params: { lang, [key]: localizedSlugs[key][lang] } }));

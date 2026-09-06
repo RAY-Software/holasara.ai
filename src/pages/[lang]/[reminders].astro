@@ -9,6 +9,7 @@ export function getStaticPaths() {
 const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
+import { inlineLinkClass } from '../../lib/ui';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
@@ -27,7 +28,7 @@ const dict = {
     metaDescription:
       'Sara envía el recordatorio de citas por WhatsApp, pide confirmación y reprograma si el paciente no puede. Para consultorios médicos, dentales y de estética.',
     heroEyebrow: 'Agenda · Recordatorio de citas por WhatsApp',
-    heroTitle: "El recordatorio de citas por WhatsApp<br /><em class='text-pine-dark'>que sí&nbsp;confirma.</em>",
+    heroTitle: "Recordatorio de citas <em class='text-pine-dark'>por&nbsp;WhatsApp.</em>",
     heroLead:
       'Enviar el recordatorio es la mitad. Sara escribe por WhatsApp un día antes, pide que el paciente confirme con una palabra y, si no puede, le propone otro horario en el mismo chat. La agenda llega al día llena, sin que recepción llame a nadie.',
     heroImageAlt: 'Una paciente confirma su cita desde el teléfono, con una taza de té al lado, en un ambiente cálido.',
@@ -122,7 +123,7 @@ const dict = {
       'Anticipo o consulta por adelantado, tú decides',
       'Link de pago seguro dentro de WhatsApp',
       'Menos ausencias desde el primer mes',
-      `<a href="${L('/cobros')}" class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">Ver cómo cobra Sara</a>`,
+      `<a href="${L('/cobros')}" class="${inlineLinkClass}">Ver cómo cobra Sara</a>`,
     ],
     row5Bubbles: [
       { who: 'out', text: 'Te dejo el jueves a las 17:30 con la Dra. Ruiz. Para confirmar la reserva va un anticipo, aquí el link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '10:12' },
@@ -156,7 +157,7 @@ const dict = {
     metaDescription:
       'Sara sends appointment reminders by text or WhatsApp, gets the patient to confirm and reschedules if they can’t. For medical, dental and med spa practices.',
     heroEyebrow: 'Scheduling · Appointment reminders',
-    heroTitle: "Appointment reminders<br /><em class='text-pine-dark'>patients actually&nbsp;confirm.</em>",
+    heroTitle: "Appointment reminders <em class='text-pine-dark'>patients&nbsp;confirm.</em>",
     heroLead:
       'Sending the reminder is half the job. Sara texts the day before, asks the patient to confirm with one word and, if they can’t make it, offers another time in the same thread. Your schedule arrives full, and nobody at the front desk has to call anyone.',
     heroImageAlt: 'A patient confirms her appointment from her phone, a cup of tea beside her, in a warm room.',
@@ -251,7 +252,7 @@ const dict = {
       'Deposit or prepaid consult, your call',
       'Secure payment link inside the chat',
       'Fewer no-shows from the first month',
-      `<a href="${L('/cobros')}" class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">See how Sara collects payments</a>`,
+      `<a href="${L('/cobros')}" class="${inlineLinkClass}">See how Sara collects payments</a>`,
     ],
     row5Bubbles: [
       { who: 'out', text: 'You’re set for Thursday at 5:30 pm with Dr. Ruiz. A deposit locks in the booking, here’s the link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '10:12 am' },
@@ -295,8 +296,8 @@ const { steps, estados, faqs } = dict;
       lead={dict.heroLead}
       image="/img/hero/recordatorios-hero.jpg"
       imageAlt={dict.heroImageAlt}
-      imageW={1600}
-      imageH={1194}
+      imageW={1200}
+      imageH={900}
     />
 
     <!-- ══════════ TIRA DE MECÁNICA (lo que hace, no stats) ══════════ -->

@@ -7,6 +7,7 @@ export function getStaticPaths() {
 const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
+import { inlineLinkClass } from '../../lib/ui';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
@@ -18,7 +19,7 @@ import CtaBand from '../../components/CtaBand.astro';
 
 // Link inline dentro de puntos y celdas (se renderizan con set:html).
 const a = (href: string, label: string) =>
-  `<a href="${href}" class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">${label}</a>`;
+  `<a href="${href}" class="${inlineLinkClass}">${label}</a>`;
 
 // ── Copy por idioma. EN es inglés nativo, no calco. ──
 // Ángulo: el SEO dental lo hace Mia cada semana (ficha de Google, artículos,
@@ -146,7 +147,7 @@ const dict = {
     panelKicker: 'Así se ve en tu panel',
     panelH2: 'Cada semana de Mia deja&nbsp;rastro.',
     panelLead:
-      'En el panel ves lo que Mia hizo y lo que trajo: la ficha actualizada, el artículo publicado, la reseña nueva y la consulta que entró desde Google. Sin planillas ni reportes de&nbsp;agencia.',
+      'En el panel ves lo que Mia hizo y lo que trajo: la ficha actualizada, el artículo publicado, la reseña nueva y la consulta que entró desde Google. Sin hojas de cálculo ni reportes de&nbsp;agencia.',
     estados: [
       { tag: 'Ficha actualizada', desc: 'Mia subió fotos, completó datos o publicó en tu ficha de Google. Queda con la fecha.' },
       { tag: 'Artículo publicado', desc: 'El artículo que aprobaste ya está en tu sitio. Ves cuántas visitas trae desde Google.' },
@@ -319,7 +320,7 @@ const { steps, estados, faqs, gbp, blog, tableRows, also } = dict;
 
 // Path de estrella para la ficha de Google (5 estrellas llenas).
 const star = 'M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9l-5.3 2.7 1-5.8L1.5 7.7l5.9-.9z';
-const gbpThumbs = ['/img/tenants/faceup.jpg', '/img/tenants/physiup.jpg', '/img/tenants/sorace.jpg'];
+const gbpThumbs = ['/img/tenants/thumbs/faceup.jpg', '/img/tenants/thumbs/physiup.jpg', '/img/tenants/thumbs/sorace.jpg'];
 ---
 
 <Layout ogImage={`/og/dental-seo-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
@@ -402,7 +403,7 @@ const gbpThumbs = ['/img/tenants/faceup.jpg', '/img/tenants/physiup.jpg', '/img/
     <section class="border-t border-line">
       <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
         <!-- Fila 1 · Ficha de Google Business (tarjeta estilo ficha, solo HTML/Tailwind) -->
-        <div id="google-business-profile">
+        <div id="google-business-profile" class="scroll-mt-24">
           <FeatureRow
             eyebrow={dict.row1Eyebrow}
             title={dict.row1Title}
@@ -475,7 +476,7 @@ const gbpThumbs = ['/img/tenants/faceup.jpg', '/img/tenants/physiup.jpg', '/img/
           <div class="w-full max-w-sm overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)]">
             <img src="/img/mia/blog.jpg" alt="" width="640" height="360" class="aspect-[16/9] w-full object-cover" loading="lazy" decoding="async" />
             <div class="p-5">
-              <p class="text-[10px] font-semibold uppercase tracking-[0.1em] text-salvia">{blog.kind}</p>
+              <p class="text-[11px] font-semibold uppercase tracking-[0.1em] text-salvia">{blog.kind}</p>
               <p class="mt-1.5 font-serif text-lg font-black leading-snug text-ink">{blog.title}</p>
               <p class="mt-2 text-sm text-salvia">{blog.body}</p>
               <div class="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4">
@@ -489,7 +490,7 @@ const gbpThumbs = ['/img/tenants/faceup.jpg', '/img/tenants/physiup.jpg', '/img/
         </FeatureRow>
 
         <!-- Fila 3 · Agencia de SEO dental vs Mia (tabla a lo ancho, sin números) -->
-        <div id="dental-seo-agency-vs-mia" class="flex flex-col gap-10">
+        <div id="dental-seo-agency-vs-mia" class="flex scroll-mt-24 flex-col gap-10">
           <div class="mx-auto max-w-2xl text-center">
             <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.row3Eyebrow}</p>
             <h3 class="font-serif text-2xl font-black leading-tight text-balance md:text-3xl" set:html={dict.row3Title} />
@@ -499,16 +500,16 @@ const gbpThumbs = ['/img/tenants/faceup.jpg', '/img/tenants/physiup.jpg', '/img/
             <table class="w-full min-w-[640px] border-collapse text-sm">
               <thead>
                 <tr class="border-b border-line bg-paper text-left">
-                  <th class="w-[26%] px-5 py-4"></th>
-                  <th class="whitespace-nowrap px-5 py-4 font-semibold text-ink">{dict.tableAgency}</th>
-                  <th class="whitespace-nowrap bg-mint/[0.08] px-5 py-4 font-semibold text-pine-dark">{dict.tableMia}</th>
+                  <th scope="col" class="w-[26%] px-5 py-4"><span class="sr-only">{lang === 'en' ? 'Aspect' : 'Aspecto'}</span></th>
+                  <th scope="col" class="whitespace-nowrap px-5 py-4 font-semibold text-ink">{dict.tableAgency}</th>
+                  <th scope="col" class="whitespace-nowrap bg-mint/[0.08] px-5 py-4 font-semibold text-pine-dark">{dict.tableMia}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-line">
                 {
                   tableRows.map((r) => (
                     <tr>
-                      <td class="px-5 py-4 align-top font-medium text-ink">{r.label}</td>
+                      <th scope="row" class="px-5 py-4 text-left align-top font-medium text-ink">{r.label}</th>
                       <td class="px-5 py-4 align-top text-salvia">{r.agency}</td>
                       <td class="bg-mint/[0.05] px-5 py-4 align-top text-ink" set:html={r.mia} />
                     </tr>
@@ -576,7 +577,7 @@ const gbpThumbs = ['/img/tenants/faceup.jpg', '/img/tenants/physiup.jpg', '/img/
             also.map((l, i) => (
               <>
                 {i > 0 && <span aria-hidden="true">·</span>}
-                <a href={L(l.href)} class="font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine">{l.label}</a>
+                <a href={L(l.href)} class="${inlineLinkClass}">{l.label}</a>
               </>
             ))
           }

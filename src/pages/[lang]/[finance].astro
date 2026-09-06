@@ -18,7 +18,7 @@ import CtaInline from '../../components/CtaInline.astro';
 import CtaBand from '../../components/CtaBand.astro';
 
 // Link inline dentro de strings con set:html (howP2, points).
-const linkCls = 'font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine';
+import { inlineLinkClass as linkCls } from '../../lib/ui';
 
 // ── Copy por idioma. EN es inglés nativo, no calco. ──
 // Ángulo: Daniel no es "otro software contable". Es el analista que se conecta al
@@ -42,7 +42,7 @@ const dict = {
     howKicker: 'Cómo lo hace Daniel',
     howH2: "El cierre del mes, <em class='text-pine-dark'>en un mensaje de&nbsp;WhatsApp.</em>",
     howP1:
-      'Así te escribe Daniel cuando cierra el mes. Ya concilió el banco, categorizó cada gasto en QuickBooks y cruzó los ingresos con lo que cobró Sara. Lo que te llega es la conclusión, no la planilla.',
+      'Así te escribe Daniel cuando cierra el mes. Ya concilió el banco, categorizó cada gasto en QuickBooks y cruzó los ingresos con lo que cobró Sara. Lo que te llega es la conclusión, no la hoja de cálculo.',
     howP2: `Y si le preguntas cómo viene el mes que viene, proyecta con lo que ya está agendado y cobrado. <a href="${L('/equipo/daniel')}" class="${linkCls}">Conoce a Daniel</a>, el analista de finanzas del equipo de&nbsp;Sara.`,
     danielSub: 'te avisa cómo van los números',
     howBubbles: [
@@ -160,7 +160,7 @@ const dict = {
     metaDescription:
       "Medical practice bookkeeping by Daniel: connects your bank through Plaid, keeps QuickBooks current and messages you the close and margin per treatment.",
     heroEyebrow: 'Daniel · Practice finance',
-    heroTitle: "Medical practice bookkeeping, <em class='text-pine-dark'>done before you&nbsp;ask.</em>",
+    heroTitle: "Medical bookkeeping, <em class='text-pine-dark'>done for&nbsp;you.</em>",
     heroLead:
       "Daniel is your practice's AI finance analyst. He connects to your bank accounts through Plaid, keeps QuickBooks current and messages you what matters: what you billed, what you spent, which treatment leaves the most margin and what's still to collect. Medical practice bookkeeping that never asks you to open a spreadsheet.",
     heroImageAlt: "A calm desk with an open laptop and an abstract chart: the practice's books, in order.",

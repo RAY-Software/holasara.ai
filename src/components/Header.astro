@@ -4,7 +4,7 @@ import NavIcon from './NavIcon.astro';
 import { getProductGroups, getIndustryLinks, getSizeLinks, getTopLinks } from '../data/nav';
 import { getTeam } from '../data/team';
 import { SHOW_GRADER_CTA } from '../lib/flags';
-import { defaultLocale, localePath, locales, type Locale } from '../i18n/config';
+import { defaultLocale, localePath, locales, alternatePath, type Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
 interface Props {
@@ -26,9 +26,8 @@ const teamNav =
     : { label: 'Equipo', all: 'Conoce a todo el equipo' };
 const L = (p: string) => localePath(p, lang);
 
-const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
-// Slugs localizados (src/i18n/slugs.ts): el switch lleva a la misma página en el otro idioma.
-const langHref = (l: Locale) => (stripLocale === '/' ? `/${l}` : localePath(stripLocale, l));
+// Misma página en el otro idioma, slugs localizados incluidos (i18n/config → alternatePath).
+const langHref = (l: Locale) => alternatePath(Astro.url.pathname, l);
 
 // Header desktop: todo con whitespace-nowrap y padding ajustado. Con "Integraciones" y
 // "Probar gratis" en la barra, el ES quedaba 25px pasado del contenedor (1152px) y los

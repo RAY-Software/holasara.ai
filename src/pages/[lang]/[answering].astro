@@ -10,7 +10,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
 import FeatureRow from '../../components/FeatureRow.astro';
-import CallDemo from '../../components/mocks/CallDemo.astro';
+import CallDemo, { type Turn } from '../../components/mocks/CallDemo.astro';
 import VoiceDemo from '../../components/VoiceDemo.astro';
 import ConversationDemo from '../../components/ConversationDemo.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
@@ -28,7 +28,7 @@ import CtaBand from '../../components/CtaBand.astro';
 // Sin "HIPAA compliant" en title ni H1: solo se aborda honesto en la FAQ.
 
 // Turnos del hero ES: se reusan en la fila 1 (misma llamada, otro timer).
-const esHeroTurns: { who: "in" | "out"; text: string }[] = [
+const esHeroTurns: Turn[] = [
   { who: 'in', text: 'Hola, quería agendar una cita para depilación láser.' },
   { who: 'out', text: '¡Hola! Con gusto. Tengo mañana a las 16:00 o el jueves a las 11:30. ¿Cuál te viene mejor?' },
   { who: 'in', text: 'El jueves a las 11:30.' },
@@ -51,7 +51,7 @@ const dict = {
       { t: 'Pasa el anticipo al chat', b: 'Termina la llamada y manda el link de anticipo por WhatsApp.' },
     ],
     howKicker: 'Cómo lo hace Sara',
-    howH2: 'Una llamada de verdad, resuelta de punta a punta.',
+    howH2: 'Una llamada de verdad, resuelta de punta a&nbsp;punta.',
     howP1:
       'Esto es una llamada real, tal cual la atiende Sara. Escucha, entiende lo que necesita el paciente, ofrece horarios concretos y deja la cita reservada, sin que nadie de recepción levante el teléfono.',
     howP2:
@@ -71,7 +71,7 @@ const dict = {
       { n: '03', title: 'Todo queda en tu panel', body: 'La cita cae en tu Google Calendar, el anticipo se cobra por el link que envía al chat, y el resumen de la llamada queda junto al resto de las conversaciones.' },
     ],
     row1Eyebrow: 'Nunca ocupado',
-    row1Title: "La llamada que antes se perdía, <em class='text-pine-dark'>ahora se contesta.</em>",
+    row1Title: "La llamada que antes se perdía, <em class='text-pine-dark'>ahora se&nbsp;contesta.</em>",
     row1Body:
       'Recepción no puede estar en el teléfono y con un paciente a la vez. Fuera de horario, directamente no hay nadie. Sara atiende todas las llamadas en paralelo, al primer tono, sin hacer esperar.',
     row1Points: [
@@ -81,7 +81,7 @@ const dict = {
     ],
     row1CallTurns: esHeroTurns,
     row2Eyebrow: 'Voz natural',
-    row2Title: "Suena humana, <em class='text-pine-dark'>no un robot de menú.</em>",
+    row2Title: "Suena humana, <em class='text-pine-dark'>no un robot de&nbsp;menú.</em>",
     row2Body:
       'Nada de "marque 1 para agenda". Sara escucha lo que el paciente dice con sus palabras, entiende el contexto y responde con criterio, en el tono de tu clínica. La conversación fluye como con tu mejor recepcionista.',
     row2Points: [
@@ -93,10 +93,10 @@ const dict = {
       { who: 'in', text: '¿Ustedes hacen tratamiento para manchas en la cara?' },
       { who: 'out', text: 'Sí, tenemos consulta dermatológica para evaluar las manchas y definir el tratamiento. ¿Quieres que te agende una?' },
       { who: 'in', text: '¿Cuánto cuesta la consulta?' },
-      { who: 'out', text: 'La consulta de valoración cuesta $18.000 y se descuenta si después haces el tratamiento. ¿Te busco un horario?' },
+      { who: 'out', text: 'La consulta de valoración cuesta $18,000 y se descuenta si después haces el tratamiento. ¿Te busco un horario?' },
     ],
     row3Eyebrow: 'Un solo hilo',
-    row3Title: "La llamada y el chat, <em class='text-pine-dark'>la misma conversación.</em>",
+    row3Title: "La llamada y el chat, <em class='text-pine-dark'>la misma&nbsp;conversación.</em>",
     row3Body:
       'Si el paciente te llamó hoy y mañana te escribe por WhatsApp, Sara ya sabe de qué hablaron. La voz no es un canal aparte: es la misma Sara, con el mismo historial, en el teléfono y en el chat.',
     row3Points: [
@@ -105,10 +105,10 @@ const dict = {
       'Un solo historial por paciente, no islas sueltas',
     ],
     row3Bubbles: [
-      { who: 'out', text: '¡Hola, Caro! Soy Sara. Recién hablamos por teléfono y te dejé agendada para el viernes 10:00 👍', t: '10:14' },
-      { who: 'out', text: 'Te paso el link del anticipo para dejar la reserva confirmada 👇', t: '10:14' },
-      { who: 'in', text: 'Gracias! ya lo pago', t: '10:20' },
-      { who: 'out', text: '¡Perfecto! Reserva confirmada ✅ Te llega el recordatorio un día antes.', t: '10:20' },
+      { who: 'out', text: 'Hola, Caro. Soy Sara. Recién hablamos por teléfono y te dejé agendada para el viernes 10:00.', t: '10:14' },
+      { who: 'out', text: 'Te paso el link del anticipo para dejar la reserva confirmada:', link: 'pay.rayhealth.app/c/aurora-4821', t: '10:14' },
+      { who: 'in', text: 'Gracias, ya lo pago', t: '10:20' },
+      { who: 'out', text: 'Pago recibido. Reserva confirmada. Te llega el recordatorio un día antes.', t: '10:20' },
     ],
     // Fila comparativa "Answering service vs Sara": solo existe en EN (ángulo US).
     vs: null,
@@ -367,8 +367,8 @@ const { steps, estados, faqs, vs } = dict;
         {
           vs && (
             <FeatureRow flip eyebrow={vs.eyebrow} title={vs.title} body={vs.body}>
-              <div class="w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-cream">
-                <table class="w-full border-collapse text-sm">
+              <div class="w-full max-w-lg overflow-x-auto rounded-2xl border border-line bg-cream">
+                <table class="w-full min-w-[440px] border-collapse text-sm">
                   <thead>
                     <tr class="border-b border-line bg-paper">
                       <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-salvia">

@@ -23,7 +23,7 @@ import CtaBand from '../../components/CtaBand.astro';
 // ES apunta a "recepcionista virtual" (MX). EN apunta a "AI receptionist for
 // dental offices and med spas" y trabaja "virtual medical receptionist" en el
 // H2 de la banda oscura y en la fila comparativa (IA vs humana).
-const linkCls = 'font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine';
+import { inlineLinkClass as linkCls } from '../../lib/ui';
 
 const dict = {
   es: {
@@ -31,7 +31,7 @@ const dict = {
     metaDescription:
       'Recepcionista virtual para dentales y clínicas de estética: Sara contesta llamadas, WhatsApp e Instagram 24/7, agenda en Google Calendar y cobra el anticipo.',
     heroEyebrow: 'Atiende · Recepcionista virtual',
-    heroTitle: "Recepcionista virtual para consultorios dentales <em class='text-pine-dark'>y clínicas de&nbsp;estética.</em>",
+    heroTitle: "Recepcionista virtual para <em class='text-pine-dark'>tu&nbsp;consultorio.</em>",
     heroLead:
       'Una recepcionista virtual que contesta el teléfono, WhatsApp, Instagram y el chat de tu web las 24 horas, agenda en tu Google Calendar y cobra el anticipo antes de dar la cita. Sara atiende a tus pacientes como tu mejor recepción, también de noche y en los picos, sin sumar a nadie al mostrador.',
     heroImageAlt: 'Mostrador de recepción de una clínica dental, vacío y luminoso: Sara atiende aunque no haya nadie en el mostrador.',
@@ -172,7 +172,7 @@ const dict = {
     metaDescription:
       'AI receptionist for dental offices and med spas: Sara answers calls, texts, WhatsApp and Instagram 24/7, books into Google Calendar and collects the deposit.',
     heroEyebrow: 'Answers · AI receptionist',
-    heroTitle: "The AI receptionist for dental offices <em class='text-pine-dark'>and med&nbsp;spas.</em>",
+    heroTitle: "AI receptionist for <em class='text-pine-dark'>dentists and med&nbsp;spas.</em>",
     heroLead:
       'An AI receptionist for dental offices and med spas that answers the phone, texts, WhatsApp, Instagram and your website chat 24/7, books into your Google Calendar and collects the deposit before giving the slot. Sara runs your front desk like your best receptionist, after hours and at peak times, without adding anyone to payroll.',
     heroImageAlt: 'An empty, sunlit dental front desk: Sara answers even when no one is at the counter.',
@@ -421,7 +421,7 @@ const { steps, compare, estados, related, faqs } = dict;
               <table class="w-full min-w-[460px] border-collapse text-sm">
                 <thead>
                   <tr class="border-b border-line bg-mint/[0.07] text-left">
-                    <th scope="col" class="px-4 py-3"></th>
+                    <th scope="col" class="px-4 py-3"><span class="sr-only">{lang === 'en' ? 'Aspect' : 'Aspecto'}</span></th>
                     <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">
                       {compare.colSara}
                       <span class="mt-0.5 block text-xs font-normal text-salvia">{compare.colSaraSub}</span>

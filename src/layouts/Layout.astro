@@ -5,7 +5,7 @@ import AgentToggle from '../components/AgentToggle.astro';
 import MetaAttribution from '../components/MetaAttribution.astro';
 import { GA4_ID, META_PIXEL_ID, GOOGLE_ADS_ID, saraTrack } from '../lib/tracking';
 import { SRC_TAG } from '../lib/whatsapp';
-import { defaultLocale, locales, localePath, type Locale } from '../i18n/config';
+import { defaultLocale, locales, alternatePath, type Locale } from '../i18n/config';
 import { useTranslations } from '../i18n/ui';
 
 interface Props {
@@ -31,13 +31,12 @@ const siteUrl = (Astro.site?.toString() ?? 'https://holasara.ai/').replace(/\/$/
 // En la raíz de cada idioma, stripLocale es "/" → apuntamos a "/es/" y "/en/" CON barra
 // final (las canónicas). Sin la barra, /es y /en redirigen y el hreflang quedaría a una
 // URL no canónica (error de auditoría "Hreflang to non-canonical").
-// Los slugs localizados (src/i18n/slugs.ts) se traducen vía localePath, así
-// /es/recordatorio-de-citas-por-whatsapp ↔ /en/appointment-reminders quedan emparejados.
-const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
-const altUrls = locales.map((l) => ({
-  lang: l,
-  href: new URL(stripLocale === '/' ? `/${l}/` : localePath(stripLocale, l), Astro.site).toString(),
-}));
+// alternatePath (i18n/config) traduce también los slugs localizados (src/i18n/slugs.ts),
+// así /es/recordatorio-de-citas-por-whatsapp ↔ /en/appointment-reminders quedan emparejados.
+const altUrls = locales.map((l) => {
+  const alt = alternatePath(Astro.url.pathname, l);
+  return { lang: l, href: new URL(alt === `/${l}` ? `${alt}/` : alt, Astro.site).toString() };
+});
 const ogLocale = lang === 'en' ? 'en_US' : 'es_LA';
 
 // --- Tracking ---

@@ -1,6 +1,8 @@
 ---
 import { localizedStaticPaths, toLocale, localePath } from '../../i18n/config';
 import { getMember, type MemberId } from '../../data/team';
+import type { NavIconName } from '../../data/nav';
+import NavIcon from '../../components/NavIcon.astro';
 // Slug localizado: /es/integraciones ↔ /en/integrations (src/i18n/slugs.ts).
 // Página directorio: con qué se conecta cada agente (Sara, Mia, Daniel), por
 // categoría. Solo lista lo que el sitio ya afirma (team.ts, páginas de feature,
@@ -14,14 +16,16 @@ import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
+import IntegrationsMap from '../../components/mocks/IntegrationsMap.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
 import CtaInline from '../../components/CtaInline.astro';
 import CtaBand from '../../components/CtaBand.astro';
 
 interface Item {
   name: string;
-  /** Logo de marca (public/img/logos). Si falta, se pinta el monograma `mono`. */
+  /** Logo de marca (public/img/logos). Si falta, un ícono de línea del set del nav o el monograma `mono`. */
   logo?: string;
+  icon?: NavIconName;
   mono?: string;
   agents: MemberId[];
   desc: string;
@@ -47,7 +51,6 @@ const dict = {
     heroTitle: "Se conecta con lo que tu clínica <em class='text-pine-dark'>ya&nbsp;usa.</em>",
     heroLead:
       'Sara, Mia y Daniel trabajan sobre tus herramientas de siempre: el WhatsApp y el Instagram de la clínica, tu teléfono, tu Google Calendar, tu ficha de Google, tu banco y QuickBooks. Sin migrar datos ni cambiar de sistema.',
-    heroImageAlt: 'Un teléfono, una laptop y una libreta sobre una mesa crema, unidos por líneas de luz.',
     strip: [
       { t: 'Sin migrar nada', b: 'Tu calendario, tu número y tus cuentas siguen donde están.' },
       { t: 'Cada agente, sus conexiones', b: 'Sara atiende y cobra, Mia publica y mide, Daniel lleva los libros.' },
@@ -83,7 +86,7 @@ const dict = {
           },
           {
             name: 'Teléfono',
-            mono: '☏',
+            icon: 'phone',
             agents: ['sara'],
             desc: 'Sara contesta las llamadas por voz sobre tu número de siempre, agenda dentro de la llamada y pasa el link del anticipo al chat. Y los recordatorios también pueden salir por mensaje de texto (SMS) donde WhatsApp no es la norma.',
             needs: 'Tu línea actual. Se conecta en la implementación para que las llamadas que no toma recepción entren a Sara, o todas.',
@@ -92,7 +95,7 @@ const dict = {
           },
           {
             name: 'Chat de tu sitio web',
-            mono: '💬',
+            icon: 'chat',
             agents: ['sara'],
             desc: 'La misma Sara atiende el chat de tu web, con el mismo historial que WhatsApp e Instagram. Quien escribe desde tu sitio termina con la cita agendada.',
             needs: 'Un fragmento de código en tu sitio. Lo dejamos listo contigo.',
@@ -130,7 +133,7 @@ const dict = {
       {
         id: 'marketing',
         kicker: 'Marketing',
-        title: 'Donde te buscan, <em class="text-pine-dark">Mia trabaja.</em>',
+        title: 'Donde te buscan, <em class="text-pine-dark">Mia&nbsp;trabaja.</em>',
         lead: 'Mia lleva la presencia de la clínica en Google y en Instagram, y te escribe la propuesta antes de ejecutarla.',
         items: [
           {
@@ -153,7 +156,7 @@ const dict = {
           },
           {
             name: 'Tu sitio web',
-            mono: '🌐',
+            icon: 'globe',
             agents: ['mia'],
             desc: 'Mia publica en tu sitio artículos con preguntas frecuentes que responden lo que buscan los pacientes, y mira las métricas: qué páginas traen consultas y desde dónde llegan.',
             needs: 'Acceso para publicar en el sitio de la clínica.',
@@ -209,10 +212,9 @@ const dict = {
     metaDescription:
       'What each agent connects to: WhatsApp Business, Instagram, phone, Google Calendar, Stripe, Google Business Profile, Google Ads, Plaid and QuickBooks. Nothing to migrate.',
     heroEyebrow: 'Integrations',
-    heroTitle: "Connects with the tools your clinic <em class='text-pine-dark'>already&nbsp;uses.</em>",
+    heroTitle: "Works with what your clinic <em class='text-pine-dark'>already&nbsp;uses.</em>",
     heroLead:
       'Sara, Mia and Daniel work on top of what you already have: the clinic’s WhatsApp and Instagram, your phone line, your Google Calendar, your Google Business Profile, your bank and QuickBooks. No data migration, no new system.',
-    heroImageAlt: 'A phone, a laptop and a notebook on a cream table, joined by thin lines of light.',
     strip: [
       { t: 'Nothing to migrate', b: 'Your calendar, your number and your accounts stay where they are.' },
       { t: 'Each agent, its connections', b: 'Sara answers and collects, Mia publishes and measures, Daniel keeps the books.' },
@@ -248,7 +250,7 @@ const dict = {
           },
           {
             name: 'Phone',
-            mono: '☏',
+            icon: 'phone',
             agents: ['sara'],
             desc: 'Sara answers voice calls on your existing number, books within the call and sends the deposit link to the chat. Reminders can also go out by text message (SMS) where WhatsApp isn’t the norm.',
             needs: 'Your current line. We connect it during onboarding so the calls the front desk misses go to Sara, or all of them.',
@@ -257,7 +259,7 @@ const dict = {
           },
           {
             name: 'Your website chat',
-            mono: '💬',
+            icon: 'chat',
             agents: ['sara'],
             desc: 'The same Sara answers your website chat, with the same history as WhatsApp and Instagram. Whoever writes from your site ends up with an appointment booked.',
             needs: 'A snippet of code on your site. We set it up with you.',
@@ -318,7 +320,7 @@ const dict = {
           },
           {
             name: 'Your website',
-            mono: '🌐',
+            icon: 'globe',
             agents: ['mia'],
             desc: 'Mia publishes articles with FAQs on your site that answer what patients are searching for, and watches the metrics: which pages bring inquiries and where visitors come from.',
             needs: 'Access to publish on the clinic’s site.',
@@ -385,11 +387,10 @@ const members = Object.fromEntries(
       eyebrow={dict.heroEyebrow}
       title={dict.heroTitle}
       lead={dict.heroLead}
-      image="/img/hero/integraciones-hero.jpg"
-      imageAlt={dict.heroImageAlt}
-      imageW={1024}
-      imageH={768}
-    />
+    >
+      <!-- Diagrama con las herramientas del copy (pedido de Franco): se entiende de un vistazo qué se conecta. -->
+      <IntegrationsMap slot="visual" lang={lang} />
+    </PageHero>
 
     <!-- ══════════ TIRA (lo que implica conectarse, no stats) ══════════ -->
     <section class="border-b border-line bg-paper">
@@ -411,7 +412,7 @@ const members = Object.fromEntries(
         <span class="font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.jumpLabel}</span>
         {
           categories.map((c) => (
-            <a href={`#${c.id}`} class="rounded-full border border-line px-3.5 py-1.5 font-medium text-ink transition-colors hover:border-ink/30">
+            <a href={`#${c.id}`} class="inline-flex min-h-11 items-center rounded-full border border-line px-3.5 py-1.5 font-medium text-ink transition-colors hover:border-ink/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pine sm:min-h-0">
               {c.kicker}
             </a>
           ))
@@ -434,6 +435,8 @@ const members = Object.fromEntries(
                     <span class="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-xl border border-line bg-cream">
                       {it.logo ? (
                         <img src={it.logo} alt="" width="28" height="28" loading="lazy" decoding="async" class="h-7 w-7 object-contain" />
+                      ) : it.icon ? (
+                        <span class="text-pine-dark"><NavIcon name={it.icon} size={26} /></span>
                       ) : (
                         <span class="font-serif text-base font-black text-pine-dark">{it.mono}</span>
                       )}

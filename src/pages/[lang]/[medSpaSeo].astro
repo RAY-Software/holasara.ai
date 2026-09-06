@@ -7,6 +7,7 @@ export function getStaticPaths() {
 const lang = toLocale(Astro.params.lang);
 const L = (p: string) => localePath(p, lang);
 import Layout from '../../layouts/Layout.astro';
+import { inlineLinkClass } from '../../lib/ui';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PageHero from '../../components/PageHero.astro';
@@ -60,14 +61,14 @@ const dict = {
       { n: '03', title: 'Te dice qué trajo pacientes', body: 'Qué búsqueda, qué post y qué artículo terminaron en una valoración agendada. Y a esa persona la atendió y la agendó Sara, con el anticipo cobrado.' },
     ],
     row1Eyebrow: 'Ficha de Google',
-    row1Title: "Cuando buscan botox cerca, <em class='text-pine-dark'>tu ficha aparece.</em>",
+    row1Title: "Cuando buscan botox cerca, <em class='text-pine-dark'>tu ficha&nbsp;aparece.</em>",
     row1Body:
       'En estética, la primera búsqueda casi siempre es local: el tratamiento más “cerca de mí”. Mia mantiene tu ficha de Google Business al día: fotos de la sala y del equipo, categorías, horarios, publicaciones. Y si la ficha baja en el mapa, actúa antes de que lo notes.',
     row1Points: [
       'Fotos nuevas de la clínica, no las de la inauguración',
       'Categorías, horarios y datos siempre correctos',
       'Actúa cuando la ficha baja en el mapa',
-      `Las reseñas las pide Sara en el momento justo: <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/resenas')}">así lo hace</a>`,
+      `Las reseñas las pide Sara en el momento justo: <a class="${inlineLinkClass}" href="${L('/resenas')}">así lo hace</a>`,
     ],
     gbp: {
       name: 'Clínica Aurora',
@@ -82,28 +83,28 @@ const dict = {
       updated: 'Fotos nuevas, subidas por Mia',
     },
     row2Eyebrow: 'Google e Instagram, juntos',
-    row2Title: "Te encuentran en Google. <em class='text-pine-dark'>Te eligen en Instagram.</em>",
+    row2Title: "Te encuentran en Google. <em class='text-pine-dark'>Te eligen en&nbsp;Instagram.</em>",
     row2Body:
       'En estética nadie reserva sin mirar el Instagram de la clínica. Mia lleva los dos: la ficha para que te encuentren y el feed para que te elijan, con la misma marca y el mismo calendario. Cada post sale con tu identidad, y cada mes sabes cuál trajo consultas.',
     row2Points: [
       'Posts con tu logo, tus colores y tu tono',
       'Un solo calendario para Google e Instagram',
-      `A quien comenta o escribe, lo atiende Sara: <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/instagram')}">así lleva Mia tu Instagram</a>`,
+      `A quien comenta o escribe, lo atiende Sara: <a class="${inlineLinkClass}" href="${L('/instagram')}">así lleva Mia tu Instagram</a>`,
     ],
     ig: {
       caption: '<b>clinicaaurora</b> Depilación láser antes del verano: cuántas sesiones necesitas y cuándo conviene empezar',
       likes: '312',
-      comment: '<b>camifer_</b> ¿Cuánto sale la valoración?',
+      comment: '<b>camifer_</b> ¿Cuánto cuesta la valoración?',
     },
     row3Eyebrow: 'Contenido en tu web',
-    row3Title: "Responde lo que preguntan <em class='text-pine-dark'>antes de la valoración.</em>",
+    row3Title: "Responde lo que preguntan <em class='text-pine-dark'>antes de la&nbsp;valoración.</em>",
     row3Body:
       '¿Cuánto dura el botox? ¿Cuántas sesiones de láser necesito? ¿Puedo hacerme un peeling en verano? Son las preguntas que la gente le hace a Google antes de escribirte. Mia escribe y publica en tu sitio el artículo que las responde, con preguntas frecuentes y SEO, sin precios. Cuando te escriben, ya vienen decididos.',
     row3Points: [
       'Un artículo por semana, en el tono de tu clínica',
       'Preguntas frecuentes al final de cada uno',
       'Nunca con precios: eso lo conversa Sara en el chat',
-      `Escrito para que te cite Google y también <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/aeo')}">los buscadores con IA</a>`,
+      `Escrito para que te cite Google y también <a class="${inlineLinkClass}" href="${L('/aeo')}">los buscadores con IA</a>`,
     ],
     blog: {
       kind: 'Blog · Cuidados',
@@ -115,7 +116,7 @@ const dict = {
       by: 'Escrito por Mia',
     },
     row4Eyebrow: 'Agencia de marketing para estética vs Mia',
-    row4Title: "La agencia te manda el reporte. <em class='text-pine-dark'>Mia hace el trabajo.</em>",
+    row4Title: "La agencia te manda el reporte. <em class='text-pine-dark'>Mia hace el&nbsp;trabajo.</em>",
     row4Body:
       'No es que la agencia sea mala: es que cobra por horas, y las horas se van en reuniones y reportes. Mia trabaja sobre tu ficha, tu web y tu Instagram todas las semanas, y te escribe solo cuando hay algo que aprobar o algo que contar.',
     cmpHead: { agency: 'Agencia', mia: 'Mia' },
@@ -128,13 +129,13 @@ const dict = {
       { label: 'Quién atiende al que llega', agency: 'Tu recepción, cuando puede', mia: 'Sara, al instante, hasta agendar la valoración' },
     ],
     row5Eyebrow: 'Y a quien te encuentra, lo agenda Sara',
-    row5Title: "De la búsqueda <em class='text-pine-dark'>a la valoración agendada.</em>",
+    row5Title: "De la búsqueda <em class='text-pine-dark'>a la valoración&nbsp;agendada.</em>",
     row5Body:
       'El SEO termina cuando alguien te escribe. Ahí entra Sara: responde al instante, explica que primero va la valoración, propone dos horarios y cobra el anticipo en el mismo chat. Lo que Mia trajo no se enfría en la bandeja de entrada.',
     row5Points: [
       'Responde WhatsApp, Instagram y el teléfono, 24/7',
       'La valoración queda agendada con el anticipo cobrado',
-      `<a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/recepcionista-virtual')}">Conoce a Sara, la recepcionista virtual</a>`,
+      `<a class="${inlineLinkClass}" href="${L('/recepcionista-virtual')}">Conoce a Sara, la recepcionista virtual</a>`,
     ],
     row5Bubbles: [
       { who: 'in', text: 'Hola, los vi en Google. Me interesa el relleno de labios, ¿cómo es para empezar?', t: '19:48' },
@@ -156,7 +157,7 @@ const dict = {
       { tag: 'Valoración agendada', desc: 'Sara atendió a quien te encontró y dejó la valoración reservada con el anticipo.' },
     ],
     related:
-      `Mia también hace el SEO dental: <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/seo-dental')}">también para consultorios dentales</a>. Y Sara atiende y agenda en <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/negocios/medicina-estetica')}">clínicas de medicina estética</a> y <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/negocios/estetica-spa')}">centros de estética y spa</a>.`,
+      `Mia también hace el SEO dental: <a class="${inlineLinkClass}" href="${L('/seo-dental')}">también para consultorios dentales</a>. Y Sara atiende y agenda en <a class="${inlineLinkClass}" href="${L('/negocios/medicina-estetica')}">clínicas de medicina estética</a> y <a class="${inlineLinkClass}" href="${L('/negocios/estetica-spa')}">centros de estética y spa</a>.`,
     faqs: [
       { q: '¿Mia reemplaza a mi agencia de marketing?', a: 'Depende de lo que hoy te haga la agencia. Lo que Mia hace, lo hace completo y todas las semanas: ficha de Google, artículos en tu web, Instagram, campañas de Google Ads cuando conviene y las métricas de tu sitio. Puedes usarla en lugar de la agencia o sumarla para lo que la agencia no hace. En la demo lo vemos con tu caso.' },
       { q: '¿Qué hace Mia cada semana?', a: 'Revisa cómo te buscaron y qué pasó con tu ficha, tu web y tu Instagram. Te escribe el resumen con una propuesta concreta: fotos nuevas para la ficha, un artículo, un post, una campaña de temporada. Apruebas por chat y ella lo ejecuta y lo publica. Al lunes siguiente te cuenta qué trajo.' },
@@ -209,7 +210,7 @@ const dict = {
       'Fresh photos of the space, not the ones from opening day',
       'Categories, hours and details always correct',
       'Acts when the profile slips on the map',
-      `Reviews get asked for by Sara at just the right moment: <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/resenas')}">here's how</a>`,
+      `Reviews get asked for by Sara at just the right moment: <a class="${inlineLinkClass}" href="${L('/resenas')}">here's how</a>`,
     ],
     gbp: {
       name: 'Clínica Aurora',
@@ -224,13 +225,13 @@ const dict = {
       updated: 'New photos, added by Mia',
     },
     row2Eyebrow: 'Google and Instagram, together',
-    row2Title: "They find you on Google. <em class='text-pine-dark'>They pick you on Instagram.</em>",
+    row2Title: "They find you on Google. <em class='text-pine-dark'>They pick you on&nbsp;Instagram.</em>",
     row2Body:
       "In aesthetics, nobody books without checking the practice's Instagram. Mia runs both: the profile so they find you and the feed so they pick you, with the same brand and the same calendar. Every post goes out with your identity, and every month you know which one brought enquiries.",
     row2Points: [
       'Posts with your logo, your colors and your tone',
       'One calendar for Google and Instagram',
-      `Whoever comments or messages gets answered by Sara: <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/instagram')}">how Mia runs your Instagram</a>`,
+      `Whoever comments or messages gets answered by Sara: <a class="${inlineLinkClass}" href="${L('/instagram')}">how Mia runs your Instagram</a>`,
     ],
     ig: {
       caption: '<b>clinicaaurora</b> Laser hair removal before summer: how many sessions you need and when to start',
@@ -238,14 +239,14 @@ const dict = {
       comment: '<b>camifer_</b> How much is the consult?',
     },
     row3Eyebrow: 'Content on your site',
-    row3Title: "Answers what they ask <em class='text-pine-dark'>before the consult.</em>",
+    row3Title: "Answers what they ask <em class='text-pine-dark'>before the&nbsp;consult.</em>",
     row3Body:
       "How long does Botox last? How many laser sessions do I need? Can I get a peel in summer? Those are the questions people ask Google before they text you. Mia writes and publishes the article that answers them on your site, with FAQs and SEO, no prices. By the time they message you, they've already decided.",
     row3Points: [
       "One article a week, in your practice's voice",
       'FAQs at the end of each one',
       'Never with prices: Sara handles that in the chat',
-      `Written so Google cites you, and so do <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/aeo')}">AI search engines</a>`,
+      `Written so Google cites you, and so do <a class="${inlineLinkClass}" href="${L('/aeo')}">AI search engines</a>`,
     ],
     blog: {
       kind: 'Blog · Aftercare',
@@ -257,7 +258,7 @@ const dict = {
       by: 'Written by Mia',
     },
     row4Eyebrow: 'Med spa SEO agency vs Mia',
-    row4Title: "A med spa SEO agency sends the report. <em class='text-pine-dark'>Mia does the work.</em>",
+    row4Title: "A med spa SEO agency sends the report. <em class='text-pine-dark'>Mia does the&nbsp;work.</em>",
     row4Body:
       "It's not that a med spa SEO company is bad: it bills by the hour, and the hours go to meetings and reports. Mia works on your profile, your site and your Instagram every single week, and only messages you when there's something to approve or something to tell.",
     cmpHead: { agency: 'Agency', mia: 'Mia' },
@@ -270,13 +271,13 @@ const dict = {
       { label: 'Who answers the lead', agency: 'Your front desk, when it can', mia: 'Sara, instantly, all the way to a booked consult' },
     ],
     row5Eyebrow: 'And whoever finds you, Sara books',
-    row5Title: "From the search <em class='text-pine-dark'>to the booked consult.</em>",
+    row5Title: "From the search <em class='text-pine-dark'>to the booked&nbsp;consult.</em>",
     row5Body:
       "SEO ends the moment someone texts you. That's where Sara comes in: she replies instantly, explains that the consult comes first, offers two times and collects the deposit in the same chat. What Mia brought in doesn't go cold in your inbox.",
     row5Points: [
       'Answers WhatsApp, Instagram and the phone, 24/7',
       'The consult is booked with the deposit collected',
-      `<a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/recepcionista-virtual')}">Meet Sara, the AI receptionist</a>`,
+      `<a class="${inlineLinkClass}" href="${L('/recepcionista-virtual')}">Meet Sara, the AI receptionist</a>`,
     ],
     row5Bubbles: [
       { who: 'in', text: "Hi, I found you on Google. I'm interested in lip filler, how do I get started?", t: '7:48 pm' },
@@ -298,7 +299,7 @@ const dict = {
       { tag: 'Consult booked', desc: 'Sara answered whoever found you and left the consult booked with the deposit.' },
     ],
     related:
-      `Mia does dental SEO too: <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/seo-dental')}">also for dental offices</a>. And Sara answers and books for <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/negocios/medicina-estetica')}">medical aesthetics clinics</a> and <a class="font-medium text-pine-dark underline decoration-pine/30 underline-offset-4 hover:decoration-pine" href="${L('/negocios/estetica-spa')}">aesthetics and spa businesses</a>.`,
+      `Mia does dental SEO too: <a class="${inlineLinkClass}" href="${L('/seo-dental')}">also for dental offices</a>. And Sara answers and books for <a class="${inlineLinkClass}" href="${L('/negocios/medicina-estetica')}">medical aesthetics clinics</a> and <a class="${inlineLinkClass}" href="${L('/negocios/estetica-spa')}">aesthetics and spa businesses</a>.`,
     faqs: [
       { q: 'Does Mia replace my med spa SEO agency?', a: "It depends on what your agency does today. What Mia does, she does end to end and every week: Google Business Profile, articles on your site, Instagram, Google Ads campaigns when they pay off, and your site metrics. You can use her instead of an agency or add her for what the agency doesn't cover. We look at your case in the demo." },
       { q: 'What does Mia do each week?', a: 'She reviews how people searched for you and what happened with your profile, your site and your Instagram. She messages you a recap with a concrete proposal: fresh photos for the profile, an article, a post, a seasonal campaign. You approve over chat and she runs it and publishes it. The following Monday she tells you what it brought.' },
@@ -403,9 +404,9 @@ const { steps, estados, faqs, gbp, ig, blog, cmpHead, cmpRows } = dict;
           >
             <figure class="w-full max-w-sm overflow-hidden rounded-xl border border-line bg-white shadow-[0_10px_30px_-20px_rgba(20,38,31,0.28)]">
               <div class="grid grid-cols-3 gap-0.5">
-                <img src="/img/tenants/faceup.jpg" alt="" class="aspect-[4/3] w-full object-cover" loading="lazy" decoding="async" />
-                <img src="/img/tenants/physiup.jpg" alt="" class="aspect-[4/3] w-full object-cover" loading="lazy" decoding="async" />
-                <img src="/img/tenants/sorace.jpg" alt="" class="aspect-[4/3] w-full object-cover" loading="lazy" decoding="async" />
+                <img src="/img/tenants/thumbs/faceup.jpg" alt="" width="320" height="240" class="aspect-[4/3] w-full object-cover" loading="lazy" decoding="async" />
+                <img src="/img/tenants/thumbs/physiup.jpg" alt="" width="320" height="240" class="aspect-[4/3] w-full object-cover" loading="lazy" decoding="async" />
+                <img src="/img/tenants/thumbs/sorace.jpg" alt="" width="320" height="240" class="aspect-[4/3] w-full object-cover" loading="lazy" decoding="async" />
               </div>
               <div class="px-4 pb-4 pt-3">
                 <div class="flex items-start gap-3">
@@ -504,16 +505,16 @@ const { steps, estados, faqs, gbp, ig, blog, cmpHead, cmpRows } = dict;
             <table class="w-full min-w-[440px] border-collapse text-sm">
               <thead>
                 <tr class="border-b border-line bg-mint/[0.07] text-left">
-                  <th class="px-4 py-3"></th>
-                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{cmpHead.agency}</th>
-                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{cmpHead.mia}</th>
+                  <th scope="col" class="px-4 py-3"><span class="sr-only">{lang === 'en' ? 'Aspect' : 'Aspecto'}</span></th>
+                  <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{cmpHead.agency}</th>
+                  <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{cmpHead.mia}</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-line">
                 {
                   cmpRows.map((row, r) => (
                     <tr class={r % 2 ? 'bg-mint/[0.03]' : ''}>
-                      <td class="px-4 py-3 align-top font-medium text-ink">{row.label}</td>
+                      <th scope="row" class="px-4 py-3 text-left align-top font-medium text-ink">{row.label}</th>
                       <td class="px-4 py-3 align-top text-salvia">{row.agency}</td>
                       <td class="px-4 py-3 align-top text-ink">{row.mia}</td>
                     </tr>
