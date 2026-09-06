@@ -43,6 +43,9 @@ export interface FeatureLink {
   href: string;
   desc: string;
   icon?: NavIconName;
+  /** En la barra desktop, mostrar este link recién desde ese breakpoint (el menú
+   *  móvil lo muestra siempre). Para que el header ES no desborde entre 1024 y 1280px. */
+  desktopFrom?: 'xl';
 }
 
 export interface FeatureGroup {
@@ -55,6 +58,7 @@ interface RawLink {
   name: Record<Locale, string>;
   desc: Record<Locale, string>;
   icon?: NavIconName;
+  desktopFrom?: 'xl';
 }
 
 interface RawGroup {
@@ -287,6 +291,7 @@ const topLinksRaw: RawLink[] = [
     href: '/integraciones',
     name: { es: 'Integraciones', en: 'Integrations' },
     desc: { es: 'Con lo que tu clínica ya usa.', en: 'With the tools your clinic already uses.' },
+    desktopFrom: 'xl',
   },
   // Free trial self-serve (sep 2026): /prueba existía pero no estaba enlazada desde ningún
   // lado del sitio. Entra por nav y footer, no por el hero: el primer scroll de la home
@@ -306,6 +311,7 @@ const pickLink = (l: RawLink, lang: Locale): FeatureLink => ({
   name: l.name[lang],
   desc: l.desc[lang],
   icon: l.icon,
+  desktopFrom: l.desktopFrom,
 });
 
 export const getProductGroups = (lang: Locale): FeatureGroup[] =>
