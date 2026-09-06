@@ -1,7 +1,11 @@
 import { rewrite, next } from '@vercel/edge';
 // Mapa de slugs localizados (src/i18n/slugs.ts). Edge-safe: ese archivo solo trae un
 // `import type`, así que el bundle de Vercel no arrastra nada de runtime.
-import { localizedSlugs } from './src/i18n/slugs.ts';
+// SIN extensión a propósito: el Edge runtime de Vercel rechaza el import con `.ts`
+// explícito ("referencing unsupported modules: ./src/i18n/slugs.ts") y falla el deploy.
+// El warning de tsc (nodenext pide extensión) es cosmético; no lo "arregles" agregándola.
+// eslint-disable-next-line
+import { localizedSlugs } from './src/i18n/slugs';
 
 // El 2º arg del middleware trae waitUntil (para tareas fire-and-forget que el
 // runtime termina después de responder). Lo tipamos estructuralmente para no
