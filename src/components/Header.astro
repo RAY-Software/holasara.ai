@@ -249,12 +249,13 @@ const graderHref =
               <a
                 href={langHref(l)}
                 data-astro-prefetch={false}
-                class={`rounded-full px-2.5 py-1 uppercase tracking-wide transition-colors ${
+                class={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 uppercase tracking-wide transition-colors ${
                   l === lang ? 'bg-ink text-cream' : 'text-salvia hover:text-ink'
                 }`}
                 aria-current={l === lang ? 'true' : undefined}
                 hreflang={l}
               >
+                <span class="text-sm leading-none" aria-hidden="true">{l === 'es' ? '🇪🇸' : '🇺🇸'}</span>
                 {l}
               </a>
             ))
