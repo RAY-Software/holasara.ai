@@ -377,7 +377,7 @@ const members = Object.fromEntries(
 ) as Record<MemberId, NonNullable<ReturnType<typeof getMember>>>;
 ---
 
-<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+<Layout ogImage={`/og/integrations-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
   <Header lang={lang} />
   <main>
     <PageHero
