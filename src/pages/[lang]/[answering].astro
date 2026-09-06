@@ -1,0 +1,428 @@
+---
+import { localizedStaticPaths, toLocale } from '../../i18n/config';
+// Slug localizado: /es/llamadas ↔ /en/medical-answering-service (src/i18n/slugs.ts).
+export function getStaticPaths() {
+  return localizedStaticPaths('answering');
+}
+const lang = toLocale(Astro.params.lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import CallDemo from '../../components/mocks/CallDemo.astro';
+import VoiceDemo from '../../components/VoiceDemo.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN NO es traducción: tiene su propio ángulo. ──
+// ES: la voz SUMA un canal a Sara (no reemplaza el chat). El paciente que igual
+// prefiere llamar ya no cae en un buzón; la misma Sara ahora también atiende el
+// teléfono, con el mismo criterio y la misma agenda.
+// EN (SEO US, "medical answering service"): contra el answering service humano
+// tradicional, que toma un mensaje y cobra por minuto. Sara contesta al primer
+// tono, agenda dentro de la llamada, manda el link del anticipo por texto y deja
+// el resumen en el panel. After hours, overflow, varias llamadas a la vez.
+// Sin "HIPAA compliant" en title ni H1: solo se aborda honesto en la FAQ.
+
+// Turnos del hero ES: se reusan en la fila 1 (misma llamada, otro timer).
+const esHeroTurns: { who: "in" | "out"; text: string }[] = [
+  { who: 'in', text: 'Hola, quería agendar una cita para depilación láser.' },
+  { who: 'out', text: '¡Hola! Con gusto. Tengo mañana a las 16:00 o el jueves a las 11:30. ¿Cuál te viene mejor?' },
+  { who: 'in', text: 'El jueves a las 11:30.' },
+  { who: 'out', text: 'Perfecto. Te lo dejo reservado y te envío por WhatsApp el link para el anticipo. ¿Es este mismo número?' },
+];
+
+const dict = {
+  es: {
+    metaTitle: 'Sara atiende el teléfono · Sara',
+    metaDescription:
+      'Ahora Sara también atiende las llamadas. La misma recepcionista con IA responde el teléfono 24/7, agenda, confirma y cobra el anticipo, sin que suene ocupado ni caiga en el buzón.',
+    heroEyebrow: 'Atiende · Llamadas por voz',
+    heroTitle: "Si nadie atiende,<br /><em class='text-pine-dark'>Sara toma<br />la llamada.</em>",
+    heroLead:
+      'No todos escriben. Muchos todavía llaman, y esa llamada se pierde cuando recepción está con un paciente o fuera de horario. Sara contesta al primer tono, conversa de verdad y deja la cita agendada. La misma Sara del chat, ahora también en la línea.',
+    heroCallTurns: esHeroTurns,
+    strip: [
+      { t: 'Contesta al primer tono', b: 'Nunca da ocupado ni cae en el buzón, a cualquier hora.' },
+      { t: 'Agenda dentro de la llamada', b: 'Propone horarios concretos y cierra la cita hablando.' },
+      { t: 'Pasa el anticipo al chat', b: 'Termina la llamada y manda el link de anticipo por WhatsApp.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'Una llamada de verdad, resuelta de punta a punta.',
+    howP1:
+      'Esto es una llamada real, tal cual la atiende Sara. Escucha, entiende lo que necesita el paciente, ofrece horarios concretos y deja la cita reservada, sin que nadie de recepción levante el teléfono.',
+    howP2:
+      'Y cuando cuelga, no se pierde el rastro: la conversación sigue <span class="font-semibold text-pine-dark">en tu panel</span>, junto a la de WhatsApp e Instagram, con el resumen de lo que se habló y la cita ya cargada en la&nbsp;agenda.',
+    howTurns: [
+      { who: 'in', text: 'Buenas, llamaba para consultar por una limpieza facial.' },
+      { who: 'out', text: '¡Hola! Sí, hacemos limpieza facial profunda. Dura una hora. ¿Quieres que te busque una cita?' },
+      { who: 'in', text: 'Sí, claro, para esta semana si se puede.' },
+      { who: 'out', text: 'Tengo miércoles a las 15:00 o viernes a las 10:00. ¿Alguno te sirve?' },
+      { who: 'in', text: 'Viernes a las 10 está perfecto.' },
+      { who: 'out', text: 'Listo, reservado el viernes a las 10:00. Te mando el recordatorio y el link del anticipo por WhatsApp. ¡Nos vemos!' },
+    ],
+    stepsH2: 'De una llamada perdida a una cita&nbsp;cobrada.',
+    steps: [
+      { n: '01', title: 'Suena el teléfono', body: 'El paciente marca tu número de siempre. Si recepción no puede atender o está cerrado, la llamada entra a Sara sin que nadie haga nada.' },
+      { n: '02', title: 'Sara conversa y agenda', body: 'Contesta con voz natural, responde dudas del tratamiento, ofrece horarios y deja la cita reservada dentro de la misma llamada.' },
+      { n: '03', title: 'Todo queda en tu panel', body: 'La cita cae en tu Google Calendar, el anticipo se cobra por el link que envía al chat, y el resumen de la llamada queda junto al resto de las conversaciones.' },
+    ],
+    row1Eyebrow: 'Nunca ocupado',
+    row1Title: "La llamada que antes se perdía, <em class='text-pine-dark'>ahora se contesta.</em>",
+    row1Body:
+      'Recepción no puede estar en el teléfono y con un paciente a la vez. Fuera de horario, directamente no hay nadie. Sara atiende todas las llamadas en paralelo, al primer tono, sin hacer esperar.',
+    row1Points: [
+      'Responde 24/7, también fines de semana y feriados',
+      'Atiende varias llamadas al mismo tiempo',
+      'Cero espera en línea, cero buzón de voz',
+    ],
+    row1CallTurns: esHeroTurns,
+    row2Eyebrow: 'Voz natural',
+    row2Title: "Suena humana, <em class='text-pine-dark'>no un robot de menú.</em>",
+    row2Body:
+      'Nada de "marque 1 para agenda". Sara escucha lo que el paciente dice con sus palabras, entiende el contexto y responde con criterio, en el tono de tu clínica. La conversación fluye como con tu mejor recepcionista.',
+    row2Points: [
+      'Entiende lenguaje natural, no comandos',
+      'Responde dudas de tratamientos y precios',
+      'Habla en el tono y los términos de tu clínica',
+    ],
+    row2CallTurns: [
+      { who: 'in', text: '¿Ustedes hacen tratamiento para manchas en la cara?' },
+      { who: 'out', text: 'Sí, tenemos consulta dermatológica para evaluar las manchas y definir el tratamiento. ¿Quieres que te agende una?' },
+      { who: 'in', text: '¿Cuánto cuesta la consulta?' },
+      { who: 'out', text: 'La consulta de valoración cuesta $18.000 y se descuenta si después haces el tratamiento. ¿Te busco un horario?' },
+    ],
+    row3Eyebrow: 'Un solo hilo',
+    row3Title: "La llamada y el chat, <em class='text-pine-dark'>la misma conversación.</em>",
+    row3Body:
+      'Si el paciente te llamó hoy y mañana te escribe por WhatsApp, Sara ya sabe de qué hablaron. La voz no es un canal aparte: es la misma Sara, con el mismo historial, en el teléfono y en el chat.',
+    row3Points: [
+      'El resumen de la llamada queda en el panel',
+      'Continúa por WhatsApp donde quedó la llamada',
+      'Un solo historial por paciente, no islas sueltas',
+    ],
+    row3Bubbles: [
+      { who: 'out', text: '¡Hola, Caro! Soy Sara. Recién hablamos por teléfono y te dejé agendada para el viernes 10:00 👍', t: '10:14' },
+      { who: 'out', text: 'Te paso el link del anticipo para dejar la reserva confirmada 👇', t: '10:14' },
+      { who: 'in', text: 'Gracias! ya lo pago', t: '10:20' },
+      { who: 'out', text: '¡Perfecto! Reserva confirmada ✅ Te llega el recordatorio un día antes.', t: '10:20' },
+    ],
+    // Fila comparativa "Answering service vs Sara": solo existe en EN (ángulo US).
+    vs: null,
+    ctaInline: 'Que ninguna llamada a tu clínica quede sin&nbsp;atender.',
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada llamada deja&nbsp;registro.',
+    panelLead:
+      'En la bandeja de Chats, las llamadas aparecen junto a WhatsApp e Instagram. De un vistazo ves quién llamó, qué necesitaba y en qué quedó, sin escuchar la grabación entera.',
+    estados: [
+      { tag: '📞 Llamada', desc: 'Sara atendió una llamada entrante. Queda con la hora y la duración.' },
+      { tag: '📝 Resumen', desc: 'El resumen en texto de lo que se habló, para leerlo en segundos.' },
+      { tag: 'Reservó', desc: 'La cita quedó agendada dentro de la llamada, en tu Google Calendar.' },
+      { tag: '✅ Confirmado', desc: 'El paciente confirmó y el anticipo quedó cobrado por el link del chat.' },
+    ],
+    faqs: [
+      { q: '¿Sara reemplaza a mi recepción telefónica?', a: 'La complementa. Atiende cuando recepción está ocupada, fuera de horario o cuando entran varias llamadas a la vez. Tu equipo deja de perder llamadas y de interrumpir la atención presencial para contestar el teléfono.' },
+      { q: '¿Necesito cambiar mi número de teléfono?', a: 'No. Sara atiende sobre tu número actual. En la implementación conectamos la línea para que las llamadas que no toma recepción entren a Sara, o todas, como prefieras.' },
+      { q: '¿Se nota que es una IA?', a: 'Sara habla con voz natural y conversa con criterio, no es un menú de "marque 1". Siempre se presenta como la asistente de tu clínica; nunca finge ser una persona concreta de tu equipo.' },
+      { q: '¿La llamada y el WhatsApp son la misma Sara?', a: 'Sí. Es un solo cerebro y un solo historial por paciente. Si alguien te llama y después te escribe, Sara ya tiene el contexto de la llamada. La voz es un canal más, junto a WhatsApp e Instagram.' },
+      { q: '¿Cobra el anticipo por teléfono?', a: 'No pide la tarjeta por voz. Cierra la cita en la llamada y envía el link de anticipo al WhatsApp del paciente, que es más seguro y cómodo. La reserva queda confirmada cuando paga.' },
+      { q: '¿En qué idiomas atiende?', a: 'Atiende en español, con el tono y los términos de tu clínica. Si tu clínica recibe pacientes en otro idioma, lo definimos en la implementación.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Automated Medical Answering Service, 24/7 · Sara',
+    metaDescription:
+      'Automated medical answering service for your practice: Sara picks up 24/7, books into your Google Calendar during the call and texts the deposit link.',
+    heroEyebrow: 'Answers · Medical office answering service',
+    heroTitle: "The medical answering service <em class='text-pine-dark'>that books the&nbsp;appointment.</em>",
+    heroLead:
+      "A traditional answering service takes a message and promises someone will call back. Sara is a medical answering service that picks up on the first ring, has a real conversation, books the appointment in your Google Calendar during the call and texts the deposit link. After hours, on weekends, and whenever the front desk is on the other line.",
+    heroCallTurns: [
+      { who: 'in', text: "Hi, I'd like to schedule a dental cleaning." },
+      { who: 'out', text: 'Hi! Happy to help. I have tomorrow at 4:00 pm or Thursday at 11:30 am. Which works better for you?' },
+      { who: 'in', text: 'Thursday at 11:30 works.' },
+      { who: 'out', text: "Perfect, you're booked for Thursday at 11:30 am. I'll text you the deposit link to lock it in. Is this the best number?" },
+    ],
+    strip: [
+      { t: 'Picks up on the first ring', b: 'No hold music, no voicemail, no "someone will call you back."' },
+      { t: 'Books during the call', b: 'Offers real openings and puts the appointment on your Google Calendar.' },
+      { t: 'Texts the deposit link', b: 'Ends the call and sends the deposit link by text or WhatsApp.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: 'A medical office answering service that finishes the&nbsp;call.',
+    howP1:
+      'This is a real call, exactly as Sara answers it. She listens, understands what the patient needs, offers real openings and books the appointment, without anyone at the front desk picking up and without a message waiting for a callback.',
+    howP2:
+      'And when she hangs up, nothing is lost: the call lives on <span class="font-semibold text-pine-dark">in your dashboard</span>, next to WhatsApp and Instagram, with a summary of what was said and the appointment already on your Google&nbsp;Calendar.',
+    howTurns: [
+      { who: 'in', text: 'Hi, I was calling to ask about a facial.' },
+      { who: 'out', text: 'Hi! Yes, we do deep-cleansing facials. It takes about an hour. Would you like me to find you a time?' },
+      { who: 'in', text: 'Yes, this week if possible.' },
+      { who: 'out', text: 'I have Wednesday at 3:00 pm or Friday at 10:00 am. Does either work?' },
+      { who: 'in', text: 'Friday at 10 is perfect.' },
+      { who: 'out', text: "You're booked for Friday at 10:00 am. I'll text you the reminder and the deposit link. See you Friday!" },
+    ],
+    stepsH2: 'From a missed call to a booked, paid&nbsp;appointment.',
+    steps: [
+      { n: '01', title: 'The phone rings', body: "The patient dials your usual number. If the front desk can't pick up, it's after hours, or you forward the line, the call goes to Sara. No new number, nothing for the patient to learn." },
+      { n: '02', title: 'Sara talks and books', body: 'She answers in a natural voice, in English or Spanish, handles treatment questions, offers real openings and books the appointment during the same call.' },
+      { n: '03', title: 'It all lands in your dashboard', body: 'The appointment drops into your Google Calendar, the deposit link goes out by text or WhatsApp, and the call summary sits alongside the rest of the conversations.' },
+    ],
+    row1Eyebrow: 'After hours and overflow',
+    row1Title: "After hours and overflow, <em class='text-pine-dark'>answered on the first&nbsp;ring.</em>",
+    row1Body:
+      'A medical office answering service used to mean an operator taking a message for the morning. Sara answers the phone the same way at 2 am as at 2 pm: on the first ring, in parallel, with no hold queue, and she books instead of writing down a callback.',
+    row1Points: [
+      'Answers 24/7, weekends and holidays included',
+      'Takes the overflow when the front desk is on the other line',
+      'Several calls at once, zero hold time',
+    ],
+    row1CallTurns: [
+      { who: 'in', text: 'Hi, are you still open? I wanted to ask about laser hair removal.' },
+      { who: 'out', text: 'The office is closed right now, but I can help you book. The first visit is a 30-minute consult. I have Tuesday at 9:00 am or Wednesday at 5:30 pm.' },
+      { who: 'in', text: 'Wednesday at 5:30, please.' },
+      { who: 'out', text: "Done, you're booked for Wednesday at 5:30 pm. I'll text you the confirmation and the deposit link right now." },
+    ],
+    row2Eyebrow: 'Not a phone tree',
+    row2Title: "Automated phone answering <em class='text-pine-dark'>that doesn't sound&nbsp;automated.</em>",
+    row2Body:
+      "No menus, no script read back at the caller. Sara understands what the patient says in their own words, answers questions about treatments, hours and pricing, and moves toward the booking with judgment, in your practice's tone.",
+    row2Points: [
+      'Understands natural language, not keypad commands',
+      'Answers treatment, hours and pricing questions',
+      "Speaks in your practice's tone and terms",
+    ],
+    row2CallTurns: [
+      { who: 'in', text: 'Do you treat dark spots on the face?' },
+      { who: 'out', text: 'Yes, we start with a dermatology consult to assess the spots and recommend a treatment. Would you like me to book one?' },
+      { who: 'in', text: 'How much is the consult?' },
+      { who: 'out', text: "The consult is $150, and it's credited toward the treatment if you go ahead. Want me to find you a time?" },
+    ],
+    row3Eyebrow: 'One thread',
+    row3Title: "The call and the text, <em class='text-pine-dark'>one&nbsp;conversation.</em>",
+    row3Body:
+      'A traditional answering service hands you a message log. Sara hands you a conversation: the call, the text with the deposit link and the reply all live in one thread per patient, so nobody starts from zero.',
+    row3Points: [
+      'The call summary lands in your dashboard',
+      'Follows up by text or WhatsApp where the call left off',
+      'One history per patient, phone and chat together',
+    ],
+    row3Bubbles: [
+      { who: 'out', text: "Hi Emily, it's Sara. We just spoke on the phone and you're booked for Friday at 10:00 am.", t: '10:14 am' },
+      { who: 'out', text: "Here's the link for the deposit, it locks in your appointment.", link: 'pay.rayhealth.app/c/aurora-4821', t: '10:14 am' },
+      { who: 'in', text: 'Thanks! Just paid.', t: '10:20 am' },
+      { who: 'out', text: "Payment received. You're all set for Friday at 10:00 am. I'll send a reminder the day before.", t: '10:20 am' },
+    ],
+    // Fila comparativa, solo EN: contra el answering service humano tradicional.
+    vs: {
+      eyebrow: 'Answering service vs Sara',
+      title: "A traditional answering service takes a message. <em class='text-pine-dark'>Sara takes the&nbsp;appointment.</em>",
+      body:
+        'Most answering services for medical offices are built to take a message. Sara is built to finish the call: the patient hangs up with an appointment, and you get the summary, not a callback list.',
+      colThem: 'Answering service',
+      colSara: 'Sara',
+      rows: [
+        { label: 'Who picks up', them: 'An operator reading a script', sara: 'Sara, in a natural voice, on the first ring' },
+        { label: 'What the caller gets', them: '"Someone will call you back"', sara: 'An appointment, booked during the call' },
+        { label: 'After hours and weekends', them: 'On-call operator takes a message for the morning', sara: 'Same answer at 2 am as at 2 pm' },
+        { label: 'Two calls at once', them: 'Hold queue', sara: 'Both answered, in parallel' },
+        { label: 'Billing', them: 'By the minute or by the message', sara: 'Flat monthly plan, no per-minute billing' },
+      ],
+    },
+    ctaInline: 'Let no call to your practice go to&nbsp;voicemail.',
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every call leaves a&nbsp;record.',
+    panelLead:
+      'In the Chats inbox, phone calls appear next to WhatsApp and Instagram. At a glance you see who called, what they needed and how it ended, without listening to the whole recording.',
+    estados: [
+      { tag: '📞 Call', desc: 'Sara answered an incoming call. Logged with the time and duration.' },
+      { tag: '📝 Summary', desc: 'A text summary of what was said, to read in seconds.' },
+      { tag: 'Booked', desc: 'The appointment was scheduled during the call, in your Google Calendar.' },
+      { tag: '✅ Confirmed', desc: 'The patient confirmed and the deposit was collected through the link she texted.' },
+    ],
+    faqs: [
+      { q: 'Is this a HIPAA compliant medical answering service?', a: "Sara doesn't store or read medical records or clinical information. She works on the conversation and the calendar: who called, what they asked for and when they're booked. We don't advertise HIPAA compliance; if your practice needs a BAA or has specific requirements, we go through them with you in the demo before anything goes live." },
+      { q: 'Do I keep my phone number?', a: 'Yes. Sara answers on your current number. During onboarding we connect the line so the calls the front desk can\'t take go to Sara: after hours, on overflow, or all of them, whichever you prefer. Patients never see a new number.' },
+      { q: 'What happens after hours and on weekends?', a: 'Sara answers exactly the same way. She books into your Google Calendar on real availability, texts the deposit link and leaves the summary in your dashboard, so Monday starts with appointments instead of a list of messages to return.' },
+      { q: 'Can she take several calls at once?', a: 'Yes. Every call is answered in parallel, on the first ring. There is no hold queue and no busy tone, even when three patients call at the same time.' },
+      { q: 'Does she book directly into my calendar?', a: "Yes, into the Google Calendar your practice already uses, only on real openings, and she blocks the slot the moment it's confirmed. If your practice runs on another scheduling system, we look at it together in the demo." },
+      { q: 'Does she answer in English and Spanish?', a: "Yes. Sara answers in English and in Spanish, in your practice's tone and terms. Bilingual practices set it up during onboarding so Spanish-speaking patients get the same service as everyone else." },
+      { q: 'What if the caller needs a human?', a: "She alerts your team right away with the full context: who called, what they need and what was already said, so a person picks it up without starting from zero. Sara doesn't give medical advice or triage symptoms; anything clinical goes to your team." },
+    ],
+  },
+}[lang];
+
+const { steps, estados, faqs, vs } = dict;
+---
+
+<Layout ogImage={`/og/llamadas-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+    >
+      <CallDemo slot="visual" lang={lang} turns={dict.heroCallTurns} timer="00:32" />
+    </PageHero>
+
+    <!-- ══════════ DEMO DE VOZ EN VIVO ══════════ -->
+    <VoiceDemo lang={lang} />
+
+    <!-- ══════════ TIRA DE MECÁNICA ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · llamada real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia">
+            {dict.howP1}
+          </p>
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <CallDemo lang={lang} turns={dict.howTurns} timer="01:12" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES · filas alternadas ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <CallDemo lang={lang} turns={dict.row1CallTurns} timer="00:19" />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row2Eyebrow}
+          title={dict.row2Title}
+          body={dict.row2Body}
+          points={dict.row2Points}
+        >
+          <CallDemo lang={lang} turns={dict.row2CallTurns} timer="00:41" />
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.row3Eyebrow}
+          title={dict.row3Title}
+          body={dict.row3Body}
+          points={dict.row3Points}
+        >
+          <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row3Bubbles} />
+        </FeatureRow>
+
+        <!-- Fila "Answering service vs Sara", solo EN: tabla comparativa inline, sin cifras, 5 filas. -->
+        {
+          vs && (
+            <FeatureRow flip eyebrow={vs.eyebrow} title={vs.title} body={vs.body}>
+              <div class="w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-cream">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr class="border-b border-line bg-paper">
+                      <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-salvia">
+                        <span class="sr-only">Aspect</span>
+                      </th>
+                      <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-salvia">{vs.colThem}</th>
+                      <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{vs.colSara}</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-line">
+                    {vs.rows.map((r) => (
+                      <tr class="align-top">
+                        <th scope="row" class="px-4 py-3 text-left font-semibold text-ink">{r.label}</th>
+                        <td class="px-4 py-3 text-salvia">{r.them}</td>
+                        <td class="px-4 py-3 font-medium text-ink">
+                          <span class="flex items-start gap-2">
+                            <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-mint" />
+                            <span>{r.sara}</span>
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </FeatureRow>
+          )
+        }
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelLead} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

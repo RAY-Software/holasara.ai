@@ -4,7 +4,8 @@
 // Bilingüe: el `href` es el path base (sin prefijo de idioma, se prefija al
 // render con localePath). `name`/`desc` traen las dos variantes. EN no es traducción:
 // es el sitio del producto para clínicas de Estados Unidos (front desk, med spa,
-// dental office, bookkeeping). Un grupo puede ser de un solo idioma (`only`).
+// dental office, bookkeeping). Las landings con slug localizado se linkean por su
+// slug ES (localePath lo traduce, ver src/i18n/slugs.ts).
 
 import type { Locale } from '../i18n/config';
 
@@ -19,6 +20,10 @@ export type ProductIcon =
   | 'gift'
   | 'camera'
   | 'star'
+  | 'bell'
+  | 'badge'
+  | 'search'
+  | 'robot'
   | 'chart';
 
 export type BusinessIcon =
@@ -38,6 +43,9 @@ export interface FeatureLink {
   href: string;
   desc: string;
   icon?: NavIconName;
+  /** En la barra desktop, mostrar este link recién desde ese breakpoint (el menú
+   *  móvil lo muestra siempre). Para que el header ES no desborde entre 1024 y 1280px. */
+  desktopFrom?: 'xl';
 }
 
 export interface FeatureGroup {
@@ -50,13 +58,12 @@ interface RawLink {
   name: Record<Locale, string>;
   desc: Record<Locale, string>;
   icon?: NavIconName;
+  desktopFrom?: 'xl';
 }
 
 interface RawGroup {
   label: Record<Locale, string>;
   items: RawLink[];
-  /** Grupo exclusivo de un idioma (p. ej. "Finance" solo en EN). */
-  only?: Locale;
 }
 
 const productGroupsRaw: RawGroup[] = [
@@ -76,10 +83,18 @@ const productGroupsRaw: RawGroup[] = [
         icon: 'chat',
       },
       {
+        // Slug localizado: /es/llamadas ↔ /en/medical-answering-service (src/i18n/slugs.ts).
         href: '/llamadas',
-        name: { es: 'Atiende el teléfono', en: 'Phone answering, 24/7' },
-        desc: { es: 'Contesta las llamadas por voz, 24/7.', en: 'Picks up every call, after hours too.' },
+        name: { es: 'Atiende el teléfono', en: 'Medical answering service' },
+        desc: { es: 'Contesta las llamadas por voz, 24/7.', en: 'Answers every call, 24/7, and books it.' },
         icon: 'phone',
+      },
+      {
+        // Slug localizado: /es/recepcionista-virtual ↔ /en/ai-receptionist.
+        href: '/recepcionista-virtual',
+        name: { es: 'Recepcionista virtual', en: 'AI receptionist' },
+        desc: { es: 'Para consultorios dentales y clínicas de estética.', en: 'For dental offices and med spas.' },
+        icon: 'badge',
       },
       {
         href: '/operador',
@@ -109,6 +124,13 @@ const productGroupsRaw: RawGroup[] = [
           en: 'Books, reminds and confirms. No double bookings.',
         },
         icon: 'calendar',
+      },
+      {
+        // Slug localizado: /es/recordatorio-de-citas-por-whatsapp ↔ /en/appointment-reminders.
+        href: '/recordatorio-de-citas-por-whatsapp',
+        name: { es: 'Recordatorios por WhatsApp', en: 'Appointment reminders' },
+        desc: { es: 'Recuerda, confirma y reprograma sola.', en: 'Reminds, confirms and reschedules on her own.' },
+        icon: 'bell',
       },
     ],
   },
@@ -144,18 +166,37 @@ const productGroupsRaw: RawGroup[] = [
         desc: { es: 'Más reseñas de 5 estrellas, solas.', en: 'More 5-star reviews, on their own.' },
         icon: 'star',
       },
+      {
+        // Slug localizado: /es/seo-dental ↔ /en/dental-seo.
+        href: '/seo-dental',
+        name: { es: 'SEO dental', en: 'Dental SEO' },
+        desc: { es: 'Mia posiciona tu consultorio en Google.', en: 'Mia gets your practice found on Google.' },
+        icon: 'search',
+      },
+      {
+        // Slug localizado: /es/seo-para-clinicas-de-estetica ↔ /en/med-spa-seo.
+        href: '/seo-para-clinicas-de-estetica',
+        name: { es: 'SEO para estética', en: 'Med spa SEO' },
+        desc: { es: 'Que te encuentren antes que a la competencia.', en: 'Get found before the med spa down the street.' },
+        icon: 'search',
+      },
+      {
+        // Slug localizado: /es/aeo ↔ /en/aeo.
+        href: '/aeo',
+        name: { es: 'Aparecer en ChatGPT (AEO)', en: 'AEO: show up in ChatGPT' },
+        desc: { es: 'Que los asistentes con IA te recomienden.', en: 'Get recommended by AI assistants.' },
+        icon: 'robot',
+      },
     ],
   },
-  // Solo en EN: en Estados Unidos el equipo se vende completo y Daniel (Plaid +
-  // QuickBooks) es la prueba que ningún competidor de recepción puede reclamar.
   {
-    only: 'en',
     label: { es: 'Finanzas', en: 'Finance' },
     items: [
       {
-        href: '/equipo/daniel',
-        name: { es: 'Finanzas con Daniel', en: 'Bookkeeping with Daniel' },
-        desc: { es: 'Cierra el mes y te avisa lo que importa.', en: 'Plaid bank feeds, QuickBooks, month closed for you.' },
+        // Slug localizado: /es/contabilidad-para-clinicas ↔ /en/medical-practice-bookkeeping.
+        href: '/contabilidad-para-clinicas',
+        name: { es: 'Contabilidad de la clínica', en: 'Practice bookkeeping' },
+        desc: { es: 'Daniel lleva las cuentas con Plaid y QuickBooks.', en: 'Daniel keeps the books with Plaid and QuickBooks.' },
         icon: 'chart',
       },
     ],
@@ -245,6 +286,13 @@ const topLinksRaw: RawLink[] = [
     name: { es: 'Cómo funciona', en: 'How it works' },
     desc: { es: 'Conectas tu calendario y listo.', en: 'Connect your calendar and you are set.' },
   },
+  {
+    // Slug localizado: /es/integraciones ↔ /en/integrations.
+    href: '/integraciones',
+    name: { es: 'Integraciones', en: 'Integrations' },
+    desc: { es: 'Con lo que tu clínica ya usa.', en: 'With the tools your clinic already uses.' },
+    desktopFrom: 'xl',
+  },
   // Free trial self-serve (sep 2026): /prueba existía pero no estaba enlazada desde ningún
   // lado del sitio. Entra por nav y footer, no por el hero: el primer scroll de la home
   // sigue siendo el de "Pedir demo" mientras corren los Ads (message match).
@@ -263,17 +311,16 @@ const pickLink = (l: RawLink, lang: Locale): FeatureLink => ({
   name: l.name[lang],
   desc: l.desc[lang],
   icon: l.icon,
+  desktopFrom: l.desktopFrom,
 });
 
-const groupsFor = (lang: Locale): RawGroup[] => productGroupsRaw.filter((g) => !g.only || g.only === lang);
-
 export const getProductGroups = (lang: Locale): FeatureGroup[] =>
-  groupsFor(lang).map((g) => ({ label: g.label[lang], items: g.items.map((i) => pickLink(i, lang)) }));
+  productGroupsRaw.map((g) => ({ label: g.label[lang], items: g.items.map((i) => pickLink(i, lang)) }));
 
 /** Lista plana de todas las funcionalidades (los grupos de producto sin agrupar),
  * en el orden del mega menú. La usa el footer para su columna "Funcionalidades". */
 export const getProductLinks = (lang: Locale): FeatureLink[] =>
-  groupsFor(lang).flatMap((g) => g.items.map((i) => pickLink(i, lang)));
+  productGroupsRaw.flatMap((g) => g.items.map((i) => pickLink(i, lang)));
 
 export const getIndustryLinks = (lang: Locale): FeatureLink[] => industryLinksRaw.map((l) => pickLink(l, lang));
 export const getSizeLinks = (lang: Locale): FeatureLink[] => sizeLinksRaw.map((l) => pickLink(l, lang));

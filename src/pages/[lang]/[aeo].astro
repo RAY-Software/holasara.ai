@@ -1,0 +1,652 @@
+---
+import { localizedStaticPaths, toLocale, localePath } from '../../i18n/config';
+// Slug localizado: /es/aeo ↔ /en/aeo (src/i18n/slugs.ts).
+export function getStaticPaths() {
+  return localizedStaticPaths('aeo');
+}
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// Link inline dentro de copy (se renderiza con set:html).
+const a = (href: string, label: string) =>
+  `<a href="${href}" class="font-medium text-pine-dark underline decoration-pine/40 underline-offset-2 transition-colors hover:decoration-pine">${label}</a>`;
+
+// ── Copy por idioma. EN es inglés nativo, no calco. ──
+// Ángulo: GUÍA para dueño de clínica (qué leen ChatGPT, Gemini y los resúmenes
+// con IA de Google cuando un paciente pregunta) + cómo lo hace Mia cada semana.
+// Honesto: nadie garantiza aparecer en un asistente; lo que se controla es lo que
+// los asistentes leen. Las menciones en asistentes no se miden de forma confiable.
+const dict = {
+  es: {
+    metaTitle: 'Cómo aparecer en ChatGPT y en Google con IA (AEO) · Sara',
+    metaDescription:
+      'Cómo aparecer en ChatGPT y en Google con IA (AEO), para dueños de clínica: qué leen los asistentes cuando un paciente pregunta y qué hace Mia cada semana.',
+    heroEyebrow: 'Marketing · Aparecer en ChatGPT',
+    heroTitle: "Aparece cuando un paciente <em class='text-pine-dark'>le pregunta a&nbsp;ChatGPT.</em>",
+    heroLead:
+      'Cada vez más pacientes ya no eligen entre diez links: le preguntan a ChatGPT, a Gemini o al resumen con IA de Google qué clínica agendar. Aparecer en ChatGPT y en Google con IA (lo que se llama AEO, answer engine optimization) es que tu clínica esté en esa respuesta. Aquí te contamos qué leen esos asistentes, en palabras simples, y qué hace Mia cada semana para que te encuentren.',
+    heroImageAlt: 'Un teléfono con una interfaz de chat abstracta: la pregunta de un paciente y la respuesta de un asistente con IA.',
+    strip: [
+      { t: 'Ficha completa y al día', b: 'Lo primero que leen Google y los asistentes. Mia la mantiene.' },
+      { t: 'Respuestas directas en tu sitio', b: 'Artículos y preguntas frecuentes en el formato que los asistentes citan.' },
+      { t: 'Datos consistentes en todos lados', b: 'Nombre, dirección, horarios y tratamientos iguales en ficha, sitio e Instagram.' },
+    ],
+    whatKicker: 'La guía',
+    whatH2: "Qué es el AEO, <em class='text-pine-dark'>en palabras&nbsp;simples.</em>",
+    whatP1:
+      'Hasta hace poco, un paciente buscaba "dentista cerca de mí" en Google y elegía entre diez links. Hoy cada vez más le pregunta a ChatGPT, a Gemini o al resumen con IA de Google, y recibe una sola respuesta con dos o tres clínicas recomendadas. Answer engine optimization (AEO), también llamado generative engine optimization (GEO) o SEO para inteligencia artificial, es el trabajo de hacer que tu clínica sea una de esas.',
+    whatP2:
+      'No es magia ni un truco nuevo. Los asistentes arman su respuesta con lo que ya existe sobre ti en internet: tu ficha de Google Business, tus reseñas recientes, el contenido de tu sitio y lo que dicen otros sitios de ti. Si esa información está completa, actualizada y dice lo mismo en todos lados, tienes chances. Si está a medias, te saltan.',
+    whatSeeAlso: `¿Tu clínica es dental o de estética? Mira también ${a(L('/seo-dental'), 'SEO dental')} y ${a(L('/seo-para-clinicas-de-estetica'), 'SEO para clínicas de estética')}.`,
+    aiCard: {
+      title: 'Asistente con IA',
+      badge: 'Ejemplo',
+      q: '¿Qué clínica en Monterrey hace depilación láser los sábados?',
+      a: 'Según su ficha de Google y su página de preguntas frecuentes, Clínica Aurora hace depilación láser y atiende los sábados de 9:00 a 14:00. Tiene reseñas recientes y puedes agendar por WhatsApp.',
+      sourcesLabel: 'Fuentes',
+      sources: ['Google Business Profile', 'clinicaaurora.com/faq'],
+      compose: 'Pregunta lo que quieras',
+    },
+    tableH3: 'SEO vs AEO: qué&nbsp;cambia',
+    tableHead: ['SEO', 'AEO / GEO'],
+    tableRows: [
+      { label: 'Dónde apareces', seo: 'En la lista de resultados de Google', aeo: 'Dentro de la respuesta de ChatGPT, Gemini o el resumen con IA de Google' },
+      { label: 'Qué leen', seo: 'Palabras clave, links, velocidad del sitio', aeo: 'Tu ficha de Google, tus reseñas, respuestas directas y datos consistentes' },
+      { label: 'Qué formato gana', seo: 'Páginas largas y bien enlazadas', aeo: 'Preguntas con respuesta corta y clara, más preguntas frecuentes' },
+      { label: 'Cómo se mide', seo: 'Posición y clics en Google', aeo: 'Búsquedas de la ficha, llamadas, visitas y consultas. Las menciones en asistentes, todavía no de forma confiable' },
+    ],
+    howKicker: 'Cómo lo hace Mia',
+    howH2: "Cómo aparecer en ChatGPT y en Google con IA, <em class='text-pine-dark'>semana a&nbsp;semana.</em>",
+    howP1:
+      'Esto es un resumen real de Mia, tal cual te llega por WhatsApp. No te manda una auditoría para que la hagas tú: reescribe, actualiza y publica, y te cuenta qué hizo y qué propone para la semana siguiente.',
+    howP2: `Nada se publica sin tu aprobación: Mia propone, tú apruebas por chat y ella ejecuta. Y al paciente que llega preguntando lo atiende y lo agenda ${a(L('/recepcionista-virtual'), 'Sara')}, a cualquier hora. ${a(L('/equipo/mia'), 'Conoce a&nbsp;Mia')}.`,
+    howBubbles: [
+      { who: 'out', text: 'Hola. Esta semana reescribí la página de preguntas frecuentes de tu sitio: 12 preguntas con la respuesta directa arriba y el detalle abajo, que es el formato que los asistentes citan.', t: '09:12' },
+      { who: 'out', text: 'También actualicé tu ficha de Google: horario de sábados hasta las 14:00 y los tres tratamientos que faltaban (láser facial, peeling y plasma).', t: '09:12' },
+      { who: 'out', text: 'Para la semana que viene propongo un artículo: "¿Cuántas sesiones de depilación láser necesito?". Es lo que más preguntan tus pacientes y tu sitio todavía no lo responde. ¿Lo escribo?', t: '09:13' },
+      { who: 'in', text: 'Sí, adelante. ¿Se publica solo?', t: '09:40' },
+      { who: 'out', text: 'Lo escribo, lo apruebas en el panel y lo publico en tu sitio. El lunes te paso qué cambió en búsquedas de la ficha y en visitas.', t: '09:41' },
+      { who: 'in', text: 'Perfecto', t: '09:41' },
+    ],
+    stepsH2: 'SEO para inteligencia artificial, hecho por Mia cada&nbsp;semana.',
+    steps: [
+      { n: '01', title: 'Mia revisa cómo te describen', body: 'Lee tu ficha de Google, tu sitio, tus reseñas y lo que dicen de ti otros sitios, y detecta qué falta, qué está viejo y qué se contradice.' },
+      { n: '02', title: 'Completa, corrige y publica cada semana', body: 'Actualiza la ficha, reescribe las respuestas de tu sitio, pide reseñas a través de Sara y deja los datos iguales en todos lados.' },
+      { n: '03', title: 'Te dice qué cambió', body: 'Cada semana te escribe por WhatsApp: búsquedas de la ficha, llamadas, visitas y consultas, y qué propone para la siguiente.' },
+    ],
+    row1Eyebrow: 'Ficha de Google',
+    row1Title: "Una ficha de Google completa <em class='text-pine-dark'>y al&nbsp;día.</em>",
+    row1Body:
+      'Es lo primero que leen Google y los asistentes cuando alguien pregunta por una clínica cerca. Mia la mantiene completa: horarios reales, todos los tratamientos, fotos recientes y una descripción que dice lo que haces. Una ficha a medias es una clínica que, para la IA, no existe.',
+    row1Points: [
+      'Horarios, tratamientos y dirección siempre al día',
+      'Fotos recientes, no las de hace dos años',
+      'Reseñas nuevas cada semana, pedidas por Sara',
+    ],
+    gb: {
+      kicker: 'Ficha de Google',
+      updated: 'Actualizada por Mia · hoy',
+      name: 'Clínica Aurora',
+      category: 'Clínica de estética · Monterrey',
+      rating: '4.9',
+      reviews: '128 reseñas',
+      rows: [
+        { k: 'Horario', v: 'Lun a Vie 9:00 a 20:00 · Sáb 9:00 a 14:00' },
+        { k: 'Dirección', v: 'Av. Constitución 1240, Monterrey' },
+        { k: 'Reservas', v: 'Por WhatsApp, atiende Sara' },
+      ],
+      servicesLabel: 'Tratamientos',
+      services: ['Depilación láser', 'Botox', 'Peeling', 'Plasma', 'Limpieza facial', 'Láser facial'],
+      footer: '6 fotos nuevas esta semana',
+    },
+    row2Eyebrow: 'Contenido que se cita',
+    row2Title: "Contenido escrito como lo citan <em class='text-pine-dark'>los&nbsp;asistentes.</em>",
+    row2Body:
+      'Un asistente no cita párrafos de relleno: cita la respuesta directa a una pregunta concreta. Mia publica en tu sitio artículos que responden lo que tus pacientes preguntan de verdad, con la respuesta arriba y el detalle abajo, más una sección de preguntas frecuentes. Sin precios, y nada sale sin tu aprobación.',
+    row2Points: [
+      'Preguntas reales de tus pacientes, no temas genéricos',
+      'La respuesta directa en las primeras líneas',
+      'Preguntas frecuentes al final de cada artículo',
+    ],
+    blog: {
+      kind: 'Blog · Cuidados · clinicaaurora.com',
+      title: '¿Cuántas sesiones de depilación láser necesito?',
+      answerLabel: 'Respuesta corta',
+      answer: 'La mayoría necesita entre 6 y 8 sesiones, separadas por 4 a 6 semanas, según la zona y el tipo de vello. Después, un mantenimiento una o dos veces al año.',
+      faqLabel: 'Preguntas frecuentes',
+      faqs: ['¿Duele?', '¿Puedo tomar sol después de la sesión?', '¿Sirve en vello claro?'],
+      status: 'Publicado en tu sitio · escrito por Mia',
+    },
+    row3Eyebrow: 'Reseñas y datos',
+    row3Title: "Reseñas recientes y los mismos datos <em class='text-pine-dark'>en todos&nbsp;lados.</em>",
+    row3Body:
+      'Dos cosas que pesan más de lo que parece. Las reseñas recientes le dicen al asistente que la clínica está activa y cómo la atienden; Sara las pide después de cada cita, con el link directo. Y el nombre, la dirección, el teléfono y los horarios tienen que decir lo mismo en tu ficha, tu sitio y tu Instagram: Mia los revisa y los corrige.',
+    row3Points: [
+      `${a(L('/resenas'), 'Sara pide la reseña')} en el momento justo, con un solo clic`,
+      'Los datos de la clínica, iguales en ficha, sitio e Instagram',
+      'Tu Instagram activo, también lo lleva Mia',
+    ],
+    row3Bubbles: [
+      { who: 'out', text: 'Hola, Juan. ¿Cómo estuvo tu sesión de hoy? Si quedaste conforme, nos ayudaría mucho una reseña en Google.', t: '17:30' },
+      { who: 'out', text: 'Es un solo clic, te dejo el link directo.', t: '17:30', link: 'g.page/tu-clinica' },
+      { who: 'in', text: 'Listo, ya la dejé', t: '20:04' },
+      { who: 'out', text: 'Mil gracias, Juan. Nos ayuda muchísimo. Nos vemos en la próxima sesión.', t: '20:04' },
+    ],
+    row4Eyebrow: 'Agencia vs Mia',
+    row4Title: "Una agencia de AEO <em class='text-pine-dark'>vs&nbsp;Mia.</em>",
+    row4Body:
+      'Las agencias de answer engine optimization venden auditorías y reportes. Mia hace el trabajo: cada semana, sobre tu ficha, tu sitio y tus reseñas, y te escribe qué cambió. Sin reuniones, sin esperar al reporte del mes, y con Sara atendiendo a quien llega.',
+    cmpHead: ['Agencia de AEO', 'Mia'],
+    cmpRows: [
+      { label: 'Qué recibes', agency: 'Una auditoría inicial y un reporte mensual', mia: 'Cambios hechos cada semana en tu ficha y tu sitio' },
+      { label: 'Quién ejecuta', agency: 'Tú o tu equipo, con una lista de pendientes', mia: 'Mia, y te avisa por WhatsApp' },
+      { label: 'Cómo te enteras', agency: 'Una reunión al mes o un PDF', mia: 'Un mensaje por semana con qué cambió y qué propone' },
+      { label: 'Reseñas', agency: 'Te dicen que pidas más', mia: 'Sara las pide después de cada cita' },
+      { label: 'El paciente que llega', agency: 'Cae en tu formulario de contacto', mia: `Lo atiende y lo agenda ${a(L('/recepcionista-virtual'), 'Sara')}, a cualquier hora` },
+    ],
+    ctaInline: 'Que te encuentren cuando preguntan, no solo cuando&nbsp;buscan.',
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada cambio deja&nbsp;rastro.',
+    panelLead:
+      'Mia no trabaja en silencio. Cada cosa que toca queda registrada en el panel, y una vez por semana te la resume por&nbsp;WhatsApp.',
+    estados: [
+      { tag: 'Ficha actualizada', desc: 'Mia cambió algo en tu ficha de Google: horarios, tratamientos, fotos o descripción.' },
+      { tag: 'Artículo publicado', desc: 'Un artículo nuevo salió en tu sitio, con su respuesta directa y sus preguntas frecuentes.' },
+      { tag: 'Reseña nueva', desc: 'Un paciente dejó una reseña en Google después de que Sara se la pidió.' },
+      { tag: 'Consulta desde Google', desc: 'Alguien llegó desde tu ficha o desde tu sitio y le escribió a Sara. Queda atribuida a ese canal.' },
+    ],
+    faqs: [
+      { q: '¿Cuál es la diferencia entre SEO, AEO y GEO?', a: 'SEO es aparecer en la lista de resultados de Google. AEO (answer engine optimization) es aparecer dentro de la respuesta que da un asistente como ChatGPT o el resumen con IA de Google. GEO (generative engine optimization) es otro nombre para lo mismo, con el foco en los motores generativos. En la práctica se trabajan juntos: casi todo lo que sirve para AEO también mejora tu SEO.' },
+      { q: '¿El AEO reemplaza al SEO?', a: 'No, se apoya en él. Los asistentes leen las mismas fuentes que Google ya lee: tu ficha, tu sitio, tus reseñas. Lo que cambia es el formato que gana: respuestas directas, preguntas frecuentes y datos consistentes pesan más que nunca. Si tu SEO está bien, el AEO es el paso siguiente; si no, se hacen juntos.' },
+      { q: '¿Pueden garantizar que mi clínica aparezca en ChatGPT?', a: 'No, y desconfía de quien lo prometa. Nadie controla lo que responde un asistente. Lo que sí se controla es lo que los asistentes leen sobre tu clínica: que la ficha esté completa, que tu sitio responda con claridad, que haya reseñas recientes y que los datos coincidan en todos lados. Eso es lo que Mia hace cada semana.' },
+      { q: '¿Cómo sé si está funcionando?', a: 'Con lo que hoy sí se puede medir: cuántas veces apareció tu ficha en búsquedas, cuántas llamadas y visitas entraron desde Google y cuántas consultas atendió Sara. Mia te lo resume cada semana. Lo que todavía no se mide de forma confiable es cuántas veces te mencionó un asistente, y no te vamos a mostrar un número inventado.' },
+      { q: '¿Qué hace Mia exactamente cada semana?', a: 'Revisa tu ficha de Google y la completa o corrige, publica artículos en tu sitio con respuestas directas y preguntas frecuentes, pide reseñas a través de Sara, mantiene los datos iguales en tu sitio, tu ficha y tu Instagram, lleva tu Instagram, y te escribe qué cambió y qué propone. Nada se publica sin tu aprobación.' },
+      { q: '¿Sirve para consultorios dentales y clínicas de estética?', a: 'Sí, es donde más se nota, porque son búsquedas locales con intención de agendar. Tenemos páginas específicas de SEO dental y de SEO para clínicas de estética con el detalle de cada caso; las encuentras enlazadas más arriba en esta página.' },
+      { q: '¿Cuánto cuesta?', a: 'El precio se arma para cada clínica, según el país y el tamaño, y se comparte en la demo. Mia se suma sobre la misma cuenta de Sara; en la demo vemos qué incluye cada plan.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Answer Engine Optimization (AEO) for Clinics · Sara',
+    metaDescription:
+      "Answer engine optimization (AEO) for clinics, in plain words: what ChatGPT, Gemini and Google's AI read when a patient asks, and what Mia does each week.",
+    heroEyebrow: 'Marketing · Answer engine optimization',
+    heroTitle: "Show up when patients <em class='text-pine-dark'>ask&nbsp;ChatGPT.</em>",
+    heroLead:
+      "More and more patients skip the ten blue links and ask ChatGPT, Gemini or Google's AI overview which clinic to book. Answer engine optimization (AEO) is how your practice shows up in that answer. Here is what those assistants actually read, in plain words, and what Mia, your AI marketing agent, does about it every week.",
+    heroImageAlt: "A phone showing an abstract chat interface: a patient's question and an AI assistant's answer.",
+    strip: [
+      { t: 'A complete, current profile', b: 'The first thing Google and the assistants read. Mia keeps it that way.' },
+      { t: 'Direct answers on your site', b: 'Articles and FAQs in the format assistants actually quote.' },
+      { t: 'The same facts everywhere', b: 'Name, address, hours and treatments identical on your profile, site and Instagram.' },
+    ],
+    whatKicker: 'The guide',
+    whatH2: "What is answer engine optimization, <em class='text-pine-dark'>in plain&nbsp;words.</em>",
+    whatP1:
+      'Until recently, a patient searched "dentist near me" on Google and picked from ten links. Today more and more of them ask ChatGPT, Gemini or Google\'s AI overview instead, and get a single answer that recommends two or three practices. Answer engine optimization (AEO), also called generative engine optimization (GEO) or ChatGPT SEO, is the work of making your clinic one of them.',
+    whatP2:
+      'It is not magic and it is not a new trick. Assistants build their answer from what already exists about you online: your Google Business Profile, your recent reviews, the content on your website and what other sites say about you. If that information is complete, current and consistent everywhere, you have a real shot. If it is half done, they skip you.',
+    whatSeeAlso: `Dental office or med spa? See also ${a(L('/seo-dental'), 'dental SEO')} and ${a(L('/seo-para-clinicas-de-estetica'), 'med spa SEO')}.`,
+    aiCard: {
+      title: 'AI assistant',
+      badge: 'Example',
+      q: 'Which med spa in Austin does laser hair removal with weekend hours?',
+      a: "Based on its Google Business Profile and FAQ page, Clínica Aurora offers laser hair removal and is open Saturdays from 9 am to 2 pm. It has recent reviews and you can book over WhatsApp.",
+      sourcesLabel: 'Sources',
+      sources: ['Google Business Profile', 'clinicaaurora.com/faq'],
+      compose: 'Ask anything',
+    },
+    tableH3: 'SEO vs AEO: what&nbsp;changes',
+    tableHead: ['SEO', 'AEO / GEO'],
+    tableRows: [
+      { label: 'Where you show up', seo: "In Google's list of results", aeo: "Inside the answer from ChatGPT, Gemini or Google's AI overview" },
+      { label: 'What they read', seo: 'Keywords, links, site speed', aeo: 'Your Google Business Profile, your reviews, direct answers and consistent facts' },
+      { label: 'What format wins', seo: 'Long, well-linked pages', aeo: 'Questions with a short, clear answer, plus FAQs' },
+      { label: 'How it is measured', seo: 'Rankings and clicks on Google', aeo: 'Profile searches, calls, visits and enquiries. Assistant mentions, not reliably yet' },
+    ],
+    howKicker: 'How Mia does it',
+    howH2: "An AI marketing agent that does your ChatGPT SEO, <em class='text-pine-dark'>every&nbsp;week.</em>",
+    howP1:
+      "This is a real weekly recap from Mia, exactly as it lands on your WhatsApp. She does not send you an audit to work through yourself: she rewrites, updates and publishes, then tells you what she did and what she proposes for next week.",
+    howP2: `Nothing goes live without your approval: Mia proposes, you approve over chat and she runs it. And the patient who shows up asking gets answered and booked by ${a(L('/recepcionista-virtual'), 'Sara')}, around the clock. ${a(L('/equipo/mia'), 'Meet&nbsp;Mia')}.`,
+    howBubbles: [
+      { who: 'out', text: 'Hi. This week I rewrote the FAQ page on your site: 12 questions with the direct answer at the top and the detail below, which is the format assistants quote.', t: '9:12 am' },
+      { who: 'out', text: 'I also updated your Google Business Profile: Saturday hours until 2 pm and the three treatments that were missing (facial laser, peel and PRP).', t: '9:12 am' },
+      { who: 'out', text: 'For next week I propose an article: "How many laser hair removal sessions do I need?" It is the question your patients ask most and your site does not answer it yet. Should I write it?', t: '9:13 am' },
+      { who: 'in', text: 'Yes, go ahead. Does it publish on its own?', t: '9:40 am' },
+      { who: 'out', text: 'I write it, you approve it in the dashboard and I publish it on your site. On Monday I will send you what changed in profile searches and site visits.', t: '9:41 am' },
+      { who: 'in', text: 'Perfect', t: '9:41 am' },
+    ],
+    stepsH2: 'Generative engine optimization (GEO), done for you every&nbsp;week.',
+    steps: [
+      { n: '01', title: 'Mia checks how you are described', body: 'She reads your Google Business Profile, your website, your reviews and what other sites say about you, and flags what is missing, outdated or contradictory.' },
+      { n: '02', title: 'She completes, fixes and publishes every week', body: 'Updates the profile, rewrites the answers on your site, asks for reviews through Sara and keeps the facts identical everywhere.' },
+      { n: '03', title: 'She tells you what changed', body: 'Every week she messages you on WhatsApp: profile searches, calls, visits and enquiries, and what she proposes for the next one.' },
+    ],
+    row1Eyebrow: 'Google Business Profile',
+    row1Title: "A Google Business Profile that is complete <em class='text-pine-dark'>and&nbsp;current.</em>",
+    row1Body:
+      'It is the first thing Google and the assistants read when someone asks about a clinic nearby. Mia keeps it complete: real hours, every treatment, recent photos and a description that says what you do. A half-finished profile is a clinic that, as far as the AI is concerned, does not exist.',
+    row1Points: [
+      'Hours, treatments and address always up to date',
+      'Recent photos, not the ones from two years ago',
+      'New reviews every week, requested by Sara',
+    ],
+    gb: {
+      kicker: 'Google Business Profile',
+      updated: 'Updated by Mia · today',
+      name: 'Clínica Aurora',
+      category: 'Med spa · Austin, TX',
+      rating: '4.9',
+      reviews: '128 reviews',
+      rows: [
+        { k: 'Hours', v: 'Mon to Fri 9 am to 8 pm · Sat 9 am to 2 pm' },
+        { k: 'Address', v: '2100 S Lamar Blvd, Austin, TX' },
+        { k: 'Booking', v: 'Over WhatsApp, Sara answers' },
+      ],
+      servicesLabel: 'Treatments',
+      services: ['Laser hair removal', 'Botox', 'Peel', 'PRP', 'Facial', 'Facial laser'],
+      footer: '6 new photos this week',
+    },
+    row2Eyebrow: 'Content that gets quoted',
+    row2Title: "Content written the way <em class='text-pine-dark'>assistants&nbsp;quote it.</em>",
+    row2Body:
+      'An assistant does not quote filler paragraphs: it quotes the direct answer to a specific question. Mia publishes articles on your site that answer what your patients actually ask, with the answer at the top and the detail below, plus an FAQ section. No prices, and nothing goes live without your approval.',
+    row2Points: [
+      'Real questions from your patients, not generic topics',
+      'The direct answer in the first few lines',
+      'FAQs at the end of every article',
+    ],
+    blog: {
+      kind: 'Blog · Aftercare · clinicaaurora.com',
+      title: 'How many laser hair removal sessions do I need?',
+      answerLabel: 'Short answer',
+      answer: 'Most people need 6 to 8 sessions, spaced 4 to 6 weeks apart, depending on the area and hair type. After that, a touch-up once or twice a year.',
+      faqLabel: 'FAQs',
+      faqs: ['Does it hurt?', 'Can I be in the sun after a session?', 'Does it work on light hair?'],
+      status: 'Published on your site · written by Mia',
+    },
+    row3Eyebrow: 'Reviews and facts',
+    row3Title: "Recent reviews and the same facts <em class='text-pine-dark'>everywhere.</em>",
+    row3Body:
+      'Two things that weigh more than they seem. Recent reviews tell the assistant the clinic is active and how patients are treated; Sara asks for them after every appointment, with the direct link. And your name, address, phone and hours have to say the same thing on your profile, your site and your Instagram: Mia checks them and fixes them.',
+    row3Points: [
+      `${a(L('/resenas'), 'Sara asks for the review')} at the right moment, a single click`,
+      'Your clinic facts, identical on profile, site and Instagram',
+      'Your Instagram kept active, Mia runs it too',
+    ],
+    row3Bubbles: [
+      { who: 'out', text: 'Hi Juan. How was your session today? If you were happy with it, a Google review would help us a lot.', t: '5:30 pm' },
+      { who: 'out', text: 'It is a single click, here is the direct link.', t: '5:30 pm', link: 'g.page/your-clinic' },
+      { who: 'in', text: 'Done, just left it', t: '8:04 pm' },
+      { who: 'out', text: 'Thank you so much, Juan. It helps us a lot. See you at your next session.', t: '8:04 pm' },
+    ],
+    row4Eyebrow: 'Agency vs Mia',
+    row4Title: "An AEO agency <em class='text-pine-dark'>vs&nbsp;Mia.</em>",
+    row4Body:
+      'Answer engine optimization agencies sell audits and reports. Mia does the work: every week, on your profile, your site and your reviews, and she messages you what changed. No meetings, no waiting for the monthly report, and Sara answering whoever shows up.',
+    cmpHead: ['AEO agency', 'Mia'],
+    cmpRows: [
+      { label: 'What you get', agency: 'An initial audit and a monthly report', mia: 'Changes made every week to your profile and your site' },
+      { label: 'Who does the work', agency: 'You or your team, from a to-do list', mia: 'Mia, and she tells you on WhatsApp' },
+      { label: 'How you find out', agency: 'A monthly meeting or a PDF', mia: 'One message a week with what changed and what she proposes' },
+      { label: 'Reviews', agency: 'They tell you to ask for more', mia: 'Sara asks after every appointment' },
+      { label: 'The patient who arrives', agency: 'Lands on your contact form', mia: `Answered and booked by ${a(L('/recepcionista-virtual'), 'Sara')}, around the clock` },
+    ],
+    ctaInline: 'Get found when patients ask, not just when they&nbsp;search.',
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every change leaves a&nbsp;trail.',
+    panelLead:
+      'Mia does not work in silence. Everything she touches is logged in the dashboard, and once a week she sums it up for you on&nbsp;WhatsApp.',
+    estados: [
+      { tag: 'Profile updated', desc: 'Mia changed something on your Google Business Profile: hours, treatments, photos or description.' },
+      { tag: 'Article published', desc: 'A new article went live on your site, with its direct answer and its FAQs.' },
+      { tag: 'New review', desc: 'A patient left a Google review after Sara asked for it.' },
+      { tag: 'Enquiry from Google', desc: 'Someone came in from your profile or your site and messaged Sara. It is attributed to that channel.' },
+    ],
+    faqs: [
+      { q: 'What is the difference between SEO, AEO and GEO?', a: "SEO is showing up in Google's list of results. AEO (answer engine optimization) is showing up inside the answer an assistant like ChatGPT or Google's AI overview gives. GEO (generative engine optimization) is another name for the same work, with the focus on generative engines. In practice they go together: almost everything that helps AEO also helps your SEO." },
+      { q: 'Does AEO replace SEO?', a: 'No, it builds on it. Assistants read the same sources Google already reads: your profile, your website, your reviews. What changes is the format that wins: direct answers, FAQs and consistent facts matter more than ever. If your SEO is in good shape, AEO is the next step; if it is not, they get done together.' },
+      { q: 'Can you guarantee my clinic shows up in ChatGPT?', a: 'No, and be wary of anyone who promises it. Nobody controls what an assistant answers. What you do control is what assistants read about your clinic: a complete profile, a website that answers clearly, recent reviews and facts that match everywhere. That is what Mia works on every week.' },
+      { q: 'How do I know if it is working?', a: 'With what can actually be measured today: how many times your profile showed up in searches, how many calls and visits came from Google, and how many enquiries Sara handled. Mia sums it up for you every week. What cannot be measured reliably yet is how many times an assistant mentioned you, and we will not show you a made-up number.' },
+      { q: 'What does Mia actually do each week?', a: 'She checks your Google Business Profile and completes or fixes it, publishes articles on your site with direct answers and FAQs, asks for reviews through Sara, keeps the facts identical across your site, your profile and your Instagram, runs your Instagram, and messages you what changed and what she proposes next. Nothing goes live without your approval.' },
+      { q: 'Does this work for dental offices and med spas?', a: 'Yes, that is where it shows the most, because these are local searches with intent to book. We have dedicated pages on dental SEO and med spa SEO with the details for each; they are linked higher up on this page.' },
+      { q: 'How much does it cost?', a: 'Pricing is built for each clinic, based on country and size, and shared in the demo. Mia works on the same account as Sara; in the demo we go over what each plan includes.' },
+    ],
+  },
+}[lang];
+
+const { steps, estados, faqs, aiCard, gb, blog } = dict;
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/aeo-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1024}
+      imageH={768}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA (qué leen los asistentes; no son stats) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ QUÉ ES AEO · guía + mock de respuesta de asistente ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <div class="grid items-center gap-14 md:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.whatKicker}</p>
+            <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.whatH2} />
+            <p class="mt-5 text-lg text-salvia">{dict.whatP1}</p>
+            <p class="mt-4 text-salvia">{dict.whatP2}</p>
+            <p class="mt-4 text-salvia" set:html={dict.whatSeeAlso} />
+          </div>
+
+          <!-- Mock de respuesta de un asistente con IA (sin logos de marcas). -->
+          <div class="flex justify-center md:justify-end">
+            <figure class="w-full max-w-md overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)]">
+              <div class="flex items-center gap-2.5 border-b border-line px-4 py-3">
+                <span class="grid h-7 w-7 place-items-center rounded-full bg-ink text-cream" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4">
+                    <path d="M12 2l1.8 5.7L19.5 9.5l-5.7 1.8L12 17l-1.8-5.7L4.5 9.5l5.7-1.8L12 2zM5 16l.9 2.6L8.5 19.5l-2.6.9L5 23l-.9-2.6L1.5 19.5l2.6-.9L5 16z" />
+                  </svg>
+                </span>
+                <span class="text-sm font-semibold text-ink">{aiCard.title}</span>
+                <span class="ml-auto rounded-full border border-line bg-paper px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-salvia">{aiCard.badge}</span>
+              </div>
+              <div class="flex flex-col gap-5 px-4 py-5">
+                <p class="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-paper px-4 py-2.5 text-sm text-ink">{aiCard.q}</p>
+                <div class="flex gap-3">
+                  <span class="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-mint/20 text-pine-dark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="h-3.5 w-3.5">
+                      <path d="M12 2l1.8 5.7L19.5 9.5l-5.7 1.8L12 17l-1.8-5.7L4.5 9.5l5.7-1.8L12 2z" />
+                    </svg>
+                  </span>
+                  <div class="min-w-0">
+                    <p class="text-sm leading-relaxed text-ink">{aiCard.a}</p>
+                    <p class="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-salvia">{aiCard.sourcesLabel}</p>
+                    <div class="mt-1.5 flex flex-wrap gap-1.5">
+                      {
+                        aiCard.sources.map((s) => (
+                          <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper px-2.5 py-1 text-xs font-medium text-ink">
+                            <span class="h-1.5 w-1.5 rounded-full bg-pine" aria-hidden="true" />
+                            {s}
+                          </span>
+                        ))
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 border-t border-line px-4 py-2.5">
+                <span class="flex-1 rounded-full border border-line bg-paper px-3.5 py-2 text-xs text-salvia">{aiCard.compose}</span>
+                <span class="grid h-8 w-8 place-items-center rounded-full bg-ink text-cream" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4"><path d="M12 19V5M6 11l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </span>
+              </div>
+            </figure>
+          </div>
+        </div>
+
+        <!-- Mini tabla SEO vs AEO/GEO -->
+        <div class="mt-16 max-w-3xl">
+          <h3 class="font-serif text-2xl font-black leading-tight text-balance" set:html={dict.tableH3} />
+          <div class="mt-6 overflow-x-auto rounded-2xl border border-line">
+            <table class="w-full min-w-[560px] border-collapse text-sm">
+              <thead>
+                <tr class="border-b border-line bg-mint/[0.07] text-left">
+                  <th class="px-4 py-3"></th>
+                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{dict.tableHead[0]}</th>
+                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{dict.tableHead[1]}</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-line">
+                {
+                  dict.tableRows.map((r, i) => (
+                    <tr class={i % 2 ? 'bg-mint/[0.03]' : ''}>
+                      <td class="whitespace-nowrap px-4 py-3 align-top font-medium text-ink">{r.label}</td>
+                      <td class="px-4 py-3 align-top text-salvia">{r.seo}</td>
+                      <td class="px-4 py-3 align-top text-ink">{r.aeo}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE MIA · resumen semanal por WhatsApp ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.howP1}</p>
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            name="Mia"
+            avatar="/equipo/mia-avatar.jpg"
+            bubbles={dict.howBubbles}
+            animate
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES · filas alternadas (copy + visual) ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow
+          eyebrow={dict.row1Eyebrow}
+          title={dict.row1Title}
+          body={dict.row1Body}
+          points={dict.row1Points}
+        >
+          <!-- Tarjeta de ficha de Google Business, mantenida por Mia. -->
+          <figure class="w-full max-w-sm overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)]">
+            <div class="flex items-center gap-2 border-b border-line px-4 py-3">
+              <img src="/img/logos/google.svg" alt="" width="20" height="20" class="h-5 w-5 shrink-0" loading="lazy" decoding="async" />
+              <span class="truncate text-xs font-semibold uppercase tracking-[0.08em] text-salvia">{gb.kicker}</span>
+              <span class="ml-auto inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-pine/20 bg-mint/[0.12] px-2.5 py-1 text-[11px] font-semibold text-pine-dark">
+                <span class="dot h-1.5 w-1.5"></span>{gb.updated}
+              </span>
+            </div>
+            <div class="px-4 py-4">
+              <p class="font-serif text-xl font-black text-ink">{gb.name}</p>
+              <p class="mt-0.5 text-sm text-salvia">{gb.category}</p>
+              <p class="mt-1.5 flex items-center gap-1.5 text-sm">
+                <span class="tracking-tight text-[#fbbc05]" aria-hidden="true">★★★★★</span>
+                <span class="font-semibold text-ink">{gb.rating}</span>
+                <span class="text-salvia">({gb.reviews})</span>
+              </p>
+              <dl class="mt-4 flex flex-col gap-2 text-sm">
+                {
+                  gb.rows.map((r) => (
+                    <div class="flex gap-3">
+                      <dt class="w-20 shrink-0 text-salvia">{r.k}</dt>
+                      <dd class="min-w-0 text-ink">{r.v}</dd>
+                    </div>
+                  ))
+                }
+              </dl>
+              <p class="mt-4 text-[11px] font-semibold uppercase tracking-[0.08em] text-salvia">{gb.servicesLabel}</p>
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                {gb.services.map((s) => <span class="rounded-full border border-line bg-paper px-2.5 py-1 text-xs text-ink">{s}</span>)}
+              </div>
+            </div>
+            <div class="flex items-center gap-2 border-t border-line bg-paper px-4 py-2.5 text-xs text-salvia">
+              <svg viewBox="0 0 24 24" fill="none" class="h-4 w-4 shrink-0" aria-hidden="true">
+                <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.6" />
+                <path d="M4 15l4-4 3 3 4-4 5 5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+              </svg>
+              {gb.footer}
+            </div>
+          </figure>
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row2Eyebrow}
+          title={dict.row2Title}
+          body={dict.row2Body}
+          points={dict.row2Points}
+        >
+          <!-- Tarjeta de artículo del blog con respuesta directa y preguntas frecuentes. -->
+          <figure class="w-full max-w-sm overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)]">
+            <img src="/img/mia/blog.jpg" alt="" width="900" height="900" class="aspect-[16/9] w-full object-cover" loading="lazy" decoding="async" />
+            <div class="px-5 py-4">
+              <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-salvia">{blog.kind}</p>
+              <p class="mt-1.5 font-serif text-lg font-black leading-snug text-ink">{blog.title}</p>
+              <div class="mt-3 rounded-xl border border-pine/20 bg-mint/[0.08] p-3">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-pine-dark">{blog.answerLabel}</p>
+                <p class="mt-1 text-sm leading-relaxed text-ink">{blog.answer}</p>
+              </div>
+              <p class="mt-3 text-[11px] font-semibold uppercase tracking-[0.08em] text-salvia">{blog.faqLabel}</p>
+              <ul class="mt-1.5 flex flex-col gap-1 text-sm text-ink">
+                {
+                  blog.faqs.map((q) => (
+                    <li class="flex items-start gap-2">
+                      <span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-mint" />
+                      <span>{q}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+            <div class="flex items-center gap-2 border-t border-line bg-paper px-5 py-2.5 text-xs text-salvia">
+              <span class="dot h-1.5 w-1.5"></span>{blog.status}
+            </div>
+          </figure>
+        </FeatureRow>
+
+        <FeatureRow
+          eyebrow={dict.row3Eyebrow}
+          title={dict.row3Title}
+          body={dict.row3Body}
+          points={dict.row3Points}
+        >
+          <ConversationDemo
+            lang={lang}
+            channel="whatsapp"
+            bubbles={dict.row3Bubbles}
+          />
+        </FeatureRow>
+
+        <FeatureRow
+          flip
+          eyebrow={dict.row4Eyebrow}
+          title={dict.row4Title}
+          body={dict.row4Body}
+        >
+          <!-- Tabla agencia de AEO vs Mia (sin números). -->
+          <div class="w-full overflow-x-auto rounded-2xl border border-line bg-white shadow-[0_12px_34px_-20px_rgba(20,38,31,0.32)]">
+            <table class="w-full min-w-[440px] border-collapse text-sm">
+              <thead>
+                <tr class="border-b border-line bg-mint/[0.07] text-left">
+                  <th class="px-4 py-3"></th>
+                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-ink">{dict.cmpHead[0]}</th>
+                  <th class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">{dict.cmpHead[1]}</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-line">
+                {
+                  dict.cmpRows.map((r, i) => (
+                    <tr class={i % 2 ? 'bg-mint/[0.03]' : ''}>
+                      <td class="px-4 py-3 align-top font-medium text-ink">{r.label}</td>
+                      <td class="px-4 py-3 align-top text-salvia">{r.agency}</td>
+                      <td class="px-4 py-3 align-top text-ink" set:html={r.mia} />
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </FeatureRow>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelLead} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

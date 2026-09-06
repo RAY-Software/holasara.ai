@@ -3,6 +3,8 @@
 // RAY-Website. El routing lo maneja la ruta dinámica src/pages/[lang]/*, así
 // que NO usamos el i18n nativo de Astro (chocaría con el param [lang]).
 
+import { localizedSlugs, slugKeyOf, type SlugKey } from './slugs.ts';
+
 export const locales = ['es', 'en'] as const;
 export type Locale = (typeof locales)[number];
 
@@ -21,11 +23,27 @@ export function toLocale(value: unknown): Locale {
 /**
  * Prefija un path absoluto del sitio con el idioma: '/agenda' → '/es/agenda'.
  * Deja pasar sin tocar los enlaces externos, mailto/tel y anclas puras.
+ *
+ * Si el primer segmento es un slug localizado (src/i18n/slugs.ts), lo traduce al
+ * idioma pedido: '/llamadas' → '/en/medical-answering-service',
+ * '/appointment-reminders' → '/es/recordatorio-de-citas-por-whatsapp'. Query y hash
+ * se conservan.
  */
 export function localePath(path: string, lang: Locale): string {
   if (/^(https?:|mailto:|tel:|#)/i.test(path)) return path;
   const clean = path.startsWith('/') ? path : `/${path}`;
-  return clean === '/' ? `/${lang}` : `/${lang}${clean}`;
+  if (clean === '/') return `/${lang}`;
+  const m = clean.match(/^\/([^/?#]+)(.*)$/);
+  if (m) {
+    const key = slugKeyOf(m[1]);
+    if (key) return `/${lang}/${localizedSlugs[key][lang]}${m[2]}`;
+  }
+  return `/${lang}${clean}`;
+}
+
+/** Slug de una página localizada en un idioma dado (sin prefijo de idioma). */
+export function slugFor(key: SlugKey, lang: Locale): string {
+  return localizedSlugs[key][lang];
 }
 
 /**
@@ -34,4 +52,15 @@ export function localePath(path: string, lang: Locale): string {
  */
 export function getStaticPaths() {
   return locales.map((lang) => ({ params: { lang } }));
+}
+
+/**
+ * getStaticPaths para páginas con slug localizado. El archivo se llama
+ * src/pages/[lang]/[<key>].astro y hace:
+ *   export const getStaticPaths = () => localizedStaticPaths('reminders');
+ * Genera /es/<slug es> y /en/<slug en>; el dev server ignora las combinaciones
+ * que no estén acá (404), así que /es/<slug en> no existe.
+ */
+export function localizedStaticPaths(key: SlugKey) {
+  return locales.map((lang) => ({ params: { lang, [key]: localizedSlugs[key][lang] } }));
 }

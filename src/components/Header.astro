@@ -27,10 +27,14 @@ const teamNav =
 const L = (p: string) => localePath(p, lang);
 
 const stripLocale = Astro.url.pathname.replace(/^\/(es|en)(?=\/|$)/, '') || '/';
-const langHref = (l: Locale) => `/${l}${stripLocale === '/' ? '' : stripLocale}`;
+// Slugs localizados (src/i18n/slugs.ts): el switch lleva a la misma página en el otro idioma.
+const langHref = (l: Locale) => (stripLocale === '/' ? `/${l}` : localePath(stripLocale, l));
 
+// Header desktop: todo con whitespace-nowrap y padding ajustado. Con "Integraciones" y
+// "Probar gratis" en la barra, el ES quedaba 25px pasado del contenedor (1152px) y los
+// ítems se partían en dos líneas.
 const triggerClass =
-  'mega-trigger inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm font-medium text-ink transition-colors';
+  'mega-trigger inline-flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-ink transition-colors';
 const graderHref =
   'https://grader.rayapp.ai/?product=servicios&utm_source=header&utm_medium=website&utm_campaign=holasara';
 ---
@@ -225,7 +229,13 @@ const graderHref =
 
         {
           topLinks.map((l) => (
-            <a href={L(l.href)} class="rounded-full px-3.5 py-1.5 text-sm font-medium text-ink transition-colors hover:bg-paper">
+            <a
+              href={L(l.href)}
+              class:list={[
+                'whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm font-medium text-ink transition-colors hover:bg-paper',
+                l.desktopFrom === 'xl' ? 'hidden xl:inline-flex' : 'inline-flex',
+              ]}
+            >
               {l.name}
             </a>
           ))
@@ -255,14 +265,14 @@ const graderHref =
         {SHOW_GRADER_CTA && (
           <a
             href={graderHref}
-            class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
+            class="inline-flex whitespace-nowrap items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink transition-colors hover:border-ink/30"
           >
             {t('header.scanCta')}
           </a>
         )}
         <a
           href={L('/demo')}
-          class="inline-flex items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
+          class="inline-flex whitespace-nowrap items-center gap-2 rounded-full bg-pine px-4 py-2 text-sm font-semibold text-cream transition-colors hover:bg-pine-dark"
         >
           {t('header.demoCta')}
         </a>
