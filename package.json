@@ -12,7 +12,9 @@
     "astro": "astro",
     "voice:dev": "node scripts/voice-dev.mjs",
     "test": "node --test \"src/**/*.test.ts\"",
-    "build:api": "node scripts/build-api.mjs"
+    "build:api": "node scripts/build-api.mjs",
+    "check:scripts": "node scripts/check-inline-scripts.mjs",
+    "synthetic": "node scripts/synthetic-check.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
