@@ -1,0 +1,515 @@
+---
+import { localizedStaticPaths, toLocale, localePath } from '../../i18n/config';
+// Slug localizado: /es/recepcionista-virtual ↔ /en/ai-receptionist (src/i18n/slugs.ts).
+export function getStaticPaths() {
+  return localizedStaticPaths('receptionist');
+}
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PageHero from '../../components/PageHero.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import CallDemo from '../../components/mocks/CallDemo.astro';
+import ConversationDemo from '../../components/ConversationDemo.astro';
+import CalendarSyncPanel from '../../components/mocks/CalendarSyncPanel.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+
+// ── Copy por idioma. EN es inglés nativo, no calco. ──
+// Ángulo SEO: el nicho (dental y med spa), no la cabeza "ai receptionist".
+// ES apunta a "recepcionista virtual" (MX). EN apunta a "AI receptionist for
+// dental offices and med spas" y trabaja "virtual medical receptionist" en el
+// H2 de la banda oscura y en la fila comparativa (IA vs humana).
+const linkCls = 'font-semibold text-pine-dark underline decoration-pine/30 underline-offset-4 transition-colors hover:decoration-pine';
+
+const dict = {
+  es: {
+    metaTitle: 'Recepcionista virtual para dentales y estética · Sara',
+    metaDescription:
+      'Recepcionista virtual para dentales y clínicas de estética: Sara contesta llamadas, WhatsApp e Instagram 24/7, agenda en Google Calendar y cobra el anticipo.',
+    heroEyebrow: 'Atiende · Recepcionista virtual',
+    heroTitle: "Recepcionista virtual para consultorios dentales <em class='text-pine-dark'>y clínicas de&nbsp;estética.</em>",
+    heroLead:
+      'Una recepcionista virtual que contesta el teléfono, WhatsApp, Instagram y el chat de tu web las 24 horas, agenda en tu Google Calendar y cobra el anticipo antes de dar la cita. Sara atiende a tus pacientes como tu mejor recepción, también de noche y en los picos, sin sumar a nadie al mostrador.',
+    heroImageAlt: 'Mostrador de recepción de una clínica dental, vacío y luminoso: Sara atiende aunque no haya nadie en el mostrador.',
+    strip: [
+      { t: 'Contesta en todos los canales, 24/7', b: 'Teléfono, WhatsApp, Instagram y el chat de tu web, también de noche y en feriados.' },
+      { t: 'Agenda en tu Google Calendar', b: 'Solo sobre disponibilidad real, sin dobles reservas.' },
+      { t: 'Cobra el anticipo antes de dar la cita', b: 'Manda el link de pago en el mismo chat y la cita queda confirmada al pagar.' },
+    ],
+    howKicker: 'Cómo lo hace Sara',
+    howH2: 'Un paciente llama con dolor de muela. Cuelga con&nbsp;cita.',
+    howP1:
+      'Esta es una llamada real, tal cual la atiende Sara. Escucha, entiende que es una urgencia, ofrece los horarios que de verdad están libres y deja la cita reservada. El link del anticipo llega por WhatsApp apenas cuelga.',
+    howP2:
+      'Y la llamada no se pierde en el aire: queda <span class="font-semibold text-pine-dark">en tu panel</span>, junto a las conversaciones de WhatsApp e Instagram, con el resumen de lo que se habló y la cita ya cargada en tu&nbsp;calendario.',
+    howTurns: [
+      { who: 'in', text: 'Hola, buenas. Tengo una muela que me duele desde anoche, ¿tienen algo para hoy o mañana?' },
+      { who: 'out', text: 'Hola, lamento el dolor. Sí, tengo un espacio de urgencia hoy a las 16:30 o mañana a las 9:00 con la doctora Ruiz. ¿Cuál te queda mejor?' },
+      { who: 'in', text: 'Hoy a las 16:30, por favor.' },
+      { who: 'out', text: 'Perfecto. ¿Me dices tu nombre completo? Te reservo ahora mismo.' },
+      { who: 'in', text: 'Mariana López.' },
+      { who: 'out', text: 'Listo, Mariana: hoy 16:30 con la doctora Ruiz. Te envío por WhatsApp la dirección y el link del anticipo para dejar la cita confirmada. ¿Es este mismo número?' },
+    ],
+    stepsH2: 'Lo que hace tu recepcionista virtual con cada&nbsp;consulta.',
+    steps: [
+      { n: '01', title: 'Entra la consulta', body: 'Una llamada, un WhatsApp, un mensaje directo de Instagram o un mensaje en el chat de tu web. A cualquier hora, por el canal que el paciente eligió.' },
+      { n: '02', title: 'Sara conversa y agenda', body: 'Responde con la información real de tu clínica, propone dos horarios libres, reserva y envía el link del anticipo en la misma conversación.' },
+      { n: '03', title: 'Todo queda en tu panel y en tu calendario', body: 'La cita aparece en tu Google Calendar, el pago queda registrado y la conversación completa, con su resumen, queda en la bandeja del panel.' },
+    ],
+    row1Eyebrow: 'Consultorios dentales',
+    row1Title: "La limpieza que piden a las 22:00, <em class='text-pine-dark'>agendada a las&nbsp;22:02.</em>",
+    row1Body:
+      'El paciente nuevo escribe cuando termina su día, no cuando abre tu consultorio. Sara le responde con la información real de tu clínica, le ofrece dos horarios libres y cobra el anticipo antes de dar la cita. También agenda controles, valoraciones de ortodoncia y urgencias.',
+    row1Points: [
+      'Limpiezas, controles, valoraciones y urgencias',
+      'Informa precios y horarios reales, nunca inventa',
+      'Anticipo cobrado antes de confirmar la cita',
+    ],
+    row1Bubbles: [
+      { who: 'in', text: 'Hola, quería agendar una limpieza dental. ¿Tienen horario esta semana?', t: '21:58' },
+      { who: 'out', text: 'Hola, con gusto. La limpieza dura unos 45 minutos con la doctora Ruiz. Tengo jueves 17:30 o viernes 10:00. ¿Cuál te queda mejor?', t: '21:58' },
+      { who: 'in', text: 'Jueves 17:30', t: '22:00' },
+      { who: 'out', text: 'Listo, jueves 17:30 reservado. Para confirmar la cita va un anticipo que se descuenta de la limpieza. Te dejo el link:', link: 'pay.rayhealth.app/c/dental-2417', t: '22:00' },
+      { who: 'in', text: 'Ya pagué', t: '22:02' },
+      { who: 'out', text: 'Pago recibido. Tu limpieza del jueves 17:30 queda confirmada. Un día antes te escribo para recordártela.', t: '22:02' },
+    ],
+    row2Eyebrow: 'Clínicas de estética',
+    row2Title: "El mensaje por tu post de botox, <em class='text-pine-dark'>convertido en&nbsp;valoración.</em>",
+    row2Body:
+      'En estética, la consulta entra por Instagram: alguien ve tu post de botox o de láser y escribe. Sara responde en el mensaje directo, explica el tratamiento con la información de tu clínica, agenda la valoración y cobra el anticipo. El interés no se enfría esperando a mañana.',
+    row2Points: [
+      'Responde mensajes directos y comentarios de Instagram',
+      'Agenda la valoración con dos horarios concretos',
+      'Anticipo por link, cita confirmada al pagar',
+    ],
+    row2Bubbles: [
+      { who: 'in', text: 'Hola! Vi el post de botox. ¿Cuánto cuesta y cómo es la primera vez?', t: '19:40' },
+      { who: 'out', text: 'Hola! La primera vez empieza con una valoración con la doctora: revisa la zona y te dice cuántas unidades necesitas. Ahí te da el precio exacto. ¿Te agendo la valoración?', t: '19:40' },
+      { who: 'in', text: 'Sí, ¿tienen algo el sábado?', t: '19:44' },
+      { who: 'out', text: 'Sábado tengo 10:30 o 12:00. Para reservar va un anticipo que se descuenta del tratamiento. Te paso el link:', link: 'pay.rayhealth.app/c/aurora-5190', t: '19:44' },
+      { who: 'in', text: '10:30. Listo, pagado', t: '19:47' },
+      { who: 'out', text: 'Pago recibido. Sábado 10:30 confirmado. Te llega el recordatorio un día antes.', t: '19:47' },
+    ],
+    row3Eyebrow: 'Recepcionista virtual: ¿con IA o humana?',
+    row3Title: "Recepcionista virtual humana o con IA: <em class='text-pine-dark'>qué&nbsp;cambia.</em>",
+    row3Body:
+      'Recepcionista virtual, secretaria virtual, asistente virtual médico: el nombre cambia, pero casi siempre es una persona que atiende a distancia, en su horario, una llamada a la vez. Sara atiende todas las llamadas a la vez, las 24 horas, con la información exacta que cargaste. Y tiene un límite claro: no opina de lo clínico ni toca la historia clínica.',
+    compare: {
+      colSara: 'Sara',
+      colSaraSub: 'recepcionista con IA',
+      colHuman: 'Humana',
+      colHumanSub: 'recepcionista virtual',
+      rows: [
+        { label: 'Disponibilidad', sara: '24/7, fines de semana y feriados', human: 'En su horario. Noches y feriados, aparte' },
+        { label: 'Llamadas al mismo tiempo', sara: 'Todas a la vez, sin espera', human: 'Una por vez; el resto espera o cae al buzón' },
+        { label: 'Idiomas', sara: 'Español e inglés, la misma Sara', human: 'Depende de a quién contrates' },
+        { label: 'Información que da', sara: 'Tus precios y horarios reales, siempre iguales', human: 'Depende del entrenamiento y de la rotación' },
+        { label: 'Tiempo de arranque', sara: 'Conectas tu calendario, cargas tu información, listo', human: 'Reclutar, entrenar y esperar a que aprenda' },
+        { label: 'Lo que no sabe', sara: 'Lo deriva a tu equipo con todo el contexto', human: 'Toma el recado y lo pasa' },
+        { label: 'Lo que no hace', sara: 'Criterio clínico e historia clínica: no los toca', human: 'Tampoco es personal clínico' },
+        { label: 'Costo', sara: 'Suscripción mensual fija, sin costo por llamada ni por hora', human: 'Por hora o por minuto' },
+      ],
+    },
+    row4Eyebrow: 'Un solo hilo',
+    row4Title: "Llamó, escribió, volvió a llamar: <em class='text-pine-dark'>la misma&nbsp;conversación.</em>",
+    row4Body:
+      'El paciente te llama hoy, te escribe por WhatsApp mañana y comenta un post la semana que viene. Para Sara es la misma persona, con el mismo historial. Teléfono, SMS, WhatsApp, Instagram y el chat de tu web, en un solo hilo por paciente.',
+    row4Points: [
+      'Un historial por paciente, no islas por canal',
+      'La llamada continúa por WhatsApp donde quedó',
+      'El resumen de cada llamada, en el panel',
+    ],
+    row4Bubbles: [
+      { who: 'out', text: 'Hola, Mariana. Soy Sara, de la clínica. Recién hablamos por teléfono y te dejé la cita de urgencia hoy 16:30 con la doctora Ruiz.', t: '10:14' },
+      { who: 'out', text: 'Te paso el link del anticipo para dejarla confirmada. Se descuenta de la consulta.', link: 'pay.rayhealth.app/c/dental-3308', t: '10:14' },
+      { who: 'in', text: 'Gracias, ya lo pagué. ¿Cuál es la dirección?', t: '10:19' },
+      { who: 'out', text: 'Pago recibido. Estamos en Av. Reforma 210, piso 2. Cualquier cosa me escribes por aquí. Nos vemos a las 16:30.', t: '10:19' },
+    ],
+    row5Eyebrow: 'Agenda y cobra',
+    row5Title: "En tu Google Calendar de siempre, <em class='text-pine-dark'>con el anticipo&nbsp;cobrado.</em>",
+    row5Body:
+      'Sara lee y escribe en el Google Calendar que ya usas, así que nunca ofrece un horario ocupado ni pisa una cita que cargó tu equipo. Cobra el anticipo al reservar con un link de pago, y el día antes recuerda y confirma sola.',
+    row5Points: [
+      'Lee y escribe en tu Google Calendar, sin migrar nada',
+      'Anticipo por link al reservar: quien paga, aparece',
+      `Recordatorio y confirmación automáticos. <a href="${L('/recordatorio-de-citas-por-whatsapp')}" class="${linkCls}">Ver los recordatorios</a>`,
+    ],
+    calendarAlt: 'Panel de Google Calendar conectado: las citas que agendó Sara junto a las que cargó tu equipo.',
+    ctaInline: 'Que tu recepción atienda las 24 horas, sin sumar a&nbsp;nadie.',
+    panelKicker: 'Así se ve en tu panel',
+    panelH2: 'Cada consulta deja rastro, venga por donde&nbsp;venga.',
+    panelLead:
+      'En la bandeja de Chats, las llamadas aparecen junto a WhatsApp, Instagram y el chat de tu web, cada una con su estado. De un vistazo sabes quién llamó, qué necesitaba y en qué&nbsp;quedó.',
+    estados: [
+      { tag: '📞 Llamada', desc: 'Sara atendió una llamada. Queda con la hora, la duración y el resumen en texto.' },
+      { tag: 'Reservó', desc: 'La cita quedó agendada en tu Google Calendar desde la conversación.' },
+      { tag: '⏰ Recordatorio', desc: 'Sara le recordó la cita un día antes para que no se caiga.' },
+      { tag: '✅ Confirmado', desc: 'El paciente confirmó que viene y el anticipo quedó cobrado.' },
+    ],
+    related: {
+      lead: 'Sigue explorando:',
+      links: [
+        { href: L('/llamadas'), label: 'Ver cómo atiende el teléfono' },
+        { href: L('/negocios/odontologia'), label: 'Sara para odontología' },
+      ],
+    },
+    faqs: [
+      { q: '¿Reemplaza a mi recepción?', a: 'No, la libera. Sara atiende lo repetitivo (contestar el teléfono, responder lo mismo por WhatsApp, agendar, confirmar, perseguir el anticipo) para que tu recepción se dedique al paciente que tiene enfrente. Y cubre las noches, los fines de semana y los picos, cuando no hay nadie.' },
+      { q: '¿Qué canales atiende?', a: 'Teléfono (por voz), WhatsApp, Instagram (mensajes directos y comentarios), SMS y el chat de tu web. Es la misma Sara en todos, con un solo historial por paciente.' },
+      { q: '¿Atiende en inglés y en español?', a: 'Sí. Sara atiende en español y en inglés, con el tono y los términos de tu clínica. Cómo se maneja cada idioma en tu consultorio lo definimos en la implementación.' },
+      { q: '¿Cumple con HIPAA?', a: 'Sara no almacena ni lee historia clínica ni información médica: trabaja sobre la conversación y la agenda, no sobre tu sistema clínico. Los requisitos específicos de tu clínica, como un BAA, los revisamos contigo en la demo.' },
+      { q: '¿Funciona con mi software dental (Dentrix, Open Dental) o mi sistema de gestión?', a: 'Sara agenda en Google Calendar y trabaja sobre la conversación; no se conecta a tu sistema clínico ni a la historia clínica. Si tu consultorio lleva la agenda en otro software, lo vemos juntos en la demo.' },
+      { q: '¿Qué pasa cuando no sabe algo?', a: 'No inventa. Responde con la información que cargaste de tu clínica (tratamientos, precios, horarios, indicaciones) y, cuando algo se sale de eso, lo deriva a tu equipo con el contexto completo de la conversación, así nadie arranca de cero.' },
+      { q: '¿Cuánto cuesta?', a: 'Es una suscripción mensual fija, sin costo por llamada ni comisión por cita. El precio se arma para cada clínica según el tamaño, las agendas y el país, y lo vemos en la demo.' },
+    ],
+  },
+  en: {
+    metaTitle: 'AI Receptionist for Dental Offices & Med Spas · Sara',
+    metaDescription:
+      'AI receptionist for dental offices and med spas: Sara answers calls, texts, WhatsApp and Instagram 24/7, books into Google Calendar and collects the deposit.',
+    heroEyebrow: 'Answers · AI receptionist',
+    heroTitle: "The AI receptionist for dental offices <em class='text-pine-dark'>and med&nbsp;spas.</em>",
+    heroLead:
+      'An AI receptionist for dental offices and med spas that answers the phone, texts, WhatsApp, Instagram and your website chat 24/7, books into your Google Calendar and collects the deposit before giving the slot. Sara runs your front desk like your best receptionist, after hours and at peak times, without adding anyone to payroll.',
+    heroImageAlt: 'An empty, sunlit dental front desk: Sara answers even when no one is at the counter.',
+    strip: [
+      { t: 'Answers every channel, 24/7', b: 'Phone, text, WhatsApp, Instagram and your website chat, after hours and on holidays.' },
+      { t: 'Books into your Google Calendar', b: 'Only on real availability, with no double bookings.' },
+      { t: 'Collects the deposit before giving the slot', b: 'Sends the payment link in the same chat and the appointment is confirmed once they pay.' },
+    ],
+    howKicker: 'How Sara does it',
+    howH2: 'A patient calls with a toothache. She hangs up with an&nbsp;appointment.',
+    howP1:
+      "This is a real call, exactly as Sara handles it. She listens, understands it's urgent, offers the times that are actually open and books the appointment. The deposit link lands by text the moment she hangs up.",
+    howP2:
+      `And the call doesn't vanish: it lands <span class="font-semibold text-pine-dark">in your dashboard</span>, next to the WhatsApp and Instagram conversations, with a summary of what was said and the appointment already on your&nbsp;calendar.`,
+    howTurns: [
+      { who: 'in', text: "Hi, I've had a toothache since last night. Do you have anything today or tomorrow?" },
+      { who: 'out', text: "Hi, I'm sorry to hear that. Yes, I have an emergency slot today at 4:30 pm or tomorrow at 9:00 am with Dr. Ruiz. Which works better?" },
+      { who: 'in', text: 'Today at 4:30, please.' },
+      { who: 'out', text: "Perfect. Can I get your full name? I'll book it right now." },
+      { who: 'in', text: 'Mariana Lopez.' },
+      { who: 'out', text: "All set, Mariana: today at 4:30 pm with Dr. Ruiz. I'll text you the address and the deposit link to lock in the appointment. Is this the best number?" },
+    ],
+    stepsH2: 'What your virtual medical receptionist does with every&nbsp;inquiry.',
+    steps: [
+      { n: '01', title: 'The inquiry comes in', body: 'A call, a text, a WhatsApp, an Instagram DM or a message on your website chat. At any hour, on whichever channel the patient picked.' },
+      { n: '02', title: 'Sara talks and books', body: "She answers with your practice's real information, offers two open times, books the slot and sends the deposit link in the same conversation." },
+      { n: '03', title: 'It all lands in your dashboard and calendar', body: 'The appointment shows up in your Google Calendar, the payment is logged, and the full conversation, with its summary, sits in your dashboard inbox.' },
+    ],
+    row1Eyebrow: 'Dental offices',
+    row1Title: "The cleaning they ask for at 10 pm, <em class='text-pine-dark'>booked by&nbsp;10:02.</em>",
+    row1Body:
+      "New patients text when their day ends, not when your office opens. Sara replies with your practice's real information, offers two open times and collects the deposit before giving the slot. She books cleanings, ortho consults, follow-ups and emergencies alike.",
+    row1Points: [
+      'Cleanings, follow-ups, consults and emergencies',
+      'Quotes real prices and hours, never makes them up',
+      'Deposit collected before the appointment is confirmed',
+    ],
+    row1Bubbles: [
+      { who: 'in', text: "Hi, I'd like to book a dental cleaning. Anything open this week?", t: '9:58 pm' },
+      { who: 'out', text: 'Hi! Happy to help. A cleaning takes about 45 minutes with Dr. Ruiz. I have Thursday at 5:30 pm or Friday at 10:00 am. Which works better?', t: '9:58 pm' },
+      { who: 'in', text: 'Thursday 5:30', t: '10:00 pm' },
+      { who: 'out', text: "Done, Thursday at 5:30 pm is yours. To confirm, there's a deposit that comes off the cleaning. Here's the link:", link: 'pay.rayhealth.app/c/dental-2417', t: '10:00 pm' },
+      { who: 'in', text: 'Paid', t: '10:02 pm' },
+      { who: 'out', text: "Payment received. Your cleaning on Thursday at 5:30 pm is confirmed. I'll text you a reminder the day before.", t: '10:02 pm' },
+    ],
+    row2Eyebrow: 'Med spas',
+    row2Title: "The DM on your Botox post, <em class='text-pine-dark'>turned into a&nbsp;consult.</em>",
+    row2Body:
+      "In a med spa, the inquiry comes through Instagram: someone sees your Botox or laser post and DMs you. Sara replies in the DM, explains the treatment with your clinic's information, books the consult and collects the deposit. The interest doesn't go cold waiting for tomorrow.",
+    row2Points: [
+      'Answers Instagram DMs and comments',
+      'Books the consult with two specific times',
+      'Deposit by link, appointment confirmed on payment',
+    ],
+    row2Bubbles: [
+      { who: 'in', text: 'Hi! Saw your Botox post. How much is it and how does a first visit work?', t: '7:40 pm' },
+      { who: 'out', text: 'Hi! A first visit starts with a consult with the doctor: she checks the area, tells you how many units you need and gives you the exact price right there. Want me to book the consult?', t: '7:40 pm' },
+      { who: 'in', text: 'Yes, anything on Saturday?', t: '7:44 pm' },
+      { who: 'out', text: "Saturday I have 10:30 am or 12:00 pm. A deposit locks it in, and it comes off the treatment. Here's the link:", link: 'pay.rayhealth.app/c/aurora-5190', t: '7:44 pm' },
+      { who: 'in', text: '10:30. Done, paid', t: '7:47 pm' },
+      { who: 'out', text: "Payment received. Saturday at 10:30 am is confirmed. You'll get a reminder the day before.", t: '7:47 pm' },
+    ],
+    row3Eyebrow: 'AI vs. human',
+    row3Title: "AI vs. human virtual medical receptionist: <em class='text-pine-dark'>what&nbsp;changes.</em>",
+    row3Body:
+      'A human virtual medical receptionist works remotely, on her shift, one call at a time, and learns your practice over months. Sara answers every call at once, around the clock, with the exact information you loaded. And she has a clear limit: no clinical opinions, and she never touches medical records.',
+    compare: {
+      colSara: 'Sara',
+      colSaraSub: 'AI receptionist',
+      colHuman: 'Human',
+      colHumanSub: 'virtual medical receptionist',
+      rows: [
+        { label: 'Availability', sara: '24/7, weekends and holidays', human: 'Her shift. Nights and holidays are extra' },
+        { label: 'Calls at the same time', sara: 'All of them at once, no hold', human: 'One at a time; the rest wait or hit voicemail' },
+        { label: 'Languages', sara: 'English and Spanish, same Sara', human: 'Depends on who you hire' },
+        { label: 'Information given', sara: 'Your real prices and hours, every time', human: 'Depends on training and staff changes' },
+        { label: 'Time to get started', sara: 'Connect your calendar, load your info, done', human: 'Recruit, train and wait for the ramp-up' },
+        { label: "What she doesn't know", sara: 'Hands it to your team with the full context', human: 'Takes a message and passes it on' },
+        { label: "What she won't do", sara: 'Clinical judgment and medical records: off limits', human: 'Not clinical staff either' },
+        { label: 'Cost', sara: 'Fixed monthly subscription, no per-call or per-hour charge', human: 'Billed per hour or per minute' },
+      ],
+    },
+    row4Eyebrow: 'One thread',
+    row4Title: "Called, texted, called again: <em class='text-pine-dark'>one&nbsp;conversation.</em>",
+    row4Body:
+      "The patient calls today, texts tomorrow and comments on a post next week. To Sara it's the same person, with the same history. Phone, text, WhatsApp, Instagram and your website chat, in a single thread per patient.",
+    row4Points: [
+      'One history per patient, not islands per channel',
+      'The call picks up by text or WhatsApp where it left off',
+      'Every call summary, in your dashboard',
+    ],
+    row4Bubbles: [
+      { who: 'out', text: "Hi Mariana, it's Sara from the office. We just spoke on the phone and I booked your emergency visit today at 4:30 pm with Dr. Ruiz.", t: '10:14 am' },
+      { who: 'out', text: "Here's the deposit link to lock it in. It comes off the visit.", link: 'pay.rayhealth.app/c/dental-3308', t: '10:14 am' },
+      { who: 'in', text: "Thanks, just paid. What's the address?", t: '10:19 am' },
+      { who: 'out', text: "Payment received. We're at 2140 Main St, Suite 200. Text me here if you need anything. See you at 4:30.", t: '10:19 am' },
+    ],
+    row5Eyebrow: 'Books and collects',
+    row5Title: "In the Google Calendar you already use, <em class='text-pine-dark'>deposit&nbsp;collected.</em>",
+    row5Body:
+      'Sara reads and writes to the Google Calendar you already use, so she never offers a taken slot or overwrites an appointment your team added. She collects the deposit at booking with a payment link, and the day before she reminds and confirms on her own.',
+    row5Points: [
+      'Reads and writes to your Google Calendar, no migration',
+      'Deposit by link at booking: who pays, shows up',
+      `Automatic reminder and confirmation. <a href="${L('/recordatorio-de-citas-por-whatsapp')}" class="${linkCls}">See appointment reminders</a>`,
+    ],
+    calendarAlt: 'Connected Google Calendar panel: the appointments Sara booked next to the ones your team added.',
+    ctaInline: 'A front desk that answers 24/7, without adding&nbsp;headcount.',
+    panelKicker: 'How it looks in your dashboard',
+    panelH2: 'Every inquiry leaves a trail, whichever way it&nbsp;came&nbsp;in.',
+    panelLead:
+      'In the Chats inbox, calls sit next to WhatsApp, Instagram and your website chat, each with its status. At a glance you know who reached out, what they needed and how it&nbsp;ended.',
+    estados: [
+      { tag: '📞 Call', desc: 'Sara answered a call. Logged with the time, the duration and a text summary.' },
+      { tag: 'Booked', desc: 'The appointment was scheduled in your Google Calendar from the conversation.' },
+      { tag: '⏰ Reminder', desc: "Sara reminded them the day before so the appointment doesn't fall through." },
+      { tag: '✅ Confirmed', desc: "The patient confirmed they're coming and the deposit was collected." },
+    ],
+    related: {
+      lead: 'Keep exploring:',
+      links: [
+        { href: L('/llamadas'), label: 'See the medical answering service' },
+        { href: L('/negocios/odontologia'), label: 'Sara for dental practices' },
+      ],
+    },
+    faqs: [
+      { q: 'Does Sara replace my front desk?', a: "No, she frees it up. Sara handles the repetitive part (answering the phone, replying to the same questions by text, booking, confirming, chasing the deposit) so your front desk can focus on the patient standing in front of them. And she covers nights, weekends and peak times, when there's no one there." },
+      { q: 'Which channels does she answer?', a: 'Phone (by voice), text messages, WhatsApp, Instagram (DMs and comments) and your website chat. Same Sara on all of them, with one history per patient.' },
+      { q: 'Does she answer in English and Spanish?', a: "Yes. Sara answers in English and in Spanish, in your practice's tone and terms. How each language is handled at your office is something we define during onboarding." },
+      { q: 'Is Sara HIPAA compliant?', a: "Sara doesn't store or read medical records or clinical information: she works on the conversation and the calendar, not on your clinical system. Your practice's specific requirements, such as a BAA, are something we review with you in the demo." },
+      { q: 'Does it work with my dental software (Dentrix, Open Dental) or my PMS?', a: "Sara books into Google Calendar and works on the conversation; she doesn't connect to your practice management system or your clinical records. If your office keeps its schedule in Dentrix, Open Dental or another PMS, we look at it together in the demo." },
+      { q: "What happens when she doesn't know something?", a: "She doesn't make things up. She answers with the information you loaded about your practice (treatments, prices, hours, instructions) and, when something falls outside of that, she hands it to your team with the full context of the conversation, so no one starts from scratch." },
+      { q: 'How much does it cost?', a: "It's a fixed monthly subscription, with no per-call charge and no commission per appointment. The price is put together for each practice based on size, number of calendars and country, and we go over it in the demo." },
+    ],
+  },
+}[lang];
+
+const { steps, compare, estados, related, faqs } = dict;
+---
+
+<Layout lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <PageHero
+      lang={lang}
+      eyebrow={dict.heroEyebrow}
+      title={dict.heroTitle}
+      lead={dict.heroLead}
+      image="/img/hero/recepcionista-virtual-hero.jpg"
+      imageAlt={dict.heroImageAlt}
+      imageW={1024}
+      imageH={768}
+    />
+
+    <!-- ══════════ TIRA DE MECÁNICA (no son stats inventadas: es lo que hace) ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        <div class="py-2">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[0].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[0].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[1].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[1].b}</p>
+        </div>
+        <div class="py-2 sm:border-l sm:border-line sm:pl-8">
+          <p class="font-serif text-lg font-black text-ink">{dict.strip[2].t}</p>
+          <p class="mt-1 text-salvia">{dict.strip[2].b}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO LO HACE SARA · llamada real ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto grid max-w-6xl items-center gap-14 px-5 py-24 md:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.howKicker}</p>
+          <h2 class="font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.howH2} />
+          <p class="mt-5 text-lg text-salvia">
+            {dict.howP1}
+          </p>
+          <p class="mt-4 text-salvia" set:html={dict.howP2} />
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <CallDemo lang={lang} turns={dict.howTurns} timer="01:04" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO FUNCIONA · 3 tiempos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CAPACIDADES · filas alternadas (copy + visual) ══════════ -->
+    <!-- Cada fila va envuelta en un div con id de ancla (#dental, #med-spa) porque FeatureRow no acepta id. -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <div id="dental" class="scroll-mt-24">
+          <FeatureRow
+            eyebrow={dict.row1Eyebrow}
+            title={dict.row1Title}
+            body={dict.row1Body}
+            points={dict.row1Points}
+          >
+            <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row1Bubbles} />
+          </FeatureRow>
+        </div>
+
+        <div id="med-spa" class="scroll-mt-24">
+          <FeatureRow
+            flip
+            eyebrow={dict.row2Eyebrow}
+            title={dict.row2Title}
+            body={dict.row2Body}
+            points={dict.row2Points}
+          >
+            <ConversationDemo lang={lang} channel="instagram" bubbles={dict.row2Bubbles} />
+          </FeatureRow>
+        </div>
+
+        <div id="ai-vs-human" class="scroll-mt-24">
+          <FeatureRow
+            eyebrow={dict.row3Eyebrow}
+            title={dict.row3Title}
+            body={dict.row3Body}
+          >
+            <!-- Tabla comparativa inline (IA vs recepcionista virtual humana). Sin cifras: solo el modelo de cobro. -->
+            <div class="w-full max-w-xl overflow-x-auto rounded-2xl border border-line bg-paper shadow-[0_16px_40px_-24px_rgba(20,38,31,0.32)]">
+              <table class="w-full min-w-[460px] border-collapse text-sm">
+                <thead>
+                  <tr class="border-b border-line bg-mint/[0.07] text-left">
+                    <th scope="col" class="px-4 py-3"></th>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-pine-dark">
+                      {compare.colSara}
+                      <span class="mt-0.5 block text-xs font-normal text-salvia">{compare.colSaraSub}</span>
+                    </th>
+                    <th scope="col" class="whitespace-nowrap px-4 py-3 font-semibold text-ink">
+                      {compare.colHuman}
+                      <span class="mt-0.5 block text-xs font-normal text-salvia">{compare.colHumanSub}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-line">
+                  {
+                    compare.rows.map((row, r) => (
+                      <tr class={r % 2 ? 'bg-mint/[0.03]' : ''}>
+                        <th scope="row" class="px-4 py-3 text-left align-top font-medium text-ink">{row.label}</th>
+                        <td class="px-4 py-3 align-top text-ink">{row.sara}</td>
+                        <td class="px-4 py-3 align-top text-salvia">{row.human}</td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          </FeatureRow>
+        </div>
+
+        <div id="one-thread" class="scroll-mt-24">
+          <FeatureRow
+            flip
+            eyebrow={dict.row4Eyebrow}
+            title={dict.row4Title}
+            body={dict.row4Body}
+            points={dict.row4Points}
+          >
+            <ConversationDemo lang={lang} channel="whatsapp" bubbles={dict.row4Bubbles} />
+          </FeatureRow>
+        </div>
+
+        <div id="calendar" class="scroll-mt-24">
+          <FeatureRow
+            eyebrow={dict.row5Eyebrow}
+            title={dict.row5Title}
+            body={dict.row5Body}
+            points={dict.row5Points}
+          >
+            <CalendarSyncPanel lang={lang} class="w-full" />
+          </FeatureRow>
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <!-- ══════════ ASÍ SE VE EN TU PANEL · estados ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.panelKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.panelH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia" set:html={dict.panelLead} />
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {
+            estados.map((e) => (
+              <div class="flex items-start gap-4 rounded-xl border border-line bg-cream p-6">
+                <span class="shrink-0 rounded-full border border-pine/20 bg-mint/[0.12] px-3 py-1.5 text-sm font-medium text-pine-dark">
+                  {e.tag}
+                </span>
+                <p class="text-salvia">{e.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+        <!-- Links de texto a las páginas hermanas (teléfono por voz y odontología). -->
+        <p class="mt-12 flex flex-wrap items-center gap-x-5 gap-y-2 text-salvia">
+          <span>{related.lead}</span>
+          {
+            related.links.map((l) => (
+              <a href={l.href} class={linkCls}>
+                {l.label}
+              </a>
+            ))
+          }
+        </p>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>
