@@ -148,6 +148,26 @@
       "permanent": true
     },
     {
+      "source": "/es/prueba",
+      "destination": "/es/free-trial",
+      "permanent": true
+    },
+    {
+      "source": "/es/prueba/",
+      "destination": "/es/free-trial",
+      "permanent": true
+    },
+    {
+      "source": "/prueba",
+      "destination": "/es/free-trial",
+      "permanent": true
+    },
+    {
+      "source": "/prueba/",
+      "destination": "/es/free-trial",
+      "permanent": true
+    },
+    {
       "source": "/en/caso",
       "destination": "/en/case-study",
       "permanent": true

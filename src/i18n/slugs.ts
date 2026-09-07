@@ -51,7 +51,7 @@ export const localizedSlugs = {
   /** Implementación ↔ implementation. */
   implementation: { es: 'implementacion', en: 'implementation' },
   /** Prueba gratis ↔ free-trial. */
-  freeTrial: { es: 'prueba', en: 'free-trial' },
+  freeTrial: { es: 'free-trial', en: 'free-trial' },
   /** Caso de éxito ↔ case-study. */
   caseStudy: { es: 'caso', en: 'case-study' },
   /** Comparativa de asistentes IA ↔ best-ai-assistants-for-clinics. */

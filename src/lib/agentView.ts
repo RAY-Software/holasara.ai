@@ -32,7 +32,7 @@ export function buildAgentMarkdown(llmsBody = ''): string {
     '> Con Mia (marketing) y Daniel (finanzas).',
     '',
     '## Empezá acá',
-    `- [Probar gratis](${page('/prueba')})`,
+    `- [Probar gratis](${page('/free-trial')})`,
     `- [Ver una demo](${page('/demo')})`,
     '',
     '## Producto',

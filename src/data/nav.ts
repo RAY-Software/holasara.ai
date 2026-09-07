@@ -294,11 +294,11 @@ const topLinksRaw: RawLink[] = [
     desc: { es: 'Con lo que tu clínica ya usa.', en: 'With the tools your clinic already uses.' },
     desktopFrom: 'xl',
   },
-  // Free trial self-serve (sep 2026): /prueba existía pero no estaba enlazada desde ningún
+  // Free trial self-serve (sep 2026): /free-trial (antes /prueba) existía pero no estaba enlazada desde ningún
   // lado del sitio. Entra por nav y footer, no por el hero: el primer scroll de la home
   // sigue siendo el de "Pedir demo" mientras corren los Ads (message match).
   {
-    href: '/prueba',
+    href: '/free-trial',
     name: { es: 'Probar gratis', en: 'Try it free' },
     desc: { es: 'Tu sitio con Sara en vivo, en segundos.', en: 'Your site with Sara live, in seconds.' },
   },
