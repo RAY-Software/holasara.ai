@@ -37,6 +37,9 @@ const dict = {
     businessHint: 'Empieza a escribir y elígelo de la lista.',
     emailLabel: 'Tu email',
     emailPlaceholder: 'tu@tunegocio.com',
+    websiteLabel: 'Tu sitio web o Instagram (opcional)',
+    websitePlaceholder: 'tunegocio.com o @tunegocio',
+    websiteHint: 'Tomamos tu logo, colores y fotos de ahí para que el sitio salga con tu marca.',
     consent: 'Confirmo que este es mi negocio y acepto que me contacten por WhatsApp o email sobre mi demo.',
     submit: 'Ver mi sitio con Sara en vivo',
     formFoot: 'Gratis. Sin tarjeta. Listo en segundos.',
@@ -88,6 +91,9 @@ const dict = {
     businessHint: 'Start typing and pick it from the list.',
     emailLabel: 'Your email',
     emailPlaceholder: 'you@yourbusiness.com',
+    websiteLabel: 'Your website or Instagram (optional)',
+    websitePlaceholder: 'yourbusiness.com or @yourbusiness',
+    websiteHint: 'We pull your logo, colors and photos from there so the site comes out with your brand.',
     consent: 'I confirm this is my business and I agree to be contacted by WhatsApp or email about my demo.',
     submit: 'See my site with Sara live',
     formFoot: 'Free. No card. Ready in seconds.',
@@ -179,6 +185,12 @@ const T = dict.js;
             <div>
               <label for="email" class="mb-1.5 block text-sm font-medium text-ink">{dict.emailLabel}</label>
               <input id="email" name="email" type="email" autocomplete="email" required placeholder={dict.emailPlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+            </div>
+
+            <div>
+              <label for="website" class="mb-1.5 block text-sm font-medium text-ink">{dict.websiteLabel}</label>
+              <input id="website" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder={dict.websitePlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              <p class="mt-1 text-xs text-salvia">{dict.websiteHint}</p>
             </div>
 
             <!-- Atribución: se rellenan al enviar, desde la URL o la cookie sara_click -->
@@ -349,6 +361,9 @@ const T = dict.js;
             category: String(fd.get('category') || ''),
           },
           clickIds: ids,
+          // Opcional: sitio actual o Instagram del negocio → el backend toma marca/fotos de ahí en vez
+          // de (o además de) la web que figure en Google.
+          websiteUrl: String(fd.get('website') || '').trim().slice(0, 300),
         };
 
         fetch(base + '/api/public/demo', {
