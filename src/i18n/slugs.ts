@@ -30,6 +30,32 @@ export const localizedSlugs = {
   aeo: { es: 'aeo', en: 'aeo' },
   /** Página de integraciones. */
   integrations: { es: 'integraciones', en: 'integrations' },
+  /** Términos y condiciones ↔ terms. */
+  terms: { es: 'terminos', en: 'terms' },
+  /** Política de privacidad ↔ privacy. */
+  privacy: { es: 'privacidad', en: 'privacy' },
+  /** Nosotros ↔ about. */
+  about: { es: 'nosotros', en: 'about' },
+  /** Cobros y señas ↔ payments. */
+  payments: { es: 'cobros', en: 'payments' },
+  /** Canales (WhatsApp/Instagram/web) ↔ channels. */
+  channels: { es: 'canales', en: 'channels' },
+  /** Agenda ↔ scheduling. */
+  scheduling: { es: 'agenda', en: 'scheduling' },
+  /** Reactivación de pacientes ↔ win-back. */
+  winBack: { es: 'reactivacion', en: 'win-back' },
+  /** Reseñas ↔ reviews. */
+  reviews: { es: 'resenas', en: 'reviews' },
+  /** Modo operador ↔ operator. */
+  operator: { es: 'operador', en: 'operator' },
+  /** Implementación ↔ implementation. */
+  implementation: { es: 'implementacion', en: 'implementation' },
+  /** Prueba gratis ↔ free-trial. */
+  freeTrial: { es: 'prueba', en: 'free-trial' },
+  /** Caso de éxito ↔ case-study. */
+  caseStudy: { es: 'caso', en: 'case-study' },
+  /** Comparativa de asistentes IA ↔ best-ai-assistants-for-clinics. */
+  bestAssistants: { es: 'mejores-asistentes-ia-clinicas', en: 'best-ai-assistants-for-clinics' },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type SlugKey = keyof typeof localizedSlugs;

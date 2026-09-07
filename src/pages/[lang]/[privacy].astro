@@ -1,6 +1,6 @@
 ---
-import { getStaticPaths, toLocale } from '../../i18n/config';
-export { getStaticPaths };
+import { localizedStaticPaths, toLocale } from '../../i18n/config';
+export function getStaticPaths() { return localizedStaticPaths('privacy'); }
 const lang = toLocale(Astro.params.lang);
 // Entidad/legales alineados con RAY-Website (misma empresa): responsable
 // BotBit, Inc. (marca RAY), email info@rayapp.io, ley de EE. UU., cláusula de
