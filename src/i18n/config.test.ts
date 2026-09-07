@@ -7,8 +7,8 @@ import { localizedSlugs, slugKeyOf } from './slugs.ts';
 const pagesDir = new URL('../pages/[lang]/', import.meta.url);
 
 test('localePath prefija paths comunes y respeta externos', () => {
-  assert.equal(localePath('/agenda', 'es'), '/es/agenda');
-  assert.equal(localePath('/agenda', 'en'), '/en/agenda');
+  assert.equal(localePath('/demo', 'es'), '/es/demo');
+  assert.equal(localePath('/demo', 'en'), '/en/demo');
   assert.equal(localePath('/', 'en'), '/en');
   assert.equal(localePath('https://wa.me/1', 'en'), 'https://wa.me/1');
   assert.equal(localePath('#faq', 'en'), '#faq');
@@ -34,7 +34,7 @@ test('localePath: bordes (sin barra inicial, barra final, subpaths, mayúsculas,
   assert.equal(localePath('/LLAMADAS', 'en'), '/en/LLAMADAS');
   assert.equal(localePath('', 'en'), '/en');
   assert.equal(slugKeyOf(''), undefined);
-  assert.equal(slugKeyOf('agenda'), undefined);
+  assert.equal(slugKeyOf('demo'), undefined);
 });
 
 test('alternatePath empareja la página actual con el otro idioma (hreflang y switch)', () => {
