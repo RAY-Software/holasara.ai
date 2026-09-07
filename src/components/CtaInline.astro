@@ -11,8 +11,8 @@ interface Props {
 }
 const { lang = defaultLocale } = Astro.props;
 const copy = {
-  es: { title: 'Que la próxima consulta no espere a&nbsp;mañana.', cta: 'Pedir demo', talk: 'Habla con Sara' },
-  en: { title: "Don't make the next patient wait until&nbsp;tomorrow.", cta: 'Book a demo', talk: 'Talk to Sara' },
+  es: { title: 'Que la próxima consulta no espere a&nbsp;mañana.', cta: 'Probar gratis', talk: 'Habla con Sara' },
+  en: { title: "Don't make the next patient wait until&nbsp;tomorrow.", cta: 'Try it free', talk: 'Talk to Sara' },
 }[lang];
 const { title = copy.title, cta = copy.cta } = Astro.props;
 ---
@@ -23,7 +23,7 @@ const { title = copy.title, cta = copy.cta } = Astro.props;
       <p class="font-serif text-xl font-black leading-snug text-ink md:text-2xl" set:html={title} />
       <div class="flex shrink-0 flex-wrap items-center justify-center gap-3">
         <a
-          href={localePath('/demo', lang)}
+          href={localePath('/free-trial', lang)}
           class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
         >
           {cta}
