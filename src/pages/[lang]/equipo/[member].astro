@@ -25,7 +25,7 @@ if (!member) return Astro.redirect(L('/equipo'));
 const others = getTeam(lang).filter((m) => m.id !== member.id);
 
 const backLabel = lang === 'en' ? 'Back to the team' : 'Volver al equipo';
-const demoLabel = lang === 'en' ? 'Book a demo' : 'Pedir demo';
+const demoLabel = lang === 'en' ? 'Try it free' : 'Probar gratis';
 const othersTitle = lang === 'en' ? 'The rest of the team' : 'El resto del equipo';
 
 // Íconos inline (línea) para los casos de uso sin logo de marca. viewBox 0 0 24 24.
@@ -64,7 +64,7 @@ const ucCols = member.useCases && member.useCases.length % 3 === 0 ? 'lg:grid-co
             <p class="mt-6 max-w-xl text-lg text-salvia">{member.heroLead}</p>
             <div class="mt-8 flex flex-wrap items-center gap-3">
               <a
-                href={L('/demo')}
+                href={L('/free-trial')}
                 class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
               >
                 {demoLabel}

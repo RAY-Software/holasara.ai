@@ -17,8 +17,8 @@ interface Props {
 const { eyebrow, title, lead, image, imageAlt = '', imageW, imageH, lang = defaultLocale } = Astro.props;
 const t =
   lang === 'en'
-    ? { back: 'Back to home', demo: 'Book a demo', scan: 'Scan my business', talk: 'Talk to Sara' }
-    : { back: 'Volver al inicio', demo: 'Pedir demo', scan: 'Escanear mi negocio', talk: 'Habla con Sara' };
+    ? { back: 'Back to home', demo: 'Try it free', scan: 'Scan my business', talk: 'Talk to Sara' }
+    : { back: 'Volver al inicio', demo: 'Probar gratis', scan: 'Escanear mi negocio', talk: 'Habla con Sara' };
 // CTA secundario del hero: "Escanear mi negocio" (al grader) en todas las
 // páginas. Cae a "Habla con Sara" (WhatsApp) si se apaga el flag del grader.
 const showScan = SHOW_GRADER_CTA;
@@ -41,7 +41,7 @@ const hasMedia = Boolean(image) || hasVisual;
       <p class="mt-6 max-w-xl text-lg text-salvia">{lead}</p>
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
-          href={localePath('/demo', lang)}
+          href={localePath('/free-trial', lang)}
           class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
         >
           {t.demo}

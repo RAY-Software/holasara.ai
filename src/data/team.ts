@@ -604,7 +604,7 @@ const RAW: RawMember[] = [
         { who: 'out', text: 'At this pace, November lands around $290,000. A bit slower with Thanksgiving, but the second half of the month is already 70% booked. If anything shifts, I will let you know.', t: '08:42' },
       ],
     },
-    featureLinkLabel: { es: 'Pedir una demo', en: 'Book a demo' },
+    featureLinkLabel: { es: 'Probar gratis', en: 'Try it free' },
     scenesTitle: {
       es: 'Daniel encuentra dinero por cobrar. <em class="text-pine-dark">Y&nbsp;Sara sale a&nbsp;cobrarlo.</em>',
       en: 'Daniel finds money to collect. <em class="text-pine-dark">And Sara goes and collects&nbsp;it.</em>',

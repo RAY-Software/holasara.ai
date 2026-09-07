@@ -18,7 +18,7 @@ export const ui = {
     'nav.byIndustry': 'Por industria',
     'nav.bySize': 'Por tamaño',
     'header.scanCta': 'Escanear mi negocio',
-    'header.demoCta': 'Pedir demo',
+    'header.demoCta': 'Probar gratis',
     'header.openMenu': 'Abrir menú',
     'header.closeMenu': 'Cerrar menú',
     'header.homeAria': 'Sara, inicio',
@@ -28,6 +28,7 @@ export const ui = {
     'header.caseTitleSecond': 'Conoce clínicas que ya trabajan con Sara',
     'header.caseCta': 'Ver el caso',
     'header.caseImgAlt': 'Resultados reales de ViaLaser con Sara',
+    'header.caseSecondImgAlt': 'Clínica de estética atendiendo a una paciente',
 
     // Footer
     'footer.tagline': 'La recepción que nunca cierra.',
@@ -65,7 +66,7 @@ export const ui = {
     'nav.byIndustry': 'By specialty',
     'nav.bySize': 'By size',
     'header.scanCta': 'Scan my business',
-    'header.demoCta': 'Book a demo',
+    'header.demoCta': 'Try it free',
     'header.openMenu': 'Open menu',
     'header.closeMenu': 'Close menu',
     'header.homeAria': 'Sara, home',
@@ -75,6 +76,7 @@ export const ui = {
     'header.caseTitleSecond': 'See practices already running on Sara',
     'header.caseCta': 'See the case',
     'header.caseImgAlt': 'Real results from ViaLaser with Sara',
+    'header.caseSecondImgAlt': 'Aesthetic clinic treating a patient',
 
     // Footer
     'footer.tagline': 'Front desk, marketing and books. One AI team.',

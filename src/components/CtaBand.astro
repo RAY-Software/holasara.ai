@@ -13,14 +13,14 @@ const copy = {
     title: 'Que la consulta<br class="md:hidden" /> de las 23:41<br class="md:hidden" /> no se te escape.',
     sub: 'Pon a Sara a atender, agendar y cobrar hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
     kicker: 'La recepción que nunca cierra',
-    demo: 'Pedir demo',
+    demo: 'Probar gratis',
     talk: 'Habla con Sara',
   },
   en: {
     title: "Don't let the next 11:41 pm text go&nbsp;unanswered.",
     sub: 'Put Sara on your front desk today, and bring in Mia and Daniel when you are ready. Without changing your calendar or how you work.',
     kicker: 'The AI team that never clocks out',
-    demo: 'Book a demo',
+    demo: 'Try it free',
     talk: 'Talk to Sara',
   },
 }[lang];
@@ -36,7 +36,7 @@ const { title = copy.title, sub = copy.sub } = Astro.props;
     <p class="mx-auto mt-6 max-w-xl text-lg text-cream/80">{sub}</p>
     <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
       <a
-        href={localePath('/demo', lang)}
+        href={localePath('/free-trial', lang)}
         class="inline-flex items-center gap-2 rounded-full bg-cream px-8 py-4 text-lg font-semibold text-ink transition-opacity hover:opacity-90"
       >
         {copy.demo}
