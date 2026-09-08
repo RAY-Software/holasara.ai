@@ -37,14 +37,28 @@ const dict = {
     businessHint: 'Empieza a escribir y elígelo de la lista.',
     emailLabel: 'Tu email',
     emailPlaceholder: 'tu@tunegocio.com',
-    websiteLabel: 'Tu sitio web o Instagram (opcional)',
-    websitePlaceholder: 'tunegocio.com o @tunegocio',
+    instagramLabel: 'Tu Instagram',
+    instagramTag: 'Recomendado',
+    instagramPlaceholder: '@tunegocio',
+    instagramHint: 'Lo sumamos a tu sitio para que tus pacientes te sigan desde ahí.',
+    websiteLabel: 'Tu sitio web actual',
+    websiteTag: 'Opcional',
+    websitePlaceholder: 'tunegocio.com',
     websiteHint: 'Tomamos tu logo, colores y fotos de ahí para que el sitio salga con tu marca.',
     consent: 'Confirmo que este es mi negocio y acepto que me contacten por WhatsApp o email sobre mi demo.',
     submit: 'Ver mi sitio con Sara en vivo',
     formFoot: 'Gratis. Sin tarjeta. Listo en segundos.',
-    loadingH2: 'Armando tu sitio…',
-    loadingBody: 'Estamos preparando tu marca y a Sara. Un segundo.',
+    progressKicker: 'Armando tu sitio',
+    progressH2: 'El sitio de {business}',
+    progressBody: 'Unos segundos. No cierres esta ventana.',
+    progressDone: 'Listo. Abriendo tu sitio…',
+    progressSteps: [
+      'Buscando tu negocio en Google',
+      'Tomando tu logo, colores y fotos',
+      'Escribiendo los textos de tu sitio',
+      'Eligiendo la foto de portada',
+      'Presentándole tu negocio a Sara',
+    ],
     benefits: [
       {
         t: 'Con tu propia marca',
@@ -91,14 +105,28 @@ const dict = {
     businessHint: 'Start typing and pick it from the list.',
     emailLabel: 'Your email',
     emailPlaceholder: 'you@yourbusiness.com',
-    websiteLabel: 'Your website or Instagram (optional)',
-    websitePlaceholder: 'yourbusiness.com or @yourbusiness',
+    instagramLabel: 'Your Instagram',
+    instagramTag: 'Recommended',
+    instagramPlaceholder: '@yourbusiness',
+    instagramHint: 'We add it to your site so your patients can follow you from there.',
+    websiteLabel: 'Your current website',
+    websiteTag: 'Optional',
+    websitePlaceholder: 'yourbusiness.com',
     websiteHint: 'We pull your logo, colors and photos from there so the site comes out with your brand.',
     consent: 'I confirm this is my business and I agree to be contacted by WhatsApp or email about my demo.',
     submit: 'See my site with Sara live',
     formFoot: 'Free. No card. Ready in seconds.',
-    loadingH2: 'Building your site…',
-    loadingBody: 'We’re preparing your brand and Sara. One second.',
+    progressKicker: 'Building your site',
+    progressH2: '{business}’s site',
+    progressBody: 'A few seconds. Please keep this window open.',
+    progressDone: 'Done. Opening your site…',
+    progressSteps: [
+      'Finding your business on Google',
+      'Picking up your logo, colors and photos',
+      'Writing your site copy',
+      'Choosing your cover photo',
+      'Introducing your business to Sara',
+    ],
     benefits: [
       {
         t: 'With your own brand',
@@ -129,7 +157,7 @@ const dict = {
   },
 }[lang];
 
-const T = dict.js;
+const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.progressDone };
 ---
 
 <Layout lang={lang}
@@ -188,7 +216,19 @@ const T = dict.js;
             </div>
 
             <div>
-              <label for="website" class="mb-1.5 block text-sm font-medium text-ink">{dict.websiteLabel}</label>
+              <label for="instagram" class="mb-1.5 flex items-baseline justify-between text-sm font-medium text-ink">
+                <span>{dict.instagramLabel}</span>
+                <span class="text-xs font-semibold uppercase tracking-[0.12em] text-pine">{dict.instagramTag}</span>
+              </label>
+              <input id="instagram" name="instagram" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder={dict.instagramPlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              <p class="mt-1 text-xs text-salvia">{dict.instagramHint}</p>
+            </div>
+
+            <div>
+              <label for="website" class="mb-1.5 flex items-baseline justify-between text-sm font-medium text-ink">
+                <span>{dict.websiteLabel}</span>
+                <span class="text-xs font-medium uppercase tracking-[0.12em] text-salvia">{dict.websiteTag}</span>
+              </label>
               <input id="website" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder={dict.websitePlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
               <p class="mt-1 text-xs text-salvia">{dict.websiteHint}</p>
             </div>
@@ -216,15 +256,6 @@ const T = dict.js;
 
             <p class="text-center text-xs text-salvia">{dict.formFoot}</p>
           </form>
-
-          <!-- Estado de carga mientras genera el demo -->
-          <div id="trial-loading" class="hidden">
-            <div class="grid place-items-center py-10 text-center">
-              <span class="dot h-3 w-3"></span>
-              <h2 class="mt-5 font-serif text-2xl font-black text-ink">{dict.loadingH2}</h2>
-              <p class="mt-2 max-w-sm text-salvia">{dict.loadingBody}</p>
-            </div>
-          </div>
         </div>
 
         <!-- ─── Por qué Sara: prueba real + beneficios ─── -->
@@ -264,6 +295,36 @@ const T = dict.js;
   <ClientsStrip lang={lang} />
 
   <Footer lang={lang} />
+
+
+  <!-- Modal de progreso: se abre al enviar y acompaña los ~5-25 s del POST /api/public/demo.
+       Las etapas siguen el orden real del pipeline (Places → marca → copy → hero → Sara) y avanzan
+       con timer; la última espera a que el backend responda y recién ahí se marca todo y redirige. -->
+  <div id="trial-progress" class="fixed inset-0 z-[120] hidden items-center justify-center bg-ink/55 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="trial-progress-h2" aria-live="polite">
+    <div class="w-full max-w-md rounded-2xl border border-line bg-cream p-7 shadow-[0_30px_60px_-30px_rgba(20,38,31,0.6)] md:p-9">
+      <p class="flex items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-pine-dark">
+        <span class="dot h-2 w-2"></span> {dict.progressKicker}
+      </p>
+      <h2 id="trial-progress-h2" class="mt-3 font-serif text-2xl font-black leading-tight text-ink text-balance" data-template={dict.progressH2}>{dict.progressH2.replace('{business}', '…')}</h2>
+      <p id="trial-progress-body" class="mt-2 text-sm text-salvia">{dict.progressBody}</p>
+
+      <div class="mt-6 h-1.5 w-full overflow-hidden rounded-full bg-line" aria-hidden="true">
+        <div id="trial-progress-bar" class="h-full w-0 rounded-full bg-pine transition-[width] duration-700 ease-out"></div>
+      </div>
+
+      <ol id="trial-progress-steps" class="mt-6 flex flex-col gap-3.5">
+        {dict.progressSteps.map((label) => (
+          <li class="flex items-center gap-3 text-[15px] text-salvia transition-colors duration-300" data-state="pending">
+            <span class="step-icon relative grid h-6 w-6 shrink-0 place-items-center rounded-full border border-line bg-white" aria-hidden="true">
+              <svg class="step-check hidden h-3.5 w-3.5 text-cream" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3 3 7-7"/></svg>
+              <span class="step-spin hidden h-3.5 w-3.5 rounded-full border-2 border-pine border-t-transparent"></span>
+            </span>
+            <span>{label}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
 
   <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, T }}>
     (function () {
@@ -328,11 +389,80 @@ const T = dict.js;
       }
 
       function showError(msg) {
+        progress.close();
         errBox.textContent = msg;
         errBox.classList.remove('hidden');
         btn.disabled = false;
         btn.textContent = T.submit;
       }
+
+      // ── Modal de progreso ──
+      // Etapas con timer (STEP_MS cada una) hasta la penúltima; la última queda "activa" hasta que
+      // el backend responde. Al responder, finish() marca lo que falte en cascada rápida y llama cb.
+      var progress = (function () {
+        var root = document.getElementById('trial-progress');
+        var h2 = document.getElementById('trial-progress-h2');
+        var body = document.getElementById('trial-progress-body');
+        var bar = document.getElementById('trial-progress-bar');
+        var items = root ? Array.prototype.slice.call(root.querySelectorAll('#trial-progress-steps li')) : [];
+        var STEP_MS = 2200;
+        var timer = null, current = -1, opened = false;
+
+        function paint() {
+          items.forEach(function (li, i) {
+            var st = i < current ? 'done' : i === current ? 'active' : 'pending';
+            li.setAttribute('data-state', st);
+            var icon = li.querySelector('.step-icon');
+            var check = li.querySelector('.step-check');
+            var spin = li.querySelector('.step-spin');
+            li.classList.toggle('text-ink', st !== 'pending');
+            li.classList.toggle('font-medium', st === 'active');
+            li.classList.toggle('text-salvia', st === 'pending');
+            icon.classList.toggle('bg-pine', st === 'done');
+            icon.classList.toggle('border-pine', st !== 'pending');
+            icon.classList.toggle('bg-white', st !== 'done');
+            check.classList.toggle('hidden', st !== 'done');
+            spin.classList.toggle('hidden', st !== 'active');
+            spin.classList.toggle('step-spinning', st === 'active');
+          });
+          var n = items.length || 1;
+          var pct = Math.min(100, Math.round(((Math.max(current, 0) + 0.45) / n) * 100));
+          if (current >= n) pct = 100;
+          bar.style.width = pct + '%';
+        }
+        function tick() {
+          if (current < items.length - 1) { current += 1; paint(); }
+          if (current < items.length - 1) timer = setTimeout(tick, STEP_MS);
+        }
+        return {
+          open: function (business) {
+            if (!root) return;
+            opened = true; current = -1;
+            var tpl = h2.getAttribute('data-template') || '';
+            h2.textContent = tpl.replace('{business}', business);
+            body.textContent = T.progressBody;
+            root.classList.remove('hidden'); root.classList.add('flex');
+            document.documentElement.classList.add('overflow-hidden');
+            tick();
+          },
+          // Cierra sin ceremonia (error): vuelve al form para reintentar.
+          close: function () {
+            if (!root || !opened) return;
+            opened = false; clearTimeout(timer);
+            root.classList.add('hidden'); root.classList.remove('flex');
+            document.documentElement.classList.remove('overflow-hidden');
+          },
+          // Éxito: marca en cascada lo que falte (250 ms por etapa) y luego cb().
+          finish: function (cb) {
+            clearTimeout(timer);
+            (function step() {
+              if (current < items.length) { current += 1; paint(); setTimeout(step, 250); return; }
+              body.textContent = T.progressDone;
+              if (cb) cb();
+            })();
+          },
+        };
+      })();
 
       form.addEventListener('submit', function (ev) {
         ev.preventDefault();
@@ -350,6 +480,7 @@ const T = dict.js;
 
         btn.disabled = true;
         btn.textContent = T.generating;
+        progress.open(business);
 
         // Shape que espera createDemo: { email, gbp: { placeId, name, address, category }, clickIds }.
         var payload = {
@@ -364,6 +495,8 @@ const T = dict.js;
           // Opcional: sitio actual o Instagram del negocio → el backend toma marca/fotos de ahí en vez
           // de (o además de) la web que figure en Google.
           websiteUrl: String(fd.get('website') || '').trim().slice(0, 300),
+          // Instagram va aparte: no se scrapea (pared de login), el backend lo guarda como link social del sitio.
+          instagramUrl: String(fd.get('instagram') || '').trim().slice(0, 120),
         };
 
         fetch(base + '/api/public/demo', {
@@ -375,14 +508,11 @@ const T = dict.js;
           .then(function (res) {
             if (!res.ok || !res.d || !res.d.token) throw new Error((res.d && res.d.error) || T.errGeneric);
             var token = res.d.token;
-            // Estado de carga mientras redirige
-            form.classList.add('hidden');
-            var loading = document.getElementById('trial-loading');
-            if (loading) loading.classList.remove('hidden');
-            // Conversión (demo generado) + redirect al reveal en el mismo dominio de la app.
-            fireLead(email, function () {
-              window.location.href = base + '/demo/' + encodeURIComponent(token);
-            });
+            // Conversión (demo generado) en paralelo con el cierre del modal; redirige cuando ambos terminaron.
+            var pending = 2;
+            function go() { if (--pending === 0) window.location.href = base + '/demo/' + encodeURIComponent(token); }
+            fireLead(email, go);
+            progress.finish(go);
           })
           .catch(function (e) {
             showError((e && e.message) || T.errRetry);
