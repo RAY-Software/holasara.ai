@@ -37,10 +37,7 @@ const dict = {
     businessHint: 'Empieza a escribir y elígelo de la lista.',
     emailLabel: 'Tu email',
     emailPlaceholder: 'tu@tunegocio.com',
-    instagramLabel: 'Tu Instagram',
-    instagramTag: 'Recomendado',
-    instagramPlaceholder: '@tunegocio',
-    instagramHint: 'Lo sumamos a tu sitio para que tus pacientes te sigan desde ahí.',
+    websiteToggle: '¿Tienes sitio web? Agrégalo y tomamos tu marca de ahí',
     websiteLabel: 'Tu sitio web actual',
     websiteTag: 'Opcional',
     websitePlaceholder: 'tunegocio.com',
@@ -105,10 +102,7 @@ const dict = {
     businessHint: 'Start typing and pick it from the list.',
     emailLabel: 'Your email',
     emailPlaceholder: 'you@yourbusiness.com',
-    instagramLabel: 'Your Instagram',
-    instagramTag: 'Recommended',
-    instagramPlaceholder: '@yourbusiness',
-    instagramHint: 'We add it to your site so your patients can follow you from there.',
+    websiteToggle: 'Have a website? Add it and we take your brand from there',
     websiteLabel: 'Your current website',
     websiteTag: 'Optional',
     websitePlaceholder: 'yourbusiness.com',
@@ -215,23 +209,19 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
               <input id="email" name="email" type="email" autocomplete="email" required placeholder={dict.emailPlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
             </div>
 
-            <div>
-              <label for="instagram" class="mb-1.5 flex items-baseline justify-between text-sm font-medium text-ink">
-                <span>{dict.instagramLabel}</span>
-                <span class="text-xs font-semibold uppercase tracking-[0.12em] text-pine">{dict.instagramTag}</span>
-              </label>
-              <input id="instagram" name="instagram" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder={dict.instagramPlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-              <p class="mt-1 text-xs text-salvia">{dict.instagramHint}</p>
-            </div>
-
-            <div>
-              <label for="website" class="mb-1.5 flex items-baseline justify-between text-sm font-medium text-ink">
-                <span>{dict.websiteLabel}</span>
-                <span class="text-xs font-medium uppercase tracking-[0.12em] text-salvia">{dict.websiteTag}</span>
-              </label>
-              <input id="website" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder={dict.websitePlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
-              <p class="mt-1 text-xs text-salvia">{dict.websiteHint}</p>
-            </div>
+            <!-- Sitio web: opcional y plegado. Pedimos poco: el demo se arma con Google y, si la portada
+                 sale de stock, el reveal ofrece conectar Instagram (OAuth) para rearmarlo con sus fotos. -->
+            <details class="group">
+              <summary class="cursor-pointer list-none text-sm font-medium text-pine underline-offset-4 hover:underline [&::-webkit-details-marker]:hidden">{dict.websiteToggle}</summary>
+              <div class="mt-3">
+                <label for="website" class="mb-1.5 flex items-baseline justify-between text-sm font-medium text-ink">
+                  <span>{dict.websiteLabel}</span>
+                  <span class="text-xs font-medium uppercase tracking-[0.12em] text-salvia">{dict.websiteTag}</span>
+                </label>
+                <input id="website" name="website" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder={dict.websitePlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+                <p class="mt-1 text-xs text-salvia">{dict.websiteHint}</p>
+              </div>
+            </details>
 
             <!-- Atribución: se rellenan al enviar, desde la URL o la cookie sara_click -->
             <input type="hidden" name="gclid" id="f_gclid" />
@@ -495,8 +485,6 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
           // Opcional: sitio actual o Instagram del negocio → el backend toma marca/fotos de ahí en vez
           // de (o además de) la web que figure en Google.
           websiteUrl: String(fd.get('website') || '').trim().slice(0, 300),
-          // Instagram va aparte: no se scrapea (pared de login), el backend lo guarda como link social del sitio.
-          instagramUrl: String(fd.get('instagram') || '').trim().slice(0, 120),
         };
 
         fetch(base + '/api/public/demo', {
