@@ -10,6 +10,7 @@ import Footer from '../../components/Footer.astro';
 import PlacesAutocomplete from '../../components/PlacesAutocomplete.astro';
 import ClientsStrip from '../../components/ClientsStrip.astro';
 import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../../lib/whatsapp';
+import { COUNTRIES } from '../../lib/countries';
 
 // Base de la app del trial (nuestro backend + el reveal). El form POStea a
 // `${TRIAL_BASE}/api/public/demo` (createDemo) y, con el token, redirige a
@@ -37,6 +38,9 @@ const dict = {
     businessHint: 'Empieza a escribir y elígelo de la lista.',
     emailLabel: 'Tu email',
     emailPlaceholder: 'tu@tunegocio.com',
+    whatsappLabel: 'Tu WhatsApp',
+    whatsappPlaceholder: '11 2345 6789',
+    whatsappHint: 'Te avisamos por aquí cuando tu demo esté listo. No lo compartimos.',
     websiteToggle: '¿Tienes sitio web? Agrégalo y tomamos tu marca de ahí',
     websiteLabel: 'Tu sitio web actual',
     websiteTag: 'Opcional',
@@ -79,6 +83,9 @@ const dict = {
       generating: 'Generando…',
       errBusiness: 'Elige tu negocio para generar el demo.',
       errEmail: 'Revisa tu email: no parece válido.',
+      errEmailTypo: '¿Quisiste decir @{domain}? Revisa tu email.',
+      errWhatsapp: 'Revisa tu WhatsApp: no parece un número válido.',
+      errWhatsappRequired: 'Déjanos tu WhatsApp para avisarte cuando esté listo.',
       errConsent: 'Necesitamos tu OK para generar el demo.',
       errGeneric: 'No se pudo generar el demo.',
       errRetry: 'No se pudo generar el demo. Prueba de nuevo.',
@@ -102,6 +109,9 @@ const dict = {
     businessHint: 'Start typing and pick it from the list.',
     emailLabel: 'Your email',
     emailPlaceholder: 'you@yourbusiness.com',
+    whatsappLabel: 'Your WhatsApp',
+    whatsappPlaceholder: '11 2345 6789',
+    whatsappHint: 'We\u2019ll ping you here when your demo is ready. We don\u2019t share it.',
     websiteToggle: 'Have a website? Add it and we take your brand from there',
     websiteLabel: 'Your current website',
     websiteTag: 'Optional',
@@ -144,6 +154,9 @@ const dict = {
       generating: 'Generating…',
       errBusiness: 'Choose your business to generate the demo.',
       errEmail: 'Check your email: it doesn’t look valid.',
+      errEmailTypo: 'Did you mean @{domain}? Check your email.',
+      errWhatsapp: 'Check your WhatsApp: it doesn’t look like a valid number.',
+      errWhatsappRequired: 'Leave us your WhatsApp so we can tell you when it’s ready.',
       errConsent: 'We need your OK to generate the demo.',
       errGeneric: 'We couldn’t generate the demo.',
       errRetry: 'We couldn’t generate the demo. Please try again.',
@@ -207,6 +220,19 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
             <div>
               <label for="email" class="mb-1.5 block text-sm font-medium text-ink">{dict.emailLabel}</label>
               <input id="email" name="email" type="email" autocomplete="email" required placeholder={dict.emailPlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+            </div>
+
+            <div>
+              <label for="wa-number" class="mb-1.5 block text-sm font-medium text-ink">{dict.whatsappLabel}</label>
+              <div class="flex gap-2">
+                <select id="wa-country" name="whatsappCountry" aria-label="País" class="shrink-0 rounded-xl border border-line bg-white px-2.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25">
+                  {COUNTRIES.map((c) => (
+                    <option value={c.iso}>{c.flag} +{c.dial}</option>
+                  ))}
+                </select>
+                <input id="wa-number" name="whatsappNumber" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder={dict.whatsappPlaceholder} class="w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-ink focus:border-pine focus:outline-none focus:ring-2 focus:ring-pine/25" />
+              </div>
+              <p class="mt-1 text-xs text-salvia">{dict.whatsappHint}</p>
             </div>
 
             <!-- Sitio web: opcional y plegado. Pedimos poco: el demo se arma con Google y, si la portada
@@ -316,7 +342,7 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
     </div>
   </div>
 
-  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, T }}>
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, T, COUNTRIES }}>
     (function () {
       var form = document.getElementById('trial-form');
       if (!form) return;
@@ -331,6 +357,87 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
         IS_AR = /America\/Argentina/.test(tz) || /^es-AR/i.test(navigator.language || '');
       } catch (e) {}
       var WA = IS_AR ? WHATSAPP_AR : WHATSAPP_MX;
+
+      // WhatsApp: default del selector de país por región (AR/MX), y helpers de validación (mismos que
+      // el backend: lib/phone.js + leadQuality.js). El backend revalida y normaliza — esto es UX.
+      var COUNTRY_BY_ISO = {};
+      COUNTRIES.forEach(function (c) { COUNTRY_BY_ISO[c.iso] = c; });
+      var waCountry = document.getElementById('wa-country');
+      var waNumber = document.getElementById('wa-number');
+      try {
+        // País por timezone (más confiable que el locale para inferir el país). Fallback AR (mercado
+        // principal): LATAM-first, y un navegador en inglés no debe forzar US. El usuario cambia con un click.
+        var TZ_ISO = [
+          [/America\/(Argentina|Buenos_Aires|Cordoba|Mendoza|Catamarca|Jujuy|Tucuman|Salta|San_Juan|San_Luis|La_Rioja|Rosario|Ushuaia)/, 'AR'], [/America\/(Mexico|Cancun|Merida|Monterrey|Matamoros|Tijuana|Hermosillo|Mazatlan|Chihuahua|Ojinaga|Bahia_Banderas)/, 'MX'],
+          [/America\/Montevideo/, 'UY'], [/America\/Santiago|America\/Punta_Arenas/, 'CL'], [/America\/Bogota/, 'CO'],
+          [/America\/Lima/, 'PE'], [/America\/(Sao_Paulo|Bahia|Fortaleza|Recife|Manaus|Belem|Cuiaba)/, 'BR'],
+          [/America\/Asuncion/, 'PY'], [/Europe\/Madrid|Atlantic\/Canary/, 'ES'],
+          [/America\/(New_York|Chicago|Denver|Los_Angeles|Phoenix|Anchorage|Detroit)|US\//, 'US'],
+        ];
+        var tzGuess = '';
+        for (var gi = 0; gi < TZ_ISO.length; gi++) { if (TZ_ISO[gi][0].test(tz)) { tzGuess = TZ_ISO[gi][1]; break; } }
+        var loc = (navigator.language || '').toUpperCase();
+        var locGuess = /-MX/.test(loc) ? 'MX' : /-US/.test(loc) ? 'US' : '';
+        var guess = (IS_AR && 'AR') || tzGuess || locGuess || 'AR';
+        if (waCountry && COUNTRY_BY_ISO[guess]) waCountry.value = guess;
+      } catch (e) {}
+
+      // Teléfono falso obvio (últimos 8 dígitos): repetidos, secuencias, mitades duplicadas. Espeja
+      // leadQuality.isFakePhonePattern del backend.
+      function isFakePhone(value) {
+        var all = String(value || '').replace(/\D/g, '');
+        var d = all.slice(-8);
+        if (d.length < 6) return false;
+        if (/^(.)\1+$/.test(d)) return true;
+        var asc = d.split('').every(function (x, i, a) { return i === 0 || +x === +a[i - 1] + 1; });
+        var desc = d.split('').every(function (x, i, a) { return i === 0 || +x === +a[i - 1] - 1; });
+        if (asc || desc) return true;
+        var half = d.slice(0, Math.floor(d.length / 2));
+        if (d === half + half) return true;
+        var l6 = all.slice(-6);
+        if (l6.length === 6 && l6 === l6.slice(0, 3) + l6.slice(0, 3)) return true;
+        if (/(.)\1{3,}/.test(d)) return true;
+        var l4 = d.slice(-4);
+        return l4.split('').every(function (x, i, a) { return i === 0 || +x === +a[i - 1] + 1; })
+          || l4.split('').every(function (x, i, a) { return i === 0 || +x === +a[i - 1] - 1; });
+      }
+
+      // Valida el WhatsApp contra el país elegido (largo nacional) y lo normaliza a E.164. Devuelve
+      // { ok, e164 } o { ok:false, reason:'required'|'invalid'|'fake' }.
+      function validateWhatsapp() {
+        var iso = (waCountry && waCountry.value) || 'AR';
+        var c = COUNTRY_BY_ISO[iso];
+        var digits = String((waNumber && waNumber.value) || '').replace(/\D/g, '').replace(/^0+/, '');
+        if (!digits) return { ok: false, reason: 'required' };
+        if (!c) return { ok: false, reason: 'invalid' };
+        var national = digits.indexOf(c.dial) === 0 ? digits.slice(c.dial.length) : digits;
+        if (c.lengths.indexOf(national.length) === -1) return { ok: false, reason: 'invalid' };
+        var e164 = '+' + c.dial + (iso === 'AR' ? '9' : '') + national;
+        if (isFakePhone(e164)) return { ok: false, reason: 'fake' };
+        return { ok: true, e164: e164 };
+      }
+
+      // Typo de dominio común (gamil→gmail) para feedback inmediato; el resto lo caza el backend.
+      var TYPO_TARGETS = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com', 'live.com'];
+      function osa(a, b) {
+        var al = a.length, bl = b.length, dd = [];
+        for (var i = 0; i <= al; i++) { dd[i] = [i]; }
+        for (var j = 0; j <= bl; j++) { dd[0][j] = j; }
+        for (i = 1; i <= al; i++) for (j = 1; j <= bl; j++) {
+          var cost = a[i - 1] === b[j - 1] ? 0 : 1;
+          dd[i][j] = Math.min(dd[i - 1][j] + 1, dd[i][j - 1] + 1, dd[i - 1][j - 1] + cost);
+          if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) dd[i][j] = Math.min(dd[i][j], dd[i - 2][j - 2] + 1);
+        }
+        return dd[al][bl];
+      }
+      function emailTypo(email) {
+        var dom = String(email || '').split('@')[1];
+        if (!dom) return null;
+        dom = dom.toLowerCase().trim();
+        if (TYPO_TARGETS.indexOf(dom) !== -1) return null;
+        for (var i = 0; i < TYPO_TARGETS.length; i++) { if (dom[0] === TYPO_TARGETS[i][0] && osa(dom, TYPO_TARGETS[i]) === 1) return TYPO_TARGETS[i]; }
+        return null;
+      }
 
       // El autocompletado del campo negocio vive en <PlacesAutocomplete />: le pega a
       // nuestro /api/places-autocomplete, así que la key de Google no viaja al cliente.
@@ -466,6 +573,10 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
         var business = String(fd.get('business') || '').trim();
         if (!business) return showError(T.errBusiness);
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError(T.errEmail);
+        var typo = emailTypo(email);
+        if (typo) return showError((T.errEmailTypo || '').replace('{domain}', typo));
+        var wa = validateWhatsapp();
+        if (!wa.ok) return showError(wa.reason === 'required' ? T.errWhatsappRequired : T.errWhatsapp);
         if (!fd.get('consent')) return showError(T.errConsent);
 
         btn.disabled = true;
@@ -485,6 +596,9 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
           // Opcional: sitio actual o Instagram del negocio → el backend toma marca/fotos de ahí en vez
           // de (o además de) la web que figure en Google.
           websiteUrl: String(fd.get('website') || '').trim().slice(0, 300),
+          // WhatsApp requerido: número nacional + país del selector. El backend revalida y normaliza a E.164.
+          whatsapp: String(fd.get('whatsappNumber') || '').trim(),
+          whatsappCountry: String(fd.get('whatsappCountry') || 'AR'),
         };
 
         fetch(base + '/api/public/demo', {
