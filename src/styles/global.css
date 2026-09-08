@@ -96,6 +96,13 @@ h2 {
   .dot { animation: none; }
 }
 
+/* Modal de progreso del free trial: spinner de la etapa activa */
+.step-spinning { animation: sara-spin 0.9s linear infinite; }
+@keyframes sara-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .step-spinning { animation: none; border-top-color: currentColor; }
+}
+
 /* Cursor de marca (wordmark sara▌): bloque verde que parpadea seco (step, no fade) */
 .caret {
   display: inline-block;
