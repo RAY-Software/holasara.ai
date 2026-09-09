@@ -288,6 +288,12 @@ const topLinksRaw: RawLink[] = [
     desc: { es: 'Conectas tu calendario y listo.', en: 'Connect your calendar and you are set.' },
   },
   {
+    // Slug localizado: /es/precios ↔ /en/pricing.
+    href: '/precios',
+    name: { es: 'Precios', en: 'Pricing' },
+    desc: { es: 'Claros, por agenda, sin llamada de ventas.', en: 'Clear, per calendar, no sales call.' },
+  },
+  {
     // Slug localizado: /es/integraciones ↔ /en/integrations.
     href: '/integraciones',
     name: { es: 'Integraciones', en: 'Integrations' },
@@ -298,9 +304,9 @@ const topLinksRaw: RawLink[] = [
   // el CTA principal ahora es "Probar gratis" y absorbe ese destino. La página sigue viva y
   // enlazada desde el footer.
 ];
-// "Precios" salió del top menu a pedido de Franco (ago 2026): prefiere no
-// mostrar precios en la navegación. La página /precios sigue viva por si hay
-// links directos (ads, contratos); solo dejó de promocionarse.
+// "Precios" volvió al top menu (sep 2026, cambio de rumbo pedido por Alex): el sitio
+// vuelve a publicar precios transparentes. Antes estuvo oculto (ago 2026) y /precios
+// redirigía a /demo.
 
 const pickLink = (l: RawLink, lang: Locale): FeatureLink => ({
   href: l.href,

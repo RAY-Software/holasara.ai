@@ -1,0 +1,442 @@
+---
+import { localizedStaticPaths, toLocale, localePath } from '../../i18n/config';
+// Slug localizado: /es/precios ↔ /en/pricing (src/i18n/slugs.ts).
+export function getStaticPaths() {
+  return localizedStaticPaths('pricing');
+}
+const lang = toLocale(Astro.params.lang);
+const L = (p: string) => localePath(p, lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { whatsappLink, whatsappText } from '../../lib/whatsapp';
+import { SARA_START, SARA_TIERS, ADDON_MIA, CALC_ROWS, fmt } from '../../data/pricing';
+
+// El precio base de Sara Full (agendas 1ª y 2ª) y el fijo de Mia/Daniel salen de la
+// fuente única (data/pricing.ts), así la copy nunca se desincroniza de la calculadora.
+const SARA_BASE = SARA_TIERS[0].price; // 129
+const ADDON = ADDON_MIA; // 110
+
+// ── Copy por idioma. EN es inglés nativo del producto US, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Precios · Sara',
+    metaDescription:
+      'Precios claros de Sara: pagas por agenda, no por sucursal. Sara desde 49 USD por agenda, Mia y Daniel 110 USD fijo cada uno. Sin demo, empiezas hoy.',
+    heroBadge: 'Sin demo · Empiezas hoy',
+    heroTitle: 'Pagas por agenda,<br />no por sucursal.',
+    heroLead1: 'Sara atiende, agenda y cobra las 24 horas.',
+    heroLead2: 'Mia trae pacientes. Daniel cuida el dinero.',
+    heroLead3: 'Precios claros, sin llamada de ventas.',
+    ctaStart: 'Empezar ahora',
+    ctaTalk: 'Habla con Sara',
+    stats: [
+      { n: fmt(SARA_START), label: 'USD por agenda' },
+      { n: fmt(ADDON), label: 'Mia o Daniel, fijo' },
+      { n: '0', label: 'demos necesarias' },
+    ],
+    teamKicker: 'Tu equipo con IA',
+    teamH2: 'Tres agentes. <em class="text-pine-dark">Empiezas por Sara.</em>',
+    teamLead:
+      'Sara es la puerta de entrada y es lo único indispensable. Mia y Daniel se suman cuando los necesitas, sobre la misma cuenta.',
+    team: [
+      {
+        tag: 'Recepción',
+        name: 'Sara',
+        body: 'Responde en WhatsApp e Instagram, informa precios, agenda la cita y cobra el anticipo. Recuerda, confirma y reprograma sola.',
+        price: fmt(SARA_BASE),
+        unit: 'USD / agenda',
+        featured: true,
+      },
+      {
+        tag: 'Marketing',
+        name: 'Mia',
+        body: 'Propone las ideas, crea las piezas con tu marca, publica en Instagram y llena los huecos de la agenda. Mide en citas, no en likes.',
+        price: fmt(ADDON),
+        unit: 'USD fijo',
+        featured: false,
+      },
+      {
+        tag: 'Finanzas',
+        name: 'Daniel',
+        body: 'Cierra el mes, te dice el margen y detecta los anticipos sin cobrar. Cuando hay dinero pendiente, se lo pasa a Sara.',
+        price: fmt(ADDON),
+        unit: 'USD fijo',
+        featured: false,
+      },
+    ],
+    plansKicker: 'Cómo se cobra',
+    plansH2: 'Una agenda es un calendario reservable.',
+    plansLead:
+      'Si en tu clínica atienden tres profesionales con calendarios propios, son tres agendas, estén en un local o en once. Mia y Daniel se cobran una sola vez por cuenta, sin importar cuántas agendas o sucursales tengas.',
+    plansCols: { plan: 'Plan', price: 'USD / mes', includes: 'Qué incluye' },
+    plans: [
+      {
+        name: 'Sara Start',
+        price: fmt(SARA_START),
+        includes:
+          'Atención 24/7 en WhatsApp y web, agendamiento automático, cobro de la consulta en línea, configuración autoservicio. Con tope mensual de conversaciones por agenda.',
+      },
+      {
+        name: 'Sara Full',
+        price: fmt(SARA_BASE),
+        includes:
+          'Todo lo de Start sin tope, más recordatorios automáticos, recuperación de no-shows, reprogramación automática y reportes de ocupación de agenda.',
+      },
+      {
+        name: '+ Mia',
+        price: fmt(ADDON),
+        includes:
+          'Captación de pacientes nuevos, reactivación de inactivos, campañas por WhatsApp, presencia en Google y buscadores con IA, reportes de origen.',
+      },
+      {
+        name: '+ Daniel',
+        price: fmt(ADDON),
+        includes:
+          'Control de ingresos y cobranzas, conciliación de pagos, reportes financieros mensuales y proyección de facturación.',
+      },
+    ],
+    volKicker: 'Volumen',
+    volH2: 'Cada agenda nueva cuesta menos.',
+    volLead:
+      'El precio baja agenda por agenda, no de golpe. Cada tramo fija el precio de las agendas que caen dentro de él, y las anteriores conservan el suyo.',
+    tiers: [
+      { label: 'Agendas 1ª y 2ª', price: fmt(SARA_TIERS[0].price), each: 'cada una' },
+      { label: 'Agendas 3ª a 5ª', price: fmt(SARA_TIERS[1].price), each: 'cada una' },
+      { label: 'Agendas 6ª a 10ª', price: fmt(SARA_TIERS[2].price), each: 'cada una' },
+      { label: 'Agendas 11ª y más', price: fmt(SARA_TIERS[3].price), each: 'cada una' },
+    ],
+    volExampleBold: 'Ejemplo con tres agendas:',
+    volExample:
+      'la primera cuesta 129, la segunda 129 y la tercera 109. El total de Sara es 367 USD, no 327. El precio de 109 aplica solo a la tercera agenda, no a las tres.',
+    calcKicker: 'Calculadora',
+    calcH2: 'Busca tu clínica en la tabla.',
+    calcLead: 'Cuenta cuántos calendarios reservables tienes y lee la fila. Los precios ya incluyen los tramos por volumen.',
+    calcCols: {
+      agendas: 'Agendas',
+      sara: 'Solo Sara',
+      saraMia: 'Sara + Mia',
+      equipo: 'Equipo completo',
+      perAgenda: 'Costo por agenda',
+    },
+    scaleBold: 'Mia y Daniel no escalan.',
+    scale:
+      'Cuestan 110 USD cada uno en cualquier tamaño de cuenta. Cuantas más agendas tengas, mejor negocio resultan: en una clínica de 20 agendas, los dos juntos cuestan menos que dos agendas de Sara.',
+    faqTitle: 'Lo que suelen preguntar.',
+    faqs: [
+      { q: '¿Qué cuenta como una agenda?', a: 'Un calendario reservable. Si dos profesionales comparten el mismo calendario, es una sola agenda.' },
+      { q: '¿Puedo empezar solo con Sara?', a: 'Sí. Sara es la puerta de entrada. Mia y Daniel se suman cuando quieras, sobre la misma cuenta.' },
+      { q: '¿Pago más por tener varias sucursales?', a: 'No. El precio depende de cuántos calendarios reservables tengas, no de cuántos locales.' },
+      { q: '¿Necesito una demo para empezar?', a: 'No. Contratas en línea, configuras la agenda y el WhatsApp, y Sara empieza a atender el mismo día.' },
+      { q: '¿Qué pasa si sumo un profesional?', a: 'Se agrega una agenda al precio del tramo que corresponda, y baja el costo promedio de toda la cuenta.' },
+      { q: '¿Toca mi historia clínica?', a: 'No. No se almacena historia clínica ni información médica. Eso queda donde está hoy.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Pricing · Sara',
+    metaDescription:
+      'Clear Sara pricing: you pay per calendar, not per location. Sara from $49 per calendar, Mia and Daniel $110 flat each. No demo, start today.',
+    heroBadge: 'No demo · Start today',
+    heroTitle: 'You pay per calendar,<br />not per location.',
+    heroLead1: 'Sara answers, books and collects 24/7.',
+    heroLead2: 'Mia brings patients in. Daniel watches the money.',
+    heroLead3: 'Clear pricing, no sales call.',
+    ctaStart: 'Start now',
+    ctaTalk: 'Talk to Sara',
+    stats: [
+      { n: fmt(SARA_START), label: 'USD per calendar' },
+      { n: fmt(ADDON), label: 'Mia or Daniel, flat' },
+      { n: '0', label: 'demos needed' },
+    ],
+    teamKicker: 'Your AI team',
+    teamH2: 'Three agents. <em class="text-pine-dark">You start with Sara.</em>',
+    teamLead:
+      'Sara is the way in and the only must-have. Mia and Daniel join when you need them, on the same account.',
+    team: [
+      {
+        tag: 'Front desk',
+        name: 'Sara',
+        body: 'Answers on WhatsApp and Instagram, quotes prices, books the appointment and collects the deposit. Reminds, confirms and reschedules on her own.',
+        price: fmt(SARA_BASE),
+        unit: 'USD / calendar',
+        featured: true,
+      },
+      {
+        tag: 'Marketing',
+        name: 'Mia',
+        body: 'Brings the ideas, builds the pieces in your brand, posts on Instagram and fills the gaps in the calendar. Measures in appointments, not likes.',
+        price: fmt(ADDON),
+        unit: 'USD flat',
+        featured: false,
+      },
+      {
+        tag: 'Bookkeeping',
+        name: 'Daniel',
+        body: 'Closes the month, tells you the margin and catches the deposits that went uncollected. When money is pending, he hands it to Sara.',
+        price: fmt(ADDON),
+        unit: 'USD flat',
+        featured: false,
+      },
+    ],
+    plansKicker: 'How you are billed',
+    plansH2: 'A calendar is one bookable schedule.',
+    plansLead:
+      'If three providers at your practice each keep their own calendar, that is three calendars, whether in one location or eleven. Mia and Daniel are billed once per account, no matter how many calendars or locations you have.',
+    plansCols: { plan: 'Plan', price: 'USD / mo', includes: 'What it includes' },
+    plans: [
+      {
+        name: 'Sara Start',
+        price: fmt(SARA_START),
+        includes:
+          '24/7 answering on WhatsApp and web, automatic scheduling, online deposit collection, self-serve setup. With a monthly cap on conversations per calendar.',
+      },
+      {
+        name: 'Sara Full',
+        price: fmt(SARA_BASE),
+        includes:
+          'Everything in Start with no cap, plus automatic reminders, no-show recovery, automatic rescheduling and calendar-occupancy reports.',
+      },
+      {
+        name: '+ Mia',
+        price: fmt(ADDON),
+        includes:
+          'New-patient acquisition, win-back of lapsed patients, WhatsApp campaigns, presence on Google and AI search, source reports.',
+      },
+      {
+        name: '+ Daniel',
+        price: fmt(ADDON),
+        includes:
+          'Revenue and collections tracking, payment reconciliation, monthly financial reports and revenue projection.',
+      },
+    ],
+    volKicker: 'Volume',
+    volH2: 'Each new calendar costs less.',
+    volLead:
+      'The price drops calendar by calendar, not all at once. Each tier sets the price for the calendars that fall inside it, and the earlier ones keep theirs.',
+    tiers: [
+      { label: 'Calendars 1 and 2', price: fmt(SARA_TIERS[0].price), each: 'each' },
+      { label: 'Calendars 3 to 5', price: fmt(SARA_TIERS[1].price), each: 'each' },
+      { label: 'Calendars 6 to 10', price: fmt(SARA_TIERS[2].price), each: 'each' },
+      { label: 'Calendars 11 and up', price: fmt(SARA_TIERS[3].price), each: 'each' },
+    ],
+    volExampleBold: 'Example with three calendars:',
+    volExample:
+      'the first costs 129, the second 129 and the third 109. Sara totals $367, not $327. The 109 price applies only to the third calendar, not to all three.',
+    calcKicker: 'Calculator',
+    calcH2: 'Find your practice in the table.',
+    calcLead: 'Count how many bookable calendars you have and read the row. Prices already include the volume tiers.',
+    calcCols: {
+      agendas: 'Calendars',
+      sara: 'Sara only',
+      saraMia: 'Sara + Mia',
+      equipo: 'Full team',
+      perAgenda: 'Cost per calendar',
+    },
+    scaleBold: 'Mia and Daniel do not scale.',
+    scale:
+      'They cost $110 each at any account size. The more calendars you have, the better the deal: at a 20-calendar practice, the two of them together cost less than two Sara calendars.',
+    faqTitle: 'What people usually ask.',
+    faqs: [
+      { q: 'What counts as one calendar?', a: 'A bookable calendar. If two providers share the same calendar, it is a single calendar.' },
+      { q: 'Can I start with just Sara?', a: 'Yes. Sara is the way in. Mia and Daniel join whenever you want, on the same account.' },
+      { q: 'Do I pay more for having several locations?', a: 'No. The price depends on how many bookable calendars you have, not how many locations.' },
+      { q: 'Do I need a demo to start?', a: 'No. You sign up online, set up the calendar and WhatsApp, and Sara starts answering the same day.' },
+      { q: 'What happens if I add a provider?', a: 'One calendar is added at the price of the matching tier, and the average cost of the whole account goes down.' },
+      { q: 'Does it touch my medical records?', a: 'No. No medical records or clinical information are stored. That stays where it is today.' },
+    ],
+  },
+}[lang];
+
+const { team, plans, tiers, calcCols, faqs } = dict;
+---
+
+<Layout ogImage={`/og/pricing-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
+  <Header lang={lang} />
+  <main>
+    <!-- ══════════ HERO (banda oscura) ══════════ -->
+    <section class="border-b border-line-dark bg-ink text-cream">
+      <div class="mx-auto max-w-6xl px-5 pb-16 pt-14">
+        <a href={L('/')} class="mb-10 inline-flex items-center gap-1.5 text-sm font-medium text-cream/60 transition-colors hover:text-cream">
+          <span aria-hidden="true">←</span> {lang === 'en' ? 'Back to home' : 'Volver al inicio'}
+        </a>
+        <p class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-cream/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-cream/85">
+          <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>{dict.heroBadge}
+        </p>
+        <h1 class="max-w-4xl font-serif text-5xl font-black leading-[1.04] tracking-tight text-balance md:text-6xl" set:html={dict.heroTitle} />
+        <div class="mt-7 space-y-1 text-lg text-cream/75 md:text-xl">
+          <p>{dict.heroLead1}</p>
+          <p>{dict.heroLead2}</p>
+          <p>{dict.heroLead3}</p>
+        </div>
+        <div class="mt-9 flex flex-wrap items-center gap-3">
+          <a
+            href={L('/free-trial')}
+            class="inline-flex items-center gap-2 rounded-full bg-mint px-7 py-3.5 text-base font-semibold text-ink transition-opacity hover:opacity-90"
+          >
+            {dict.ctaStart}
+          </a>
+          <a
+            href={whatsappLink(whatsappText(lang))}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full border border-cream/30 px-7 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-cream/10"
+          >
+            {dict.ctaTalk}
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="mt-14 grid max-w-2xl grid-cols-3 gap-8 border-t border-cream/12 pt-8">
+          {
+            dict.stats.map((s) => (
+              <div>
+                <p class="font-serif text-4xl font-black text-cream tabular-nums md:text-5xl">{s.n}</p>
+                <p class="mt-1.5 text-sm text-cream/60">{s.label}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ TU EQUIPO CON IA · 3 tarjetas ══════════ -->
+    <section class="border-b border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.teamKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.teamH2} />
+        <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.teamLead}</p>
+        <div class="mt-12 grid gap-5 md:grid-cols-3">
+          {
+            team.map((m) => (
+              <div
+                class:list={[
+                  'flex flex-col rounded-2xl border bg-cream p-7',
+                  m.featured ? 'border-pine/40 shadow-[0_16px_44px_-24px_rgba(20,38,31,0.4)]' : 'border-line',
+                ]}
+              >
+                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-pine-dark">{m.tag}</p>
+                <p class="mt-2 font-serif text-2xl font-black text-ink">{m.name}</p>
+                <p class="mt-3 flex-1 text-salvia">{m.body}</p>
+                <p class="mt-6 border-t border-line pt-4">
+                  <span class="font-serif text-3xl font-black text-ink tabular-nums">{m.price}</span>
+                  <span class="ml-1.5 text-sm text-salvia">{m.unit}</span>
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO SE COBRA · tabla de planes ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.plansKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.plansH2}</h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.plansLead}</p>
+
+        <div class="mt-12 overflow-x-auto rounded-2xl border border-line bg-cream shadow-[0_16px_40px_-28px_rgba(20,38,31,0.32)]">
+          <table class="w-full min-w-[640px] border-collapse text-left">
+            <thead>
+              <tr class="bg-ink text-cream">
+                <th scope="col" class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em]">{dict.plansCols.plan}</th>
+                <th scope="col" class="whitespace-nowrap px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em]">{dict.plansCols.price}</th>
+                <th scope="col" class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em]">{dict.plansCols.includes}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-line">
+              {
+                plans.map((p, i) => (
+                  <tr class={i % 2 ? 'bg-mint/[0.04]' : ''}>
+                    <th scope="row" class="whitespace-nowrap px-6 py-5 text-left align-top font-serif text-lg font-black text-ink">{p.name}</th>
+                    <td class="px-6 py-5 align-top">
+                      <span class="font-serif text-xl font-black text-ink tabular-nums">{p.price}</span>
+                    </td>
+                    <td class="px-6 py-5 align-top text-salvia">{p.includes}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ VOLUMEN · tramos + ejemplo ══════════ -->
+    <section class="border-b border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.volKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.volH2}</h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.volLead}</p>
+
+        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            tiers.map((tr, i) => (
+              <div
+                class:list={[
+                  'rounded-2xl border p-6',
+                  i < 2 ? 'border-pine/30 bg-mint/[0.05]' : 'border-line bg-paper',
+                ]}
+              >
+                <p class="text-sm font-semibold text-pine-dark">{tr.label}</p>
+                <p class="mt-4 font-serif text-4xl font-black text-ink tabular-nums">{tr.price}</p>
+                <p class="mt-1 text-sm text-salvia">{tr.each}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-8 rounded-xl border-l-4 border-pine bg-paper p-6 text-salvia">
+          <span class="font-semibold text-ink">{dict.volExampleBold}</span> {dict.volExample}
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ CALCULADORA · tabla por nº de agendas ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.calcKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.calcH2}</h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.calcLead}</p>
+
+        <div class="mt-12 overflow-x-auto rounded-2xl border border-line bg-cream shadow-[0_16px_40px_-28px_rgba(20,38,31,0.32)]">
+          <table class="w-full min-w-[620px] border-collapse text-right tabular-nums">
+            <thead>
+              <tr class="bg-ink text-cream">
+                <th scope="col" class="px-5 py-4 text-center text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.agendas}</th>
+                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.sara}</th>
+                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.saraMia}</th>
+                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em] text-mint">{calcCols.equipo}</th>
+                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.perAgenda}</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-line">
+              {
+                CALC_ROWS.map((r, i) => (
+                  <tr class={i % 2 ? 'bg-mint/[0.03]' : ''}>
+                    <th scope="row" class="px-5 py-3.5 text-center font-semibold text-ink">{r.agendas}</th>
+                    <td class="px-5 py-3.5 text-salvia">{fmt(r.sara)}</td>
+                    <td class="px-5 py-3.5 text-salvia">{fmt(r.saraMia)}</td>
+                    <td class="px-5 py-3.5 font-semibold text-pine-dark">{fmt(r.equipo)}</td>
+                    <td class="px-5 py-3.5 text-salvia">{fmt(r.perAgenda)}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-8 rounded-xl border-l-4 border-pine bg-cream p-6 text-salvia">
+          <span class="font-semibold text-ink">{dict.scaleBold}</span> {dict.scale}
+        </div>
+      </div>
+    </section>
+
+    <FeatureFaq items={faqs} lang={lang} title={dict.faqTitle} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

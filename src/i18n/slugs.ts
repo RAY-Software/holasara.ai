@@ -52,6 +52,8 @@ export const localizedSlugs = {
   implementation: { es: 'implementacion', en: 'implementation' },
   /** Prueba gratis ↔ free-trial. */
   freeTrial: { es: 'free-trial', en: 'free-trial' },
+  /** Precios ↔ pricing. Vuelve a publicarse (sep 2026); antes redirigía a /demo. */
+  pricing: { es: 'precios', en: 'pricing' },
   /** Caso de éxito ↔ case-study. */
   caseStudy: { es: 'caso', en: 'case-study' },
   /** Comparativa de asistentes IA ↔ best-ai-assistants-for-clinics. */
