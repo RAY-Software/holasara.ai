@@ -26,9 +26,10 @@ const ADDON = ADDON_MIA; // 110
 const CALC_MAX = 30;
 const DEFAULT_N = 3;
 const SARA_TOTALS = Array.from({ length: CALC_MAX }, (_, i) => saraTotal(i + 1));
-const calcData = { totals: SARA_TOTALS, mia: ADDON_MIA, daniel: ADDON_DANIEL, max: CALC_MAX };
-// Valores por defecto server-render (para que la calculadora muestre algo sin JS).
-const defaultSara = saraTotal(DEFAULT_N);
+// start = precio de Sara Start (plano, por agenda). totals = Sara Full (con tramos por volumen).
+const calcData = { totals: SARA_TOTALS, start: SARA_START, mia: ADDON_MIA, daniel: ADDON_DANIEL, max: CALC_MAX };
+// Valores por defecto server-render (plan Start, para que arranque en 49 y muestre algo sin JS).
+const defaultSara = SARA_START * DEFAULT_N;
 const defaultPer = Math.round(defaultSara / DEFAULT_N);
 
 // ── Copy por idioma. EN es inglés nativo del producto US, no calco. ──
@@ -162,7 +163,8 @@ const dict = {
       'la primera cuesta 129, la segunda 129 y la tercera 109. El total de Sara es 367 USD, no 327. El precio de 109 aplica solo a la tercera agenda, no a las tres.',
     calcKicker: 'Calculadora',
     calcH2: 'Calcula el precio de tu clínica.',
-    calcLead: 'Mueve el control según cuántos calendarios reservables tienes y suma a Mia y a Daniel. El precio ya incluye los tramos por volumen.',
+    calcLead: 'Elige el plan, mueve el control según cuántas agendas tienes y suma a Mia y a Daniel. El precio se actualiza al instante.',
+    calcPlanLabel: 'Plan de Sara',
     calcAgendasLabel: '¿Cuántas agendas?',
     calcAddMia: '+ Mia',
     calcAddDaniel: '+ Daniel',
@@ -314,7 +316,8 @@ const dict = {
       'the first costs 129, the second 129 and the third 109. Sara totals $367, not $327. The 109 price applies only to the third calendar, not to all three.',
     calcKicker: 'Calculator',
     calcH2: 'Price it for your practice.',
-    calcLead: 'Move the control for how many bookable calendars you have and add Mia and Daniel. The price already includes the volume tiers.',
+    calcLead: 'Pick the plan, move the control for how many calendars you have and add Mia and Daniel. The price updates instantly.',
+    calcPlanLabel: 'Sara plan',
     calcAgendasLabel: 'How many calendars?',
     calcAddMia: '+ Mia',
     calcAddDaniel: '+ Daniel',
@@ -347,46 +350,49 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
   <main>
     <!-- ══════════ HERO (banda oscura) ══════════ -->
     <section class="border-b border-line-dark bg-ink text-cream">
-      <div class="mx-auto max-w-6xl px-5 pb-16 pt-14">
-        <a href={L('/')} class="mb-10 inline-flex items-center gap-1.5 text-sm font-medium text-cream/60 transition-colors hover:text-cream">
+      <div class="mx-auto max-w-5xl px-5 pb-16 pt-14">
+        <a href={L('/')} class="inline-flex items-center gap-1.5 text-sm font-medium text-cream/60 transition-colors hover:text-cream">
           <span aria-hidden="true">←</span> {lang === 'en' ? 'Back to home' : 'Volver al inicio'}
         </a>
-        <p class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-cream/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-cream/85">
-          <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>{dict.heroBadge}
-        </p>
-        <h1 class="max-w-4xl font-serif text-5xl font-black leading-[1.04] tracking-tight text-balance md:text-6xl" set:html={dict.heroTitle} />
-        <div class="mt-7 space-y-1 text-lg text-cream/75 md:text-xl">
-          <p>{dict.heroLead1}</p>
-          <p>{dict.heroLead2}</p>
-          <p>{dict.heroLead3}</p>
-        </div>
-        <div class="mt-9 flex flex-wrap items-center gap-3">
-          <a
-            href={L('/free-trial')}
-            class="inline-flex items-center gap-2 rounded-full bg-mint px-7 py-3.5 text-base font-semibold text-ink transition-opacity hover:opacity-90"
-          >
-            {dict.ctaStart}
-          </a>
-          <a
-            href={whatsappLink(whatsappText(lang))}
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center gap-2 rounded-full border border-cream/30 px-7 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-cream/10"
-          >
-            {dict.ctaTalk}
-          </a>
-        </div>
 
-        <!-- Stats -->
-        <div class="mt-14 grid max-w-2xl grid-cols-3 gap-8 border-t border-cream/12 pt-8">
-          {
-            dict.stats.map((s) => (
-              <div>
-                <p class="font-serif text-4xl font-black text-cream tabular-nums md:text-5xl">{s.n}</p>
-                <p class="mt-1.5 text-sm text-cream/60">{s.label}</p>
-              </div>
-            ))
-          }
+        <div class="mt-10 text-center">
+          <p class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-cream/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-cream/85">
+            <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>{dict.heroBadge}
+          </p>
+          <h1 class="mx-auto max-w-3xl font-serif text-5xl font-black leading-[1.04] tracking-tight text-balance md:text-6xl" set:html={dict.heroTitle} />
+          <div class="mx-auto mt-7 max-w-2xl space-y-1 text-lg text-cream/75 md:text-xl">
+            <p>{dict.heroLead1}</p>
+            <p>{dict.heroLead2}</p>
+            <p>{dict.heroLead3}</p>
+          </div>
+          <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={L('/free-trial')}
+              class="inline-flex items-center gap-2 rounded-full bg-mint px-7 py-3.5 text-base font-semibold text-ink transition-opacity hover:opacity-90"
+            >
+              {dict.ctaStart}
+            </a>
+            <a
+              href={whatsappLink(whatsappText(lang))}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-full border border-cream/30 px-7 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-cream/10"
+            >
+              {dict.ctaTalk}
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-8 border-t border-cream/12 pt-8">
+            {
+              dict.stats.map((s) => (
+                <div>
+                  <p class="font-serif text-4xl font-black text-cream tabular-nums md:text-5xl">{s.n}</p>
+                  <p class="mt-1.5 text-sm text-cream/60">{s.label}</p>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -574,6 +580,13 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
         >
           <!-- Controles -->
           <div class="flex flex-col justify-center">
+            <div class="mb-6">
+              <p class="mb-2 text-sm font-semibold text-pine-dark">{dict.calcPlanLabel}</p>
+              <div class="inline-flex items-center gap-1 rounded-full border border-line bg-paper p-1" role="group" aria-label={dict.calcPlanLabel}>
+                <button type="button" data-plan="start" aria-pressed="true" class="bill-btn">Sara Start</button>
+                <button type="button" data-plan="full" aria-pressed="false" class="bill-btn">Sara Full</button>
+              </div>
+            </div>
             <div class="flex items-baseline justify-between gap-4">
               <label for="calc-agendas" class="text-sm font-semibold text-pine-dark">{dict.calcAgendasLabel}</label>
               <span class="font-serif text-4xl font-black text-ink tabular-nums" data-calc-n>{DEFAULT_N}</span>
@@ -616,7 +629,7 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
             </p>
             <ul class="mt-5 space-y-2.5 text-sm">
               <li class="flex items-center justify-between gap-4">
-                <span class="text-cream/80">{dict.calcSaraLabel}</span>
+                <span class="text-cream/80" data-calc-sara-label>Sara Start</span>
                 <span class="tabular-nums text-cream" data-calc-sara>{fmt(defaultSara)}</span>
               </li>
               <li class="flex items-center justify-between gap-4" data-calc-row="mia" hidden>
@@ -789,25 +802,35 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
     var perOut = root && root.querySelector('[data-calc-per]');
     var rowMia = root && root.querySelector('[data-calc-row="mia"]');
     var rowDaniel = root && root.querySelector('[data-calc-row="daniel"]');
+    var saraLabelOut = root && root.querySelector('[data-calc-sara-label]');
+    var planBtns = root ? root.querySelectorAll('[data-plan]') : [];
     var unit = (range && range.getAttribute('data-unit')) || '';
     var state = { mia: false, daniel: false };
+    var plan = 'start'; // 'start' (49 por agenda, plano) | 'full' (tramos por volumen)
+
+    // Sara Start = 49 x nº de agendas (plano). Sara Full = total con tramos por volumen.
+    function saraMonthlyFor(n) {
+      return plan === 'full' ? calcData.totals[n - 1] : calcData.start * n;
+    }
 
     function renderCalc() {
       if (!root) return;
       var n = parseInt(range.value, 10) || 1;
+      var saraM = saraMonthlyFor(n);
       // Sumamos las partes ya con el descuento aplicado, así el total coincide con las filas.
-      var saraNow = withBilling(calcData.totals[n - 1]);
+      var saraNow = withBilling(saraM);
       var total = saraNow + (state.mia ? withBilling(calcData.mia) : 0) + (state.daniel ? withBilling(calcData.daniel) : 0);
       nOut.textContent = String(n);
       saraOut.textContent = nf.format(saraNow);
       totalOut.textContent = nf.format(total);
       perOut.textContent = nf.format(Math.round(total / n));
+      if (saraLabelOut) saraLabelOut.textContent = plan === 'full' ? 'Sara Full' : 'Sara Start';
       if (rowMia) rowMia.hidden = !state.mia;
       if (rowDaniel) rowDaniel.hidden = !state.daniel;
       // Tachado del total: el mensual sin descuento.
       if (totalWas) {
         if (billing === 'annual') {
-          var monthly = calcData.totals[n - 1] + (state.mia ? calcData.mia : 0) + (state.daniel ? calcData.daniel : 0);
+          var monthly = saraM + (state.mia ? calcData.mia : 0) + (state.daniel ? calcData.daniel : 0);
           totalWas.textContent = nf.format(monthly);
           totalWas.hidden = false;
         } else {
@@ -834,6 +857,15 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
     });
 
     if (range) range.addEventListener('input', renderCalc);
+    planBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        plan = b.getAttribute('data-plan');
+        planBtns.forEach(function (x) {
+          x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+        });
+        renderCalc();
+      });
+    });
     if (root) {
       root.querySelectorAll('[data-calc-toggle]').forEach(function (btn) {
         btn.addEventListener('click', function () {
