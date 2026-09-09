@@ -34,10 +34,11 @@ const dict = {
     metaDescription:
       'La app de Sara AI para iPhone y iPad: la agenda, los cobros y cada conversación de tu clínica desde el celular. Sara, Mia y Daniel te avisan cuando hay algo que decidir.',
     heroEyebrow: 'Sara AI · App para iPhone',
-    // Tres líneas fijas (sin wrap), como el hero de la home: el tamaño por breakpoint
-    // en el <h1> está calibrado para que la más larga (22 caracteres) entre siempre.
+    // Dos líneas fijas (sin wrap), como el hero de la home. `heroSize` calibra el tamaño
+    // por breakpoint para que la línea más larga (27 caracteres en ES) entre siempre.
     heroTitle:
-      '<span class="block whitespace-nowrap">Tu clínica,</span><span class="block whitespace-nowrap">en el bolsillo.</span><span class="block whitespace-nowrap text-pine-dark">Tu equipo, a un toque.</span>',
+      '<span class="block whitespace-nowrap">Tu clínica, en el bolsillo.</span><span class="block whitespace-nowrap text-pine-dark">Tu equipo, a un toque.</span>',
+    heroSize: 'text-[clamp(1.5rem,7.3vw,1.85rem)] md:text-[1.95rem] lg:text-[2.5rem] xl:text-[2.8rem]',
     heroLead:
       'Sara, Mia y Daniel trabajan solos y te avisan. Con la app ves la agenda, los cobros y cada conversación desde el celular, y entras solo cuando hace&nbsp;falta.',
     heroBack: 'Volver al inicio',
@@ -87,7 +88,9 @@ const dict = {
       'The Sara AI app for iPhone and iPad: your schedule, payments and every patient conversation from your phone. Sara, Mia and Daniel message you when there is something to decide.',
     heroEyebrow: 'Sara AI · iPhone app',
     heroTitle:
-      '<span class="block whitespace-nowrap">Your practice,</span><span class="block whitespace-nowrap">in your pocket.</span><span class="block whitespace-nowrap text-pine-dark">Your team, a tap away.</span>',
+      '<span class="block whitespace-nowrap">Your practice, in your pocket.</span><span class="block whitespace-nowrap text-pine-dark">Your team, a tap away.</span>',
+    // 30 caracteres en la línea larga: un punto menos que ES en cada breakpoint.
+    heroSize: 'text-[clamp(1.3rem,6vw,1.6rem)] md:text-[1.75rem] lg:text-[2.25rem] xl:text-[2.5rem]',
     heroLead:
       'Sara, Mia and Daniel work on their own and message you. With the app you see the schedule, the payments and every conversation from your phone, and step in only when it&nbsp;matters.',
     heroBack: 'Back to home',
@@ -166,9 +169,9 @@ const schema = {
           <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
             <span class="dot h-2 w-2"></span>{dict.heroEyebrow}
           </p>
-          {/* Tres líneas fijas. Tamaños calibrados para la columna de cada breakpoint
-              (la línea más larga tiene 22 caracteres a ~0.44em cada uno). */}
-          <h1 class="font-serif text-[clamp(1.6rem,7.8vw,2.1rem)] font-black leading-[1.05] tracking-tight md:text-[2.4rem] lg:text-[3rem]" set:html={dict.heroTitle} />
+          {/* Dos líneas fijas. El tamaño viene del dict (heroSize): depende del largo de la
+              línea más larga en cada idioma, a ~0.44em por carácter. */}
+          <h1 class:list={['font-serif font-black leading-[1.05] tracking-tight', dict.heroSize]} set:html={dict.heroTitle} />
           <p class="mt-6 max-w-xl text-lg text-salvia" set:html={dict.heroLead} />
 
           <!-- Ficha de la app (ícono real + nombre) y badge del App Store, como Owner. -->
