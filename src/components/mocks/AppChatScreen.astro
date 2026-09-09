@@ -1,0 +1,144 @@
+---
+// Chat con un integrante del equipo dentro de la app Sara AI (por defecto, Daniel).
+// Framing del sitio: el equipo trabaja solo y te escribe; tú decides con un toque.
+// Daniel abre la conversación con el cierre del mes y lo que falta cobrar; tú
+// apruebas y él se lo pasa a Sara. Quinta captura de la ficha del App Store.
+import PhoneFrame from './PhoneFrame.astro';
+import { getMember, type MemberId } from '../../data/team';
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Bubble {
+  who: 'them' | 'me';
+  text: string;
+}
+interface Props {
+  lang?: Locale;
+  member?: MemberId;
+  class?: string;
+}
+const { lang = defaultLocale, member = 'daniel', class: cls = '' } = Astro.props;
+const m = getMember(member, lang)!;
+
+const dict = {
+  es: {
+    compose: `Mensaje a ${m.name}`,
+    bubbles: [
+      { who: 'them', text: 'Cierre de agosto: entraron $184,500 y quedan $9,200 por cobrar de 4 anticipos.' },
+      { who: 'them', text: '¿Se los paso a Sara para que los cobre hoy?' },
+      { who: 'me', text: 'Sí, dale.' },
+      { who: 'them', text: 'Listo. Sara ya les escribió a los cuatro. Te aviso cuando entren.' },
+    ] as Bubble[],
+  },
+  en: {
+    compose: `Message ${m.name}`,
+    bubbles: [
+      { who: 'them', text: 'August close: $48,300 in, and $2,400 still owed on 4 deposits.' },
+      { who: 'them', text: 'Want me to hand those to Sara so she collects today?' },
+      { who: 'me', text: 'Yes, go ahead.' },
+      { who: 'them', text: 'Done. Sara just texted all four. I’ll let you know when they pay.' },
+    ] as Bubble[],
+  },
+}[lang];
+---
+
+<PhoneFrame lang={lang} title={m.name} back class={cls}>
+  <div class="thread">
+    <div class="who">
+      <img src={m.avatar} alt="" width="48" height="48" loading="lazy" decoding="async" />
+      <b>{m.name}</b>
+      <small>{m.role}</small>
+    </div>
+    {dict.bubbles.map((b) => <p class:list={['msg', b.who === 'me' ? 'msg--me' : 'msg--them']}>{b.text}</p>)}
+  </div>
+  <div class="compose">
+    <span class="compose__field">{dict.compose}</span>
+    <span class="compose__send" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6" /></svg>
+    </span>
+  </div>
+</PhoneFrame>
+
+<style>
+  .thread {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.4rem;
+    min-height: 0;
+  }
+  .who {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.05rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.2;
+  }
+  .who img {
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 0.3rem;
+    border-radius: 999px;
+    object-fit: cover;
+    object-position: top;
+    background: #dfe7e2;
+  }
+  .who b {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .who small {
+    font-size: 0.62rem;
+    color: #5e6b62;
+  }
+  .msg {
+    max-width: 84%;
+    margin: 0;
+    padding: 0.5rem 0.65rem;
+    border-radius: 1rem;
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+  .msg--them {
+    align-self: flex-start;
+    border-bottom-left-radius: 0.3rem;
+    background: #fff;
+    color: #14261f;
+    box-shadow: 0 1px 2px rgba(20, 38, 31, 0.06);
+  }
+  .msg--me {
+    align-self: flex-end;
+    border-bottom-right-radius: 0.3rem;
+    background: #2f5a47;
+    color: #fff;
+  }
+  .compose {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-top: 0.3rem;
+  }
+  .compose__field {
+    flex: 1;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid #e4e8e4;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 0.7rem;
+    color: #8a948d;
+  }
+  .compose__send {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: #1a6349;
+    color: #fff;
+  }
+  .compose__send svg {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>

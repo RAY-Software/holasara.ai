@@ -16,9 +16,13 @@ interface Props {
   /** OG image propia de la página (path absoluto del sitio, 1200x630).
    * Sin ella, cae al genérico /og-image.jpg. */
   ogImage?: string;
+  /** ID de la app en el App Store: emite el Smart App Banner de Safari (iOS).
+   * Solo en /app a propósito: la app pide cuenta, en el resto del sitio le
+   * hablamos a prospectos y el banner sería ruido. */
+  appId?: string;
 }
 
-const { lang = defaultLocale, schema, ogImage = '/og-image.jpg' } = Astro.props;
+const { lang = defaultLocale, schema, ogImage = '/og-image.jpg', appId } = Astro.props;
 const t = useTranslations(lang);
 
 const { title = t('meta.title'), description = t('meta.description') } = Astro.props;
@@ -149,6 +153,7 @@ const schemas = schema ? [baseSchema, schema] : [baseSchema];
     <link rel="alternate" hreflang="x-default" href={altUrls.find((a) => a.lang === defaultLocale)?.href} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {appId && <meta name="apple-itunes-app" content={`app-id=${appId}`} />}
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

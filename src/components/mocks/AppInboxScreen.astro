@@ -1,0 +1,175 @@
+---
+// Bandeja de Sara en la app: todas las conversaciones que Sara atendió (WhatsApp,
+// Instagram y web) con su estado. Una pide un humano: la app la marca y te avisa
+// (contador rojo en la tab de Sara). Tercera captura de la ficha del App Store.
+import PhoneFrame from './PhoneFrame.astro';
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+
+type Channel = 'wa' | 'ig' | 'web';
+interface Row {
+  name: string;
+  text: string;
+  ch: Channel;
+  /** true = la conversación pide un humano (pill verde "Te necesita"). */
+  needsYou?: boolean;
+}
+
+const dict = {
+  es: {
+    title: 'Chats de Sara',
+    chips: ['Todos · 7', 'WhatsApp · 3', 'Instagram · 2', 'Web · 2'],
+    resolved: 'Resuelta',
+    needsYou: 'Te necesita',
+    rows: [
+      { name: 'Carolina Méndez', text: '¡Listo! Te reservé el jueves a las 10:00.', ch: 'wa' },
+      { name: 'Valentina Ruiz', text: '¡Gracias por tu reseña de 5 estrellas!', ch: 'ig' },
+      { name: 'Lucía Fernández', text: 'Quiere hablar con alguien de la clínica.', ch: 'web', needsYou: true },
+      { name: 'Martín Gómez', text: 'Te escribo para recordarte tu cita de mañana.', ch: 'wa' },
+      { name: 'Diego Torres', text: 'Listo, te reagendé para el martes a las 16:00.', ch: 'wa' },
+      { name: 'Florencia Díaz', text: 'Te paso la info de precios y promos.', ch: 'ig' },
+      { name: 'Tomás Rivas', text: '¡Recibimos tu anticipo! Tu cita queda confirmada.', ch: 'web' },
+    ] as Row[],
+  },
+  en: {
+    title: 'Sara’s chats',
+    chips: ['All · 7', 'WhatsApp · 3', 'Instagram · 2', 'Web · 2'],
+    resolved: 'Resolved',
+    needsYou: 'Needs you',
+    rows: [
+      { name: 'Emily Carter', text: 'Done! You’re booked Thursday at 10:00 am.', ch: 'wa' },
+      { name: 'Sofia Ramirez', text: 'Thanks for the 5-star review!', ch: 'ig' },
+      { name: 'Olivia Brooks', text: 'Wants to speak with someone at the office.', ch: 'web', needsYou: true },
+      { name: 'Michael Chen', text: 'A quick reminder about your visit tomorrow.', ch: 'wa' },
+      { name: 'James Miller', text: 'Done, moved you to Tuesday at 4:00 pm.', ch: 'wa' },
+      { name: 'Ava Johnson', text: 'Here are our fees and current specials.', ch: 'ig' },
+      { name: 'Ethan Lee', text: 'Deposit received! Your appointment is confirmed.', ch: 'web' },
+    ] as Row[],
+  },
+}[lang];
+const pending = dict.rows.filter((r) => r.needsYou).length;
+---
+
+<PhoneFrame lang={lang} title={dict.title} tab="sara" badge={pending} class={cls}>
+  <svg slot="header-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z" /></svg>
+
+  <div class="chips">
+    {dict.chips.map((c, i) => <span class:list={['chip', i === 0 && 'is-active']}>{c}</span>)}
+  </div>
+
+  <ul class="list">
+    {
+      dict.rows.map((r) => (
+        <li class:list={['row', r.needsYou && 'row--needs']}>
+          <span class:list={['ch', `ch--${r.ch}`]} aria-hidden="true">
+            {r.ch === 'wa' && <img src="/img/logos/whatsapp.svg" alt="" width="14" height="14" loading="lazy" decoding="async" />}
+            {r.ch === 'ig' && <img src="/img/logos/instagram.svg" alt="" width="14" height="14" loading="lazy" decoding="async" />}
+            {r.ch === 'web' && (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.7 2.5 2.7 14.5 0 17M12 3.5c-2.7 2.5-2.7 14.5 0 17" /></svg>
+            )}
+          </span>
+          <span class="row__text">
+            <b>{r.name}</b>
+            <small>{r.needsYou ? '' : 'Sara: '}{r.text}</small>
+          </span>
+          <span class:list={['pill', r.needsYou && 'pill--needs']}>{r.needsYou ? dict.needsYou : dict.resolved}</span>
+        </li>
+      ))
+    }
+  </ul>
+</PhoneFrame>
+
+<style>
+  .chips {
+    display: flex;
+    gap: 0.35rem;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .chip {
+    flex: none;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 0.64rem;
+    font-weight: 600;
+    color: #14261f;
+  }
+  .chip.is-active {
+    background: #14261f;
+    color: #fff;
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.55rem;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(20, 38, 31, 0.06);
+  }
+  .row--needs {
+    box-shadow: 0 0 0 1.5px #3fe08a;
+  }
+  .ch {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    background: #f1f3f2;
+  }
+  .ch img,
+  .ch svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+  .ch--web {
+    color: #1d63c9;
+  }
+  .row__text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.2;
+  }
+  .row__text b {
+    font-size: 0.76rem;
+    font-weight: 600;
+  }
+  .row__text small {
+    overflow: hidden;
+    font-size: 0.64rem;
+    color: #5e6b62;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pill {
+    flex: none;
+    padding: 0.28rem 0.5rem;
+    border-radius: 999px;
+    background: #f1f3f2;
+    font-size: 0.58rem;
+    font-weight: 600;
+    color: #5e6b62;
+  }
+  .pill--needs {
+    background: #3fe08a;
+    color: #14261f;
+  }
+</style>

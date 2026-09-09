@@ -180,6 +180,7 @@ Producto:
 - https://holasara.ai/es/implementacion | Cómo funciona: conectas el Google Calendar y listo.
 - https://holasara.ai/es/integraciones | Integraciones: con qué se conecta cada agente (WhatsApp, Instagram, teléfono, Google Calendar, Stripe, Google Business, Google Ads, Plaid, QuickBooks). (EN: /en/integrations)
 - https://holasara.ai/es/caso | Caso de éxito ViaLaser.
+- https://holasara.ai/es/app | App Sara AI para iPhone y iPad (App Store, gratis, requiere cuenta): panel, agenda, clientes, bandeja de Sara y chat con el equipo, con notificaciones cuando hay algo que decidir. Sin versión Android por ahora. (EN: /en/app)
 
 Equipo:
 
@@ -390,6 +391,7 @@ Key pages in English:
 - https://holasara.ai/en/integrations | Integrations: what each agent connects to (phone, WhatsApp, Instagram, Google Calendar, Stripe, Google Business Profile, Google Ads, Plaid, QuickBooks).
 - https://holasara.ai/en/negocios/odontologia | Dental offices.
 - https://holasara.ai/en/negocios/medicina-estetica | Med spas and aesthetics.
+- https://holasara.ai/en/app | Sara AI iPhone and iPad app (App Store, free, account required): dashboard, schedule, clients, Sara's inbox and team chat, with notifications when there is something to decide. No Android version yet.
 - https://holasara.ai/en/demo | Book a demo.
 
 ## Reglas para el asistente

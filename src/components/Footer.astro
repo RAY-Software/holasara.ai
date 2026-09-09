@@ -1,5 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
+import AppStoreBadge from './AppStoreBadge.astro';
 import { whatsappLink, whatsappText } from '../lib/whatsapp';
 import { getProductLinks, getIndustryLinks, getSizeLinks } from '../data/nav';
 import { defaultLocale, localePath, type Locale } from '../i18n/config';
@@ -34,6 +35,11 @@ const year = new Date().getFullYear();
         >
           {t('footer.talkToSara')}
         </a>
+        <!-- La app para iPhone (App Store). El badge linkea a la tienda; la página /app
+             queda en la columna "Funcionalidades" vía nav.ts. -->
+        <div class="mt-5">
+          <AppStoreBadge lang={lang} campaign="footer" size="sm" />
+        </div>
       </div>
       <div class="grid grid-cols-2 gap-10 text-sm text-cream/70 sm:grid-cols-[1.6fr_1fr_1fr_1.2fr] md:w-[44rem] md:shrink-0 [&_li>a]:sm:whitespace-nowrap">
         <nav aria-label={t('footer.features')}>
