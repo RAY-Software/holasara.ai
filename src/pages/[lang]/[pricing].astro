@@ -11,8 +11,9 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
 import { whatsappLink, whatsappText } from '../../lib/whatsapp';
-import { SARA_START, SARA_TIERS, ADDON_MIA, ADDON_DANIEL, saraTotal, fmt } from '../../data/pricing';
+import { SARA_START, SARA_TIERS, ADDON_MIA, ADDON_DANIEL, ANNUAL_MONTHS_CHARGED, annualMonthly, saraTotal, fmt } from '../../data/pricing';
 
 // El precio base de Sara Full (agendas 1ª y 2ª) y el fijo de Mia/Daniel salen de la
 // fuente única (data/pricing.ts), así la copy nunca se desincroniza de la calculadora.
@@ -25,9 +26,10 @@ const ADDON = ADDON_MIA; // 110
 const CALC_MAX = 30;
 const DEFAULT_N = 3;
 const SARA_TOTALS = Array.from({ length: CALC_MAX }, (_, i) => saraTotal(i + 1));
-const calcData = { totals: SARA_TOTALS, mia: ADDON_MIA, daniel: ADDON_DANIEL, max: CALC_MAX };
-// Valores por defecto server-render (para que la calculadora muestre algo sin JS).
-const defaultSara = saraTotal(DEFAULT_N);
+// start = precio de Sara Start (plano, por agenda). totals = Sara Full (con tramos por volumen).
+const calcData = { totals: SARA_TOTALS, start: SARA_START, mia: ADDON_MIA, daniel: ADDON_DANIEL, max: CALC_MAX };
+// Valores por defecto server-render (plan Start, para que arranque en 49 y muestre algo sin JS).
+const defaultSara = SARA_START * DEFAULT_N;
 const defaultPer = Math.round(defaultSara / DEFAULT_N);
 
 // ── Copy por idioma. EN es inglés nativo del producto US, no calco. ──
@@ -36,8 +38,8 @@ const dict = {
     metaTitle: 'Precios · Sara',
     metaDescription:
       'Precios claros de Sara, sin sorpresas: desde 49 USD por agenda, con Mia y Daniel a 110 USD fijo cada uno. Sin comisión por cita.',
-    heroBadge: 'Precios claros',
-    heroTitle: 'El precio que ves<br />es el que pagas.',
+    heroBadge: 'Sin llamada de ventas',
+    heroTitle: 'Precios claros,<br />sin sorpresas.',
     heroLead1: 'Sara atiende, agenda y cobra las 24 horas.',
     heroLead2: 'Mia trae pacientes. Daniel cuida el dinero.',
     heroLead3: 'Sumas a cada uno cuando lo necesitas.',
@@ -82,31 +84,68 @@ const dict = {
     plansH2: 'Una agenda es un calendario reservable.',
     plansLead:
       'Si en tu clínica atienden tres profesionales con calendarios propios, son tres agendas. Mia y Daniel se cobran una sola vez por cuenta, sin importar cuántas agendas tengas.',
-    plansCols: { plan: 'Plan', price: 'USD / mes', includes: 'Qué incluye' },
-    plans: [
+    plansPopular: 'Más elegido',
+    plansAddon: 'Complemento',
+    plansCta: 'Empezar',
+    billMonthly: 'Mensual',
+    billAnnual: 'Anual',
+    billSave: '2 meses gratis',
+    billAnnualNote: 'facturado anual',
+    additionalKicker: 'Productos adicionales',
+    additionalH2: 'Suma a Mia y a Daniel cuando los necesites.',
+    additionalLead: 'Se cobran una sola vez por cuenta, sin importar cuántas agendas tengas. Cuantas más agendas, mejor negocio resultan.',
+    saraPlans: [
       {
         name: 'Sara Start',
-        price: fmt(SARA_START),
-        includes:
-          'Atención 24/7 en WhatsApp y web, agendamiento automático, cobro de la consulta en línea, configuración autoservicio. Con tope mensual de conversaciones por agenda.',
+        raw: SARA_START,
+        unit: 'USD/mes por agenda',
+        features: [
+          'Atención 24/7 en WhatsApp y web',
+          'Agendamiento automático',
+          'Cobro de la consulta en línea',
+          'Configuración autoservicio',
+        ],
+        note: 'Con tope mensual de conversaciones.',
       },
       {
         name: 'Sara Full',
-        price: fmt(SARA_BASE),
-        includes:
-          'Todo lo de Start sin tope, más recordatorios automáticos, recuperación de no-shows, reprogramación automática y reportes de ocupación de agenda.',
+        raw: SARA_BASE,
+        unit: 'USD/mes por agenda',
+        featured: true,
+        features: [
+          'Todo lo de Start, sin tope',
+          'Recordatorios automáticos',
+          'Recuperación de no-shows',
+          'Reprogramación automática',
+          'Reportes de ocupación de agenda',
+        ],
+      },
+    ],
+    addons: [
+      {
+        name: 'Mia',
+        raw: ADDON,
+        unit: 'USD/mes fijo',
+        blurb: 'Marketing con IA. Llena la agenda con pacientes nuevos y reactivados.',
+        features: [
+          'Captación de pacientes nuevos',
+          'Reactivación de inactivos',
+          'Campañas por WhatsApp',
+          'Presencia en Google y buscadores con IA',
+          'Reportes de origen',
+        ],
       },
       {
-        name: '+ Mia',
-        price: fmt(ADDON),
-        includes:
-          'Captación de pacientes nuevos, reactivación de inactivos, campañas por WhatsApp, presencia en Google y buscadores con IA, reportes de origen.',
-      },
-      {
-        name: '+ Daniel',
-        price: fmt(ADDON),
-        includes:
-          'Control de ingresos y cobranzas, conciliación de pagos, reportes financieros mensuales y proyección de facturación.',
+        name: 'Daniel',
+        raw: ADDON,
+        unit: 'USD/mes fijo',
+        blurb: 'Finanzas con IA. Controla ingresos, cobranzas y el margen del mes.',
+        features: [
+          'Control de ingresos y cobranzas',
+          'Conciliación de pagos',
+          'Reportes financieros mensuales',
+          'Proyección de facturación',
+        ],
       },
     ],
     volKicker: 'Volumen',
@@ -124,7 +163,8 @@ const dict = {
       'la primera cuesta 129, la segunda 129 y la tercera 109. El total de Sara es 367 USD, no 327. El precio de 109 aplica solo a la tercera agenda, no a las tres.',
     calcKicker: 'Calculadora',
     calcH2: 'Calcula el precio de tu clínica.',
-    calcLead: 'Mueve el control según cuántos calendarios reservables tienes y suma a Mia y a Daniel. El precio ya incluye los tramos por volumen.',
+    calcLead: 'Elige el plan, mueve el control según cuántas agendas tienes y suma a Mia y a Daniel. El precio se actualiza al instante.',
+    calcPlanLabel: 'Plan de Sara',
     calcAgendasLabel: '¿Cuántas agendas?',
     calcAddMia: '+ Mia',
     calcAddDaniel: '+ Daniel',
@@ -151,8 +191,8 @@ const dict = {
     metaTitle: 'Pricing · Sara',
     metaDescription:
       'Clear Sara pricing, no surprises: from $49 per calendar, with Mia and Daniel at $110 flat each. No per-booking fees.',
-    heroBadge: 'Clear pricing',
-    heroTitle: 'The price you see<br />is the price you pay.',
+    heroBadge: 'No sales call',
+    heroTitle: 'Clear pricing,<br />no surprises.',
     heroLead1: 'Sara answers, books and collects 24/7.',
     heroLead2: 'Mia brings patients in. Daniel watches the money.',
     heroLead3: 'You add each one when you need them.',
@@ -197,31 +237,68 @@ const dict = {
     plansH2: 'A calendar is one bookable schedule.',
     plansLead:
       'If three providers at your practice each keep their own calendar, that is three calendars. Mia and Daniel are billed once per account, no matter how many calendars you have.',
-    plansCols: { plan: 'Plan', price: 'USD / mo', includes: 'What it includes' },
-    plans: [
+    plansPopular: 'Most picked',
+    plansAddon: 'Add-on',
+    plansCta: 'Get started',
+    billMonthly: 'Monthly',
+    billAnnual: 'Annual',
+    billSave: '2 months free',
+    billAnnualNote: 'billed annually',
+    additionalKicker: 'Additional products',
+    additionalH2: 'Add Mia and Daniel when you need them.',
+    additionalLead: 'They are billed once per account, no matter how many calendars you have. The more calendars, the better the deal.',
+    saraPlans: [
       {
         name: 'Sara Start',
-        price: fmt(SARA_START),
-        includes:
-          '24/7 answering on WhatsApp and web, automatic scheduling, online deposit collection, self-serve setup. With a monthly cap on conversations per calendar.',
+        raw: SARA_START,
+        unit: 'USD/mo per calendar',
+        features: [
+          '24/7 answering on WhatsApp and web',
+          'Automatic scheduling',
+          'Online deposit collection',
+          'Self-serve setup',
+        ],
+        note: 'With a monthly cap on conversations.',
       },
       {
         name: 'Sara Full',
-        price: fmt(SARA_BASE),
-        includes:
-          'Everything in Start with no cap, plus automatic reminders, no-show recovery, automatic rescheduling and calendar-occupancy reports.',
+        raw: SARA_BASE,
+        unit: 'USD/mo per calendar',
+        featured: true,
+        features: [
+          'Everything in Start, no cap',
+          'Automatic reminders',
+          'No-show recovery',
+          'Automatic rescheduling',
+          'Calendar-occupancy reports',
+        ],
+      },
+    ],
+    addons: [
+      {
+        name: 'Mia',
+        raw: ADDON,
+        unit: 'USD/mo flat',
+        blurb: 'AI marketing. Fills the calendar with new and lapsed patients.',
+        features: [
+          'New-patient acquisition',
+          'Win-back of lapsed patients',
+          'WhatsApp campaigns',
+          'Presence on Google and AI search',
+          'Source reports',
+        ],
       },
       {
-        name: '+ Mia',
-        price: fmt(ADDON),
-        includes:
-          'New-patient acquisition, win-back of lapsed patients, WhatsApp campaigns, presence on Google and AI search, source reports.',
-      },
-      {
-        name: '+ Daniel',
-        price: fmt(ADDON),
-        includes:
-          'Revenue and collections tracking, payment reconciliation, monthly financial reports and revenue projection.',
+        name: 'Daniel',
+        raw: ADDON,
+        unit: 'USD/mo flat',
+        blurb: 'AI bookkeeping. Tracks revenue, collections and the monthly margin.',
+        features: [
+          'Revenue and collections tracking',
+          'Payment reconciliation',
+          'Monthly financial reports',
+          'Revenue projection',
+        ],
       },
     ],
     volKicker: 'Volume',
@@ -239,7 +316,8 @@ const dict = {
       'the first costs 129, the second 129 and the third 109. Sara totals $367, not $327. The 109 price applies only to the third calendar, not to all three.',
     calcKicker: 'Calculator',
     calcH2: 'Price it for your practice.',
-    calcLead: 'Move the control for how many bookable calendars you have and add Mia and Daniel. The price already includes the volume tiers.',
+    calcLead: 'Pick the plan, move the control for how many calendars you have and add Mia and Daniel. The price updates instantly.',
+    calcPlanLabel: 'Sara plan',
     calcAgendasLabel: 'How many calendars?',
     calcAddMia: '+ Mia',
     calcAddDaniel: '+ Daniel',
@@ -264,7 +342,7 @@ const dict = {
   },
 }[lang];
 
-const { team, plans, tiers, faqs } = dict;
+const { team, saraPlans, addons, tiers, faqs } = dict;
 ---
 
 <Layout ogImage={`/og/pricing-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
@@ -272,46 +350,49 @@ const { team, plans, tiers, faqs } = dict;
   <main>
     <!-- ══════════ HERO (banda oscura) ══════════ -->
     <section class="border-b border-line-dark bg-ink text-cream">
-      <div class="mx-auto max-w-6xl px-5 pb-16 pt-14">
-        <a href={L('/')} class="mb-10 inline-flex items-center gap-1.5 text-sm font-medium text-cream/60 transition-colors hover:text-cream">
+      <div class="mx-auto max-w-5xl px-5 pb-16 pt-14">
+        <a href={L('/')} class="inline-flex items-center gap-1.5 text-sm font-medium text-cream/60 transition-colors hover:text-cream">
           <span aria-hidden="true">←</span> {lang === 'en' ? 'Back to home' : 'Volver al inicio'}
         </a>
-        <p class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-cream/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-cream/85">
-          <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>{dict.heroBadge}
-        </p>
-        <h1 class="max-w-4xl font-serif text-5xl font-black leading-[1.04] tracking-tight text-balance md:text-6xl" set:html={dict.heroTitle} />
-        <div class="mt-7 space-y-1 text-lg text-cream/75 md:text-xl">
-          <p>{dict.heroLead1}</p>
-          <p>{dict.heroLead2}</p>
-          <p>{dict.heroLead3}</p>
-        </div>
-        <div class="mt-9 flex flex-wrap items-center gap-3">
-          <a
-            href={L('/free-trial')}
-            class="inline-flex items-center gap-2 rounded-full bg-mint px-7 py-3.5 text-base font-semibold text-ink transition-opacity hover:opacity-90"
-          >
-            {dict.ctaStart}
-          </a>
-          <a
-            href={whatsappLink(whatsappText(lang))}
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center gap-2 rounded-full border border-cream/30 px-7 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-cream/10"
-          >
-            {dict.ctaTalk}
-          </a>
-        </div>
 
-        <!-- Stats -->
-        <div class="mt-14 grid max-w-2xl grid-cols-3 gap-8 border-t border-cream/12 pt-8">
-          {
-            dict.stats.map((s) => (
-              <div>
-                <p class="font-serif text-4xl font-black text-cream tabular-nums md:text-5xl">{s.n}</p>
-                <p class="mt-1.5 text-sm text-cream/60">{s.label}</p>
-              </div>
-            ))
-          }
+        <div class="mt-10 text-center">
+          <p class="mb-6 inline-flex items-center gap-2.5 rounded-full border border-cream/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-cream/85">
+            <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>{dict.heroBadge}
+          </p>
+          <h1 class="mx-auto max-w-3xl font-serif text-5xl font-black leading-[1.04] tracking-tight text-balance md:text-6xl" set:html={dict.heroTitle} />
+          <div class="mx-auto mt-7 max-w-2xl space-y-1 text-lg text-cream/75 md:text-xl">
+            <p>{dict.heroLead1}</p>
+            <p>{dict.heroLead2}</p>
+            <p>{dict.heroLead3}</p>
+          </div>
+          <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={L('/free-trial')}
+              class="inline-flex items-center gap-2 rounded-full bg-mint px-7 py-3.5 text-base font-semibold text-ink transition-opacity hover:opacity-90"
+            >
+              {dict.ctaStart}
+            </a>
+            <a
+              href={whatsappLink(whatsappText(lang))}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-full border border-cream/30 px-7 py-3.5 text-base font-semibold text-cream transition-colors hover:bg-cream/10"
+            >
+              {dict.ctaTalk}
+            </a>
+          </div>
+
+          <!-- Stats -->
+          <div class="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-8 border-t border-cream/12 pt-8">
+            {
+              dict.stats.map((s) => (
+                <div>
+                  <p class="font-serif text-4xl font-black text-cream tabular-nums md:text-5xl">{s.n}</p>
+                  <p class="mt-1.5 text-sm text-cream/60">{s.label}</p>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -352,48 +433,106 @@ const { team, plans, tiers, faqs } = dict;
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.plansH2}</h2>
         <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.plansLead}</p>
 
-        <!-- Mobile: tarjetas apiladas (la columna "qué incluye" no entra en una tabla en pantallas chicas). -->
-        <div class="mt-12 flex flex-col gap-4 sm:hidden">
+        <!-- Toggle mensual / anual -->
+        <div
+          class="mt-10 inline-flex items-center gap-1 rounded-full border border-line bg-cream p-1"
+          role="group"
+          aria-label={`${dict.billMonthly} / ${dict.billAnnual}`}
+        >
+          <button type="button" data-billing="monthly" aria-pressed="true" class="bill-btn">{dict.billMonthly}</button>
+          <button type="button" data-billing="annual" aria-pressed="false" class="bill-btn">
+            {dict.billAnnual}
+            <span class="bill-save">{dict.billSave}</span>
+          </button>
+        </div>
+
+        <!-- Planes de Sara (pricing-cards) -->
+        <div class="mt-8 grid gap-5 md:grid-cols-2">
           {
-            plans.map((p) => (
-              <div class="rounded-2xl border border-line bg-cream p-6">
-                <div class="flex items-baseline justify-between gap-4 border-b border-line pb-4">
-                  <span class="font-serif text-xl font-black text-ink">{p.name}</span>
-                  <span class="shrink-0 whitespace-nowrap">
-                    <span class="font-serif text-2xl font-black text-ink tabular-nums">{p.price}</span>
-                    <span class="ml-1 text-xs text-salvia">{dict.plansCols.price}</span>
+            saraPlans.map((p) => (
+              <div
+                class:list={[
+                  'relative flex flex-col rounded-2xl border bg-cream p-7',
+                  p.featured ? 'border-pine/50 shadow-[0_16px_44px_-24px_rgba(20,38,31,0.4)]' : 'border-line',
+                ]}
+              >
+                {p.featured && (
+                  <span class="absolute -top-3 left-7 rounded-full bg-pine px-3 py-1 text-xs font-semibold text-cream">
+                    {dict.plansPopular}
                   </span>
-                </div>
-                <p class="mt-4 text-salvia">{p.includes}</p>
+                )}
+                <p class="font-serif text-xl font-black text-ink">{p.name}</p>
+                <p class="mt-3 flex items-baseline gap-2">
+                  <span class="font-serif text-4xl font-black text-ink tabular-nums" data-price data-monthly={p.raw}>
+                    {fmt(p.raw)}
+                  </span>
+                  <s class="font-serif text-xl font-black text-salvia/50 tabular-nums" data-price-was hidden></s>
+                </p>
+                <p class="mt-0.5 text-sm text-salvia">
+                  {p.unit}<span class="text-pine-dark" data-annual-note hidden> · {dict.billAnnualNote}</span>
+                </p>
+                <ul class="mt-6 flex-1 space-y-2.5 text-sm text-ink">
+                  {p.features.map((f) => (
+                    <li class="flex items-start gap-2.5">
+                      <svg class="mt-0.5 h-4 w-4 shrink-0 text-pine" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                {p.note && <p class="mt-4 text-xs text-salvia">{p.note}</p>}
+                <a
+                  href={L('/free-trial')}
+                  class:list={[
+                    'mt-6 inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-colors',
+                    p.featured ? 'bg-pine text-cream hover:bg-pine-dark' : 'border border-line text-ink hover:border-ink/30',
+                  ]}
+                >
+                  {dict.plansCta}
+                </a>
               </div>
             ))
           }
         </div>
+      </div>
+    </section>
 
-        <!-- Desktop: tabla. -->
-        <div class="mt-12 hidden overflow-x-auto rounded-2xl border border-line bg-cream shadow-[0_16px_40px_-28px_rgba(20,38,31,0.32)] sm:block">
-          <table class="w-full min-w-[640px] border-collapse text-left">
-            <thead>
-              <tr class="bg-ink text-cream">
-                <th scope="col" class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em]">{dict.plansCols.plan}</th>
-                <th scope="col" class="whitespace-nowrap px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em]">{dict.plansCols.price}</th>
-                <th scope="col" class="px-6 py-4 text-xs font-semibold uppercase tracking-[0.12em]">{dict.plansCols.includes}</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-line">
-              {
-                plans.map((p, i) => (
-                  <tr class={i % 2 ? 'bg-mint/[0.04]' : ''}>
-                    <th scope="row" class="whitespace-nowrap px-6 py-5 text-left align-top font-serif text-lg font-black text-ink">{p.name}</th>
-                    <td class="px-6 py-5 align-top">
-                      <span class="font-serif text-xl font-black text-ink tabular-nums">{p.price}</span>
-                    </td>
-                    <td class="px-6 py-5 align-top text-salvia">{p.includes}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+    <!-- ══════════ PRODUCTOS ADICIONALES · add-ons ══════════ -->
+    <section class="border-b border-line">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.additionalKicker}</p>
+        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.additionalH2}</h2>
+        <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.additionalLead}</p>
+        <div class="mt-12 grid gap-5 md:grid-cols-2">
+          {
+            addons.map((p) => (
+              <div class="flex flex-col rounded-2xl border border-line bg-cream p-7 sm:flex-row sm:gap-7">
+                <div class="sm:w-48 sm:shrink-0">
+                  <span class="text-xs font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.plansAddon}</span>
+                  <p class="mt-2 font-serif text-2xl font-black text-ink">{p.name}</p>
+                  <p class="mt-2 text-salvia">{p.blurb}</p>
+                  <p class="mt-4">
+                    <span class="font-serif text-3xl font-black text-ink tabular-nums" data-price data-monthly={p.raw}>{fmt(p.raw)}</span>
+                    <s class="ml-2 font-serif text-lg font-black text-salvia/50 tabular-nums" data-price-was hidden></s>
+                    <span class="mt-0.5 block text-sm text-salvia">
+                      {p.unit}<span class="text-pine-dark" data-annual-note hidden> · {dict.billAnnualNote}</span>
+                    </span>
+                  </p>
+                </div>
+                <ul class="mt-6 flex-1 space-y-2.5 text-sm text-ink sm:mt-0 sm:border-l sm:border-line sm:pl-7">
+                  {p.features.map((f) => (
+                    <li class="flex items-start gap-2.5">
+                      <svg class="mt-0.5 h-4 w-4 shrink-0 text-pine" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -441,6 +580,13 @@ const { team, plans, tiers, faqs } = dict;
         >
           <!-- Controles -->
           <div class="flex flex-col justify-center">
+            <div class="mb-6">
+              <p class="mb-2 text-sm font-semibold text-pine-dark">{dict.calcPlanLabel}</p>
+              <div class="inline-flex items-center gap-1 rounded-full border border-line bg-paper p-1" role="group" aria-label={dict.calcPlanLabel}>
+                <button type="button" data-plan="start" aria-pressed="true" class="bill-btn">Sara Start</button>
+                <button type="button" data-plan="full" aria-pressed="false" class="bill-btn">Sara Full</button>
+              </div>
+            </div>
             <div class="flex items-baseline justify-between gap-4">
               <label for="calc-agendas" class="text-sm font-semibold text-pine-dark">{dict.calcAgendasLabel}</label>
               <span class="font-serif text-4xl font-black text-ink tabular-nums" data-calc-n>{DEFAULT_N}</span>
@@ -474,22 +620,25 @@ const { team, plans, tiers, faqs } = dict;
           <!-- Resultado -->
           <div class="rounded-xl bg-ink p-6 text-cream">
             <p class="text-xs font-semibold uppercase tracking-[0.12em] text-cream/60">{dict.calcResultKicker}</p>
-            <p class="mt-2 flex items-baseline gap-2">
+            <p class="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
               <span class="font-serif text-5xl font-black tabular-nums" data-calc-total>{fmt(defaultSara)}</span>
-              <span class="text-cream/70">{dict.calcTotalUnit}</span>
+              <s class="font-serif text-2xl font-black text-cream/40 tabular-nums" data-calc-total-was hidden></s>
+              <span class="text-cream/70">
+                {dict.calcTotalUnit}<span class="text-cream/50" data-annual-note hidden> · {dict.billAnnualNote}</span>
+              </span>
             </p>
             <ul class="mt-5 space-y-2.5 text-sm">
               <li class="flex items-center justify-between gap-4">
-                <span class="text-cream/80">{dict.calcSaraLabel}</span>
+                <span class="text-cream/80" data-calc-sara-label>Sara Start</span>
                 <span class="tabular-nums text-cream" data-calc-sara>{fmt(defaultSara)}</span>
               </li>
               <li class="flex items-center justify-between gap-4" data-calc-row="mia" hidden>
                 <span class="text-cream/80">Mia</span>
-                <span class="tabular-nums text-cream">{fmt(ADDON)}</span>
+                <span class="tabular-nums text-cream" data-price data-monthly={ADDON}>{fmt(ADDON)}</span>
               </li>
               <li class="flex items-center justify-between gap-4" data-calc-row="daniel" hidden>
                 <span class="text-cream/80">Daniel</span>
-                <span class="tabular-nums text-cream">{fmt(ADDON_DANIEL)}</span>
+                <span class="tabular-nums text-cream" data-price data-monthly={ADDON_DANIEL}>{fmt(ADDON_DANIEL)}</span>
               </li>
             </ul>
             <p class="mt-4 flex items-center justify-between gap-4 border-t border-cream/15 pt-4 text-sm text-cream/70">
@@ -498,12 +647,10 @@ const { team, plans, tiers, faqs } = dict;
             </p>
           </div>
         </div>
-
-        <div class="mt-8 rounded-xl border-l-4 border-pine bg-cream p-6 text-salvia">
-          <span class="font-semibold text-ink">{dict.scaleBold}</span> {dict.scale}
-        </div>
       </div>
     </section>
+
+    <ClientsStrip lang={lang} />
 
     <FeatureFaq items={faqs} lang={lang} title={dict.faqTitle} />
 
@@ -576,47 +723,156 @@ const { team, plans, tiers, faqs } = dict;
     box-shadow: 0 1px 4px rgba(20, 38, 31, 0.3);
     cursor: pointer;
   }
+
+  .bill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-radius: 9999px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-salvia);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .bill-btn[aria-pressed='true'] {
+    background: var(--color-ink);
+    color: var(--color-cream);
+  }
+  .bill-save {
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-mint) 22%, transparent);
+    padding: 0.1rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--color-pine-dark);
+    white-space: nowrap;
+  }
+  .bill-btn[aria-pressed='true'] .bill-save {
+    background: color-mix(in srgb, var(--color-mint) 88%, transparent);
+    color: var(--color-ink);
+  }
 </style>
 
-<script is:inline define:vars={{ calcData }}>
+<script is:inline define:vars={{ calcData, annualCharged: ANNUAL_MONTHS_CHARGED }}>
   (function () {
-    var root = document.querySelector('[data-calc]');
-    if (!root) return;
-    var range = root.querySelector('[data-calc-range]');
-    var nOut = root.querySelector('[data-calc-n]');
-    var totalOut = root.querySelector('[data-calc-total]');
-    var saraOut = root.querySelector('[data-calc-sara]');
-    var perOut = root.querySelector('[data-calc-per]');
-    var rowMia = root.querySelector('[data-calc-row="mia"]');
-    var rowDaniel = root.querySelector('[data-calc-row="daniel"]');
-    var toggles = root.querySelectorAll('[data-calc-toggle]');
-    var unit = (range && range.getAttribute('data-unit')) || '';
     var nf = new Intl.NumberFormat('en-US');
-    var state = { mia: false, daniel: false };
+    // 'monthly' | 'annual'. En anual el precio mensual equivalente lleva el descuento.
+    var billing = 'monthly';
+    function withBilling(m) {
+      return billing === 'annual' ? Math.round((m * annualCharged) / 12) : m;
+    }
 
-    function render() {
+    // ── Toggle de facturación: precios de las cards (data-price/data-monthly + tachado) ──
+    var billBtns = document.querySelectorAll('[data-billing]');
+    var priceEls = document.querySelectorAll('[data-price][data-monthly]');
+    var annualNotes = document.querySelectorAll('[data-annual-note]');
+
+    function renderPrices() {
+      priceEls.forEach(function (el) {
+        var m = parseInt(el.getAttribute('data-monthly'), 10);
+        var was = el.parentElement.querySelector('[data-price-was]');
+        el.textContent = nf.format(withBilling(m));
+        if (was) {
+          if (billing === 'annual') {
+            was.textContent = nf.format(m);
+            was.hidden = false;
+          } else {
+            was.hidden = true;
+          }
+        }
+      });
+      annualNotes.forEach(function (n) {
+        n.hidden = billing !== 'annual';
+      });
+    }
+
+    // ── Calculadora ──
+    var root = document.querySelector('[data-calc]');
+    var range = root && root.querySelector('[data-calc-range]');
+    var nOut = root && root.querySelector('[data-calc-n]');
+    var totalOut = root && root.querySelector('[data-calc-total]');
+    var totalWas = root && root.querySelector('[data-calc-total-was]');
+    var saraOut = root && root.querySelector('[data-calc-sara]');
+    var perOut = root && root.querySelector('[data-calc-per]');
+    var rowMia = root && root.querySelector('[data-calc-row="mia"]');
+    var rowDaniel = root && root.querySelector('[data-calc-row="daniel"]');
+    var saraLabelOut = root && root.querySelector('[data-calc-sara-label]');
+    var planBtns = root ? root.querySelectorAll('[data-plan]') : [];
+    var unit = (range && range.getAttribute('data-unit')) || '';
+    var state = { mia: false, daniel: false };
+    var plan = 'start'; // 'start' (49 por agenda, plano) | 'full' (tramos por volumen)
+
+    // Sara Start = 49 x nº de agendas (plano). Sara Full = total con tramos por volumen.
+    function saraMonthlyFor(n) {
+      return plan === 'full' ? calcData.totals[n - 1] : calcData.start * n;
+    }
+
+    function renderCalc() {
+      if (!root) return;
       var n = parseInt(range.value, 10) || 1;
-      var sara = calcData.totals[n - 1];
-      var total = sara + (state.mia ? calcData.mia : 0) + (state.daniel ? calcData.daniel : 0);
+      var saraM = saraMonthlyFor(n);
+      // Sumamos las partes ya con el descuento aplicado, así el total coincide con las filas.
+      var saraNow = withBilling(saraM);
+      var total = saraNow + (state.mia ? withBilling(calcData.mia) : 0) + (state.daniel ? withBilling(calcData.daniel) : 0);
       nOut.textContent = String(n);
-      saraOut.textContent = nf.format(sara);
+      saraOut.textContent = nf.format(saraNow);
       totalOut.textContent = nf.format(total);
       perOut.textContent = nf.format(Math.round(total / n));
+      if (saraLabelOut) saraLabelOut.textContent = plan === 'full' ? 'Sara Full' : 'Sara Start';
       if (rowMia) rowMia.hidden = !state.mia;
       if (rowDaniel) rowDaniel.hidden = !state.daniel;
+      // Tachado del total: el mensual sin descuento.
+      if (totalWas) {
+        if (billing === 'annual') {
+          var monthly = saraM + (state.mia ? calcData.mia : 0) + (state.daniel ? calcData.daniel : 0);
+          totalWas.textContent = nf.format(monthly);
+          totalWas.hidden = false;
+        } else {
+          totalWas.hidden = true;
+        }
+      }
       range.setAttribute('aria-valuenow', String(n));
       range.setAttribute('aria-valuetext', n + ' ' + unit);
     }
 
-    range.addEventListener('input', render);
-    toggles.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var k = btn.getAttribute('data-calc-toggle');
-        state[k] = !state[k];
-        btn.setAttribute('aria-pressed', state[k] ? 'true' : 'false');
-        render();
+    function renderAll() {
+      renderPrices();
+      renderCalc();
+    }
+
+    billBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        billing = b.getAttribute('data-billing');
+        billBtns.forEach(function (x) {
+          x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+        });
+        renderAll();
       });
     });
-    render();
+
+    if (range) range.addEventListener('input', renderCalc);
+    planBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        plan = b.getAttribute('data-plan');
+        planBtns.forEach(function (x) {
+          x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
+        });
+        renderCalc();
+      });
+    });
+    if (root) {
+      root.querySelectorAll('[data-calc-toggle]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var k = btn.getAttribute('data-calc-toggle');
+          state[k] = !state[k];
+          btn.setAttribute('aria-pressed', state[k] ? 'true' : 'false');
+          renderCalc();
+        });
+      });
+    }
+
+    renderAll();
   })();
 </script>
