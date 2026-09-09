@@ -13,21 +13,20 @@ import FeatureFaq from '../../components/FeatureFaq.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import ClientsStrip from '../../components/ClientsStrip.astro';
 import { whatsappLink, whatsappText } from '../../lib/whatsapp';
-import { SARA_START, SARA_TIERS, ADDON_MIA, ADDON_DANIEL, ANNUAL_MONTHS_CHARGED, annualMonthly, saraTotal, fmt } from '../../data/pricing';
+import { SARA_START, SARA_TIERS, ANNUAL_MONTHS_CHARGED, annualMonthly, saraTotal, fmt } from '../../data/pricing';
 
-// El precio base de Sara Full (agendas 1ª y 2ª) y el fijo de Mia/Daniel salen de la
-// fuente única (data/pricing.ts), así la copy nunca se desincroniza de la calculadora.
+// El precio base de Sara Full (agendas 1ª y 2ª) sale de la fuente única (data/pricing.ts),
+// así la copy nunca se desincroniza de la calculadora.
 const SARA_BASE = SARA_TIERS[0].price; // 129
-const ADDON = ADDON_MIA; // 110
 
 // Datos para la calculadora interactiva (client-side). Precomputamos el total de Sara
 // por cada nº de agendas (1..MAX) desde la fuente única, así el JS del navegador solo
-// indexa y suma los add-ons; no reimplementa la lógica de tramos.
+// indexa; no reimplementa la lógica de tramos.
 const CALC_MAX = 30;
 const DEFAULT_N = 3;
 const SARA_TOTALS = Array.from({ length: CALC_MAX }, (_, i) => saraTotal(i + 1));
 // start = precio de Sara Start (plano, por agenda). totals = Sara Full (con tramos por volumen).
-const calcData = { totals: SARA_TOTALS, start: SARA_START, mia: ADDON_MIA, daniel: ADDON_DANIEL, max: CALC_MAX };
+const calcData = { totals: SARA_TOTALS, start: SARA_START, max: CALC_MAX };
 // Valores por defecto server-render (plan Start, para que arranque en 49 y muestre algo sin JS).
 const defaultSara = SARA_START * DEFAULT_N;
 const defaultPer = Math.round(defaultSara / DEFAULT_N);
@@ -37,63 +36,28 @@ const dict = {
   es: {
     metaTitle: 'Precios · Sara',
     metaDescription:
-      'Precios claros de Sara, sin sorpresas: desde 49 USD por agenda, con Mia y Daniel a 110 USD fijo cada uno. Sin comisión por cita.',
+      'Precios claros de Sara, sin sorpresas: desde 49 USD por agenda. Sin comisión por cita.',
     heroBadge: 'Sin llamada de ventas',
     heroTitle: 'Precios claros,<br />sin sorpresas.',
     heroLead1: 'Sara atiende, agenda y cobra las 24 horas.',
-    heroLead2: 'Mia trae pacientes. Daniel cuida el dinero.',
-    heroLead3: 'Sumas a cada uno cuando lo necesitas.',
+    heroLead2: 'Un precio por agenda, sin comisión por cita.',
     ctaStart: 'Empezar ahora',
     ctaTalk: 'Habla con Sara',
+    ctaSub: 'Pon a Sara a atender, agendar y cobrar hoy mismo. Sin cambiar tu agenda ni tu forma de trabajar.',
     stats: [
       { n: fmt(SARA_START), label: 'USD por agenda' },
-      { n: fmt(ADDON), label: 'Mia o Daniel, fijo' },
       { n: '0', label: 'comisión por cita' },
-    ],
-    teamKicker: 'Tu equipo con IA',
-    teamH2: 'Tres agentes. <em class="text-pine-dark">Empiezas por Sara.</em>',
-    teamLead:
-      'Sara es la puerta de entrada y es lo único indispensable. Mia y Daniel se suman cuando los necesitas, sobre la misma cuenta.',
-    team: [
-      {
-        tag: 'Recepción',
-        name: 'Sara',
-        body: 'Responde en WhatsApp e Instagram, informa precios, agenda la cita y cobra el anticipo. Recuerda, confirma y reprograma sola.',
-        price: fmt(SARA_BASE),
-        unit: 'USD / agenda',
-        featured: true,
-      },
-      {
-        tag: 'Marketing',
-        name: 'Mia',
-        body: 'Propone las ideas, crea las piezas con tu marca, publica en Instagram y llena los huecos de la agenda. Mide en citas, no en likes.',
-        price: fmt(ADDON),
-        unit: 'USD fijo',
-        featured: false,
-      },
-      {
-        tag: 'Finanzas',
-        name: 'Daniel',
-        body: 'Cierra el mes, te dice el margen y detecta los anticipos sin cobrar. Cuando hay dinero pendiente, se lo pasa a Sara.',
-        price: fmt(ADDON),
-        unit: 'USD fijo',
-        featured: false,
-      },
     ],
     plansKicker: 'Cómo se cobra',
     plansH2: 'Una agenda es un calendario reservable.',
     plansLead:
-      'Si en tu clínica atienden tres profesionales con calendarios propios, son tres agendas. Mia y Daniel se cobran una sola vez por cuenta, sin importar cuántas agendas tengas.',
+      'Si en tu clínica atienden tres profesionales con calendarios propios, son tres agendas, estén en un local o en varios.',
     plansPopular: 'Más elegido',
-    plansAddon: 'Complemento',
     plansCta: 'Empezar',
     billMonthly: 'Mensual',
     billAnnual: 'Anual',
     billSave: '2 meses gratis',
     billAnnualNote: 'facturado anual',
-    additionalKicker: 'Productos adicionales',
-    additionalH2: 'Suma a Mia y a Daniel cuando los necesites.',
-    additionalLead: 'Se cobran una sola vez por cuenta, sin importar cuántas agendas tengas. Cuantas más agendas, mejor negocio resultan.',
     saraRole: 'Recepción',
     saraPlans: [
       {
@@ -122,37 +86,6 @@ const dict = {
         ],
       },
     ],
-    addons: [
-      {
-        name: 'Mia',
-        raw: ADDON,
-        unit: 'USD/mes fijo',
-        avatar: '/equipo/mia-avatar.jpg',
-        role: 'Marketing',
-        blurb: 'Marketing con IA. Llena la agenda con pacientes nuevos y reactivados.',
-        features: [
-          'Captación de pacientes nuevos',
-          'Reactivación de inactivos',
-          'Campañas por WhatsApp',
-          'Presencia en Google y buscadores con IA',
-          'Reportes de origen',
-        ],
-      },
-      {
-        name: 'Daniel',
-        raw: ADDON,
-        unit: 'USD/mes fijo',
-        avatar: '/equipo/daniel-avatar.jpg',
-        role: 'Finanzas',
-        blurb: 'Finanzas con IA. Controla ingresos, cobranzas y el margen del mes.',
-        features: [
-          'Control de ingresos y cobranzas',
-          'Conciliación de pagos',
-          'Reportes financieros mensuales',
-          'Proyección de facturación',
-        ],
-      },
-    ],
     volKicker: 'Volumen',
     volH2: 'Cada agenda nueva cuesta menos.',
     volLead:
@@ -168,24 +101,19 @@ const dict = {
       'la primera cuesta 129, la segunda 129 y la tercera 109. El total de Sara es 367 USD, no 327. El precio de 109 aplica solo a la tercera agenda, no a las tres.',
     calcKicker: 'Calculadora',
     calcH2: 'Calcula el precio de tu clínica.',
-    calcLead: 'Elige el plan, mueve el control según cuántas agendas tienes y suma a Mia y a Daniel. El precio se actualiza al instante.',
+    calcLead: 'Elige el plan y mueve el control según cuántas agendas tienes. El precio se actualiza al instante.',
     calcPlanLabel: 'Plan de Sara',
     calcAgendasLabel: '¿Cuántas agendas?',
-    calcAddMia: '+ Mia',
-    calcAddDaniel: '+ Daniel',
-    calcResultKicker: 'Tu equipo, por mes',
+    calcResultKicker: 'Tu plan, por mes',
     calcTotalUnit: 'USD / mes',
     calcSaraLabel: 'Sara',
     calcPerAgendaLabel: 'Costo por agenda',
     calcPerAgendaUnit: 'USD',
     calcUnitWord: 'agendas',
-    scaleBold: 'Mia y Daniel no escalan.',
-    scale:
-      'Cuestan 110 USD cada uno en cualquier tamaño de cuenta. Cuantas más agendas tengas, mejor negocio resultan: en una clínica de 20 agendas, los dos juntos cuestan menos que dos agendas de Sara.',
     faqTitle: 'Lo que suelen preguntar.',
     faqs: [
       { q: '¿Qué cuenta como una agenda?', a: 'Un calendario reservable. Si dos profesionales comparten el mismo calendario, es una sola agenda.' },
-      { q: '¿Puedo empezar solo con Sara?', a: 'Sí. Sara es la puerta de entrada. Mia y Daniel se suman cuando quieras, sobre la misma cuenta.' },
+      { q: '¿Puedo empezar solo con Sara?', a: 'Sí. Sara es todo lo que necesitas para atender, agendar y cobrar desde el primer día.' },
       { q: '¿Pago más por tener varias sucursales?', a: 'No. El precio depende de cuántos calendarios reservables tengas, no de cuántos locales.' },
       { q: '¿Cómo empiezo?', a: 'Contratas en línea, configuras la agenda y el WhatsApp, y Sara empieza a atender el mismo día.' },
       { q: '¿Qué pasa si sumo un profesional?', a: 'Se agrega una agenda al precio del tramo que corresponda, y baja el costo promedio de toda la cuenta.' },
@@ -195,63 +123,28 @@ const dict = {
   en: {
     metaTitle: 'Pricing · Sara',
     metaDescription:
-      'Clear Sara pricing, no surprises: from $49 per calendar, with Mia and Daniel at $110 flat each. No per-booking fees.',
+      'Clear Sara pricing, no surprises: from $49 per calendar. No per-booking fees.',
     heroBadge: 'No sales call',
     heroTitle: 'Clear pricing,<br />no surprises.',
     heroLead1: 'Sara answers, books and collects 24/7.',
-    heroLead2: 'Mia brings patients in. Daniel watches the money.',
-    heroLead3: 'You add each one when you need them.',
+    heroLead2: 'One price per calendar, no per-booking fees.',
     ctaStart: 'Start now',
     ctaTalk: 'Talk to Sara',
+    ctaSub: 'Put Sara on your front desk today. Without changing your calendar or how you work.',
     stats: [
       { n: fmt(SARA_START), label: 'USD per calendar' },
-      { n: fmt(ADDON), label: 'Mia or Daniel, flat' },
       { n: '0', label: 'per-booking fees' },
-    ],
-    teamKicker: 'Your AI team',
-    teamH2: 'Three agents. <em class="text-pine-dark">You start with Sara.</em>',
-    teamLead:
-      'Sara is the way in and the only must-have. Mia and Daniel join when you need them, on the same account.',
-    team: [
-      {
-        tag: 'Front desk',
-        name: 'Sara',
-        body: 'Answers on WhatsApp and Instagram, quotes prices, books the appointment and collects the deposit. Reminds, confirms and reschedules on her own.',
-        price: fmt(SARA_BASE),
-        unit: 'USD / calendar',
-        featured: true,
-      },
-      {
-        tag: 'Marketing',
-        name: 'Mia',
-        body: 'Brings the ideas, builds the pieces in your brand, posts on Instagram and fills the gaps in the calendar. Measures in appointments, not likes.',
-        price: fmt(ADDON),
-        unit: 'USD flat',
-        featured: false,
-      },
-      {
-        tag: 'Bookkeeping',
-        name: 'Daniel',
-        body: 'Closes the month, tells you the margin and catches the deposits that went uncollected. When money is pending, he hands it to Sara.',
-        price: fmt(ADDON),
-        unit: 'USD flat',
-        featured: false,
-      },
     ],
     plansKicker: 'How you are billed',
     plansH2: 'A calendar is one bookable schedule.',
     plansLead:
-      'If three providers at your practice each keep their own calendar, that is three calendars. Mia and Daniel are billed once per account, no matter how many calendars you have.',
+      'If three providers at your practice each keep their own calendar, that is three calendars, whether in one location or several.',
     plansPopular: 'Most picked',
-    plansAddon: 'Add-on',
     plansCta: 'Get started',
     billMonthly: 'Monthly',
     billAnnual: 'Annual',
     billSave: '2 months free',
     billAnnualNote: 'billed annually',
-    additionalKicker: 'Additional products',
-    additionalH2: 'Add Mia and Daniel when you need them.',
-    additionalLead: 'They are billed once per account, no matter how many calendars you have. The more calendars, the better the deal.',
     saraRole: 'Front desk',
     saraPlans: [
       {
@@ -280,37 +173,6 @@ const dict = {
         ],
       },
     ],
-    addons: [
-      {
-        name: 'Mia',
-        raw: ADDON,
-        unit: 'USD/mo flat',
-        avatar: '/equipo/mia-avatar.jpg',
-        role: 'Marketing',
-        blurb: 'AI marketing. Fills the calendar with new and lapsed patients.',
-        features: [
-          'New-patient acquisition',
-          'Win-back of lapsed patients',
-          'WhatsApp campaigns',
-          'Presence on Google and AI search',
-          'Source reports',
-        ],
-      },
-      {
-        name: 'Daniel',
-        raw: ADDON,
-        unit: 'USD/mo flat',
-        avatar: '/equipo/daniel-avatar.jpg',
-        role: 'Finance',
-        blurb: 'AI bookkeeping. Tracks revenue, collections and the monthly margin.',
-        features: [
-          'Revenue and collections tracking',
-          'Payment reconciliation',
-          'Monthly financial reports',
-          'Revenue projection',
-        ],
-      },
-    ],
     volKicker: 'Volume',
     volH2: 'Each new calendar costs less.',
     volLead:
@@ -326,24 +188,19 @@ const dict = {
       'the first costs 129, the second 129 and the third 109. Sara totals $367, not $327. The 109 price applies only to the third calendar, not to all three.',
     calcKicker: 'Calculator',
     calcH2: 'Price it for your practice.',
-    calcLead: 'Pick the plan, move the control for how many calendars you have and add Mia and Daniel. The price updates instantly.',
+    calcLead: 'Pick the plan and move the control for how many calendars you have. The price updates instantly.',
     calcPlanLabel: 'Sara plan',
     calcAgendasLabel: 'How many calendars?',
-    calcAddMia: '+ Mia',
-    calcAddDaniel: '+ Daniel',
-    calcResultKicker: 'Your team, per month',
+    calcResultKicker: 'Your plan, per month',
     calcTotalUnit: 'USD / mo',
     calcSaraLabel: 'Sara',
     calcPerAgendaLabel: 'Cost per calendar',
     calcPerAgendaUnit: 'USD',
     calcUnitWord: 'calendars',
-    scaleBold: 'Mia and Daniel do not scale.',
-    scale:
-      'They cost $110 each at any account size. The more calendars you have, the better the deal: at a 20-calendar practice, the two of them together cost less than two Sara calendars.',
     faqTitle: 'What people usually ask.',
     faqs: [
       { q: 'What counts as one calendar?', a: 'A bookable calendar. If two providers share the same calendar, it is a single calendar.' },
-      { q: 'Can I start with just Sara?', a: 'Yes. Sara is the way in. Mia and Daniel join whenever you want, on the same account.' },
+      { q: 'Can I start with just Sara?', a: 'Yes. Sara is all you need to answer, book and collect from day one.' },
       { q: 'Do I pay more for having several locations?', a: 'No. The price depends on how many bookable calendars you have, not how many locations.' },
       { q: 'How do I get started?', a: 'You sign up online, set up the calendar and WhatsApp, and Sara starts answering the same day.' },
       { q: 'What happens if I add a provider?', a: 'One calendar is added at the price of the matching tier, and the average cost of the whole account goes down.' },
@@ -352,7 +209,7 @@ const dict = {
   },
 }[lang];
 
-const { saraPlans, addons, tiers, faqs } = dict;
+const { saraPlans, tiers, faqs } = dict;
 ---
 
 <Layout ogImage={`/og/pricing-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
@@ -373,7 +230,6 @@ const { saraPlans, addons, tiers, faqs } = dict;
           <div class="mx-auto mt-7 max-w-2xl space-y-1 text-lg text-cream/75 md:text-xl">
             <p>{dict.heroLead1}</p>
             <p>{dict.heroLead2}</p>
-            <p>{dict.heroLead3}</p>
           </div>
           <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
             <a
@@ -393,7 +249,7 @@ const { saraPlans, addons, tiers, faqs } = dict;
           </div>
 
           <!-- Stats -->
-          <div class="mx-auto mt-14 grid max-w-2xl grid-cols-3 gap-8 border-t border-cream/12 pt-8">
+          <div class="mx-auto mt-14 grid max-w-md grid-cols-2 gap-8 border-t border-cream/12 pt-8">
             {
               dict.stats.map((s) => (
                 <div>
@@ -489,52 +345,6 @@ const { saraPlans, addons, tiers, faqs } = dict;
       </div>
     </section>
 
-    <!-- ══════════ PRODUCTOS ADICIONALES · add-ons ══════════ -->
-    <section class="border-b border-line">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.additionalKicker}</p>
-        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.additionalH2}</h2>
-        <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.additionalLead}</p>
-        <div class="mt-12 grid gap-5 md:grid-cols-2">
-          {
-            addons.map((p) => (
-              <div class="flex flex-col rounded-2xl border border-line bg-cream p-7 sm:flex-row sm:gap-7">
-                <div class="sm:w-52 sm:shrink-0">
-                  <div class="flex items-center gap-3">
-                    <span class="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-line bg-paper">
-                      <img src={p.avatar} alt={p.name} width="48" height="48" class="h-full w-full object-cover object-top" loading="lazy" decoding="async" />
-                    </span>
-                    <div>
-                      <p class="font-serif text-xl font-black leading-none text-ink">{p.name}</p>
-                      <p class="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{p.role}</p>
-                    </div>
-                  </div>
-                  <p class="mt-4 text-salvia">{p.blurb}</p>
-                  <p class="mt-4">
-                    <span class="font-serif text-3xl font-black text-ink tabular-nums" data-price data-monthly={p.raw}>{fmt(p.raw)}</span>
-                    <s class="ml-2 font-serif text-lg font-black text-salvia/50 tabular-nums" data-price-was hidden></s>
-                    <span class="mt-0.5 block text-sm text-salvia">
-                      {p.unit}<span class="text-pine-dark" data-annual-note hidden> · {dict.billAnnualNote}</span>
-                    </span>
-                  </p>
-                </div>
-                <ul class="mt-6 flex-1 space-y-2.5 text-sm text-ink sm:mt-0 sm:border-l sm:border-line sm:pl-7">
-                  {p.features.map((f) => (
-                    <li class="flex items-start gap-2.5">
-                      <svg class="mt-0.5 h-4 w-4 shrink-0 text-pine" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                        <path d="M4 10.5 8 14.5 16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
     <!-- ══════════ VOLUMEN · tramos + ejemplo ══════════ -->
     <section class="border-b border-line">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
@@ -605,14 +415,6 @@ const { saraPlans, addons, tiers, faqs } = dict;
             <div class="mt-1.5 flex justify-between text-xs text-salvia tabular-nums">
               <span>1</span><span>{calcData.max}</span>
             </div>
-            <div class="mt-7 flex flex-wrap gap-3">
-              <button type="button" data-calc-toggle="mia" aria-pressed="false" class="calc-chip">
-                {dict.calcAddMia} <span class="calc-chip__price">{fmt(ADDON)}</span>
-              </button>
-              <button type="button" data-calc-toggle="daniel" aria-pressed="false" class="calc-chip">
-                {dict.calcAddDaniel} <span class="calc-chip__price">{fmt(ADDON_DANIEL)}</span>
-              </button>
-            </div>
           </div>
 
           <!-- Resultado -->
@@ -625,21 +427,8 @@ const { saraPlans, addons, tiers, faqs } = dict;
                 {dict.calcTotalUnit}<span class="text-cream/50" data-annual-note hidden> · {dict.billAnnualNote}</span>
               </span>
             </p>
-            <ul class="mt-5 space-y-2.5 text-sm">
-              <li class="flex items-center justify-between gap-4">
-                <span class="text-cream/80" data-calc-sara-label>Sara Start</span>
-                <span class="tabular-nums text-cream" data-calc-sara>{fmt(defaultSara)}</span>
-              </li>
-              <li class="flex items-center justify-between gap-4" data-calc-row="mia" hidden>
-                <span class="text-cream/80">Mia</span>
-                <span class="tabular-nums text-cream" data-price data-monthly={ADDON}>{fmt(ADDON)}</span>
-              </li>
-              <li class="flex items-center justify-between gap-4" data-calc-row="daniel" hidden>
-                <span class="text-cream/80">Daniel</span>
-                <span class="tabular-nums text-cream" data-price data-monthly={ADDON_DANIEL}>{fmt(ADDON_DANIEL)}</span>
-              </li>
-            </ul>
-            <p class="mt-4 flex items-center justify-between gap-4 border-t border-cream/15 pt-4 text-sm text-cream/70">
+            <p class="mt-1 text-sm text-cream/70" data-calc-sara-label>Sara Start</p>
+            <p class="mt-5 flex items-center justify-between gap-4 border-t border-cream/15 pt-4 text-sm text-cream/70">
               <span>{dict.calcPerAgendaLabel}</span>
               <span><span class="font-semibold text-cream tabular-nums" data-calc-per>{fmt(defaultPer)}</span> {dict.calcPerAgendaUnit}</span>
             </p>
@@ -652,41 +441,12 @@ const { saraPlans, addons, tiers, faqs } = dict;
 
     <FeatureFaq items={faqs} lang={lang} title={dict.faqTitle} />
 
-    <CtaBand lang={lang} />
+    <CtaBand lang={lang} sub={dict.ctaSub} />
   </main>
   <Footer lang={lang} />
 </Layout>
 
 <style>
-  .calc-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border-radius: 9999px;
-    border: 1px solid var(--color-line);
-    background: #fff;
-    padding: 0.55rem 1.05rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: var(--color-ink);
-    cursor: pointer;
-    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
-  }
-  .calc-chip__price {
-    color: var(--color-salvia);
-    font-variant-numeric: tabular-nums;
-  }
-  .calc-chip:hover {
-    border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
-  }
-  .calc-chip[aria-pressed='true'] {
-    border-color: var(--color-pine);
-    background: var(--color-pine);
-    color: var(--color-cream);
-  }
-  .calc-chip[aria-pressed='true'] .calc-chip__price {
-    color: color-mix(in srgb, var(--color-cream) 78%, transparent);
-  }
 
   input[type='range'][data-calc-range] {
     outline-offset: 4px;
@@ -792,14 +552,10 @@ const { saraPlans, addons, tiers, faqs } = dict;
     var nOut = root && root.querySelector('[data-calc-n]');
     var totalOut = root && root.querySelector('[data-calc-total]');
     var totalWas = root && root.querySelector('[data-calc-total-was]');
-    var saraOut = root && root.querySelector('[data-calc-sara]');
     var perOut = root && root.querySelector('[data-calc-per]');
-    var rowMia = root && root.querySelector('[data-calc-row="mia"]');
-    var rowDaniel = root && root.querySelector('[data-calc-row="daniel"]');
     var saraLabelOut = root && root.querySelector('[data-calc-sara-label]');
     var planBtns = root ? root.querySelectorAll('[data-plan]') : [];
     var unit = (range && range.getAttribute('data-unit')) || '';
-    var state = { mia: false, daniel: false };
     var plan = 'start'; // 'start' (49 por agenda, plano) | 'full' (tramos por volumen)
 
     // Sara Start = 49 x nº de agendas (plano). Sara Full = total con tramos por volumen.
@@ -811,21 +567,15 @@ const { saraPlans, addons, tiers, faqs } = dict;
       if (!root) return;
       var n = parseInt(range.value, 10) || 1;
       var saraM = saraMonthlyFor(n);
-      // Sumamos las partes ya con el descuento aplicado, así el total coincide con las filas.
-      var saraNow = withBilling(saraM);
-      var total = saraNow + (state.mia ? withBilling(calcData.mia) : 0) + (state.daniel ? withBilling(calcData.daniel) : 0);
+      var total = withBilling(saraM);
       nOut.textContent = String(n);
-      saraOut.textContent = nf.format(saraNow);
       totalOut.textContent = nf.format(total);
       perOut.textContent = nf.format(Math.round(total / n));
       if (saraLabelOut) saraLabelOut.textContent = plan === 'full' ? 'Sara Full' : 'Sara Start';
-      if (rowMia) rowMia.hidden = !state.mia;
-      if (rowDaniel) rowDaniel.hidden = !state.daniel;
       // Tachado del total: el mensual sin descuento.
       if (totalWas) {
         if (billing === 'annual') {
-          var monthly = saraM + (state.mia ? calcData.mia : 0) + (state.daniel ? calcData.daniel : 0);
-          totalWas.textContent = nf.format(monthly);
+          totalWas.textContent = nf.format(saraM);
           totalWas.hidden = false;
         } else {
           totalWas.hidden = true;
@@ -860,16 +610,6 @@ const { saraPlans, addons, tiers, faqs } = dict;
         renderCalc();
       });
     });
-    if (root) {
-      root.querySelectorAll('[data-calc-toggle]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var k = btn.getAttribute('data-calc-toggle');
-          state[k] = !state[k];
-          btn.setAttribute('aria-pressed', state[k] ? 'true' : 'false');
-          renderCalc();
-        });
-      });
-    }
 
     renderAll();
   })();
