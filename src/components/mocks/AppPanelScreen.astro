@@ -1,0 +1,279 @@
+---
+// Panel de la app Sara AI: reservas, conversaciones, tasa de reserva e ingresos
+// del período, más la actividad diaria. Última captura de la ficha del App Store.
+// Los números son los del screenshot (90 días); las barras son un patrón fijo.
+import PhoneFrame from './PhoneFrame.astro';
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+
+const dict = {
+  es: {
+    title: 'Panel',
+    periods: ['Hoy', '7d', '30d', '90d'],
+    kpis: [
+      { n: '20', l: 'Reservas', up: 'nuevo' },
+      { n: '103', l: 'Conversaciones', up: 'nuevo' },
+      { n: '19%', l: 'Tasa de reserva' },
+      { n: '$37,997', l: 'Ingresos estimados', up: 'nuevo', dark: true },
+    ],
+    compare: 'Comparado con el período anterior',
+    income: 'Ingresos',
+    currency: 'MXN',
+    est: 'Estimado (citas)',
+    estN: '$37,997',
+    real: 'Cobrado',
+    realN: '$12,400',
+    activity: 'Actividad diaria',
+    legend: ['Conv.', 'Reservas'],
+    axis: ['28 may', '11 jul', '25 ago'],
+  },
+  en: {
+    title: 'Dashboard',
+    periods: ['Today', '7d', '30d', '90d'],
+    kpis: [
+      { n: '20', l: 'Bookings', up: 'new' },
+      { n: '103', l: 'Conversations', up: 'new' },
+      { n: '19%', l: 'Booking rate' },
+      { n: '$37,997', l: 'Est. revenue', up: 'new', dark: true },
+    ],
+    compare: 'Compared with the previous period',
+    income: 'Revenue',
+    currency: 'USD',
+    est: 'Estimated (bookings)',
+    estN: '$37,997',
+    real: 'Collected',
+    realN: '$12,400',
+    activity: 'Daily activity',
+    legend: ['Conv.', 'Bookings'],
+    axis: ['May 28', 'Jul 11', 'Aug 25'],
+  },
+}[lang];
+
+// Barras (conversaciones claras + reservas oscuras): patrón fijo, 36 días.
+const conv = [2, 3, 1, 4, 2, 6, 9, 4, 12, 7, 5, 3, 8, 10, 6, 4, 3, 5, 7, 2, 4, 6, 3, 9, 5, 4, 2, 7, 14, 18, 9, 16, 24, 12, 8, 5];
+const book = conv.map((c, i) => (i % 3 === 0 ? Math.max(1, Math.round(c / 4)) : i % 5 === 0 ? Math.round(c / 3) : 0));
+const max = Math.max(...conv);
+---
+
+<PhoneFrame lang={lang} title={dict.title} tab="panel" badge={1} class={cls}>
+  <div class="periods">
+    {dict.periods.map((p, i) => <span class:list={['period', i === 3 && 'is-active']}>{p}</span>)}
+  </div>
+
+  <div class="kpis">
+    {
+      dict.kpis.map((k) => (
+        <div class:list={['kpi', k.dark && 'kpi--dark']}>
+          <b>{k.n}</b>
+          <span>{k.l}</span>
+          {k.up && <em>▲ {k.up}</em>}
+        </div>
+      ))
+    }
+  </div>
+  <p class="compare">{dict.compare}</p>
+
+  <div class="card">
+    <div class="card__head">
+      <span class="card__title">{dict.income}</span>
+      <span class="cur">{dict.currency}</span>
+    </div>
+    <div class="line">
+      <span>{dict.est}</span>
+      <b>{dict.estN}</b>
+    </div>
+    <div class="line">
+      <span>{dict.real}</span>
+      <b>{dict.realN}</b>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__head">
+      <span class="card__title">{dict.activity}</span>
+      <span class="legend">
+        <i class="legend__conv"></i>{dict.legend[0]}
+        <i class="legend__book"></i>{dict.legend[1]}
+      </span>
+    </div>
+    <div class="bars" aria-hidden="true">
+      {
+        conv.map((c, i) => (
+          <span class="bar">
+            <i class="bar__conv" style={`height:${(c / max) * 100}%`} />
+            {book[i] > 0 && <i class="bar__book" style={`height:${(book[i] / max) * 100}%`} />}
+          </span>
+        ))
+      }
+    </div>
+    <div class="axis">{dict.axis.map((a) => <span>{a}</span>)}</div>
+  </div>
+</PhoneFrame>
+
+<style>
+  .periods {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0.2rem;
+    border-radius: 0.7rem;
+    background: #e9edea;
+  }
+  .period {
+    padding: 0.4rem 0;
+    border-radius: 0.55rem;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #5e6b62;
+    text-align: center;
+  }
+  .period.is-active {
+    background: #fff;
+    color: #14261f;
+    box-shadow: 0 1px 2px rgba(20, 38, 31, 0.1);
+  }
+
+  .kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+  }
+  .kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.65rem 0.7rem;
+    border-radius: 0.8rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(20, 38, 31, 0.06);
+  }
+  .kpi b {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .kpi span {
+    font-size: 0.64rem;
+    color: #5e6b62;
+  }
+  .kpi em {
+    font-size: 0.6rem;
+    font-style: normal;
+    font-weight: 700;
+    color: #1a6349;
+  }
+  .kpi--dark {
+    background: #2f5a47;
+    color: #fff;
+  }
+  .kpi--dark span {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .kpi--dark em {
+    color: #3fe08a;
+  }
+  .compare {
+    margin: -0.2rem 0 0;
+    font-size: 0.56rem;
+    color: #8a948d;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.65rem 0.7rem;
+    border-radius: 0.8rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(20, 38, 31, 0.06);
+  }
+  .card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card__title {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #5e6b62;
+    text-transform: uppercase;
+  }
+  .cur {
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.4rem;
+    background: #e9edea;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #1a6349;
+  }
+  .line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #14261f;
+  }
+  .line b {
+    font-size: 0.86rem;
+    font-weight: 700;
+  }
+  .legend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.56rem;
+    color: #8a948d;
+  }
+  .legend i {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 2px;
+  }
+  .legend i + * {
+    margin-right: 0.3rem;
+  }
+  .legend__conv {
+    background: #c9d3cc;
+  }
+  .legend__book {
+    background: #2f5a47;
+  }
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 3.4rem;
+    border-bottom: 1px dashed #dfe5e0;
+  }
+  .bar {
+    position: relative;
+    display: block;
+    flex: 1;
+    height: 100%;
+  }
+  .bar i {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-radius: 1px 1px 0 0;
+  }
+  .bar__conv {
+    background: #c9d3cc;
+  }
+  .bar__book {
+    background: #2f5a47;
+  }
+  .axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.54rem;
+    color: #8a948d;
+  }
+</style>

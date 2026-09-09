@@ -1,0 +1,261 @@
+---
+// La app Sara AI para iPhone y iPad (App Store, sep 2026). Página de la app para
+// el dueño o la dueña de la clínica: qué ve y qué decide desde el celular. El
+// molde es el de Owner.com para su app (hero con el teléfono, por qué importa,
+// features con la UI real, pasos, FAQ), sobre el patrón profundo de las
+// funcionalidades. Mocks bilingües en components/mocks/App*.astro.
+//
+// Framing (team.ts): el equipo trabaja solo y te escribe; la app es donde te avisa
+// y donde entras cuando hace falta. Nada de "pregúntales lo que quieras".
+import { getStaticPaths, toLocale } from '../../i18n/config';
+export { getStaticPaths };
+const lang = toLocale(Astro.params.lang);
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ClientsStrip from '../../components/ClientsStrip.astro';
+import FeatureRow from '../../components/FeatureRow.astro';
+import FeatureFaq from '../../components/FeatureFaq.astro';
+import CtaInline from '../../components/CtaInline.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import AppStoreBadge from '../../components/AppStoreBadge.astro';
+import AppTeamScreen from '../../components/mocks/AppTeamScreen.astro';
+import AppInboxScreen from '../../components/mocks/AppInboxScreen.astro';
+import AppPanelScreen from '../../components/mocks/AppPanelScreen.astro';
+import AppChatScreen from '../../components/mocks/AppChatScreen.astro';
+import { localePath } from '../../i18n/config';
+import { APP_STORE_ID } from '../../lib/app';
+const L = (p: string) => localePath(p, lang);
+
+// ── Copy por idioma. EN es el producto para clínicas de Estados Unidos, no calco. ──
+const dict = {
+  es: {
+    metaTitle: 'Sara AI para iPhone · Tu clínica en el bolsillo',
+    metaDescription:
+      'La app de Sara AI para iPhone y iPad: la agenda, los cobros y cada conversación de tu clínica desde el celular. Sara, Mia y Daniel te avisan cuando hay algo que decidir.',
+    heroEyebrow: 'Sara AI · App para iPhone',
+    // Tres líneas fijas (sin wrap), como el hero de la home: el tamaño por breakpoint
+    // en el <h1> está calibrado para que la más larga (22 caracteres) entre siempre.
+    heroTitle:
+      '<span class="block whitespace-nowrap">Tu clínica,</span><span class="block whitespace-nowrap">en el bolsillo.</span><span class="block whitespace-nowrap text-pine-dark">Tu equipo, a un toque.</span>',
+    heroLead:
+      'Sara, Mia y Daniel trabajan solos y te avisan. Con la app ves la agenda, los cobros y cada conversación desde el celular, y entras solo cuando hace&nbsp;falta.',
+    heroBack: 'Volver al inicio',
+    appName: 'Sara AI',
+    appMeta: 'Gratis · iPhone y iPad',
+    heroNote: 'Para clínicas que ya usan Sara. ¿Todavía no?',
+    heroNoteCta: 'Prueba gratis',
+    strip: [
+      { t: 'Te avisa, no te interrumpe', b: 'Una notificación cuando entra una cita nueva o un chat pide un humano. Nada más.' },
+      { t: 'Entras cuando quieres', b: 'Abres cualquier conversación de Sara y tomas el control al instante.' },
+      { t: 'Los números, en vivo', b: 'Citas, ingresos y conversaciones del día, sin abrir la computadora.' },
+    ],
+    row1Eyebrow: 'Bandeja de Sara',
+    row1Title: 'Cada chat, resuelto. <em class="text-pine-dark">Y a la&nbsp;vista.</em>',
+    row1Body:
+      'Sara atiende WhatsApp, Instagram y el chat de tu web. En la app ves qué respondió, qué agendó y qué cobró. Si un paciente pide hablar con alguien, te llega al momento y tomas la conversación desde ahí.',
+    row1Points: ['WhatsApp, Instagram y web en una sola bandeja', 'Tomas el control de cualquier chat con un toque', 'La ficha y el historial de cada paciente'],
+    row2Eyebrow: 'Panel',
+    row2Title: 'Cuánto entró hoy, <em class="text-pine-dark">sin pedir el&nbsp;reporte.</em>',
+    row2Body:
+      'Reservas, conversaciones, tasa de reserva e ingresos estimados. Hoy, la semana o el trimestre, comparado con el período anterior.',
+    row2Points: ['Las citas de hoy y de la semana, siempre a mano', 'Ingresos estimados y cobrados', 'Actividad por canal, día a día'],
+    row3Eyebrow: 'Tu equipo',
+    row3Title: 'Sara, Mia y Daniel <em class="text-pine-dark">te escriben a&nbsp;ti.</em>',
+    row3Body:
+      'Mia te propone la promo de la semana. Daniel te dice cómo cierra el mes y qué falta cobrar. Sara te avisa cuando alguien necesita una respuesta humana. Todo entra como un chat y tú decides con un toque.',
+    row3Points: ['Notificaciones solo cuando hay algo que decidir', 'Apruebas, corriges o los dejas seguir', 'La conversación sigue en la web'],
+    stepsH2: 'En el bolsillo en <em class="text-mint">dos&nbsp;minutos.</em>',
+    steps: [
+      { n: '01', title: 'Descarga Sara AI', body: 'Gratis en el App Store, para iPhone y iPad.' },
+      { n: '02', title: 'Inicia sesión con tu cuenta', body: 'La misma de la plataforma Sara. No hay nada que configurar.' },
+      { n: '03', title: 'Activa las notificaciones', body: 'Y el equipo te avisa cuando hay algo que decidir.' },
+    ],
+    ctaInline: 'Tu equipo con IA ya trabaja. Ahora también te avisa al&nbsp;celular.',
+    faqs: [
+      { q: '¿Necesito una cuenta para usar la app?', a: 'Sí. La app es para clínicas que ya trabajan con Sara: inicias sesión con la misma cuenta de la plataforma. Si todavía no la tienes, empieza con la prueba gratis y descarga la app después.' },
+      { q: '¿La app tiene costo?', a: 'No. Está incluida en tu plan. La descargas gratis del App Store y entras con tu cuenta.' },
+      { q: '¿Puedo responderle yo a un paciente desde la app?', a: 'Sí. Abres la conversación en la bandeja de Sara y tomas el control. Sara se hace a un lado hasta que se la devuelves.' },
+      { q: '¿Qué notificaciones me llegan?', a: 'Citas nuevas y chats que piden un humano, al instante. También los avisos de Mia y Daniel cuando tienen algo para decidir contigo. Las configuras desde la app.' },
+      { q: '¿Y para Android?', a: 'Por ahora la app es para iPhone y iPad. Desde un Android entras a la plataforma web desde el navegador del celular, con las mismas funciones.' },
+      { q: '¿La app guarda historia clínica?', a: 'No. Igual que la plataforma, Sara AI no almacena historia clínica ni información médica. Trabaja sobre la conversación, la agenda y los cobros.' },
+    ],
+  },
+  en: {
+    metaTitle: 'Sara AI for iPhone · Your practice in your pocket',
+    metaDescription:
+      'The Sara AI app for iPhone and iPad: your schedule, payments and every patient conversation from your phone. Sara, Mia and Daniel message you when there is something to decide.',
+    heroEyebrow: 'Sara AI · iPhone app',
+    heroTitle:
+      '<span class="block whitespace-nowrap">Your practice,</span><span class="block whitespace-nowrap">in your pocket.</span><span class="block whitespace-nowrap text-pine-dark">Your team, a tap away.</span>',
+    heroLead:
+      'Sara, Mia and Daniel work on their own and message you. With the app you see the schedule, the payments and every conversation from your phone, and step in only when it&nbsp;matters.',
+    heroBack: 'Back to home',
+    appName: 'Sara AI',
+    appMeta: 'Free · iPhone and iPad',
+    heroNote: 'For practices already running on Sara. Not yet?',
+    heroNoteCta: 'Try it free',
+    strip: [
+      { t: 'Alerts, not interruptions', b: 'One notification when a new booking lands or a chat asks for a human. That’s it.' },
+      { t: 'Step in when you want', b: 'Open any of Sara’s conversations and take over instantly.' },
+      { t: 'Your numbers, live', b: 'Today’s bookings, revenue and conversations, without opening a laptop.' },
+    ],
+    row1Eyebrow: 'Sara’s inbox',
+    row1Title: 'Every chat, handled. <em class="text-pine-dark">And in plain&nbsp;sight.</em>',
+    row1Body:
+      'Sara answers texts, WhatsApp, Instagram DMs and your website chat. In the app you see what she replied, what she booked and what she collected. If a patient asks for a person, it reaches you right away and you take the conversation from there.',
+    row1Points: ['Text, WhatsApp, Instagram and web in one inbox', 'Take over any chat with one tap', 'Every patient’s profile and history'],
+    row2Eyebrow: 'Dashboard',
+    row2Title: 'What came in today, <em class="text-pine-dark">without asking for a&nbsp;report.</em>',
+    row2Body:
+      'Bookings, conversations, booking rate and estimated revenue. Today, this week or the quarter, compared with the previous period.',
+    row2Points: ['Today’s and this week’s appointments, always at hand', 'Estimated and collected revenue', 'Activity by channel, day by day'],
+    row3Eyebrow: 'Your team',
+    row3Title: 'Sara, Mia and Daniel <em class="text-pine-dark">message&nbsp;you.</em>',
+    row3Body:
+      'Mia pitches this week’s special. Daniel tells you how the month closes and what is still owed. Sara flags when someone needs a human answer. It all lands as a chat and you decide with one tap.',
+    row3Points: ['Notifications only when there is something to decide', 'Approve, correct or let them carry on', 'The conversation continues on the web'],
+    stepsH2: 'In your pocket in <em class="text-mint">two&nbsp;minutes.</em>',
+    steps: [
+      { n: '01', title: 'Download Sara AI', body: 'Free on the App Store, for iPhone and iPad.' },
+      { n: '02', title: 'Sign in with your account', body: 'The same one you use on the Sara platform. Nothing to set up.' },
+      { n: '03', title: 'Turn on notifications', body: 'And the team reaches you when there is something to decide.' },
+    ],
+    ctaInline: 'Your AI team is already working. Now it reaches you on your&nbsp;phone.',
+    faqs: [
+      { q: 'Do I need an account to use the app?', a: 'Yes. The app is for practices already running on Sara: you sign in with the same platform account. If you don’t have one yet, start with the free trial and download the app afterwards.' },
+      { q: 'Does the app cost anything?', a: 'No. It’s included in your plan. Download it free from the App Store and sign in.' },
+      { q: 'Can I reply to a patient myself from the app?', a: 'Yes. Open the conversation in Sara’s inbox and take over. Sara steps aside until you hand it back.' },
+      { q: 'Which notifications do I get?', a: 'New bookings and chats asking for a human, instantly. Plus Mia’s and Daniel’s messages when they have something for you to decide. You configure them in the app.' },
+      { q: 'What about Android?', a: 'For now the app is for iPhone and iPad. On Android you use the web platform from your phone’s browser, with the same features.' },
+      { q: 'Does the app store patient records?', a: 'No. Like the platform, Sara AI never stores medical records or clinical notes. It works on the conversation, the schedule and the payments.' },
+    ],
+  },
+}[lang];
+
+// JSON-LD de la app (además del SoftwareApplication web que emite el Layout).
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'MobileApplication',
+  name: 'Sara AI',
+  operatingSystem: 'iOS',
+  applicationCategory: 'BusinessApplication',
+  installUrl: `https://apps.apple.com/app/id${APP_STORE_ID}`,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  description: dict.metaDescription,
+  publisher: { '@id': 'https://holasara.ai/#organization' },
+};
+---
+
+<Layout ogImage={`/og/app-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription} schema={schema} appId={APP_STORE_ID}>
+  <Header lang={lang} />
+  <main>
+    <!-- ══════════ HERO · el teléfono con la pantalla del equipo ══════════ -->
+    <section class="relative overflow-hidden border-b border-line">
+      <div
+        class="pointer-events-none absolute -right-32 -top-40 h-[520px] w-[520px] rounded-full opacity-60 blur-3xl"
+        style="background: radial-gradient(circle, color-mix(in srgb, var(--color-mint) 40%, transparent), transparent 70%);"
+        aria-hidden="true"
+      >
+      </div>
+      <div class="mx-auto grid max-w-6xl gap-14 px-5 pb-20 pt-14 md:grid-cols-[1.05fr_0.95fr] md:items-center">
+        <div>
+          <a href={L('/')} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
+            <span aria-hidden="true">←</span> {dict.heroBack}
+          </a>
+          <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+            <span class="dot h-2 w-2"></span>{dict.heroEyebrow}
+          </p>
+          {/* Tres líneas fijas. Tamaños calibrados para la columna de cada breakpoint
+              (la línea más larga tiene 22 caracteres a ~0.44em cada uno). */}
+          <h1 class="font-serif text-[clamp(1.6rem,7.8vw,2.1rem)] font-black leading-[1.05] tracking-tight md:text-[2.4rem] lg:text-[3rem]" set:html={dict.heroTitle} />
+          <p class="mt-6 max-w-xl text-lg text-salvia" set:html={dict.heroLead} />
+
+          <!-- Ficha de la app (ícono real + nombre) y badge del App Store, como Owner. -->
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <div class="flex items-center gap-3">
+              <img src="/img/app/sara-ai-icon.png" width="56" height="56" alt="" class="h-14 w-14 rounded-[0.9rem] shadow-[0_8px_20px_-10px_rgba(20,38,31,0.5)]" fetchpriority="high" />
+              <span class="flex flex-col leading-tight">
+                <span class="font-semibold text-ink">{dict.appName}</span>
+                <span class="text-sm text-salvia">{dict.appMeta}</span>
+              </span>
+            </div>
+            <AppStoreBadge lang={lang} campaign="hero" />
+          </div>
+          <p class="mt-5 text-sm text-salvia">
+            {dict.heroNote}
+            <a href={L('/free-trial')} class="ml-1 whitespace-nowrap font-semibold text-pine-dark transition-colors hover:text-ink">{dict.heroNoteCta} <span aria-hidden="true">→</span></a>
+          </p>
+        </div>
+
+        <div class="flex justify-center md:justify-end">
+          <AppTeamScreen lang={lang} />
+        </div>
+      </div>
+    </section>
+
+    <ClientsStrip lang={lang} />
+
+    <!-- ══════════ TIRA · por qué importa ══════════ -->
+    <section class="border-b border-line bg-paper">
+      <div class="mx-auto grid max-w-6xl gap-8 px-5 py-10 sm:grid-cols-3">
+        {
+          dict.strip.map((s, i) => (
+            <div class:list={['py-2', i > 0 && 'sm:border-l sm:border-line sm:pl-8']}>
+              <p class="font-serif text-lg font-black text-ink">{s.t}</p>
+              <p class="mt-1 text-salvia">{s.b}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ══════════ FEATURES · la UI real, fila por fila ══════════ -->
+    <section class="border-t border-line">
+      <div class="reveal mx-auto flex max-w-6xl flex-col gap-24 px-5 py-24">
+        <FeatureRow eyebrow={dict.row1Eyebrow} title={dict.row1Title} body={dict.row1Body} points={dict.row1Points}>
+          <AppInboxScreen lang={lang} />
+        </FeatureRow>
+
+        <FeatureRow flip eyebrow={dict.row2Eyebrow} title={dict.row2Title} body={dict.row2Body} points={dict.row2Points}>
+          <AppPanelScreen lang={lang} />
+        </FeatureRow>
+
+        <FeatureRow eyebrow={dict.row3Eyebrow} title={dict.row3Title} body={dict.row3Body} points={dict.row3Points}>
+          <AppChatScreen lang={lang} member="daniel" />
+        </FeatureRow>
+      </div>
+    </section>
+
+    <!-- ══════════ CÓMO EMPIEZAS · 3 pasos (banda oscura) ══════════ -->
+    <section class="border-t border-line bg-ink text-cream">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <div class="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.stepsH2} />
+          <AppStoreBadge lang={lang} campaign="steps" class="self-start md:self-auto" />
+        </div>
+        <div class="mt-14 grid gap-x-10 gap-y-12 md:grid-cols-3">
+          {
+            dict.steps.map((s) => (
+              <div>
+                <div class="flex items-center gap-4">
+                  <span class="font-serif text-4xl font-black text-mint tabular-nums">{s.n}</span>
+                  <span class="h-px flex-1 bg-cream/15" />
+                </div>
+                <h3 class="mt-5 text-xl font-semibold text-cream">{s.title}</h3>
+                <p class="mt-2 text-cream/65">{s.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <CtaInline title={dict.ctaInline} lang={lang} />
+
+    <FeatureFaq items={dict.faqs} lang={lang} />
+
+    <CtaBand lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Layout>

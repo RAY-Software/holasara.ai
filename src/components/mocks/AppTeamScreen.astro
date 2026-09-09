@@ -1,0 +1,110 @@
+---
+// Pantalla "Equipo" de la app Sara AI: una tarjeta por integrante (Sara, Mia,
+// Daniel) con su avatar, su rol y el botón para abrir el chat. Es la primera
+// captura de la ficha del App Store. Caras y roles salen de team.ts.
+import PhoneFrame from './PhoneFrame.astro';
+import { getTeam, type MemberId } from '../../data/team';
+import { defaultLocale, type Locale } from '../../i18n/config';
+
+interface Props {
+  lang?: Locale;
+  class?: string;
+}
+const { lang = defaultLocale, class: cls = '' } = Astro.props;
+const team = getTeam(lang);
+
+const ui =
+  lang === 'en'
+    ? {
+        title: 'Team',
+        intro: 'Your team, one tap away.',
+        talk: 'Talk to',
+        lines: { sara: 'Today’s conversations and bookings', mia: 'This week’s content and specials', daniel: 'Cash and the month close' },
+      }
+    : {
+        title: 'Equipo',
+        intro: 'Tu equipo, en un chat.',
+        talk: 'Habla con',
+        lines: { sara: 'Conversaciones y citas de hoy', mia: 'Contenido y promos de la semana', daniel: 'Caja y cierre del mes' },
+      };
+// Color de cada integrante en la app (rol y botón).
+const color: Record<MemberId, string> = { sara: '#1a6349', mia: '#c4396a', daniel: '#1d63c9' };
+---
+
+<PhoneFrame lang={lang} title={ui.title} back class={cls}>
+  <p class="intro">{ui.intro}</p>
+  {
+    team.map((m) => (
+      <div class="card">
+        <div class="who">
+          <img src={m.avatar} alt="" width="40" height="40" loading="lazy" decoding="async" />
+          <span class="who__id">
+            <b>{m.name}</b>
+            <small style={`color:${color[m.id]}`}>{m.role}</small>
+          </span>
+        </div>
+        <p class="line">{ui.lines[m.id]}</p>
+        <span class="btn" style={`background:${color[m.id]}`}>
+          {ui.talk} {m.name}
+        </span>
+      </div>
+    ))
+  }
+</PhoneFrame>
+
+<style>
+  .intro {
+    margin: 0 0 0.1rem;
+    font-size: 0.72rem;
+    color: #5e6b62;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 0.65rem 0.7rem 0.7rem;
+    border-radius: 0.9rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(20, 38, 31, 0.06);
+  }
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .who img {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    object-fit: cover;
+    object-position: top;
+    background: #dfe7e2;
+  }
+  .who__id {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .who__id b {
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+  .who__id small {
+    font-size: 0.64rem;
+    font-weight: 600;
+  }
+  .line {
+    margin: 0;
+    font-size: 0.68rem;
+    color: #5e6b62;
+  }
+  .btn {
+    display: block;
+    padding: 0.55rem 0.5rem;
+    border-radius: 0.6rem;
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-align: center;
+  }
+</style>

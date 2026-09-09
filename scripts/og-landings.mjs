@@ -38,6 +38,8 @@ const CARDS = [
   { out: 'aeo-en', kicker: 'Marketing · Answer engine optimization', lines: ['Show up when', 'patients'], accent: ['ask ChatGPT.'], photo: 'public/img/hero/aeo-hero.jpg', pos: '72% 50%' },
   { out: 'integrations-es', kicker: 'Integraciones', lines: ['Se conecta con', 'lo que tu clínica'], accent: ['ya usa.'], photo: 'public/img/hero/integraciones-hero.jpg', pos: '72% 50%' },
   { out: 'integrations-en', kicker: 'Integrations', lines: ['Connects with the', 'tools your clinic'], accent: ['already uses.'], photo: 'public/img/hero/integraciones-hero.jpg', pos: '72% 50%' },
+  { out: 'app-es', kicker: 'Sara AI · App para iPhone', lines: ['Tu clínica', 'en el bolsillo.'], accent: ['Tu equipo,', 'a un toque.'], photo: 'public/equipo/sara.jpg', pos: '50% 15%' },
+  { out: 'app-en', kicker: 'Sara AI · iPhone app', lines: ['Your practice', 'in your pocket.'], accent: ['Your team,', 'one tap away.'], photo: 'public/equipo/sara.jpg', pos: '50% 15%' },
 ];
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');

@@ -25,7 +25,8 @@ export type ProductIcon =
   | 'search'
   | 'robot'
   | 'chart'
-  | 'globe';
+  | 'globe'
+  | 'mobile';
 
 export type BusinessIcon =
   | 'laser'
@@ -199,6 +200,18 @@ const productGroupsRaw: RawGroup[] = [
         name: { es: 'Contabilidad de la clínica', en: 'Practice bookkeeping' },
         desc: { es: 'Daniel lleva las cuentas con Plaid y QuickBooks.', en: 'Daniel keeps the books with Plaid and QuickBooks.' },
         icon: 'chart',
+      },
+    ],
+  },
+  {
+    // La app Sara AI para iPhone (App Store, sep 2026). Mismo slug en ambos idiomas.
+    label: { es: 'En tu celular', en: 'On your phone' },
+    items: [
+      {
+        href: '/app',
+        name: { es: 'App para iPhone', en: 'iPhone app' },
+        desc: { es: 'Tu equipo y tu agenda, en el bolsillo.', en: 'Your team and your schedule, in your pocket.' },
+        icon: 'mobile',
       },
     ],
   },
