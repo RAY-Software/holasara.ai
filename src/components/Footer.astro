@@ -10,7 +10,10 @@ interface Props {
 }
 const { lang = defaultLocale } = Astro.props;
 const t = useTranslations(lang);
-const productLinks = getProductLinks(lang);
+// Estos productos (SEO dental, SEO estética, AEO) siguen en el mega-menú, pero se sacan
+// de la columna "Funcionalidades" del footer (pedido de Franco, sep 2026).
+const FOOTER_HIDDEN_PRODUCTS = new Set(['/seo-dental', '/seo-para-clinicas-de-estetica', '/aeo']);
+const productLinks = getProductLinks(lang).filter((it) => !FOOTER_HIDDEN_PRODUCTS.has(it.href));
 const industryLinks = getIndustryLinks(lang);
 const sizeLinks = getSizeLinks(lang);
 const L = (p: string) => localePath(p, lang);
