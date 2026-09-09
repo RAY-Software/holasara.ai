@@ -94,6 +94,7 @@ const dict = {
     additionalKicker: 'Productos adicionales',
     additionalH2: 'Suma a Mia y a Daniel cuando los necesites.',
     additionalLead: 'Se cobran una sola vez por cuenta, sin importar cuántas agendas tengas. Cuantas más agendas, mejor negocio resultan.',
+    saraRole: 'Recepción',
     saraPlans: [
       {
         name: 'Sara Start',
@@ -126,6 +127,8 @@ const dict = {
         name: 'Mia',
         raw: ADDON,
         unit: 'USD/mes fijo',
+        avatar: '/equipo/mia-avatar.jpg',
+        role: 'Marketing',
         blurb: 'Marketing con IA. Llena la agenda con pacientes nuevos y reactivados.',
         features: [
           'Captación de pacientes nuevos',
@@ -139,6 +142,8 @@ const dict = {
         name: 'Daniel',
         raw: ADDON,
         unit: 'USD/mes fijo',
+        avatar: '/equipo/daniel-avatar.jpg',
+        role: 'Finanzas',
         blurb: 'Finanzas con IA. Controla ingresos, cobranzas y el margen del mes.',
         features: [
           'Control de ingresos y cobranzas',
@@ -247,6 +252,7 @@ const dict = {
     additionalKicker: 'Additional products',
     additionalH2: 'Add Mia and Daniel when you need them.',
     additionalLead: 'They are billed once per account, no matter how many calendars you have. The more calendars, the better the deal.',
+    saraRole: 'Front desk',
     saraPlans: [
       {
         name: 'Sara Start',
@@ -279,6 +285,8 @@ const dict = {
         name: 'Mia',
         raw: ADDON,
         unit: 'USD/mo flat',
+        avatar: '/equipo/mia-avatar.jpg',
+        role: 'Marketing',
         blurb: 'AI marketing. Fills the calendar with new and lapsed patients.',
         features: [
           'New-patient acquisition',
@@ -292,6 +300,8 @@ const dict = {
         name: 'Daniel',
         raw: ADDON,
         unit: 'USD/mo flat',
+        avatar: '/equipo/daniel-avatar.jpg',
+        role: 'Finance',
         blurb: 'AI bookkeeping. Tracks revenue, collections and the monthly margin.',
         features: [
           'Revenue and collections tracking',
@@ -342,7 +352,7 @@ const dict = {
   },
 }[lang];
 
-const { team, saraPlans, addons, tiers, faqs } = dict;
+const { saraPlans, addons, tiers, faqs } = dict;
 ---
 
 <Layout ogImage={`/og/pricing-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
@@ -397,35 +407,6 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
       </div>
     </section>
 
-    <!-- ══════════ TU EQUIPO CON IA · 3 tarjetas ══════════ -->
-    <section class="border-b border-line">
-      <div class="reveal mx-auto max-w-6xl px-5 py-24">
-        <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.teamKicker}</p>
-        <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl" set:html={dict.teamH2} />
-        <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.teamLead}</p>
-        <div class="mt-12 grid gap-5 md:grid-cols-3">
-          {
-            team.map((m) => (
-              <div
-                class:list={[
-                  'flex flex-col rounded-2xl border bg-cream p-7',
-                  m.featured ? 'border-pine/40 shadow-[0_16px_44px_-24px_rgba(20,38,31,0.4)]' : 'border-line',
-                ]}
-              >
-                <p class="text-xs font-semibold uppercase tracking-[0.14em] text-pine-dark">{m.tag}</p>
-                <p class="mt-2 font-serif text-2xl font-black text-ink">{m.name}</p>
-                <p class="mt-3 flex-1 text-salvia">{m.body}</p>
-                <p class="mt-6 border-t border-line pt-4">
-                  <span class="font-serif text-3xl font-black text-ink tabular-nums">{m.price}</span>
-                  <span class="ml-1.5 text-sm text-salvia">{m.unit}</span>
-                </p>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </section>
-
     <!-- ══════════ CÓMO SE COBRA · tabla de planes ══════════ -->
     <section class="border-b border-line bg-paper">
       <div class="reveal mx-auto max-w-6xl px-5 py-24">
@@ -433,9 +414,19 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.plansH2}</h2>
         <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.plansLead}</p>
 
+        <!-- Identidad de Sara (una sola vez; las dos tarjetas de abajo son sus planes) -->
+        <div class="mt-8 flex items-center gap-3">
+          <span class="h-11 w-11 shrink-0 overflow-hidden rounded-full border border-line bg-cream">
+            <img src="/equipo/sara-avatar.jpg" alt="Sara" width="44" height="44" class="h-full w-full object-cover object-top" loading="lazy" decoding="async" />
+          </span>
+          <span class="font-serif text-lg font-black text-ink">
+            Sara <span class="font-normal text-salvia">· {dict.saraRole}</span>
+          </span>
+        </div>
+
         <!-- Toggle mensual / anual -->
         <div
-          class="mt-10 inline-flex items-center gap-1 rounded-full border border-line bg-cream p-1"
+          class="mt-6 inline-flex items-center gap-1 rounded-full border border-line bg-cream p-1"
           role="group"
           aria-label={`${dict.billMonthly} / ${dict.billAnnual}`}
         >
@@ -508,10 +499,17 @@ const { team, saraPlans, addons, tiers, faqs } = dict;
           {
             addons.map((p) => (
               <div class="flex flex-col rounded-2xl border border-line bg-cream p-7 sm:flex-row sm:gap-7">
-                <div class="sm:w-48 sm:shrink-0">
-                  <span class="text-xs font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.plansAddon}</span>
-                  <p class="mt-2 font-serif text-2xl font-black text-ink">{p.name}</p>
-                  <p class="mt-2 text-salvia">{p.blurb}</p>
+                <div class="sm:w-52 sm:shrink-0">
+                  <div class="flex items-center gap-3">
+                    <span class="h-12 w-12 shrink-0 overflow-hidden rounded-full border border-line bg-paper">
+                      <img src={p.avatar} alt={p.name} width="48" height="48" class="h-full w-full object-cover object-top" loading="lazy" decoding="async" />
+                    </span>
+                    <div>
+                      <p class="font-serif text-xl font-black leading-none text-ink">{p.name}</p>
+                      <p class="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-pine-dark">{p.role}</p>
+                    </div>
+                  </div>
+                  <p class="mt-4 text-salvia">{p.blurb}</p>
                   <p class="mt-4">
                     <span class="font-serif text-3xl font-black text-ink tabular-nums" data-price data-monthly={p.raw}>{fmt(p.raw)}</span>
                     <s class="ml-2 font-serif text-lg font-black text-salvia/50 tabular-nums" data-price-was hidden></s>
