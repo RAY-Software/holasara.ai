@@ -13,6 +13,11 @@
 // por WhatsApp (ver src/lib/pricing.ts). Alinear ese número con este modelo vive en el backend,
 // no acá.
 
+/** Descuento anual: pagas 10 meses y usas 12 (2 meses gratis). */
+export const ANNUAL_MONTHS_CHARGED = 10;
+/** Precio mensual equivalente cuando se factura anual (monto mensual con el descuento aplicado). */
+export const annualMonthly = (monthly: number): number => Math.round((monthly * ANNUAL_MONTHS_CHARGED) / 12);
+
 /** Precio de entrada de Sara (plan Start, con tope mensual de conversaciones). USD/mes por agenda. */
 export const SARA_START = 49;
 
