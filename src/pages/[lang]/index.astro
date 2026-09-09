@@ -54,8 +54,8 @@ const dict = {
     scanCta: 'Escanear mi negocio',
     talkCta: 'Habla con Sara',
     videoKicker: 'En acción',
-    videoH2: 'Mira a Sara en 60&nbsp;segundos.',
-    videoAlt: 'Video: Sara en acción, en 60 segundos',
+    videoH2: 'Mira a Sara en&nbsp;acción.',
+    videoAlt: 'Video: Sara en acción',
     videoPlay: 'Reproducir el video de Sara',
     ctxKicker: 'El contexto',
     ctxH2: 'Tu paciente ya decidió <em class="text-mint">cómo</em> quiere&nbsp;agendar.',
@@ -203,7 +203,7 @@ const ig = mia.pipeline?.ig;
 const calCells = cal ? Array.from({ length: 35 }, (_, i) => i - cal.startOffset + 1) : [];
 const daniel = getMember('daniel', lang)!;
 
-// Solo en inglés. (a) El video de la home está en español (YouTube -HAjxKXeltI), así que
+// Solo en inglés. (a) El video de la home está en español (YouTube 2iwulLWylPg), así que
 // en /en no se muestra. (b) El acto de Daniel suma las integraciones del producto en
 // Estados Unidos (Plaid + QuickBooks); en ES el arreglo queda vacío y no se pinta nada.
 const showVideo = lang === 'es';
@@ -321,15 +321,16 @@ const danielIntegrations: { name: string; icon: string }[] =
           <!-- Video demo: portada liviana (thumbnail YouTube); el iframe se carga recién al clic -->
           <div
             id="video-embed"
-            data-yt="-HAjxKXeltI"
+            data-yt="2iwulLWylPg"
             class="group relative mt-10 aspect-video cursor-pointer overflow-hidden rounded-2xl border border-line bg-ink shadow-[0_16px_40px_-26px_rgba(20,38,31,0.38)]"
           >
             <img
-              src="https://img.youtube.com/vi/-HAjxKXeltI/maxresdefault.jpg"
+              src="https://img.youtube.com/vi/2iwulLWylPg/maxresdefault.jpg"
               alt={dict.videoAlt}
               class="absolute inset-0 h-full w-full object-cover opacity-95 transition group-hover:opacity-100"
               loading="lazy"
               decoding="async"
+              onerror="this.onerror=null;this.src='https://img.youtube.com/vi/2iwulLWylPg/hqdefault.jpg'"
             />
             <button
               type="button"
