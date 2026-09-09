@@ -12,30 +12,41 @@ import Footer from '../../components/Footer.astro';
 import FeatureFaq from '../../components/FeatureFaq.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { whatsappLink, whatsappText } from '../../lib/whatsapp';
-import { SARA_START, SARA_TIERS, ADDON_MIA, CALC_ROWS, fmt } from '../../data/pricing';
+import { SARA_START, SARA_TIERS, ADDON_MIA, ADDON_DANIEL, saraTotal, fmt } from '../../data/pricing';
 
 // El precio base de Sara Full (agendas 1ª y 2ª) y el fijo de Mia/Daniel salen de la
 // fuente única (data/pricing.ts), así la copy nunca se desincroniza de la calculadora.
 const SARA_BASE = SARA_TIERS[0].price; // 129
 const ADDON = ADDON_MIA; // 110
 
+// Datos para la calculadora interactiva (client-side). Precomputamos el total de Sara
+// por cada nº de agendas (1..MAX) desde la fuente única, así el JS del navegador solo
+// indexa y suma los add-ons; no reimplementa la lógica de tramos.
+const CALC_MAX = 30;
+const DEFAULT_N = 3;
+const SARA_TOTALS = Array.from({ length: CALC_MAX }, (_, i) => saraTotal(i + 1));
+const calcData = { totals: SARA_TOTALS, mia: ADDON_MIA, daniel: ADDON_DANIEL, max: CALC_MAX };
+// Valores por defecto server-render (para que la calculadora muestre algo sin JS).
+const defaultSara = saraTotal(DEFAULT_N);
+const defaultPer = Math.round(defaultSara / DEFAULT_N);
+
 // ── Copy por idioma. EN es inglés nativo del producto US, no calco. ──
 const dict = {
   es: {
     metaTitle: 'Precios · Sara',
     metaDescription:
-      'Precios claros de Sara: pagas por agenda, no por sucursal. Sara desde 49 USD por agenda, Mia y Daniel 110 USD fijo cada uno. Sin demo, empiezas hoy.',
-    heroBadge: 'Sin demo · Empiezas hoy',
-    heroTitle: 'Pagas por agenda,<br />no por sucursal.',
+      'Precios claros de Sara, sin sorpresas: desde 49 USD por agenda, con Mia y Daniel a 110 USD fijo cada uno. Sin comisión por cita.',
+    heroBadge: 'Precios claros',
+    heroTitle: 'El precio que ves<br />es el que pagas.',
     heroLead1: 'Sara atiende, agenda y cobra las 24 horas.',
     heroLead2: 'Mia trae pacientes. Daniel cuida el dinero.',
-    heroLead3: 'Precios claros, sin llamada de ventas.',
+    heroLead3: 'Sumas a cada uno cuando lo necesitas.',
     ctaStart: 'Empezar ahora',
     ctaTalk: 'Habla con Sara',
     stats: [
       { n: fmt(SARA_START), label: 'USD por agenda' },
       { n: fmt(ADDON), label: 'Mia o Daniel, fijo' },
-      { n: '0', label: 'demos necesarias' },
+      { n: '0', label: 'comisión por cita' },
     ],
     teamKicker: 'Tu equipo con IA',
     teamH2: 'Tres agentes. <em class="text-pine-dark">Empiezas por Sara.</em>',
@@ -70,7 +81,7 @@ const dict = {
     plansKicker: 'Cómo se cobra',
     plansH2: 'Una agenda es un calendario reservable.',
     plansLead:
-      'Si en tu clínica atienden tres profesionales con calendarios propios, son tres agendas, estén en un local o en once. Mia y Daniel se cobran una sola vez por cuenta, sin importar cuántas agendas o sucursales tengas.',
+      'Si en tu clínica atienden tres profesionales con calendarios propios, son tres agendas. Mia y Daniel se cobran una sola vez por cuenta, sin importar cuántas agendas tengas.',
     plansCols: { plan: 'Plan', price: 'USD / mes', includes: 'Qué incluye' },
     plans: [
       {
@@ -112,15 +123,17 @@ const dict = {
     volExample:
       'la primera cuesta 129, la segunda 129 y la tercera 109. El total de Sara es 367 USD, no 327. El precio de 109 aplica solo a la tercera agenda, no a las tres.',
     calcKicker: 'Calculadora',
-    calcH2: 'Busca tu clínica en la tabla.',
-    calcLead: 'Cuenta cuántos calendarios reservables tienes y lee la fila. Los precios ya incluyen los tramos por volumen.',
-    calcCols: {
-      agendas: 'Agendas',
-      sara: 'Solo Sara',
-      saraMia: 'Sara + Mia',
-      equipo: 'Equipo completo',
-      perAgenda: 'Costo por agenda',
-    },
+    calcH2: 'Calcula el precio de tu clínica.',
+    calcLead: 'Mueve el control según cuántos calendarios reservables tienes y suma a Mia y a Daniel. El precio ya incluye los tramos por volumen.',
+    calcAgendasLabel: '¿Cuántas agendas?',
+    calcAddMia: '+ Mia',
+    calcAddDaniel: '+ Daniel',
+    calcResultKicker: 'Tu equipo, por mes',
+    calcTotalUnit: 'USD / mes',
+    calcSaraLabel: 'Sara',
+    calcPerAgendaLabel: 'Costo por agenda',
+    calcPerAgendaUnit: 'USD',
+    calcUnitWord: 'agendas',
     scaleBold: 'Mia y Daniel no escalan.',
     scale:
       'Cuestan 110 USD cada uno en cualquier tamaño de cuenta. Cuantas más agendas tengas, mejor negocio resultan: en una clínica de 20 agendas, los dos juntos cuestan menos que dos agendas de Sara.',
@@ -129,7 +142,7 @@ const dict = {
       { q: '¿Qué cuenta como una agenda?', a: 'Un calendario reservable. Si dos profesionales comparten el mismo calendario, es una sola agenda.' },
       { q: '¿Puedo empezar solo con Sara?', a: 'Sí. Sara es la puerta de entrada. Mia y Daniel se suman cuando quieras, sobre la misma cuenta.' },
       { q: '¿Pago más por tener varias sucursales?', a: 'No. El precio depende de cuántos calendarios reservables tengas, no de cuántos locales.' },
-      { q: '¿Necesito una demo para empezar?', a: 'No. Contratas en línea, configuras la agenda y el WhatsApp, y Sara empieza a atender el mismo día.' },
+      { q: '¿Cómo empiezo?', a: 'Contratas en línea, configuras la agenda y el WhatsApp, y Sara empieza a atender el mismo día.' },
       { q: '¿Qué pasa si sumo un profesional?', a: 'Se agrega una agenda al precio del tramo que corresponda, y baja el costo promedio de toda la cuenta.' },
       { q: '¿Toca mi historia clínica?', a: 'No. No se almacena historia clínica ni información médica. Eso queda donde está hoy.' },
     ],
@@ -137,18 +150,18 @@ const dict = {
   en: {
     metaTitle: 'Pricing · Sara',
     metaDescription:
-      'Clear Sara pricing: you pay per calendar, not per location. Sara from $49 per calendar, Mia and Daniel $110 flat each. No demo, start today.',
-    heroBadge: 'No demo · Start today',
-    heroTitle: 'You pay per calendar,<br />not per location.',
+      'Clear Sara pricing, no surprises: from $49 per calendar, with Mia and Daniel at $110 flat each. No per-booking fees.',
+    heroBadge: 'Clear pricing',
+    heroTitle: 'The price you see<br />is the price you pay.',
     heroLead1: 'Sara answers, books and collects 24/7.',
     heroLead2: 'Mia brings patients in. Daniel watches the money.',
-    heroLead3: 'Clear pricing, no sales call.',
+    heroLead3: 'You add each one when you need them.',
     ctaStart: 'Start now',
     ctaTalk: 'Talk to Sara',
     stats: [
       { n: fmt(SARA_START), label: 'USD per calendar' },
       { n: fmt(ADDON), label: 'Mia or Daniel, flat' },
-      { n: '0', label: 'demos needed' },
+      { n: '0', label: 'per-booking fees' },
     ],
     teamKicker: 'Your AI team',
     teamH2: 'Three agents. <em class="text-pine-dark">You start with Sara.</em>',
@@ -183,7 +196,7 @@ const dict = {
     plansKicker: 'How you are billed',
     plansH2: 'A calendar is one bookable schedule.',
     plansLead:
-      'If three providers at your practice each keep their own calendar, that is three calendars, whether in one location or eleven. Mia and Daniel are billed once per account, no matter how many calendars or locations you have.',
+      'If three providers at your practice each keep their own calendar, that is three calendars. Mia and Daniel are billed once per account, no matter how many calendars you have.',
     plansCols: { plan: 'Plan', price: 'USD / mo', includes: 'What it includes' },
     plans: [
       {
@@ -225,15 +238,17 @@ const dict = {
     volExample:
       'the first costs 129, the second 129 and the third 109. Sara totals $367, not $327. The 109 price applies only to the third calendar, not to all three.',
     calcKicker: 'Calculator',
-    calcH2: 'Find your practice in the table.',
-    calcLead: 'Count how many bookable calendars you have and read the row. Prices already include the volume tiers.',
-    calcCols: {
-      agendas: 'Calendars',
-      sara: 'Sara only',
-      saraMia: 'Sara + Mia',
-      equipo: 'Full team',
-      perAgenda: 'Cost per calendar',
-    },
+    calcH2: 'Price it for your practice.',
+    calcLead: 'Move the control for how many bookable calendars you have and add Mia and Daniel. The price already includes the volume tiers.',
+    calcAgendasLabel: 'How many calendars?',
+    calcAddMia: '+ Mia',
+    calcAddDaniel: '+ Daniel',
+    calcResultKicker: 'Your team, per month',
+    calcTotalUnit: 'USD / mo',
+    calcSaraLabel: 'Sara',
+    calcPerAgendaLabel: 'Cost per calendar',
+    calcPerAgendaUnit: 'USD',
+    calcUnitWord: 'calendars',
     scaleBold: 'Mia and Daniel do not scale.',
     scale:
       'They cost $110 each at any account size. The more calendars you have, the better the deal: at a 20-calendar practice, the two of them together cost less than two Sara calendars.',
@@ -242,14 +257,14 @@ const dict = {
       { q: 'What counts as one calendar?', a: 'A bookable calendar. If two providers share the same calendar, it is a single calendar.' },
       { q: 'Can I start with just Sara?', a: 'Yes. Sara is the way in. Mia and Daniel join whenever you want, on the same account.' },
       { q: 'Do I pay more for having several locations?', a: 'No. The price depends on how many bookable calendars you have, not how many locations.' },
-      { q: 'Do I need a demo to start?', a: 'No. You sign up online, set up the calendar and WhatsApp, and Sara starts answering the same day.' },
+      { q: 'How do I get started?', a: 'You sign up online, set up the calendar and WhatsApp, and Sara starts answering the same day.' },
       { q: 'What happens if I add a provider?', a: 'One calendar is added at the price of the matching tier, and the average cost of the whole account goes down.' },
       { q: 'Does it touch my medical records?', a: 'No. No medical records or clinical information are stored. That stays where it is today.' },
     ],
   },
 }[lang];
 
-const { team, plans, tiers, calcCols, faqs } = dict;
+const { team, plans, tiers, faqs } = dict;
 ---
 
 <Layout ogImage={`/og/pricing-${lang}.jpg`} lang={lang} title={dict.metaTitle} description={dict.metaDescription}>
@@ -337,7 +352,26 @@ const { team, plans, tiers, calcCols, faqs } = dict;
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.plansH2}</h2>
         <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.plansLead}</p>
 
-        <div class="mt-12 overflow-x-auto rounded-2xl border border-line bg-cream shadow-[0_16px_40px_-28px_rgba(20,38,31,0.32)]">
+        <!-- Mobile: tarjetas apiladas (la columna "qué incluye" no entra en una tabla en pantallas chicas). -->
+        <div class="mt-12 flex flex-col gap-4 sm:hidden">
+          {
+            plans.map((p) => (
+              <div class="rounded-2xl border border-line bg-cream p-6">
+                <div class="flex items-baseline justify-between gap-4 border-b border-line pb-4">
+                  <span class="font-serif text-xl font-black text-ink">{p.name}</span>
+                  <span class="shrink-0 whitespace-nowrap">
+                    <span class="font-serif text-2xl font-black text-ink tabular-nums">{p.price}</span>
+                    <span class="ml-1 text-xs text-salvia">{dict.plansCols.price}</span>
+                  </span>
+                </div>
+                <p class="mt-4 text-salvia">{p.includes}</p>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Desktop: tabla. -->
+        <div class="mt-12 hidden overflow-x-auto rounded-2xl border border-line bg-cream shadow-[0_16px_40px_-28px_rgba(20,38,31,0.32)] sm:block">
           <table class="w-full min-w-[640px] border-collapse text-left">
             <thead>
               <tr class="bg-ink text-cream">
@@ -371,7 +405,7 @@ const { team, plans, tiers, calcCols, faqs } = dict;
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.volH2}</h2>
         <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.volLead}</p>
 
-        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="mt-12 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
           {
             tiers.map((tr, i) => (
               <div
@@ -401,31 +435,68 @@ const { team, plans, tiers, calcCols, faqs } = dict;
         <h2 class="max-w-2xl font-serif text-3xl font-black leading-tight text-balance md:text-4xl">{dict.calcH2}</h2>
         <p class="mt-5 max-w-2xl text-lg text-salvia">{dict.calcLead}</p>
 
-        <div class="mt-12 overflow-x-auto rounded-2xl border border-line bg-cream shadow-[0_16px_40px_-28px_rgba(20,38,31,0.32)]">
-          <table class="w-full min-w-[620px] border-collapse text-right tabular-nums">
-            <thead>
-              <tr class="bg-ink text-cream">
-                <th scope="col" class="px-5 py-4 text-center text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.agendas}</th>
-                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.sara}</th>
-                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.saraMia}</th>
-                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em] text-mint">{calcCols.equipo}</th>
-                <th scope="col" class="px-5 py-4 text-xs font-semibold uppercase tracking-[0.1em]">{calcCols.perAgenda}</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-line">
-              {
-                CALC_ROWS.map((r, i) => (
-                  <tr class={i % 2 ? 'bg-mint/[0.03]' : ''}>
-                    <th scope="row" class="px-5 py-3.5 text-center font-semibold text-ink">{r.agendas}</th>
-                    <td class="px-5 py-3.5 text-salvia">{fmt(r.sara)}</td>
-                    <td class="px-5 py-3.5 text-salvia">{fmt(r.saraMia)}</td>
-                    <td class="px-5 py-3.5 font-semibold text-pine-dark">{fmt(r.equipo)}</td>
-                    <td class="px-5 py-3.5 text-salvia">{fmt(r.perAgenda)}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
+        <div
+          class="mt-12 grid gap-6 rounded-2xl border border-line bg-cream p-6 shadow-[0_16px_40px_-28px_rgba(20,38,31,0.32)] md:grid-cols-2 md:gap-10 md:p-8"
+          data-calc
+        >
+          <!-- Controles -->
+          <div class="flex flex-col justify-center">
+            <div class="flex items-baseline justify-between gap-4">
+              <label for="calc-agendas" class="text-sm font-semibold text-pine-dark">{dict.calcAgendasLabel}</label>
+              <span class="font-serif text-4xl font-black text-ink tabular-nums" data-calc-n>{DEFAULT_N}</span>
+            </div>
+            <input
+              id="calc-agendas"
+              type="range"
+              min="1"
+              max={calcData.max}
+              value={DEFAULT_N}
+              step="1"
+              class="mt-4 h-2 w-full cursor-pointer appearance-none rounded-full bg-line accent-pine"
+              data-calc-range
+              data-unit={dict.calcUnitWord}
+              aria-label={dict.calcAgendasLabel}
+              aria-valuetext={`${DEFAULT_N} ${dict.calcUnitWord}`}
+            />
+            <div class="mt-1.5 flex justify-between text-xs text-salvia tabular-nums">
+              <span>1</span><span>{calcData.max}</span>
+            </div>
+            <div class="mt-7 flex flex-wrap gap-3">
+              <button type="button" data-calc-toggle="mia" aria-pressed="false" class="calc-chip">
+                {dict.calcAddMia} <span class="calc-chip__price">{fmt(ADDON)}</span>
+              </button>
+              <button type="button" data-calc-toggle="daniel" aria-pressed="false" class="calc-chip">
+                {dict.calcAddDaniel} <span class="calc-chip__price">{fmt(ADDON_DANIEL)}</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Resultado -->
+          <div class="rounded-xl bg-ink p-6 text-cream">
+            <p class="text-xs font-semibold uppercase tracking-[0.12em] text-cream/60">{dict.calcResultKicker}</p>
+            <p class="mt-2 flex items-baseline gap-2">
+              <span class="font-serif text-5xl font-black tabular-nums" data-calc-total>{fmt(defaultSara)}</span>
+              <span class="text-cream/70">{dict.calcTotalUnit}</span>
+            </p>
+            <ul class="mt-5 space-y-2.5 text-sm">
+              <li class="flex items-center justify-between gap-4">
+                <span class="text-cream/80">{dict.calcSaraLabel}</span>
+                <span class="tabular-nums text-cream" data-calc-sara>{fmt(defaultSara)}</span>
+              </li>
+              <li class="flex items-center justify-between gap-4" data-calc-row="mia" hidden>
+                <span class="text-cream/80">Mia</span>
+                <span class="tabular-nums text-cream">{fmt(ADDON)}</span>
+              </li>
+              <li class="flex items-center justify-between gap-4" data-calc-row="daniel" hidden>
+                <span class="text-cream/80">Daniel</span>
+                <span class="tabular-nums text-cream">{fmt(ADDON_DANIEL)}</span>
+              </li>
+            </ul>
+            <p class="mt-4 flex items-center justify-between gap-4 border-t border-cream/15 pt-4 text-sm text-cream/70">
+              <span>{dict.calcPerAgendaLabel}</span>
+              <span><span class="font-semibold text-cream tabular-nums" data-calc-per>{fmt(defaultPer)}</span> {dict.calcPerAgendaUnit}</span>
+            </p>
+          </div>
         </div>
 
         <div class="mt-8 rounded-xl border-l-4 border-pine bg-cream p-6 text-salvia">
@@ -440,3 +511,112 @@ const { team, plans, tiers, calcCols, faqs } = dict;
   </main>
   <Footer lang={lang} />
 </Layout>
+
+<style>
+  .calc-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    padding: 0.55rem 1.05rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-ink);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  }
+  .calc-chip__price {
+    color: var(--color-salvia);
+    font-variant-numeric: tabular-nums;
+  }
+  .calc-chip:hover {
+    border-color: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  }
+  .calc-chip[aria-pressed='true'] {
+    border-color: var(--color-pine);
+    background: var(--color-pine);
+    color: var(--color-cream);
+  }
+  .calc-chip[aria-pressed='true'] .calc-chip__price {
+    color: color-mix(in srgb, var(--color-cream) 78%, transparent);
+  }
+
+  input[type='range'][data-calc-range] {
+    outline-offset: 4px;
+  }
+  input[type='range'][data-calc-range]::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 9999px;
+  }
+  input[type='range'][data-calc-range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    margin-top: -7px;
+    border-radius: 9999px;
+    background: var(--color-pine);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 4px rgba(20, 38, 31, 0.3);
+    cursor: pointer;
+  }
+  input[type='range'][data-calc-range]::-moz-range-track {
+    height: 8px;
+    border-radius: 9999px;
+    background: var(--color-line);
+  }
+  input[type='range'][data-calc-range]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border: 3px solid #fff;
+    border-radius: 9999px;
+    background: var(--color-pine);
+    box-shadow: 0 1px 4px rgba(20, 38, 31, 0.3);
+    cursor: pointer;
+  }
+</style>
+
+<script is:inline define:vars={{ calcData }}>
+  (function () {
+    var root = document.querySelector('[data-calc]');
+    if (!root) return;
+    var range = root.querySelector('[data-calc-range]');
+    var nOut = root.querySelector('[data-calc-n]');
+    var totalOut = root.querySelector('[data-calc-total]');
+    var saraOut = root.querySelector('[data-calc-sara]');
+    var perOut = root.querySelector('[data-calc-per]');
+    var rowMia = root.querySelector('[data-calc-row="mia"]');
+    var rowDaniel = root.querySelector('[data-calc-row="daniel"]');
+    var toggles = root.querySelectorAll('[data-calc-toggle]');
+    var unit = (range && range.getAttribute('data-unit')) || '';
+    var nf = new Intl.NumberFormat('en-US');
+    var state = { mia: false, daniel: false };
+
+    function render() {
+      var n = parseInt(range.value, 10) || 1;
+      var sara = calcData.totals[n - 1];
+      var total = sara + (state.mia ? calcData.mia : 0) + (state.daniel ? calcData.daniel : 0);
+      nOut.textContent = String(n);
+      saraOut.textContent = nf.format(sara);
+      totalOut.textContent = nf.format(total);
+      perOut.textContent = nf.format(Math.round(total / n));
+      if (rowMia) rowMia.hidden = !state.mia;
+      if (rowDaniel) rowDaniel.hidden = !state.daniel;
+      range.setAttribute('aria-valuenow', String(n));
+      range.setAttribute('aria-valuetext', n + ' ' + unit);
+    }
+
+    range.addEventListener('input', render);
+    toggles.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var k = btn.getAttribute('data-calc-toggle');
+        state[k] = !state[k];
+        btn.setAttribute('aria-pressed', state[k] ? 'true' : 'false');
+        render();
+      });
+    });
+    render();
+  })();
+</script>
