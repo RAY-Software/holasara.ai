@@ -21,7 +21,7 @@ const t = {
   dayTitle: en ? 'Tuesday Jul 29' : 'Martes 29/7',
   daySub: en ? '10 appointments · all rescheduled' : '10 citas · todas reprogramadas',
   online: en ? 'online' : 'en línea',
-  compose: en ? 'Message' : 'Mensaje',
+  compose: en ? 'Text Message' : 'Mensaje',
   summaryTitle: en ? 'MANAGEMENT SUMMARY' : 'RESUMEN DE LA GESTIÓN',
   summaryFoot: en ? 'Tuesday Jul 29 stays closed.' : 'El martes 29/7 queda cerrado.',
 };
@@ -55,7 +55,7 @@ const rows = [
 const bubbles = en
   ? [
       { who: 'out', html: 'Reschedule everyone from Tuesday', t: '08:12' },
-      { who: 'in', html: 'Done. I moved all 10 appointments to Thursday Jul 31 at the same times and messaged each patient on WhatsApp.', t: '08:12' },
+      { who: 'in', html: 'Done. I moved all 10 appointments to Thursday Jul 31 at the same times and texted each patient.', t: '08:12' },
       { who: 'in', html: 'Two asked for a different time, I already reassigned them. Should I block Tuesday?', t: '08:12' },
       { who: 'out', html: 'Yes, block it', t: '08:13' },
     ]
@@ -109,7 +109,7 @@ const tick =
     </div>
 
     <!-- ── Derecha: chat de WhatsApp (modo operador) ── -->
-    <div class="op-wa flex min-w-0 flex-col overflow-hidden rounded-2xl border border-line">
+    <div class={`op-wa ${en ? 'op-wa--sms' : ''} flex min-w-0 flex-col overflow-hidden rounded-2xl border border-line`}>
       <!-- Header -->
       <div class="op-head">
         <span class="op-photo" aria-hidden="true">S</span>
@@ -276,4 +276,33 @@ const tick =
     color: #8696a0;
   }
   .op-cam, .op-mic { width: 22px; height: 22px; flex: none; }
+
+  /* ── iMessage / SMS (EN · mercado US): burbujas grises/azules sobre blanco ── */
+  .op-wa--sms { background: #fff; }
+  .op-wa--sms .op-head { background: #f6f6f6; border-bottom-color: #dcdcdc; }
+  .op-wa--sms .op-online { display: none; }
+  .op-wa--sms .op-body {
+    background-color: #fff;
+    background-image: none;
+  }
+  .op-wa--sms .op-msg { box-shadow: none; border-radius: 18px; }
+  .op-wa--sms .op-in {
+    background: #e9e9eb;
+    color: #000;
+    border-top-left-radius: 18px;
+    border-bottom-left-radius: 5px;
+  }
+  .op-wa--sms .op-out {
+    background: #0a7cff;
+    color: #fff;
+    border-top-right-radius: 18px;
+    border-bottom-right-radius: 5px;
+  }
+  /* iMessage no muestra hora/tick bajo cada burbuja. */
+  .op-wa--sms .op-meta { display: none; }
+  .op-wa--sms .op-sum-title { color: #0a7cff; }
+  .op-wa--sms .op-check { background: #34c759; }
+  .op-wa--sms .op-sum-foot { color: #000; }
+  .op-wa--sms .op-compose { background: #fff; border-top: 1px solid #ececec; }
+  .op-wa--sms .op-field { border: 1px solid #d1d1d6; }
 </style>

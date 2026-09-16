@@ -118,7 +118,7 @@ const RAW: RawMember[] = [
     },
     metaDescription: {
       es: 'Sara es la recepcionista con IA de tu clínica. Atiende WhatsApp e Instagram 24/7, informa con precios reales, agenda y cobra el anticipo. Sin sumar a nadie a recepción.',
-      en: 'Your practice’s AI receptionist: answers calls, texts, WhatsApp and Instagram DMs 24/7, quotes real fees, books the appointment and collects the deposit.',
+      en: 'Your practice’s AI receptionist: answers calls, texts and Instagram DMs 24/7, quotes real fees, books the appointment and collects the deposit.',
     },
     heroEyebrow: { es: 'Sara · Recepción', en: 'Sara · Front desk' },
     heroTitle: {
@@ -127,7 +127,7 @@ const RAW: RawMember[] = [
     },
     heroLead: {
       es: 'Sara es la recepcionista y la secretaria con IA de tu clínica. Atiende, vende, agenda y cobra por WhatsApp, Instagram y teléfono. Y le pides lo que necesites (bloquear tu agenda, reagendar, reactivar pacientes) y lo hace. De noche, los fines de semana y en los picos.',
-      en: 'Sara is your practice’s AI receptionist and assistant. She answers, sells, books and collects over the phone, text, WhatsApp and Instagram. And you text her whatever you need (block your calendar, reschedule a day, win patients back) and she does it. Nights, weekends and the lunch-hour rush.',
+      en: 'Sara is your practice’s AI receptionist and assistant. She answers, sells, books and collects over the phone, text and Instagram. And you text her whatever you need (block your calendar, reschedule a day, win patients back) and she does it. Nights, weekends and the lunch-hour rush.',
     },
     kicker: { es: 'Cómo trabaja Sara', en: 'How Sara works' },
     h2: {
@@ -136,7 +136,7 @@ const RAW: RawMember[] = [
     },
     paragraph: {
       es: 'Responde WhatsApp, Instagram y el chat de tu web a toda hora. Informa con precios reales, arma la propuesta que conviene, agenda la cita y cobra el anticipo en la misma conversación. Sin sumar a nadie a recepción.',
-      en: 'She picks up calls, texts, WhatsApp, Instagram and your website chat around the clock. She quotes real fees, builds the offer that fits, books the appointment and collects the deposit in the same conversation. Without adding anyone to your front desk.',
+      en: 'She picks up calls, texts, Instagram and your website chat around the clock. She quotes real fees, builds the offer that fits, books the appointment and collects the deposit in the same conversation. Without adding anyone to your front desk.',
     },
     points: {
       es: [
@@ -155,7 +155,7 @@ const RAW: RawMember[] = [
       es: [
         { who: 'out', text: '¡Hola! Piernas enteras: pack de 6 sesiones a $6,900, la primera de prueba sin costo. ¿Te agendo la primera?', t: '23:41' },
         { who: 'in', text: 'Sí, ¿tienen esta semana?', t: '23:42' },
-        { who: 'out', text: 'Jueves 17:30 o viernes 18:00. Para reservar va un anticipo, aquí el link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '23:42' },
+        { who: 'out', text: 'Jueves 17:30 o viernes 18:00. Para reservar va un anticipo, aquí el link:', link: 'pay.holasara.ai/c/aurora-4821', t: '23:42' },
         { who: 'in', text: 'Jueves', t: '23:43' },
         { who: 'out', text: 'Pago recibido. Jueves 17:30 confirmado. Un día antes te escribo para confirmar.', t: '23:43' },
         { who: 'out', text: 'Hola, mañana jueves 17:30 tienes tu primera sesión. ¿Confirmas que vienes?', t: '10:00' },
@@ -164,7 +164,7 @@ const RAW: RawMember[] = [
       en: [
         { who: 'out', text: 'Hi! Full legs are $1,950 for a package of 6 sessions, and your first session is free. Want me to book it?', t: '11:41' },
         { who: 'in', text: 'Yes, anything this week?', t: '11:42' },
-        { who: 'out', text: 'Thursday 5:30 pm or Friday 6:00 pm. A deposit holds the spot, here is the link:', link: 'pay.rayhealth.app/c/aurora-4821', t: '11:42' },
+        { who: 'out', text: 'Thursday 5:30 pm or Friday 6:00 pm. A deposit holds the spot, here is the link:', link: 'pay.holasara.ai/c/aurora-4821', t: '11:42' },
         { who: 'in', text: 'Thursday', t: '11:43' },
         { who: 'out', text: 'Payment received. Thursday 5:30 pm is confirmed. I will text you the day before to confirm.', t: '11:43' },
         { who: 'out', text: 'Hi, tomorrow Thursday at 5:30 pm is your first session. Can you confirm you are coming?', t: '10:00' },
@@ -495,7 +495,7 @@ const RAW: RawMember[] = [
         {
           who: '1 · Mia and you',
           label: 'pitches the promo',
-          subtitle: 'with you, on WhatsApp',
+          subtitle: 'with you, by text',
           bubbles: [
             { who: 'out', text: 'Hey, Thursday and Friday are looking light: 9 open slots between them, almost all in the afternoon.', t: '09:12' },
             { who: 'out', text: 'Let me put together a promo to fill them: "Botox Thursday and Friday, book with a deposit and get the second area half off." The feed and story pieces are ready, with your brand.', t: '09:12' },
