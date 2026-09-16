@@ -112,7 +112,7 @@ const rows: { tag: Tag; name: string; channel: string; when: { es: string; en: s
                 <span class="min-w-0 flex-1">
                   <span class="block truncate text-[15px] font-bold text-ink">{r.name}</span>
                   <span class="block truncate text-[13px] text-salvia">
-                    {r.channel} · {en ? r.when.en : r.when.es}
+                    {en && r.channel === 'WhatsApp' ? 'SMS' : r.channel} · {en ? r.when.en : r.when.es}
                   </span>
                 </span>
                 <span class="shrink-0 text-right">

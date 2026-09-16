@@ -11,7 +11,7 @@ interface Props {
 }
 const { lang = defaultLocale, class: cls = '' } = Astro.props;
 
-type Channel = 'wa' | 'ig' | 'web';
+type Channel = 'wa' | 'ig' | 'web' | 'sms';
 interface Row {
   name: string;
   text: string;
@@ -38,15 +38,15 @@ const dict = {
   },
   en: {
     title: 'Sara’s chats',
-    chips: ['All · 7', 'WhatsApp · 3', 'Instagram · 2', 'Web · 2'],
+    chips: ['All · 7', 'SMS · 3', 'Instagram · 2', 'Web · 2'],
     resolved: 'Resolved',
     needsYou: 'Needs you',
     rows: [
-      { name: 'Emily Carter', text: 'Done! You’re booked Thursday at 10:00 am.', ch: 'wa' },
+      { name: 'Emily Carter', text: 'Done! You’re booked Thursday at 10:00 am.', ch: 'sms' },
       { name: 'Sofia Ramirez', text: 'Thanks for the 5-star review!', ch: 'ig' },
       { name: 'Olivia Brooks', text: 'Wants to speak with someone at the office.', ch: 'web', needsYou: true },
-      { name: 'Michael Chen', text: 'A quick reminder about your visit tomorrow.', ch: 'wa' },
-      { name: 'James Miller', text: 'Done, moved you to Tuesday at 4:00 pm.', ch: 'wa' },
+      { name: 'Michael Chen', text: 'A quick reminder about your visit tomorrow.', ch: 'sms' },
+      { name: 'James Miller', text: 'Done, moved you to Tuesday at 4:00 pm.', ch: 'sms' },
       { name: 'Ava Johnson', text: 'Here are our fees and current specials.', ch: 'ig' },
       { name: 'Ethan Lee', text: 'Deposit received! Your appointment is confirmed.', ch: 'web' },
     ] as Row[],
@@ -68,6 +68,9 @@ const pending = dict.rows.filter((r) => r.needsYou).length;
         <li class:list={['row', r.needsYou && 'row--needs']}>
           <span class:list={['ch', `ch--${r.ch}`]} aria-hidden="true">
             {r.ch === 'wa' && <img src="/img/logos/whatsapp.svg" alt="" width="14" height="14" loading="lazy" decoding="async" />}
+            {r.ch === 'sms' && (
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 4C6.9 4 3 7.4 3 11.6c0 2.2 1.1 4.1 2.8 5.5-.1 1-.6 2.2-1.4 3 1.5-.2 3-.7 4-1.5 1.1.4 2.4.6 3.6.6 5.1 0 9-3.4 9-7.6C21 7.4 17.1 4 12 4z" /></svg>
+            )}
             {r.ch === 'ig' && <img src="/img/logos/instagram.svg" alt="" width="14" height="14" loading="lazy" decoding="async" />}
             {r.ch === 'web' && (
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.7 2.5 2.7 14.5 0 17M12 3.5c-2.7 2.5-2.7 14.5 0 17" /></svg>
@@ -140,6 +143,9 @@ const pending = dict.rows.filter((r) => r.needsYou).length;
   }
   .ch--web {
     color: #1d63c9;
+  }
+  .ch--sms {
+    color: #34c759;
   }
   .row__text {
     display: flex;

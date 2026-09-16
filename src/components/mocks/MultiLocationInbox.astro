@@ -37,7 +37,7 @@ const t = {
   filters: [
     { label: en ? 'All' : 'Todos', count: '128', kind: 'all' as const },
     { label: '', count: '46', kind: 'none' as const },
-    { label: 'WhatsApp', count: '52', kind: 'wa' as const },
+    { label: en ? 'SMS' : 'WhatsApp', count: '52', kind: 'wa' as const },
     { label: 'Instagram', count: '30', kind: 'ig' as const },
   ],
 };
@@ -245,9 +245,12 @@ const avatarStyle: Record<Channel, string> = {
                 class={`mt-0.5 grid h-9 w-9 shrink-0 place-content-center rounded-full text-white ${avatarStyle[r.channel]}`}
                 aria-hidden="true"
               >
-                {r.channel === 'wa' && (
-                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2zm5.3 14.1c-.2.6-1.2 1.1-1.7 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2.1.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1.9 1.9 1.2 2.2 1.3.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.1.1.4 0 .8z"/></svg>
-                )}
+                {r.channel === 'wa' &&
+                  (en ? (
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4C6.9 4 3 7.4 3 11.6c0 2.2 1.1 4.1 2.8 5.5-.1 1-.6 2.2-1.4 3 1.5-.2 3-.7 4-1.5 1.1.4 2.4.6 3.6.6 5.1 0 9-3.4 9-7.6C21 7.4 17.1 4 12 4z"/></svg>
+                  ) : (
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2zm5.3 14.1c-.2.6-1.2 1.1-1.7 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.7-1.2-4.4-3.9-4.6-4.1-.1-.2-1-1.4-1-2.6 0-1.2.6-1.8.9-2.1.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.7 1.7c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1.9 1.9 1.2 2.2 1.3.2.1.4.1.5-.1l.6-.7c.2-.2.3-.2.6-.1l1.6.8c.2.1.4.2.4.3.1.1.1.4 0 .8z"/></svg>
+                  ))}
                 {r.channel === 'ig' && (
                   <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>
                 )}

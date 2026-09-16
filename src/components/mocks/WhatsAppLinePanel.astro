@@ -13,10 +13,10 @@ const { lang = defaultLocale, class: cls = '' } = Astro.props;
 const en = lang === 'en';
 
 const t = {
-  win: 'PielStudio · WhatsApp',
-  title: en ? 'Your WhatsApp line, ready' : 'Tu línea de WhatsApp, lista',
+  win: en ? 'PielStudio · Messages' : 'PielStudio · WhatsApp',
+  title: en ? 'Your text line, ready' : 'Tu línea de WhatsApp, lista',
   sub: en
-    ? 'We give you the WhatsApp Business line for your clinic and leave it connected to Sara. No paperwork with the carrier.'
+    ? 'We give you a business texting line for your clinic and leave it connected to Sara. No paperwork with the carrier.'
     : 'Te damos la línea de WhatsApp Business para tu clínica y la dejamos conectada a Sara. Sin trámites con la operadora.',
   brand: 'PielStudio',
   badge: en ? 'Business account' : 'Cuenta de empresa',
@@ -44,7 +44,7 @@ const t = {
 
 <figure
   class={`w-full min-w-0 max-w-3xl overflow-hidden rounded-2xl border border-line bg-white shadow-[0_18px_50px_-24px_rgba(20,38,31,0.4)] ${cls}`}
-  aria-label={en ? 'Sara WhatsApp line' : 'Línea de WhatsApp de Sara'}
+  aria-label={en ? 'Sara text line' : 'Línea de WhatsApp de Sara'}
 >
   <!-- Chrome estilo macOS -->
   <div class="flex min-w-0 items-center gap-3 border-b border-line bg-[#f7f8fa] px-4 py-3">

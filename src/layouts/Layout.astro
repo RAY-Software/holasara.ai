@@ -90,14 +90,14 @@ const baseSchema = {
       operatingSystem: 'Web',
       description:
         lang === 'en'
-          ? 'AI front desk, marketing and bookkeeping for dental offices, med spas and medical practices. Sara answers calls, texts, WhatsApp and Instagram DMs 24/7, books into Google Calendar and collects deposits. Mia runs Instagram, Google Ads and the Google Business Profile. Daniel reconciles the bank through Plaid and keeps QuickBooks current.'
+          ? 'AI front desk, marketing and bookkeeping for dental offices, med spas and medical practices. Sara answers calls, texts and Instagram DMs 24/7, books into Google Calendar and collects deposits. Mia runs Instagram, Google Ads and the Google Business Profile. Daniel reconciles the bank through Plaid and keeps QuickBooks current.'
           : 'Recepción con IA para clínicas de estética y salud. Atiende, agenda, cobra el anticipo y baja las ausencias en WhatsApp e Instagram.',
       // Solo en EN: lista de capacidades del equipo (schema.org featureList). En ES no
       // se emite nada, así el JSON-LD en español queda exactamente igual.
       ...(lang === 'en'
         ? {
             featureList: [
-              'AI receptionist for phone, SMS, WhatsApp and Instagram DMs, 24/7',
+              'AI receptionist for phone, SMS and Instagram DMs, 24/7',
               'Appointment scheduling, reminders and confirmations in Google Calendar',
               'Deposit and consult fee collection with a payment link',
               'Patient win-back and waitlist',
