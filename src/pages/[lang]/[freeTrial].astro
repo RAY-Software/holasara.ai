@@ -11,6 +11,11 @@ import PlacesAutocomplete from '../../components/PlacesAutocomplete.astro';
 import ClientsStrip from '../../components/ClientsStrip.astro';
 import { WHATSAPP_AR, WHATSAPP_MX, SRC_TAG } from '../../lib/whatsapp';
 import { COUNTRIES } from '../../lib/countries';
+import { POSTHOG_KEY, POSTHOG_HOST } from '../../lib/tracking';
+
+// PostHog solo en build de prod (mismo criterio que los tags de marketing en Layout).
+// En dev los eventos se loguean en consola, no viajan.
+const PH_ENABLED = import.meta.env.PROD && !!POSTHOG_KEY;
 
 // Base de la app del trial (nuestro backend + el reveal). El form POStea a
 // `${TRIAL_BASE}/api/public/demo` (createDemo) y, con el token, redirige a
@@ -342,13 +347,60 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
     </div>
   </div>
 
-  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, T, COUNTRIES }}>
+  <script is:inline define:vars={{ WHATSAPP_AR, WHATSAPP_MX, SRC_TAG, T, COUNTRIES, POSTHOG_KEY, POSTHOG_HOST, PH_ENABLED, LANG: lang }}>
     (function () {
       var form = document.getElementById('trial-form');
       if (!form) return;
       var btn = document.getElementById('trial-submit');
       var errBox = document.getElementById('trial-error');
       var base = form.getAttribute('data-base') || '';
+
+      // ── PostHog: funnel del Free Trial (top del embudo, que vive en este repo) ──
+      // Fetch directo al endpoint de captura (sin SDK, para no cargar ~50 KB en una landing de
+      // anuncios) con keepalive. Best-effort absoluto: envuelto en try/catch, jamás puede romper
+      // el form que mide. distinctId = email en minúsculas (igual que normId del backend) para
+      // que el $identify cosa estos eventos con el demo_created que dispara posthog-node.
+      // Proyecto COMPARTIDO con RAY → todo va con product:'sara'.
+      var PH = (function () {
+        var host = (POSTHOG_HOST || 'https://us.i.posthog.com').replace(/\/$/, '');
+        function anonId() {
+          try {
+            var k = 'sara_ph_id', v = localStorage.getItem(k);
+            if (!v) { v = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'a-' + Date.now() + '-' + Math.random().toString(36).slice(2); localStorage.setItem(k, v); }
+            return v;
+          } catch (e) { return 'anon-' + Date.now(); }
+        }
+        function send(distinctId, event, props, extra) {
+          var properties = Object.assign(
+            { product: 'sara', funnel: 'free_trial', lang: LANG, $current_url: location.href },
+            props || {}, extra || {}
+          );
+          if (!PH_ENABLED || !POSTHOG_KEY || !distinctId) { try { console.log('[ph:dev]', event, properties); } catch (e) {} return; }
+          try {
+            fetch(host + '/capture/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ api_key: POSTHOG_KEY, event: event, distinct_id: distinctId, properties: properties }),
+              keepalive: true,
+              mode: 'cors',
+            }).catch(function () {});
+          } catch (e) {}
+        }
+        function norm(email) { return String(email || '').trim().toLowerCase(); }
+        return {
+          // Evento anónimo (pre-email): landing, errores de validación.
+          capture: function (event, props) { send(anonId(), event, props); },
+          // Evento ya conocido el email (post-submit): cosido al mismo person.
+          captureAs: function (email, event, props) { send(norm(email) || anonId(), event, props); },
+          // Liga el anónimo con el email y captura desde el email de ahí en más.
+          identify: function (email, event, props) {
+            var mail = norm(email);
+            if (!mail) return;
+            send(mail, '$identify', {}, { $anon_distinct_id: anonId(), $set: { email: mail } });
+            if (event) send(mail, event, props);
+          },
+        };
+      })();
 
       // Región (mismo criterio que el resto del sitio) → sesga el country del autocomplete.
       var IS_AR = false;
@@ -561,6 +613,16 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
         };
       })();
 
+      // Landing vista: cuánta gente llega a /prueba (top del embudo, hoy ciego salvo pageview de GA).
+      // Anónimo; se liga al email en el submit vía $identify.
+      try {
+        var _lids = clickIds();
+        PH.capture('trial_landing_viewed', {
+          referrer: document.referrer || '',
+          has_click_id: !!(_lids.gclid || _lids.wbraid || _lids.gbraid || _lids.fbclid),
+        });
+      } catch (e) {}
+
       form.addEventListener('submit', function (ev) {
         ev.preventDefault();
         errBox.classList.add('hidden');
@@ -571,13 +633,16 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
         var fd = new FormData(form);
         var email = String(fd.get('email') || '').trim();
         var business = String(fd.get('business') || '').trim();
-        if (!business) return showError(T.errBusiness);
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError(T.errEmail);
+        // Cada rebote de validación se registra con su motivo: es el drop-off del form que nunca
+        // llegaba al backend (createDemo ni se entera de quien no pasa la validación del cliente).
+        function bail(reason, msg) { PH.capture('trial_form_validation_failed', { reason: reason }); return showError(msg); }
+        if (!business) return bail('business', T.errBusiness);
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return bail('email', T.errEmail);
         var typo = emailTypo(email);
-        if (typo) return showError((T.errEmailTypo || '').replace('{domain}', typo));
+        if (typo) return bail('email_typo', (T.errEmailTypo || '').replace('{domain}', typo));
         var wa = validateWhatsapp();
-        if (!wa.ok) return showError(wa.reason === 'required' ? T.errWhatsappRequired : T.errWhatsapp);
-        if (!fd.get('consent')) return showError(T.errConsent);
+        if (!wa.ok) return bail('whatsapp_' + wa.reason, wa.reason === 'required' ? T.errWhatsappRequired : T.errWhatsapp);
+        if (!fd.get('consent')) return bail('consent', T.errConsent);
 
         btn.disabled = true;
         btn.textContent = T.generating;
@@ -601,6 +666,15 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
           whatsappCountry: String(fd.get('whatsappCountry') || 'AR'),
         };
 
+        // Submit válido: ligamos el anónimo con el email y marcamos el intento. De acá en más el
+        // person queda cosido con el demo_created del backend (mismo email en minúsculas).
+        PH.identify(email, 'trial_form_submitted', {
+          business: business,
+          country: payload.whatsappCountry,
+          has_website: !!payload.websiteUrl,
+          has_click_id: !!(ids.gclid || ids.wbraid || ids.gbraid || ids.fbclid),
+        });
+
         fetch(base + '/api/public/demo', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -617,6 +691,9 @@ const T = { ...dict.js, progressBody: dict.progressBody, progressDone: dict.prog
             progress.finish(go);
           })
           .catch(function (e) {
+            // El POST se rompió (backend caído, error 5xx o red): exactamente el fallo que
+            // estuvo días sin verse por falta de analytics en la entrada.
+            PH.captureAs(email, 'trial_demo_request_failed', { error: String((e && e.message) || 'unknown').slice(0, 200) });
             showError((e && e.message) || T.errRetry);
           });
       });
