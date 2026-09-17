@@ -50,18 +50,18 @@ const dict = {
     ],
     stepsH2: 'De una cita agendada a un paciente que&nbsp;llega.',
     steps: [
-      { n: '01', title: 'La cita entra en tu agenda', body: 'La reserva Sara desde el chat o la carga tu equipo en Google Calendar. Da igual: Sara la ve y la cuida.' },
+      { n: '01', title: 'La cita entra en tu agenda', body: 'La reserva Sara desde el chat o la carga tu equipo en la plataforma. Da igual: Sara la ve y la cuida.' },
       { n: '02', title: 'Sara recuerda y confirma', body: 'Un día antes escribe por WhatsApp, pide confirmación y vuelve a preguntar si no hay respuesta. Con criterio, no en ráfaga.' },
       { n: '03', title: 'La agenda llega llena', body: 'Confirmadas, reprogramadas o liberadas para la lista de espera. Sin llamadas de recepción y sin sorpresas a las 9 de la mañana.' },
     ],
     row1Eyebrow: 'Confirmación',
     row1Title: "Confirma con una palabra <em class='text-pine-dark'>y queda en tu&nbsp;agenda.</em>",
     row1Body:
-      'El paciente responde SÍ y la cita pasa a confirmada en tu panel y en tu Google Calendar. Si no responde, Sara vuelve a preguntar unas horas después. Si sigue en silencio, tu equipo la ve marcada y decide qué hacer.',
+      'El paciente responde SÍ y la cita pasa a confirmada en tu panel y en la agenda de la plataforma. Si no responde, Sara vuelve a preguntar unas horas después. Si sigue en silencio, tu equipo la ve marcada y decide qué hacer.',
     row1Points: [
       'Confirmación con un SÍ, sin apps ni formularios',
       'Un segundo intento si no hay respuesta',
-      'El estado se ve en tu panel y en tu calendario',
+      'El estado se ve en tu panel y en tu agenda',
     ],
     row1Bubbles: [
       { who: 'out', text: 'Hola, Laura. Mañana miércoles a las 11:00 tienes tu limpieza facial en Clínica Aurora. ¿Confirmas que vienes?', t: 'Mar 17:00' },
@@ -72,7 +72,7 @@ const dict = {
     row2Eyebrow: 'Reprogramación',
     row2Title: "Si no puede, <em class='text-pine-dark'>reprograma en el mismo&nbsp;chat.</em>",
     row2Body:
-      'Un "no puedo" no es una hora perdida. Sara propone dos horarios concretos, mueve la cita en tu calendario y ofrece el hueco que quedó libre a la lista de espera. Todo en la misma conversación.',
+      'Un "no puedo" no es una hora perdida. Sara propone dos horarios concretos, mueve la cita en tu agenda y ofrece el hueco que quedó libre a la lista de espera. Todo en la misma conversación.',
     row2Points: [
       'Propone horarios reales, no un "escríbenos para reagendar"',
       'La hora que se libera va a la lista de espera',
@@ -139,14 +139,14 @@ const dict = {
       { tag: '⏰ Recordatorio', desc: 'Sara envió el recordatorio de la cita de mañana.' },
       { tag: '✅ Confirmado', desc: 'El paciente respondió que viene. La hora es tuya.' },
       { tag: '📨 Seguimiento', desc: 'No respondió y Sara volvió a preguntar. El contador muestra cuántas veces.' },
-      { tag: 'Reprogramó', desc: 'El paciente no podía y Sara movió la cita a otro horario en tu calendario.' },
+      { tag: 'Reprogramó', desc: 'El paciente no podía y Sara movió la cita a otro horario en tu agenda.' },
     ],
     faqs: [
-      { q: '¿Cómo envía Sara el recordatorio de citas por WhatsApp?', a: 'Desde una línea de WhatsApp Business conectada a tu clínica. Toma la cita de tu Google Calendar y escribe un día antes con fecha, hora, dirección y las indicaciones que definas. No hay que exportar listas ni copiar mensajes.' },
+      { q: '¿Cómo envía Sara el recordatorio de citas por WhatsApp?', a: 'Desde una línea de WhatsApp Business conectada a tu clínica. Toma la cita de su propia agenda y escribe un día antes con fecha, hora, dirección y las indicaciones que definas. No hay que exportar listas ni copiar mensajes.' },
       { q: '¿Cuánto tiempo antes lo envía?', a: 'Por defecto, un día antes, en un horario en que la gente responde. Se puede ajustar por clínica y por tipo de cita (por ejemplo, dos avisos para estudios con preparación). Lo definimos en la implementación.' },
       { q: '¿Qué pasa si el paciente no responde?', a: 'Sara vuelve a preguntar unas horas después. Si sigue sin responder, la cita queda marcada en tu panel para que tu equipo decida. Y si el paciente responde a cualquier hora, aunque sea a las 23:00, Sara le contesta.' },
       { q: '¿Sirve para recordatorio de citas médicas y dentales?', a: 'Sí. Es el mismo recordatorio con distinto contenido: indicaciones de ayuno o estudios para consultas médicas, retenedor o control de seis meses para odontología, sin maquillaje para tratamientos estéticos. Se configura por tipo de cita.' },
-      { q: '¿Necesito cambiar mi agenda o mi software?', a: 'No. Sara lee y escribe en tu Google Calendar. Si tu clínica usa otra agenda, lo vemos en la demo. No se migra nada.' },
+      { q: '¿Necesito cambiar mi agenda o mi software?', a: 'La agenda es propia y vive en la plataforma de Sara. Si vienes de AgendaPro, Zenoti o GlossGenius, importamos tus servicios, precios y pacientes.' },
       { q: '¿Puedo personalizar el mensaje?', a: 'Sí. El tono, el nombre de la clínica, los datos que incluye y las indicaciones por tratamiento se definen contigo. Y es una conversación, no un envío masivo: si el paciente pregunta algo, Sara le responde.' },
       { q: '¿El recordatorio de citas por WhatsApp se cobra aparte?', a: 'No. Es parte de lo que hace Sara, junto con atender, agendar y cobrar. No se cobra por mensaje ni por cita: es una suscripción mensual que se arma para cada clínica y se comparte en la demo.' },
       { q: '¿Baja las ausencias de verdad?', a: 'El recordatorio las baja; el anticipo las casi elimina. Sara puede pedir un anticipo o la consulta por adelantado al reservar, con un link de pago en el mismo chat. Tú decides para qué tratamientos aplica.' },
@@ -163,7 +163,7 @@ const dict = {
     heroImageAlt: 'A patient confirms her appointment from her phone, a cup of tea beside her, in a warm room.',
     strip: [
       { t: 'Reminds the day before', b: 'Date, time, address and what to bring, in the patient’s text thread.' },
-      { t: 'Gets a confirmation', b: 'The patient replies YES and the appointment is confirmed in your calendar.' },
+      { t: 'Gets a confirmation', b: 'The patient replies YES and the appointment is confirmed in your schedule.' },
       { t: 'Reschedules if they can’t', b: 'Offers another time in the same thread and frees the slot for the waitlist.' },
     ],
     howKicker: 'How Sara does it',
@@ -179,18 +179,18 @@ const dict = {
     ],
     stepsH2: 'From a booked appointment to a patient who shows&nbsp;up.',
     steps: [
-      { n: '01', title: 'The appointment lands in your calendar', body: 'Sara books it from the chat, or your team adds it to Google Calendar. Either way, Sara sees it and looks after it.' },
+      { n: '01', title: 'The appointment lands in your schedule', body: 'Sara books it from the chat, or your team adds it in the platform. Either way, Sara sees it and looks after it.' },
       { n: '02', title: 'Sara reminds and confirms', body: 'The day before, she texts, asks for a confirmation and follows up if there’s no reply. With judgment, not a barrage.' },
       { n: '03', title: 'The schedule arrives full', body: 'Confirmed, rescheduled or released to the waitlist. No front-desk calls and no surprises at 9 am.' },
     ],
     row1Eyebrow: 'Confirmation',
     row1Title: "One word to confirm, <em class='text-pine-dark'>straight into your&nbsp;calendar.</em>",
     row1Body:
-      'The patient replies YES and the appointment turns to confirmed in your dashboard and your Google Calendar. If there’s no reply, Sara asks again a few hours later. If it stays quiet, your team sees it flagged and decides what to do.',
+      'The patient replies YES and the appointment turns to confirmed in your dashboard and the platform. If there’s no reply, Sara asks again a few hours later. If it stays quiet, your team sees it flagged and decides what to do.',
     row1Points: [
       'Confirm with a YES, no apps or forms',
       'A second nudge when there’s no reply',
-      'The status shows in your dashboard and your calendar',
+      'The status shows in your dashboard and your schedule',
     ],
     row1Bubbles: [
       { who: 'out', text: 'Hi Laura, tomorrow Wednesday at 11:00 am you have your facial at Aurora Clinic. Can you confirm you’re coming?', t: 'Tue 5:00 pm' },
@@ -201,7 +201,7 @@ const dict = {
     row2Eyebrow: 'Rescheduling',
     row2Title: "If they can’t make it, <em class='text-pine-dark'>she reschedules in the same&nbsp;thread.</em>",
     row2Body:
-      'A “can’t make it” isn’t a lost hour. Sara offers two specific times, moves the appointment in your calendar and offers the freed slot to the waitlist. All in the same conversation.',
+      'A “can’t make it” isn’t a lost hour. Sara offers two specific times, moves the appointment in your schedule and offers the freed slot to the waitlist. All in the same conversation.',
     row2Points: [
       'Offers real times, not a “call us to reschedule”',
       'The freed slot goes to the waitlist',
@@ -268,14 +268,14 @@ const dict = {
       { tag: '⏰ Reminder', desc: 'Sara sent the reminder for tomorrow’s appointment.' },
       { tag: '✅ Confirmed', desc: 'The patient replied they’re coming. The slot is yours.' },
       { tag: '📨 Follow-up', desc: 'No reply, so Sara asked again. The counter shows how many times.' },
-      { tag: 'Rescheduled', desc: 'The patient couldn’t make it and Sara moved the appointment to another time in your calendar.' },
+      { tag: 'Rescheduled', desc: 'The patient couldn’t make it and Sara moved the appointment to another time in your schedule.' },
     ],
     faqs: [
-      { q: 'How does Sara send appointment reminders?', a: 'By text message, from a line connected to your practice. She takes the appointment from your Google Calendar and writes the day before with the date, time, address and any instructions you define. No lists to export, no messages to copy.' },
+      { q: 'How does Sara send appointment reminders?', a: 'By text message, from a line connected to your practice. She takes the appointment from her own scheduling and writes the day before with the date, time, address and any instructions you define. No lists to export, no messages to copy.' },
       { q: 'How far in advance does she send them?', a: 'By default, the day before, at a time when people actually reply. It can be adjusted per practice and per appointment type (for example, two notices for procedures that need prep). We set it up together during onboarding.' },
       { q: 'What happens if the patient doesn’t reply?', a: 'Sara asks again a few hours later. If it stays quiet, the appointment is flagged in your dashboard so your team can decide. And if the patient replies at any hour, even 11 pm, Sara answers.' },
       { q: 'Does it work as a medical appointment reminder service and for dental offices?', a: 'Yes. It’s the same reminder with different content: fasting or paperwork for medical consults, retainers and six-month recalls for dental, no makeup for aesthetic treatments. It’s configured per appointment type.' },
-      { q: 'Do I need to change my scheduling software?', a: 'No. Sara reads and writes in your Google Calendar. If your practice uses another scheduling system, we look at it in the demo. Nothing gets migrated.' },
+      { q: 'Do I need to change my scheduling software?', a: 'Scheduling is her own and lives in the platform. Coming from AgendaPro, Zenoti or GlossGenius? We import your services, prices and patients.' },
       { q: 'Can I customize the message?', a: 'Yes. The tone, your practice’s name, the details it includes and the instructions per treatment are defined with you. And it’s a conversation, not a blast: if the patient asks something, Sara answers.' },
       { q: 'Is there a per-message fee for reminders?', a: 'No. Reminders are part of what Sara does, along with answering, booking and collecting. There’s no per-message or per-appointment fee: it’s a monthly subscription built for each practice and shared in the demo.' },
       { q: 'Does this actually reduce no-show appointments?', a: 'The reminder cuts them; the deposit almost removes them. Sara can ask for a deposit or a prepaid consult at booking, with a payment link in the same thread. You decide which treatments it applies to.' },

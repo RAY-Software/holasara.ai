@@ -68,7 +68,7 @@ const dict = {
     steps: [
       { n: '01', title: 'Suena el teléfono', body: 'El paciente marca tu número de siempre. Si recepción no puede atender o está cerrado, la llamada entra a Sara sin que nadie haga nada.' },
       { n: '02', title: 'Sara conversa y agenda', body: 'Contesta con voz natural, responde dudas del tratamiento, ofrece horarios y deja la cita reservada dentro de la misma llamada.' },
-      { n: '03', title: 'Todo queda en tu panel', body: 'La cita cae en tu Google Calendar, el anticipo se cobra por el link que envía al chat, y el resumen de la llamada queda junto al resto de las conversaciones.' },
+      { n: '03', title: 'Todo queda en tu panel', body: 'La cita cae en su propia agenda, el anticipo se cobra por el link que envía al chat, y el resumen de la llamada queda junto al resto de las conversaciones.' },
     ],
     row1Eyebrow: 'Nunca ocupado',
     row1Title: "La llamada que antes se perdía, <em class='text-pine-dark'>ahora se&nbsp;contesta.</em>",
@@ -120,7 +120,7 @@ const dict = {
     estados: [
       { tag: '📞 Llamada', desc: 'Sara atendió una llamada entrante. Queda con la hora y la duración.' },
       { tag: '📝 Resumen', desc: 'El resumen en texto de lo que se habló, para leerlo en segundos.' },
-      { tag: 'Reservó', desc: 'La cita quedó agendada dentro de la llamada, en tu Google Calendar.' },
+      { tag: 'Reservó', desc: 'La cita quedó agendada dentro de la llamada, en la agenda de la plataforma.' },
       { tag: '✅ Confirmado', desc: 'El paciente confirmó y el anticipo quedó cobrado por el link del chat.' },
     ],
     faqs: [
@@ -135,14 +135,14 @@ const dict = {
   en: {
     metaTitle: 'Automated Medical Answering Service, 24/7 · Sara',
     metaDescription:
-      'Automated medical answering service for your practice: Sara picks up 24/7, books into your Google Calendar during the call and texts the deposit link.',
+      'Automated medical answering service for your practice: Sara picks up 24/7, books in her own scheduling during the call and texts the deposit link.',
     heroEyebrow: 'Answers · Medical office answering service',
     // H1 corto a propósito: la columna del hero (554px a 60px) solo admite unos 15
     // caracteres por línea y la keyword completa pedía 5 líneas. "medical answering
     // service" queda en title, meta, eyebrow y H2.
     heroTitle: "The answering service<br /><em class='text-pine-dark'>that books.</em>",
     heroLead:
-      "A traditional answering service takes a message and promises someone will call back. Sara is a medical answering service that picks up on the first ring, has a real conversation, books the appointment in your Google Calendar during the call and texts the deposit link. After hours, on weekends, and whenever the front desk is on the other line.",
+      "A traditional answering service takes a message and promises someone will call back. Sara is a medical answering service that picks up on the first ring, has a real conversation, books the appointment in her own scheduling during the call and texts the deposit link. After hours, on weekends, and whenever the front desk is on the other line.",
     heroCallTurns: [
       { who: 'in', text: "Hi, I'd like to schedule a dental cleaning." },
       { who: 'out', text: 'Hi! Happy to help. I have tomorrow at 4:00 pm or Thursday at 11:30 am. Which works better for you?' },
@@ -151,7 +151,7 @@ const dict = {
     ],
     strip: [
       { t: 'Picks up on the first ring', b: 'No hold music, no voicemail, no "someone will call you back."' },
-      { t: 'Books during the call', b: 'Offers real openings and puts the appointment on your Google Calendar.' },
+      { t: 'Books during the call', b: 'Offers real openings and puts the appointment in her own scheduling.' },
       { t: 'Texts the deposit link', b: 'Ends the call and sends the deposit link by text.' },
     ],
     howKicker: 'How Sara does it',
@@ -159,7 +159,7 @@ const dict = {
     howP1:
       'This is a real call, exactly as Sara answers it. She listens, understands what the patient needs, offers real openings and books the appointment, without anyone at the front desk picking up and without a message waiting for a callback.',
     howP2:
-      'And when she hangs up, nothing is lost: the call lives on <span class="font-semibold text-pine-dark">in your dashboard</span>, next to SMS and Instagram, with a summary of what was said and the appointment already on your Google&nbsp;Calendar.',
+      'And when she hangs up, nothing is lost: the call lives on <span class="font-semibold text-pine-dark">in your dashboard</span>, next to SMS and Instagram, with a summary of what was said and the appointment already in her own&nbsp;scheduling.',
     howTurns: [
       { who: 'in', text: 'Hi, I was calling to ask about a facial.' },
       { who: 'out', text: 'Hi! Yes, we do deep-cleansing facials. It takes about an hour. Would you like me to find you a time?' },
@@ -172,7 +172,7 @@ const dict = {
     steps: [
       { n: '01', title: 'The phone rings', body: "The patient dials your usual number. If the front desk can't pick up, it's after hours, or you forward the line, the call goes to Sara. No new number, nothing for the patient to learn." },
       { n: '02', title: 'Sara talks and books', body: 'She answers in a natural voice, in English or Spanish, handles treatment questions, offers real openings and books the appointment during the same call.' },
-      { n: '03', title: 'It all lands in your dashboard', body: 'The appointment drops into your Google Calendar, the deposit link goes out by text, and the call summary sits alongside the rest of the conversations.' },
+      { n: '03', title: 'It all lands in your dashboard', body: 'The appointment drops into her own scheduling, the deposit link goes out by text, and the call summary sits alongside the rest of the conversations.' },
     ],
     row1Eyebrow: 'After hours and overflow',
     row1Title: "After hours and overflow, <em class='text-pine-dark'>answered on the first&nbsp;ring.</em>",
@@ -243,15 +243,15 @@ const dict = {
     estados: [
       { tag: '📞 Call', desc: 'Sara answered an incoming call. Logged with the time and duration.' },
       { tag: '📝 Summary', desc: 'A text summary of what was said, to read in seconds.' },
-      { tag: 'Booked', desc: 'The appointment was scheduled during the call, in your Google Calendar.' },
+      { tag: 'Booked', desc: 'The appointment was scheduled during the call, in her own scheduling.' },
       { tag: '✅ Confirmed', desc: 'The patient confirmed and the deposit was collected through the link she texted.' },
     ],
     faqs: [
       { q: 'Is this a HIPAA compliant medical answering service?', a: "Sara doesn't store or read medical records or clinical information. She works on the conversation and the calendar: who called, what they asked for and when they're booked. We don't advertise HIPAA compliance; if your practice needs a BAA or has specific requirements, we go through them with you in the demo before anything goes live." },
       { q: 'Do I keep my phone number?', a: 'Yes. Sara answers on your current number. During onboarding we connect the line so the calls the front desk can\'t take go to Sara: after hours, on overflow, or all of them, whichever you prefer. Patients never see a new number.' },
-      { q: 'What happens after hours and on weekends?', a: 'Sara answers exactly the same way. She books into your Google Calendar on real availability, texts the deposit link and leaves the summary in your dashboard, so Monday starts with appointments instead of a list of messages to return.' },
+      { q: 'What happens after hours and on weekends?', a: 'Sara answers exactly the same way. She books in her own scheduling on real availability, texts the deposit link and leaves the summary in your dashboard, so Monday starts with appointments instead of a list of messages to return.' },
       { q: 'Can she take several calls at once?', a: 'Yes. Every call is answered in parallel, on the first ring. There is no hold queue and no busy tone, even when three patients call at the same time.' },
-      { q: 'Does she book directly into my calendar?', a: "Yes, into the Google Calendar your practice already uses, only on real openings, and she blocks the slot the moment it's confirmed. If your practice runs on another scheduling system, we look at it together in the demo." },
+      { q: 'Where does she book the appointment?', a: "In her own scheduling, which lives inside Sara's platform, only on real openings, and she blocks the slot the moment it's confirmed. If you come from another system, we import your schedule and services so you start with everything already loaded." },
       { q: 'Does she answer in English and Spanish?', a: "Yes. Sara answers in English and in Spanish, in your practice's tone and terms. Bilingual practices set it up during onboarding so Spanish-speaking patients get the same service as everyone else." },
       { q: 'What if the caller needs a human?', a: "She alerts your team right away with the full context: who called, what they need and what was already said, so a person picks it up without starting from zero. Sara doesn't give medical advice or triage symptoms; anything clinical goes to your team." },
     ],

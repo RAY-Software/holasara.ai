@@ -32,8 +32,8 @@ export interface Competitor {
   copy: { es: CompetitorCopy; en: CompetitorCopy };
 }
 
-const saraPrice = 'a medida por clínica, en la demo';
-const saraPriceEn = 'tailored per clinic, shared in the demo';
+const saraPrice = 'desde US$49 por agenda (Mia y Daniel US$110)';
+const saraPriceEn = 'from US$49 per calendar (Mia and Daniel US$110)';
 
 export const competitors: Competitor[] = [
   {
@@ -53,13 +53,13 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Elige Sara AI si...',
-          body: 'atiendes en español y quieres IA conversacional de verdad en WhatsApp e Instagram desde el primer día, con la cita agendada en tu Google Calendar y la seña cobrada dentro del chat. En Cloudia la conversación con IA generativa es un módulo adicional que se paga aparte; en Sara es el corazón del producto.',
+          body: 'atiendes en español y quieres IA conversacional de verdad en WhatsApp e Instagram desde el primer día, con la cita agendada en su plataforma y la seña cobrada dentro del chat. En Cloudia la conversación con IA generativa es un módulo adicional que se paga aparte; en Sara es el corazón del producto, y viene con el equipo de IA que ningún competidor tiene.',
         },
         rows: [
           { label: 'IA conversacional real', sara: { v: 'yes' }, them: { v: 'partial', note: 'módulo de IA generativa pago aparte; la base son flujos' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Cobra la seña dentro del chat', sara: { v: 'yes' }, them: { v: 'no' } },
-          { label: 'Usa tu Google Calendar sin migrar', sara: { v: 'yes' }, them: { v: 'partial', note: 'integra 40+ software de gestión' } },
+          { label: 'Equipo de IA: recepción, marketing y finanzas', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Reactivación y lista de espera', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Crea el contenido de Instagram', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Idioma principal', sara: { v: 'text', note: 'español (LATAM)' }, them: { v: 'text', note: 'portugués (BR y PT)' } },
@@ -84,13 +84,13 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Pick Sara AI if...',
-          body: 'you serve patients in Spanish and want real conversational AI on WhatsApp and Instagram from day one, with the appointment booked into your Google Calendar and the deposit collected inside the chat. In Cloudia, generative AI conversation is a paid add-on; in Sara it’s the heart of the product.',
+          body: 'you serve patients in Spanish and want real conversational AI on WhatsApp and Instagram from day one, with the appointment booked in its own platform and the deposit collected inside the chat. In Cloudia, generative AI conversation is a paid add-on; in Sara it’s the heart of the product, and it comes with the AI team no competitor has.',
         },
         rows: [
           { label: 'Real conversational AI', sara: { v: 'yes' }, them: { v: 'partial', note: 'paid generative AI add-on; the core is flow-based' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Collects the deposit in the chat', sara: { v: 'yes' }, them: { v: 'no' } },
-          { label: 'Uses your Google Calendar, no migration', sara: { v: 'yes' }, them: { v: 'partial', note: 'integrates 40+ management systems' } },
+          { label: 'Full AI team: reception, marketing and finance', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Reactivation and waitlist', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Creates your Instagram content', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Main language', sara: { v: 'text', note: 'Spanish (LATAM)' }, them: { v: 'text', note: 'Portuguese (BR and PT)' } },
@@ -112,7 +112,7 @@ export const competitors: Competitor[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI vs Soyla de Doctocliq: ¿cuál conviene para tu negocio? (2026)',
-        metaDescription: 'Comparamos Sara AI y Soyla (Doctocliq) para clínicas, médicos y wellness: las dos tienen IA real por WhatsApp, pero difieren en Instagram, en el cobro de la seña y en si te obligan a migrar la agenda.',
+        metaDescription: 'Comparamos Sara AI y Soyla (Doctocliq) para clínicas, médicos y wellness: las dos tienen IA real por WhatsApp, pero difieren en Instagram, en el cobro de la seña y en la plataforma y el equipo de IA que trae cada una.',
         eyebrow: 'Sara AI vs Soyla (Doctocliq)',
         title: 'Sara AI vs Soyla,<br />sin&nbsp;vueltas.',
         lead: 'Soyla es el asistente con IA de Doctocliq, la suite clínica peruana. Las dos tienen IA conversacional real por WhatsApp; la diferencia está en todo lo demás. Datos públicos de agosto 2026.',
@@ -122,20 +122,20 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Elige Sara AI si...',
-          body: 'quieres la IA sin cambiar de sistema: Sara agenda en el Google Calendar que ya usas, atiende también Instagram (Soyla es solo WhatsApp) y cobra la seña dentro del chat. Además reactiva pacientes, llena huecos con lista de espera y crea tu contenido de Instagram.',
+          body: 'quieres la plataforma completa con IA: Sara tiene su propia agenda (además de caja, inventario y finanzas), atiende también Instagram (Soyla es solo WhatsApp) y cobra la seña dentro del chat. Además trae el equipo de IA (Mia en marketing, Daniel en finanzas), reactiva pacientes, llena huecos con lista de espera y crea tu contenido de Instagram.',
         },
         rows: [
           { label: 'IA conversacional real', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Cobra la seña dentro del chat', sara: { v: 'yes' }, them: { v: 'partial', note: 'pagos en la suite, no en el chat' } },
-          { label: 'Usa tu Google Calendar sin migrar', sara: { v: 'yes' }, them: { v: 'no', note: 'requiere la agenda de Doctocliq' } },
+          { label: 'Equipo de IA: recepción, marketing y finanzas', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Historia clínica y odontograma', sara: { v: 'no', note: 'a propósito: no toca datos clínicos' }, them: { v: 'yes' } },
           { label: 'Facturación electrónica', sara: { v: 'no' }, them: { v: 'yes', note: 'PE, MX, CO, EC' } },
           { label: 'Crea el contenido de Instagram', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Precio público', sara: { v: 'text', note: saraPrice }, them: { v: 'text', note: 'suite desde US$19; Soyla aparte' } },
         ],
         faq: [
-          { q: '¿Puedo usar Soyla sin Doctocliq?', a: 'No: Soyla consulta la disponibilidad en la agenda de Doctocliq, así que implica adoptar su suite. Sara trabaja sobre el Google Calendar que tu clínica ya usa.' },
+          { q: '¿Puedo usar Soyla sin Doctocliq?', a: 'No: Soyla consulta la disponibilidad en la agenda de Doctocliq, así que implica adoptar su suite. Sara trae su propia plataforma con agenda, caja e inventario.' },
           { q: '¿Cuál atiende Instagram?', a: 'Sara atiende WhatsApp e Instagram con la misma IA. Soyla es solo WhatsApp.' },
           { q: '¿Y si necesito historia clínica?', a: 'Ahí Doctocliq es más completo: historia clínica, odontograma y facturación electrónica. Sara no toca datos clínicos a propósito, y convive con el software clínico que ya tengas.' },
         ],
@@ -143,7 +143,7 @@ export const competitors: Competitor[] = [
       },
       en: {
         metaTitle: 'Sara AI vs Soyla by Doctocliq: which one fits your business? (2026)',
-        metaDescription: 'We compare Sara AI and Soyla (Doctocliq) for clinics, doctors and wellness: both have real WhatsApp AI, but they differ on Instagram, deposit collection and whether you must migrate your calendar.',
+        metaDescription: 'We compare Sara AI and Soyla (Doctocliq) for clinics, doctors and wellness: both have real WhatsApp AI, but they differ on Instagram, deposit collection and the platform and AI team each one brings.',
         eyebrow: 'Sara AI vs Soyla (Doctocliq)',
         title: 'Sara AI vs Soyla,<br />straight&nbsp;up.',
         lead: 'Soyla is the AI assistant of Doctocliq, the Peruvian clinical suite. Both have real conversational AI on WhatsApp; the difference is everything else. Public data from August 2026.',
@@ -153,20 +153,20 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Pick Sara AI if...',
-          body: 'you want the AI without changing systems: Sara books into the Google Calendar you already use, also covers Instagram (Soyla is WhatsApp only) and collects the deposit inside the chat. It also reactivates patients, fills freed slots from a waitlist and creates your Instagram content.',
+          body: 'you want the full platform with AI: Sara has its own calendar (plus POS, inventory and finance), also covers Instagram (Soyla is WhatsApp only) and collects the deposit inside the chat. It also brings the AI team (Mia on marketing, Daniel on finance), reactivates patients, fills freed slots from a waitlist and creates your Instagram content.',
         },
         rows: [
           { label: 'Real conversational AI', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Collects the deposit in the chat', sara: { v: 'yes' }, them: { v: 'partial', note: 'payments in the suite, not in the chat' } },
-          { label: 'Uses your Google Calendar, no migration', sara: { v: 'yes' }, them: { v: 'no', note: 'requires the Doctocliq calendar' } },
+          { label: 'Full AI team: reception, marketing and finance', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Patient records and dental charting', sara: { v: 'no', note: 'on purpose: no clinical data' }, them: { v: 'yes' } },
           { label: 'E-invoicing', sara: { v: 'no' }, them: { v: 'yes', note: 'PE, MX, CO, EC' } },
           { label: 'Creates your Instagram content', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Public pricing', sara: { v: 'text', note: saraPriceEn }, them: { v: 'text', note: 'suite from US$19; Soyla apart' } },
         ],
         faq: [
-          { q: 'Can I use Soyla without Doctocliq?', a: 'No: Soyla checks availability against the Doctocliq calendar, so it means adopting their suite. Sara works on top of the Google Calendar your clinic already uses.' },
+          { q: 'Can I use Soyla without Doctocliq?', a: 'No: Soyla checks availability against the Doctocliq calendar, so it means adopting their suite. Sara brings its own platform with scheduling, POS and inventory.' },
           { q: 'Which one covers Instagram?', a: 'Sara answers WhatsApp and Instagram with the same AI. Soyla is WhatsApp only.' },
           { q: 'What if I need patient records?', a: 'That’s where Doctocliq is more complete: records, dental charting and e-invoicing. Sara never touches clinical data on purpose, and coexists with whatever clinical software you already have.' },
         ],
@@ -191,13 +191,13 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Elige Sara AI si...',
-          body: 'tu clínica está en Latinoamérica y quieres que la conversación termine en cita cobrada: Sara atiende WhatsApp e Instagram, agenda en tu Google Calendar sin migrar, cobra la seña en el chat, reactiva pacientes y crea tu contenido de Instagram. Y escribe como se habla en tu país.',
+          body: 'tu clínica está en Latinoamérica y quieres que la conversación termine en cita cobrada: Sara atiende WhatsApp e Instagram, agenda en su plataforma propia (con caja, inventario y finanzas), cobra la seña en el chat, reactiva pacientes y crea tu contenido de Instagram. Y trae el equipo de IA (Mia en marketing, Daniel en finanzas) que Kura no tiene. Además escribe como se habla en tu país.',
         },
         rows: [
           { label: 'IA conversacional real', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Cobra la seña dentro del chat', sara: { v: 'yes' }, them: { v: 'no' } },
-          { label: 'Usa tu Google Calendar sin migrar', sara: { v: 'yes' }, them: { v: 'no', note: 'agenda propia; HIS solo en Enterprise' } },
+          { label: 'Equipo de IA: recepción, marketing y finanzas', sara: { v: 'yes' }, them: { v: 'partial', note: 'califica leads de anuncios; sin finanzas' } },
           { label: 'Reactivación de pacientes', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Pide reseñas de Google', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Encuestas NPS', sara: { v: 'no' }, them: { v: 'yes' } },
@@ -206,7 +206,7 @@ export const competitors: Competitor[] = [
         ],
         faq: [
           { q: '¿Cuál cobra la seña?', a: 'Sara cobra la seña con un link de pago dentro del chat antes de confirmar la cita. Kura no cobra dentro de la conversación.' },
-          { q: '¿Kura funciona con mi Google Calendar?', a: 'Kura usa su propio calendario de equipo; la integración con sistemas existentes es de su plan Enterprise. Sara agenda directo en el Google Calendar que ya usas.' },
+          { q: '¿Kura tiene agenda propia?', a: 'Kura usa su propio calendario de equipo; la integración con sistemas existentes es de su plan Enterprise. Sara también trae su agenda propia dentro de la plataforma, con caja e inventario.' },
           { q: '¿Cuál conviene en España?', a: 'Si tu clínica está en España y el compliance europeo es prioritario, Kura es una opción sólida. Sara está enfocada en clínicas de Latinoamérica y adapta el registro a cada país.' },
         ],
         compareAllCta: 'Ver la comparativa completa de asistentes con IA',
@@ -223,13 +223,13 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Pick Sara AI if...',
-          body: 'your clinic is in Latin America and you want the conversation to end as a paid appointment: Sara covers WhatsApp and Instagram, books into your Google Calendar with no migration, collects the deposit in the chat, reactivates patients and creates your Instagram content. And it writes the way your country speaks.',
+          body: 'your clinic is in Latin America and you want the conversation to end as a paid appointment: Sara covers WhatsApp and Instagram, books into its own platform (with POS, inventory and finance), collects the deposit in the chat, reactivates patients and creates your Instagram content. And it brings the AI team (Mia on marketing, Daniel on finance) that Kura doesn’t have. Plus it writes the way your country speaks.',
         },
         rows: [
           { label: 'Real conversational AI', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Collects the deposit in the chat', sara: { v: 'yes' }, them: { v: 'no' } },
-          { label: 'Uses your Google Calendar, no migration', sara: { v: 'yes' }, them: { v: 'no', note: 'own calendar; HIS only on Enterprise' } },
+          { label: 'Full AI team: reception, marketing and finance', sara: { v: 'yes' }, them: { v: 'partial', note: 'qualifies ad leads; no finance' } },
           { label: 'Patient reactivation', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Asks for Google reviews', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'NPS surveys', sara: { v: 'no' }, them: { v: 'yes' } },
@@ -238,7 +238,7 @@ export const competitors: Competitor[] = [
         ],
         faq: [
           { q: 'Which one collects the deposit?', a: 'Sara collects the deposit with a payment link inside the chat before confirming the appointment. Kura does not charge inside the conversation.' },
-          { q: 'Does Kura work with my Google Calendar?', a: 'Kura uses its own team calendar; integrating with existing systems is an Enterprise feature. Sara books directly into the Google Calendar you already use.' },
+          { q: 'Does Kura have its own calendar?', a: 'Kura uses its own team calendar; integrating with existing systems is an Enterprise feature. Sara also brings its own calendar inside the platform, with POS and inventory.' },
           { q: 'Which one is better in Spain?', a: 'If your clinic is in Spain and EU compliance is a priority, Kura is a solid option. Sara focuses on Latin American clinics and adapts its register to each country.' },
         ],
         compareAllCta: 'See the full AI assistant comparison',
@@ -252,30 +252,31 @@ export const competitors: Competitor[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI vs AgendaPro: ¿cuál necesita tu negocio? (2026)',
-        metaDescription: 'AgendaPro es un software de agenda; Sara es un asistente con IA que conversa, agenda y cobra. Comparamos qué hace cada uno y cuándo conviene cada opción, con datos de agosto 2026.',
+        metaDescription: 'AgendaPro es un software de agenda; Sara es plataforma (agenda, caja e inventario) y además un equipo de IA que conversa, agenda y cobra. Comparamos qué hace cada uno y cuándo conviene cada opción, con datos de agosto 2026.',
         eyebrow: 'Sara AI vs AgendaPro',
-        title: 'Sara y AgendaPro<br />no hacen<br />lo mismo.',
-        lead: 'AgendaPro es uno de los software de agenda más usados de LATAM, con más de 20.000 negocios. Sara no es un software de agenda: es la que atiende la conversación y la convierte en cita cobrada. La comparación honesta, con datos de agosto 2026.',
+        title: 'AgendaPro es software.<br />Sara AI es software y equipo.',
+        lead: 'AgendaPro es uno de los software de agenda más usados de LATAM, con más de 20.000 negocios. Sara ahora también es plataforma (agenda, caja e inventario) y, además, atiende la conversación con IA real y trae un equipo de IA que un software de agenda no tiene. La comparación honesta, con datos de agosto 2026.',
         verdictThem: {
           title: 'Elige AgendaPro si...',
           body: 'lo que buscas es el software: reservas online, ficha, POS, inventario y reportes para tu operación. Es una suite madura y probada en toda la región. Su chatbot responde preguntas frecuentes, pero no conversa ni vende por ti.',
         },
         verdictSara: {
           title: 'Elige Sara AI si...',
-          body: 'tu problema no es la agenda sino quién contesta: el WhatsApp y el Instagram que suenan a las 23:00 con alguien que quiere precio y horario. Sara conversa con IA real, agenda en tu Google Calendar y cobra la seña. Y si ya usas una agenda que te gusta, no te pide cambiarla.',
+          body: 'tu problema no es la agenda sino quién contesta: el WhatsApp y el Instagram que suenan a las 23:00 con alguien que quiere precio y horario. Sara conversa con IA real, agenda en su propia plataforma y cobra la seña. Y trae el equipo de IA (Mia en marketing, Daniel en finanzas) que un software de agenda no tiene.',
         },
         rows: [
           { label: 'IA conversacional real', sara: { v: 'yes' }, them: { v: 'partial', note: 'chatbot de preguntas frecuentes' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Cobra la seña dentro del chat', sara: { v: 'yes' }, them: { v: 'partial', note: 'pago online al reservar en su sistema' } },
-          { label: 'Usa tu Google Calendar sin migrar', sara: { v: 'yes' }, them: { v: 'no', note: 'hay que migrar a su agenda' } },
-          { label: 'Ficha clínica, POS e inventario', sara: { v: 'no', note: 'a propósito: no reemplaza tu software' }, them: { v: 'yes' } },
+          { label: 'Equipo de IA: recepción, marketing y finanzas', sara: { v: 'yes' }, them: { v: 'no' } },
+          { label: 'Agenda, caja e inventario propios', sara: { v: 'yes' }, them: { v: 'yes' } },
+          { label: 'Historia clínica / ficha médica', sara: { v: 'no', note: 'a propósito: no toca datos clínicos' }, them: { v: 'yes' } },
           { label: 'Gift cards', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Crea el contenido de Instagram', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Precio público', sara: { v: 'text', note: saraPrice }, them: { v: 'text', note: 'no publica (~US$19-59 según terceros)' } },
         ],
         faq: [
-          { q: '¿Sara reemplaza a AgendaPro?', a: 'No necesariamente: resuelven cosas distintas. AgendaPro es el software de gestión; Sara es quien atiende la conversación. De hecho pueden convivir: Sara agenda en Google Calendar y tu operación sigue donde está.' },
+          { q: '¿Sara reemplaza a AgendaPro?', a: 'En la operación sí compiten: Sara también hace agenda, caja e inventario, y encima atiende la conversación con IA real y trae el equipo (Mia en marketing, Daniel en finanzas) que AgendaPro no tiene. Lo único que Sara no hace, a propósito, es la historia clínica.' },
           { q: '¿El chatbot de AgendaPro es como Sara?', a: 'No. El chatbot de AgendaPro responde preguntas frecuentes como horarios y ubicación. Sara mantiene una conversación real: entiende lo que pide el paciente, cotiza, propone horarios, agenda y cobra la seña.' },
           { q: '¿Cuál conviene para empezar?', a: 'Si no tienes ningún sistema y quieres digitalizar toda la operación, AgendaPro es un buen punto de partida. Si lo que pierdes son las consultas que nadie contesta, Sara ataca ese problema desde el primer día.' },
         ],
@@ -283,30 +284,31 @@ export const competitors: Competitor[] = [
       },
       en: {
         metaTitle: 'Sara AI vs AgendaPro: which one does your business need? (2026)',
-        metaDescription: 'AgendaPro is scheduling software; Sara is an AI assistant that converses, books and collects. We compare what each one does and when each option makes sense, with data from August 2026.',
+        metaDescription: 'AgendaPro is scheduling software; Sara is a platform (scheduling, POS and inventory) plus an AI team that converses, books and collects. We compare what each one does and when each option makes sense, with data from August 2026.',
         eyebrow: 'Sara AI vs AgendaPro',
-        title: 'Sara vs AgendaPro:<br />not the same job.',
-        lead: 'AgendaPro is one of LATAM’s most used scheduling platforms, with over 20,000 businesses. Sara is not scheduling software: it’s the one answering the conversation and turning it into a paid appointment. The honest comparison, with data from August 2026.',
+        title: 'AgendaPro is software.<br />Sara AI is software and a team.',
+        lead: 'AgendaPro is one of LATAM’s most used scheduling platforms, with over 20,000 businesses. Sara is now also a platform (scheduling, POS and inventory) and, on top of that, answers the conversation with real AI and brings an AI team that scheduling software doesn’t have. The honest comparison, with data from August 2026.',
         verdictThem: {
           title: 'Pick AgendaPro if...',
           body: 'what you want is the software: online booking, records, POS, inventory and reports for your operation. It’s a mature suite proven across the region. Its chatbot answers FAQs, but it doesn’t converse or sell for you.',
         },
         verdictSara: {
           title: 'Pick Sara AI if...',
-          body: 'your problem isn’t the calendar but who answers: the WhatsApp and Instagram ringing at 11 pm with someone asking for prices and slots. Sara converses with real AI, books into your Google Calendar and collects the deposit. And if you already like your scheduling software, it won’t ask you to change it.',
+          body: 'your problem isn’t the calendar but who answers: the WhatsApp and Instagram ringing at 11 pm with someone asking for prices and slots. Sara converses with real AI, books into its own platform and collects the deposit. And it brings the AI team (Mia on marketing, Daniel on finance) that scheduling software doesn’t have.',
         },
         rows: [
           { label: 'Real conversational AI', sara: { v: 'yes' }, them: { v: 'partial', note: 'FAQ chatbot' } },
           { label: 'Instagram DM', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Collects the deposit in the chat', sara: { v: 'yes' }, them: { v: 'partial', note: 'online payment when booking in their system' } },
-          { label: 'Uses your Google Calendar, no migration', sara: { v: 'yes' }, them: { v: 'no', note: 'you migrate to their calendar' } },
-          { label: 'Records, POS and inventory', sara: { v: 'no', note: 'on purpose: it doesn’t replace your software' }, them: { v: 'yes' } },
+          { label: 'Full AI team: reception, marketing and finance', sara: { v: 'yes' }, them: { v: 'no' } },
+          { label: 'Own scheduling, POS and inventory', sara: { v: 'yes' }, them: { v: 'yes' } },
+          { label: 'Clinical records / charting', sara: { v: 'no', note: 'on purpose: no clinical data' }, them: { v: 'yes' } },
           { label: 'Gift cards', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Creates your Instagram content', sara: { v: 'yes' }, them: { v: 'no' } },
           { label: 'Public pricing', sara: { v: 'text', note: saraPriceEn }, them: { v: 'text', note: 'not published (~US$19-59 per third parties)' } },
         ],
         faq: [
-          { q: 'Does Sara replace AgendaPro?', a: 'Not necessarily: they solve different problems. AgendaPro is the management software; Sara answers the conversation. They can coexist: Sara books into Google Calendar and your operation stays where it is.' },
+          { q: 'Does Sara replace AgendaPro?', a: 'On the operation side they do compete: Sara also does scheduling, POS and inventory, and on top of that answers the conversation with real AI and brings the team (Mia on marketing, Daniel on finance) AgendaPro doesn’t have. The only thing Sara doesn’t do, on purpose, is clinical records.' },
           { q: 'Is AgendaPro’s chatbot like Sara?', a: 'No. AgendaPro’s chatbot answers FAQs like opening hours and location. Sara holds a real conversation: it understands what the patient wants, quotes, proposes slots, books and collects the deposit.' },
           { q: 'Which one should I start with?', a: 'If you have no system and want to digitize the whole operation, AgendaPro is a good starting point. If what you’re losing are the enquiries nobody answers, Sara attacks that problem from day one.' },
         ],
@@ -321,7 +323,7 @@ export const competitors: Competitor[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI vs GlossGenius: ¿cuál conviene para tu negocio? (2026)',
-        metaDescription: 'Comparamos Sara AI y GlossGenius (Reception) para clínicas, médicos y wellness: Sara atiende todos los canales (WhatsApp, Instagram, SMS y teléfono), tu Google Calendar sin migrar, mercado LATAM vs EE.UU. Datos de agosto 2026.',
+        metaDescription: 'Comparamos Sara AI y GlossGenius (Reception) para clínicas, médicos y wellness: Sara atiende todos los canales (WhatsApp, Instagram, SMS y teléfono), con su plataforma propia (agenda, caja e inventario) y un equipo de IA, mercado LATAM vs EE.UU. Datos de agosto 2026.',
         eyebrow: 'Sara AI vs GlossGenius',
         title: 'Sara AI vs GlossGenius,<br />sin&nbsp;vueltas.',
         lead: 'GlossGenius es la plataforma de gestión para salones y medspas de EE.UU., y su IA (Genius AI / Reception) atiende las llamadas por voz. Sara es la recepcionista con IA para clínicas, médicos y wellness de LATAM, que atiende por WhatsApp, Instagram, SMS y también el teléfono. Atacan el mismo problema en mercados distintos. Datos públicos de agosto 2026.',
@@ -331,13 +333,13 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Elige Sara AI si...',
-          body: 'atendés en español y querés una recepcionista que cubra todos los canales por los que te contactan: WhatsApp, Instagram, SMS y también el teléfono. Sara conversa con IA real, agenda en el Google Calendar que ya usás (sin migrar), cobra la seña, reactiva pacientes, crea tu contenido de Instagram y pide las reseñas, sin atarte a una plataforma nueva ni tocar la historia clínica.',
+          body: 'atendés en español y querés una recepcionista que cubra todos los canales por los que te contactan: WhatsApp, Instagram, SMS y también el teléfono. Sara conversa con IA real, agenda en su plataforma propia (con caja e inventario), cobra la seña, reactiva pacientes, crea tu contenido de Instagram y pide las reseñas, y trae el equipo de IA (Mia en marketing, Daniel en finanzas), sin tocar la historia clínica.',
         },
         rows: [
           { label: 'IA conversacional real', sara: { v: 'yes' }, them: { v: 'yes', note: 'Reception, por voz' } },
           { label: 'WhatsApp, Instagram y SMS con IA', sara: { v: 'yes' }, them: { v: 'no', note: 'recepcionista por voz/llamada' } },
           { label: 'Atiende llamadas telefónicas (voz)', sara: { v: 'yes' }, them: { v: 'yes' } },
-          { label: 'Usa tu Google Calendar sin migrar', sara: { v: 'yes' }, them: { v: 'no', note: 'requiere la plataforma GlossGenius' } },
+          { label: 'Equipo de IA: recepción, marketing y finanzas', sara: { v: 'yes' }, them: { v: 'partial', note: 'recepción por voz y marketing; sin finanzas' } },
           { label: 'Cobra la seña dentro del chat', sara: { v: 'yes' }, them: { v: 'partial', note: 'cobros y depósitos en su plataforma' } },
           { label: 'Reactiva pacientes', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Pide reseñas de Google', sara: { v: 'yes' }, them: { v: 'yes' } },
@@ -349,14 +351,14 @@ export const competitors: Competitor[] = [
         faq: [
           { q: '¿GlossGenius funciona en español y en LATAM?', a: 'Es una plataforma de Estados Unidos, en inglés, pensada para el mercado norteamericano. Sara está hecha para clínicas de LATAM y adapta el registro al país de cada clínica.' },
           { q: '¿Por qué canales atiende cada una?', a: 'Reception es principalmente una recepcionista por voz (atiende las llamadas) dentro de la plataforma GlossGenius. Sara atiende WhatsApp, Instagram, SMS y también el teléfono, así cubre todos los canales por los que te contactan en Latinoamérica.' },
-          { q: '¿Tengo que cambiar mi software para usar Reception?', a: 'Reception funciona dentro de GlossGenius, así que implica adoptar su plataforma. Sara trabaja sobre el Google Calendar que tu clínica ya usa, sin migración.' },
+          { q: '¿Tengo que cambiar mi software para usar Reception?', a: 'Reception funciona dentro de GlossGenius, así que implica adoptar su plataforma. Sara ya trae su propia plataforma con agenda, caja e inventario.' },
           { q: '¿Cuál conviene para un medspa en EE.UU. con ficha clínica y HIPAA?', a: 'Ahí GlossGenius es más completo: tiene charting, HIPAA y sign-off médico. Sara no toca la historia clínica a propósito y se enfoca en la conversación, la agenda y el cobro por todos tus canales.' },
         ],
         compareAllCta: 'Ver la comparativa completa de asistentes con IA',
       },
       en: {
         metaTitle: 'Sara AI vs GlossGenius: which one fits your business? (2026)',
-        metaDescription: 'We compare Sara AI and GlossGenius (Reception) for clinics, doctors and wellness: Sara covers every channel (WhatsApp, Instagram, SMS and the phone), your Google Calendar with no migration, LATAM vs US market. Data from August 2026.',
+        metaDescription: 'We compare Sara AI and GlossGenius (Reception) for clinics, doctors and wellness: Sara covers every channel (WhatsApp, Instagram, SMS and the phone), with its own platform (scheduling, POS and inventory) and an AI team, LATAM vs US market. Data from August 2026.',
         eyebrow: 'Sara AI vs GlossGenius',
         title: 'Sara AI vs GlossGenius,<br />straight&nbsp;up.',
         lead: 'GlossGenius is the management platform for US salons and medspas, and its AI (Genius AI / Reception) answers phone calls by voice. Sara is the AI receptionist for LATAM clinics, doctors and wellness, on WhatsApp, Instagram, SMS and the phone too. Same problem, different markets. Public data from August 2026.',
@@ -366,13 +368,13 @@ export const competitors: Competitor[] = [
         },
         verdictSara: {
           title: 'Pick Sara AI if...',
-          body: 'you serve patients in Spanish and want a receptionist that covers every channel they reach you on: WhatsApp, Instagram, SMS and the phone. Sara holds a real AI conversation, books into the Google Calendar you already use (no migration), collects the deposit, reactivates patients, creates your Instagram content and asks for reviews, without locking you into a new platform or touching clinical records.',
+          body: 'you serve patients in Spanish and want a receptionist that covers every channel they reach you on: WhatsApp, Instagram, SMS and the phone. Sara holds a real AI conversation, books into its own platform (with POS and inventory), collects the deposit, reactivates patients, creates your Instagram content and asks for reviews, and brings the AI team (Mia on marketing, Daniel on finance), without touching clinical records.',
         },
         rows: [
           { label: 'Real conversational AI', sara: { v: 'yes' }, them: { v: 'yes', note: 'Reception, by voice' } },
           { label: 'WhatsApp, Instagram and SMS with AI', sara: { v: 'yes' }, them: { v: 'no', note: 'voice/phone receptionist' } },
           { label: 'Answers phone calls (voice)', sara: { v: 'yes' }, them: { v: 'yes' } },
-          { label: 'Uses your Google Calendar, no migration', sara: { v: 'yes' }, them: { v: 'no', note: 'requires the GlossGenius platform' } },
+          { label: 'Full AI team: reception, marketing and finance', sara: { v: 'yes' }, them: { v: 'partial', note: 'voice reception and marketing; no finance' } },
           { label: 'Collects the deposit in the chat', sara: { v: 'yes' }, them: { v: 'partial', note: 'payments and deposits in their platform' } },
           { label: 'Patient reactivation', sara: { v: 'yes' }, them: { v: 'yes' } },
           { label: 'Asks for Google reviews', sara: { v: 'yes' }, them: { v: 'yes' } },
@@ -384,7 +386,7 @@ export const competitors: Competitor[] = [
         faq: [
           { q: 'Does GlossGenius work in Spanish and in LATAM?', a: 'It is a US platform, in English, built for the North American market. Sara is made for LATAM clinics and adapts its register to each clinic’s country.' },
           { q: 'Which channels does each one cover?', a: 'Reception is primarily a voice receptionist (it answers calls) inside the GlossGenius platform. Sara answers on WhatsApp, Instagram, SMS and the phone too, covering every channel patients reach you on in Latin America.' },
-          { q: 'Do I have to change my software to use Reception?', a: 'Reception works inside GlossGenius, so it means adopting their platform. Sara works on top of the Google Calendar your clinic already uses, with no migration.' },
+          { q: 'Do I have to change my software to use Reception?', a: 'Reception works inside GlossGenius, so it means adopting their platform. Sara already brings its own platform with scheduling, POS and inventory.' },
           { q: 'Which one is better for a US medspa with clinical records and HIPAA?', a: 'GlossGenius is more complete there: it has charting, HIPAA and medical sign-off. Sara never touches clinical records on purpose and focuses on the conversation, the calendar and payment across all your channels.' },
         ],
         compareAllCta: 'See the full AI assistant comparison',

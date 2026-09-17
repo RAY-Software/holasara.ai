@@ -198,7 +198,7 @@ const productGroupsRaw: RawGroup[] = [
         // Slug localizado: /es/contabilidad-para-clinicas ↔ /en/medical-practice-bookkeeping.
         href: '/contabilidad-para-clinicas',
         name: { es: 'Contabilidad de la clínica', en: 'Practice bookkeeping' },
-        desc: { es: 'Daniel lleva las cuentas con Plaid y QuickBooks.', en: 'Daniel keeps the books with Plaid and QuickBooks.' },
+        desc: { es: 'Daniel lleva las cuentas con Belvo y tu facturación (CFDI).', en: 'Daniel keeps the books with Plaid and QuickBooks.' },
         icon: 'chart',
       },
     ],
@@ -298,7 +298,7 @@ const topLinksRaw: RawLink[] = [
   {
     href: '/implementacion',
     name: { es: 'Cómo funciona', en: 'How it works' },
-    desc: { es: 'Conectas tu calendario y listo.', en: 'Connect your calendar and you are set.' },
+    desc: { es: 'Importamos tu catálogo y listo.', en: 'We import your catalog and you are set.' },
   },
   {
     // Slug localizado: /es/precios ↔ /en/pricing.

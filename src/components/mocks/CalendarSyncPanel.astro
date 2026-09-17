@@ -1,7 +1,7 @@
 ---
-// Mock del panel de sincronización con Google Calendar (reemplaza /img/implementacion.jpg).
+// Mock del panel de la agenda de Sara (reemplaza /img/implementacion.jpg).
 // HTML nítido y bilingüe: tarjeta de conexión + grilla de 3 días con eventos
-// (azul = agendado por Sara, gris = tuyo desde Google Calendar).
+// (azul = agendado por Sara, gris = cargado por tu equipo).
 import { defaultLocale, type Locale } from '../../i18n/config';
 
 interface Props {
@@ -13,12 +13,12 @@ const en = lang === 'en';
 
 const t = {
   crumb: en ? 'Setup · Calendar' : 'Configuración · Calendario',
-  connLine: en ? 'Google Calendar · Sara can read and write in “Office”' : 'Google Calendar · Sara puede leer y escribir en “Consultorio”',
+  connLine: en ? 'Schedule · Sara and your team work in the same one' : 'Agenda · Sara y tu equipo trabajan en la misma',
   connected: en ? 'Connected' : 'Conectado',
   title: en ? 'Office · Dr. Ruiz' : 'Consultorio · Dra. Ruiz',
   synced: en ? 'synced 2 seconds ago' : 'sincronizado hace 2 segundos',
   legendSara: en ? 'Booked by Sara' : 'Agendado por Sara',
-  legendYou: en ? 'Yours, from Google Calendar' : 'Tuyo, desde Google Calendar',
+  legendYou: en ? 'Added by your team' : 'Cargado por tu equipo',
 };
 
 const days = en ? ['Thu Jul 31', 'Fri Aug 1', 'Sat Aug 2'] : ['Jue 31/7', 'Vie 1/8', 'Sáb 2/8'];

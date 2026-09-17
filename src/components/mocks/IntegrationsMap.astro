@@ -17,14 +17,14 @@ const members = (['sara', 'mia', 'daniel'] as MemberId[]).map((id) => getMember(
 
 type Node = { label: string; logo?: string; icon?: 'phone'; mono?: string };
 const nodes: Node[] = [
-  { label: 'WhatsApp', logo: '/img/logos/whatsapp.svg' },
+  en ? { label: 'Messages', logo: '/img/logos/messages.svg' } : { label: 'WhatsApp', logo: '/img/logos/whatsapp.svg' },
   { label: 'Instagram', logo: '/img/logos/instagram.svg' },
   { label: en ? 'Phone' : 'Teléfono', icon: 'phone' },
-  { label: 'Google Calendar', logo: '/img/logos/google.svg' },
+  en ? { label: 'Stripe', logo: '/img/logos/stripe.svg' } : { label: 'Clip', logo: '/img/logos/clip.svg' },
   { label: 'Google Business', logo: '/img/logos/google-business.svg' },
   { label: 'Google Ads', logo: '/img/logos/google-ads.svg' },
-  { label: en ? 'Plaid · bank' : 'Plaid · banco', mono: 'P' },
-  { label: 'QuickBooks', mono: 'QB' },
+  en ? { label: 'Plaid · bank', logo: '/img/logos/plaid.png' } : { label: 'Belvo · banco', logo: '/img/logos/belvo.png' },
+  en ? { label: 'QuickBooks', logo: '/img/logos/quickbooks.png' } : { label: 'SAT · facturación', mono: 'SAT' },
 ];
 // Posiciones en círculo (porcentaje del contenedor), arrancando arriba.
 const R = 40;
