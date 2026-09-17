@@ -1,82 +1,124 @@
 // Modelo de precios público de Sara (fuente única de la página /precios).
 //
-// Decisión de rumbo (8-sep-2026, pedido de Alex, confirmado por Franco): el sitio vuelve
-// a publicar precios, ahora transparentes y self-serve ("sin demo, empiezas hoy"). Revierte
-// la política de "cero precios" de agosto 2026.
+// Decisión de rumbo (17-sep-2026, esquema de Alex, Head of Sales, confirmado por Franco):
+// el sitio pasa al modelo "plan base + catálogo de add-ons", con precios en MXN para el
+// mercado mexicano (/es) y su equivalente en USD para el sitio de producto US (/en).
+// Reemplaza el modelo anterior (tramos por agenda en USD, Mia/Daniel a US$110).
 //
-// El cobro es POR AGENDA (un calendario reservable = una agenda), no por sucursal. El precio
-// de Sara baja por tramos de volumen: cada tramo fija el precio de las agendas que caen dentro
-// de él, y las anteriores conservan el suyo (marginal, no retroactivo). Mia y Daniel son un
-// monto fijo por cuenta, sin importar cuántas agendas o sucursales.
+// TRES UNIDADES DE COBRO (la parte delicada de explicar):
+//   - 'agenda' → por calendario reservable. El plan base incluye 1; cada agenda extra se cobra
+//                aparte y baja por volumen.
+//   - 'local'  → por sucursal. El trabajo pasa en el mostrador de cada local (caja, inventario,
+//                la ficha de Google de ese local), así que se cobra en cada uno.
+//   - 'marca'  → una sola vez para toda la cuenta, tengas una sucursal o mil (web, Instagram,
+//                contabilidad, voz, API). Es de la marca entera, no de un local.
+// La regla que lo vuelve simple para el dueño: "lo que pasa dentro de cada local se cobra por
+// local; lo que es de toda la marca se paga una sola vez". La UI muestra esto como un badge por
+// add-on, no como una columna que obligue a calcular.
 //
-// OJO coherencia: el backend (clinic-platform) todavía da el piso viejo "US$400 por sucursal"
-// por WhatsApp (ver src/lib/pricing.ts). Alinear ese número con este modelo vive en el backend,
-// no acá.
+// PRECIOS: se guardan MXN y USD explícitos por ítem, tomados del deck de Alex (conversión
+// nominal ~17 MXN/USD, pero redondeada distinto en cada ítem). No los derivamos con una
+// multiplicación para no desincronizarnos de lo que Ventas ya comunica.
+//
+// SUPUESTO A CONFIRMAR CON ALEX: los tramos de "calendario adicional" ($199 → $179 desde 5 →
+// $159 desde 10) se interpretan como marginales sobre los calendarios EXTRA (más allá del que
+// incluye el plan base). Si Alex los quiso sobre el total de calendarios, ajustar CALENDAR_TIERS.
 
-/** Descuento anual: pagas 10 meses y usas 12 (2 meses gratis). */
+/** Descuento anual: pagas 10 meses y usas 12 (2 meses gratis). Aplica a todo. */
 export const ANNUAL_MONTHS_CHARGED = 10;
-/** Precio mensual equivalente cuando se factura anual (monto mensual con el descuento aplicado). */
+/** Monto mensual equivalente cuando se factura anual (con el descuento aplicado). */
 export const annualMonthly = (monthly: number): number => Math.round((monthly * ANNUAL_MONTHS_CHARGED) / 12);
 
-/** Precio de entrada de Sara (plan Start, con tope mensual de conversaciones). USD/mes por agenda. */
-export const SARA_START = 49;
+export type Currency = 'MXN' | 'USD';
 
-/** Precio fijo de Mia y de Daniel. USD/mes por cuenta, no escala con las agendas. */
-export const ADDON_MIA = 110;
-export const ADDON_DANIEL = 110;
-
-export interface Tier {
-  /** Índice de la primera agenda del tramo (1-based). */
-  from: number;
-  /** Índice de la última agenda del tramo, o null para "y más". */
-  to: number | null;
-  /** Precio de cada agenda dentro de este tramo (Sara Full). USD/mes. */
-  price: number;
+/** Un precio en las dos monedas. Se elige la columna según el idioma de la página. */
+export interface Price {
+  mxn: number;
+  usd: number;
 }
 
-/** Tramos por volumen de Sara Full. El precio es marginal: aplica a las agendas del tramo. */
-export const SARA_TIERS: Tier[] = [
-  { from: 1, to: 2, price: 129 },
-  { from: 3, to: 5, price: 109 },
-  { from: 6, to: 10, price: 89 },
-  { from: 11, to: null, price: 69 },
+/** Toma el monto de la moneda pedida. */
+export const amount = (p: Price, currency: Currency): number => (currency === 'MXN' ? p.mxn : p.usd);
+
+// ── Plan base: 1 agenda + Sara ──
+export const BASE_PRICE: Price = { mxn: 499, usd: 29 };
+
+// ── Calendario adicional (unidad 'agenda'): tramos marginales sobre los calendarios extra ──
+export interface CalendarTier {
+  /** Índice del primer calendario EXTRA del tramo (1-based; el 1º extra es el 2º calendario). */
+  from: number;
+  /** Índice del último calendario extra del tramo, o null para "y más". */
+  to: number | null;
+  price: Price;
+}
+
+export const CALENDAR_TIERS: CalendarTier[] = [
+  { from: 1, to: 4, price: { mxn: 199, usd: 12 } },
+  { from: 5, to: 9, price: { mxn: 179, usd: 11 } },
+  { from: 10, to: null, price: { mxn: 159, usd: 9 } },
 ];
 
-/** Precio de la n-ésima agenda de Sara Full (según su tramo). */
-export function tierPriceAt(index: number): number {
-  for (const t of SARA_TIERS) {
-    if (index >= t.from && (t.to === null || index <= t.to)) return t.price;
+/** Precio del n-ésimo calendario extra (según su tramo), en la moneda pedida. */
+export function calendarExtraPriceAt(indexExtra: number, currency: Currency): number {
+  for (const t of CALENDAR_TIERS) {
+    if (indexExtra >= t.from && (t.to === null || indexExtra <= t.to)) return amount(t.price, currency);
   }
-  return SARA_TIERS[SARA_TIERS.length - 1].price;
+  return amount(CALENDAR_TIERS[CALENDAR_TIERS.length - 1].price, currency);
 }
 
-/** Total mensual de Sara Full para n agendas (suma de cada agenda por su tramo). */
-export function saraTotal(n: number): number {
-  let sum = 0;
-  for (let i = 1; i <= n; i++) sum += tierPriceAt(i);
+/** Total mensual de la cuenta: plan base + (agendas − 1) calendarios extra, marginal. */
+export function accountTotal(agendas: number, currency: Currency): number {
+  let sum = amount(BASE_PRICE, currency);
+  for (let i = 1; i <= agendas - 1; i++) sum += calendarExtraPriceAt(i, currency);
   return sum;
 }
 
-export interface CalcRow {
-  agendas: number;
-  /** Solo Sara (Full). */
-  sara: number;
-  /** Sara + Mia. */
-  saraMia: number;
-  /** Equipo completo (Sara + Mia + Daniel). */
-  equipo: number;
-  /** Costo promedio por agenda del equipo completo (redondeado). */
-  perAgenda: number;
+// ── Catálogo de add-ons ──
+export type Unit = 'agenda' | 'local' | 'marca';
+export type Category = 'capacidad' | 'operacion' | 'crecimiento' | 'dinero';
+
+export interface AddOn {
+  /** Id estable; la copy (nombre/descripción) vive en el dict de la página, por idioma. */
+  id: string;
+  category: Category;
+  unit: Unit;
+  price: Price;
 }
 
-export function calcRow(n: number): CalcRow {
-  const sara = saraTotal(n);
-  const equipo = sara + ADDON_MIA + ADDON_DANIEL;
-  return { agendas: n, sara, saraMia: sara + ADDON_MIA, equipo, perAgenda: Math.round(equipo / n) };
-}
+/**
+ * Los 11 add-ons del esquema de Alex, en orden de catálogo por categoría.
+ * El "Calendario adicional" NO va acá: es la unidad 'agenda' del plan base y vive en la
+ * calculadora, no en el catálogo de add-ons.
+ */
+export const ADDONS: AddOn[] = [
+  // Capacidad
+  { id: 'voz', category: 'capacidad', unit: 'marca', price: { mxn: 690, usd: 41 } },
+  // Operación
+  { id: 'caja', category: 'operacion', unit: 'local', price: { mxn: 290, usd: 17 } },
+  { id: 'inventario', category: 'operacion', unit: 'local', price: { mxn: 290, usd: 17 } },
+  // Crecimiento
+  { id: 'instagram', category: 'crecimiento', unit: 'marca', price: { mxn: 790, usd: 46 } },
+  { id: 'seo', category: 'crecimiento', unit: 'marca', price: { mxn: 890, usd: 52 } },
+  { id: 'resenas', category: 'crecimiento', unit: 'local', price: { mxn: 190, usd: 11 } },
+  { id: 'soporte', category: 'crecimiento', unit: 'marca', price: { mxn: 390, usd: 23 } },
+  { id: 'api', category: 'crecimiento', unit: 'marca', price: { mxn: 690, usd: 41 } },
+  // Dinero
+  { id: 'finanzas', category: 'dinero', unit: 'marca', price: { mxn: 590, usd: 35 } },
+  { id: 'giftcards', category: 'dinero', unit: 'marca', price: { mxn: 190, usd: 11 } },
+];
 
-/** Filas de la tabla-calculadora (nº de agendas representativos). */
-export const CALC_ROWS: CalcRow[] = [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20].map(calcRow);
+/** Orden de las categorías en la página. */
+export const CATEGORY_ORDER: Category[] = ['capacidad', 'operacion', 'crecimiento', 'dinero'];
 
-/** Formato de monto en USD, separador de miles con coma (formato del PDF). Sin símbolo. */
+/** Add-ons de una categoría, en el orden de ADDONS. */
+export const addonsByCategory = (c: Category): AddOn[] => ADDONS.filter((a) => a.category === c);
+
+// ── Formato ──
+/** Separador de miles con coma (1,699). Sin símbolo: el símbolo lo pone la página. */
 export const fmt = (n: number): string => n.toLocaleString('en-US');
+
+/** Símbolo delante del número según la moneda: "$" para MXN, "US$" para USD. */
+export const symbol = (currency: Currency): string => (currency === 'MXN' ? '$' : 'US$');
+
+/** Monto listo para mostrar, con símbolo. Ej: sara(BASE_PRICE,'MXN') → "$499". */
+export const withSymbol = (p: Price, currency: Currency): string => symbol(currency) + fmt(amount(p, currency));
