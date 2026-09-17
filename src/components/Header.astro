@@ -259,24 +259,37 @@ const graderHref =
 
       <!-- ─── CTAs desktop ─── -->
       <div class="hidden items-center gap-2.5 lg:flex">
-        <div class="flex items-center rounded-full border border-line p-0.5 text-xs font-semibold" role="group" aria-label={t('lang.switch')}>
-          {
-            locales.map((l) => (
-              <a
-                href={langHref(l)}
-                data-astro-prefetch={false}
-                class={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 uppercase tracking-wide transition-colors ${
-                  l === lang ? 'bg-ink text-cream' : 'text-salvia hover:text-ink'
-                }`}
-                aria-current={l === lang ? 'true' : undefined}
-                hreflang={l}
-              >
-                <span class="text-sm leading-none" aria-hidden="true">{l === 'es' ? '🇪🇸' : '🇺🇸'}</span>
-                {l}
-              </a>
-            ))
-          }
-        </div>
+        <details class="lang-menu relative">
+          <summary
+            class="lang-trigger flex cursor-pointer list-none items-center gap-1.5 rounded-full border border-line px-2.5 py-1.5 text-xs font-semibold uppercase tracking-wide text-ink transition-colors hover:bg-paper"
+            aria-label={t('lang.switch')}
+          >
+            <span class="text-sm leading-none" aria-hidden="true">{lang === 'es' ? '🇪🇸' : '🇺🇸'}</span>
+            {lang}
+            <svg class="lang-chev h-3 w-3 text-salvia transition-transform" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </summary>
+          <div class="lang-panel absolute right-0 z-[60] mt-2 w-40 overflow-hidden rounded-xl border border-line bg-white py-1 shadow-[0_16px_40px_-16px_rgba(20,38,31,0.28)]">
+            {
+              locales.map((l) => (
+                <a
+                  href={langHref(l)}
+                  data-astro-prefetch={false}
+                  class:list={[
+                    'flex items-center gap-2.5 px-3 py-2 text-sm transition-colors',
+                    l === lang ? 'bg-mint/10 font-semibold text-pine-dark' : 'text-ink hover:bg-paper',
+                  ]}
+                  aria-current={l === lang ? 'true' : undefined}
+                  hreflang={l}
+                >
+                  <span class="text-base leading-none" aria-hidden="true">{l === 'es' ? '🇪🇸' : '🇺🇸'}</span>
+                  {l === 'es' ? t('lang.es') : t('lang.en')}
+                </a>
+              ))
+            }
+          </div>
+        </details>
         {/* CTA al grader: product=servicios activa la variante Sara. No quitar el param. */}
         {SHOW_GRADER_CTA && (
           <a
@@ -593,6 +606,17 @@ const graderHref =
 
 <style>
   [data-accordion].is-open [data-accordion-chevron] {
+    transform: rotate(180deg);
+  }
+
+  /* Switcher de idioma (dropdown nativo con <details>, estilo RAY-Website). */
+  .lang-trigger {
+    list-style: none;
+  }
+  .lang-trigger::-webkit-details-marker {
+    display: none;
+  }
+  details.lang-menu[open] .lang-chev {
     transform: rotate(180deg);
   }
 
@@ -964,5 +988,23 @@ const graderHref =
       backdrop.addEventListener('click', closeAll);
     }
     if (bar) document.documentElement.style.setProperty('--nav-bar-h', bar.offsetHeight + 'px');
+  })();
+</script>
+
+<script is:inline>
+  // Cierra el dropdown de idioma al hacer clic afuera o con Escape.
+  (function () {
+    document.addEventListener('click', function (e) {
+      document.querySelectorAll('details.lang-menu[open]').forEach(function (d) {
+        if (!d.contains(e.target)) d.removeAttribute('open');
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('details.lang-menu[open]').forEach(function (d) {
+          d.removeAttribute('open');
+        });
+      }
+    });
   })();
 </script>

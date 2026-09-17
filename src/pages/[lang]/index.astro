@@ -30,7 +30,7 @@ const dict = {
       { q: '¿Usa mi número de WhatsApp actual?', a: 'Sara atiende sobre una línea de WhatsApp Business conectada a tu clínica. Coordinamos el número en la implementación; no tienes que cambiar de teléfono personal.' },
       { q: '¿Reemplaza a mi recepción?', a: 'La libera de lo repetitivo: responder lo mismo, confirmar citas, perseguir pagos. Tu equipo se dedica al paciente que está en la clínica.' },
       { q: '¿Toca mi historia clínica?', a: 'No. No se almacena historia clínica ni información médica de tus pacientes. Eso queda donde está hoy.' },
-      { q: '¿Qué necesito para empezar?', a: 'Conectar tu Google Calendar y una línea de WhatsApp. La implementación la hacemos contigo; no migras datos ni cambias de sistema.' },
+      { q: '¿Qué necesito para empezar?', a: 'Una línea de WhatsApp y tus servicios cargados en la plataforma. La implementación la hacemos contigo, sin que tengas que armar nada solo.' },
       { q: '¿Puedo empezar solo con Sara?', a: 'Sí. Sara es la puerta de entrada. Mia y Daniel se suman cuando quieras, sobre la misma cuenta.' },
     ],
     saraDoes: [
@@ -46,10 +46,19 @@ const dict = {
       { n: '03', title: 'Agendan con el primero', body: 'Comparan pocas opciones y reservan en la clínica que responde antes.' },
     ],
     spotlightQuotes: ['“Bloquea mi agenda el viernes.”', '“Pasa a Juan al jueves 10.”', '“Reagenda a todos los del martes.”'],
-    heroKicker: 'La recepcionista con IA para clínicas, médicos y wellness',
-    heroH1: ['Más pacientes.', 'Más facturación.', 'Todo automático,', 'las 24 horas.'],
-    heroSub: 'Sara responde, agenda, cobra el anticipo y baja las ausencias, por WhatsApp, Instagram, SMS y teléfono. Sin cambiar tu agenda ni tocar tu historia&nbsp;clínica. Y su equipo te avisa cuando hay algo que&nbsp;decidir.',
+    heroKicker: 'La plataforma con IA para clínicas, médicos y wellness',
+    heroH1: ['El software', 'de tu clínica.', 'Y el equipo', 'que lo opera.'],
+    heroSub: 'Agenda, caja, inventario y finanzas en un solo lugar. Y un equipo con IA que lo opera solo: Sara atiende y cobra, Mia trae pacientes y Daniel cuida el dinero. Te escriben cuando hay algo que&nbsp;decidir.',
     heroImgAlt: 'Sara, Mia y Daniel, el equipo con IA de tu clínica. Sara al frente.',
+    platKicker: 'Una sola plataforma',
+    platH2: 'Toda tu operación, <em class="text-pine-dark">en un solo lugar.</em>',
+    platSub: 'Agenda, caja, inventario y finanzas conectados. Sin saltar entre cinco programas ni pasar datos a mano. Y con el equipo de IA trabajando encima.',
+    platItems: [
+      { t: 'Agenda', b: 'Turnos por profesional y sala, con el anticipo cobrado y sin dobles reservas.' },
+      { t: 'Caja', b: 'Cobra en mostrador con efectivo, tarjeta o link. Abre y cierra caja con arqueo.' },
+      { t: 'Inventario', b: 'Stock por sucursal que se descuenta solo con cada servicio. Te avisa antes de que falte.' },
+      { t: 'Finanzas', b: 'Facturación, margen por tratamiento y lo que falta cobrar. Cerrado cada mes.' },
+    ],
     demoCta: 'Probar gratis',
     scanCta: 'Escanear mi negocio',
     talkCta: 'Habla con Sara',
@@ -114,7 +123,7 @@ const dict = {
       { q: 'Does she replace my front desk?', a: 'She takes the repetitive part: answering the same questions, confirming appointments, chasing deposits. Your team stays with the patient who is in the office.' },
       { q: 'Does Sara touch patient records?', a: 'No. Sara never stores medical records or clinical notes. She works on the conversation and the calendar; your records stay in the system you use today.' },
       { q: 'What does Daniel connect to?', a: 'Your bank accounts through Plaid and your books in QuickBooks. He reads the transactions, reconciles the month and flags what changed. When there is money to collect, Sara goes and collects it.' },
-      { q: 'What do I need to get started?', a: 'A Google Calendar and the phone line or WhatsApp number patients already use. We run onboarding with you; you do not migrate data or switch systems. If your practice runs on another scheduler, we go through it on the demo.' },
+      { q: 'What do I need to get started?', a: 'The phone line or WhatsApp number your patients already use, and your services and schedule set up in the platform. We run onboarding with you, so you are not setting anything up alone.' },
       { q: 'Can I start with just Sara?', a: 'Yes. Sara is the way in. Mia and Daniel join whenever you want, on the same account.' },
     ],
     saraDoes: [
@@ -130,10 +139,19 @@ const dict = {
       { n: '03', title: 'Whoever answers first, wins', body: 'They compare two or three practices and book the one that picks up.' },
     ],
     spotlightQuotes: ['“Block my calendar on Friday.”', '“Move Mark to Thursday at 10.”', '“Reschedule everyone from Tuesday.”'],
-    heroKicker: 'The AI team for dental offices, med spas and medical practices',
-    heroH1: ['Your front desk,', 'your marketing,', 'your books.', 'One AI team.'],
-    heroSub: 'Sara answers every call and text, books the appointment and collects the deposit. Mia brings in new patients. Daniel reads your bank through Plaid, keeps QuickBooks current and tells you what you actually made. All three work on their own and message you when there is something to&nbsp;decide.',
+    heroKicker: 'The AI platform for dental offices, med spas and medical practices',
+    heroH1: ['Your front desk,', 'books and stock.', 'And the AI team', 'that runs it all.'],
+    heroSub: 'Scheduling, checkout, inventory and books in one place. And an AI team that runs it: Sara answers and collects, Mia brings in patients, and Daniel reads your bank through Plaid and keeps QuickBooks current. They message you when there is something to&nbsp;decide.',
     heroImgAlt: 'Sara, Mia and Daniel, your practice’s AI team. Sara up front.',
+    platKicker: 'One platform',
+    platH2: 'Everything your clinic runs on, <em class="text-pine-dark">in one place.</em>',
+    platSub: 'Scheduling, checkout, inventory and books, connected. No jumping between five tools or moving data by hand. With the AI team working on top.',
+    platItems: [
+      { t: 'Scheduling', b: 'Appointments by provider and room, deposit collected, no double bookings.' },
+      { t: 'Checkout', b: 'Take payment at the counter with cash, card or link. Open and close the register with a count.' },
+      { t: 'Inventory', b: 'Per-branch stock that draws down with every service. It warns you before you run out.' },
+      { t: 'Finance', b: 'Revenue, margin by treatment and what is still owed. Closed every month.' },
+    ],
     demoCta: 'Try it free',
     scanCta: 'Scan my business',
     talkCta: 'Talk to Sara',
@@ -202,6 +220,14 @@ const cal = mia.pipeline?.calendar;
 const ig = mia.pipeline?.ig;
 const calCells = cal ? Array.from({ length: 35 }, (_, i) => i - cal.startOffset + 1) : [];
 const daniel = getMember('daniel', lang)!;
+
+// Íconos de la sección "Una sola plataforma" (agenda, caja, inventario, finanzas). Independiente del idioma.
+const platIcons = [
+  '<rect x="3" y="4.5" width="18" height="16" rx="2" /><path d="M3 9h18M8 2.5v4M16 2.5v4" />',
+  '<rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20M6 15h4" />',
+  '<path d="M21 8 12 3 3 8v8l9 5 9-5V8Z" /><path d="m3 8 9 5 9-5M12 13v8" />',
+  '<path d="M4 5v14h16M8 15v-3M12 15V9M16 15v-6" />',
+];
 
 // Solo en inglés. (a) El video de la home está en español (YouTube 2iwulLWylPg), así que
 // en /en no se muestra. (b) El acto de Daniel suma las integraciones del producto en
@@ -384,6 +410,32 @@ const danielIntegrations: { name: string; icon: string }[] =
                 </div>
                 <h3 class="mt-5 text-xl font-semibold text-cream">{c.title}</h3>
                 <p class="mt-2 text-cream/65">{c.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════ UNA SOLA PLATAFORMA ══════════ -->
+    <section class="border-t border-line bg-paper">
+      <div class="reveal mx-auto max-w-6xl px-5 py-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">{dict.platKicker}</p>
+          <h2 class="font-serif text-4xl font-black leading-tight text-balance md:text-5xl" set:html={dict.platH2} />
+          <p class="mt-5 text-lg text-salvia">{dict.platSub}</p>
+        </div>
+        <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {
+            dict.platItems.map((it, i) => (
+              <div class="flex flex-col gap-4 rounded-2xl border border-line bg-white p-6 shadow-[0_10px_30px_-24px_rgba(20,38,31,0.35)]">
+                <span class="grid h-11 w-11 place-items-center rounded-xl bg-mint/15 text-pine-dark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true" set:html={platIcons[i]} />
+                </span>
+                <div>
+                  <h3 class="text-lg font-semibold text-ink">{it.t}</h3>
+                  <p class="mt-1.5 text-sm text-salvia">{it.b}</p>
+                </div>
               </div>
             ))
           }

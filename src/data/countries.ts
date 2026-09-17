@@ -34,14 +34,14 @@ export const countries: Country[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI en México: la recepcionista con IA para clínicas, médicos y wellness',
-        metaDescription: `Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en México las 24 horas: responde precios, agenda en tu Google Calendar y cobra el anticipo en pesos. Precio por clínica, en la demo.`,
+        metaDescription: `Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en México las 24 horas: responde precios, agenda en su propia agenda y cobra el anticipo en pesos. Precio por clínica, en la demo.`,
         eyebrow: 'Sara AI en México',
         title: 'Contesta a las 11.<br /><em class="text-pine-dark">También en México.</em>',
-        lead: 'Las clínicas mexicanas reciben la consulta por WhatsApp o Instagram cuando la recepción ya se fue. Sara contesta al momento, informa precios en pesos, agenda en tu Google Calendar y cobra el anticipo para que la cita quede en firme.',
+        lead: 'Las clínicas mexicanas reciben la consulta por WhatsApp o Instagram cuando la recepción ya se fue. Sara contesta al momento, informa precios en pesos, agenda en su propia agenda y cobra el anticipo para que la cita quede en firme.',
         bullets: [
           { title: 'Responde como se habla en México', body: 'Tuteo natural, sin sonar a robot ni a call center de otro país.' },
           { title: 'Cobra el anticipo en pesos', body: 'Link de pago en el mismo chat. La cita queda apartada y pagada.' },
-          { title: 'Tu agenda de siempre', body: 'Sara agenda en el Google Calendar que tu clínica ya usa. Sin migrar nada.' },
+          { title: 'Tu agenda, en la plataforma', body: 'La agenda vive en la plataforma de Sara, por profesional y sucursal.' },
         ],
         dialect: {
           title: 'Habla como tu&nbsp;paciente',
@@ -54,20 +54,20 @@ export const countries: Country[] = [
         faq: [
           { q: '¿Cuánto cuesta Sara en México?', a: 'Es una suscripción mensual con todo incluido y sin comisión por cita. El plan se arma según tu clínica y sus sucursales; en la demo te pasamos el número exacto.' },
           { q: '¿Sara cobra en pesos mexicanos?', a: 'Sí. El anticipo se cobra con un link de pago dentro del chat, en la moneda de tu clínica.' },
-          { q: '¿Tengo que cambiar mi agenda o mi software?', a: 'No. Sara lee y escribe en el Google Calendar que ya usas. No hay migración ni sistema nuevo que aprender.' },
+          { q: '¿Tengo que cambiar mi agenda o mi software?', a: 'La agenda es propia y vive en la plataforma de Sara. Si vienes de AgendaPro, Zenoti o GlossGenius, importamos tus servicios, precios y pacientes.' },
           { q: '¿Atiende WhatsApp e Instagram a la vez?', a: 'Sí, los dos canales, las 24 horas, con la información y el tono de tu clínica. Si algo se sale de lo que sabe, lo deriva a tu equipo con el contexto completo.' },
         ],
       },
       en: {
         metaTitle: 'Sara AI in Mexico: the AI receptionist for clinics, doctors & wellness',
-        metaDescription: `Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Mexico around the clock: quotes prices, books into your Google Calendar and collects the deposit in pesos. Pricing per clinic, shared in the demo.`,
+        metaDescription: `Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Mexico around the clock: quotes prices, books in her own scheduling and collects the deposit in pesos. Pricing per clinic, shared in the demo.`,
         eyebrow: 'Sara AI in Mexico',
         title: 'The front desk that answers at 11 pm, in Mexico&nbsp;too.',
-        lead: 'Mexican clinics get the enquiry on WhatsApp or Instagram after the front desk has gone home. Sara answers on the spot, quotes prices in pesos, books into your Google Calendar and collects the deposit so the appointment is locked in.',
+        lead: 'Mexican clinics get the enquiry on WhatsApp or Instagram after the front desk has gone home. Sara answers on the spot, quotes prices in pesos, books in her own scheduling and collects the deposit so the appointment is locked in.',
         bullets: [
           { title: 'Speaks like Mexico speaks', body: 'Natural local Spanish, not a generic bot or an offshore call center.' },
           { title: 'Collects the deposit in pesos', body: 'Payment link inside the chat. The slot is reserved and paid.' },
-          { title: 'Your same calendar', body: 'Sara books into the Google Calendar your clinic already uses. No migration.' },
+          { title: 'Your agenda, in the platform', body: "Scheduling lives in Sara's platform, per provider and location." },
         ],
         dialect: {
           title: 'Speaks like your&nbsp;patient',
@@ -80,7 +80,7 @@ export const countries: Country[] = [
         faq: [
           { q: 'How much does Sara cost in Mexico?', a: 'It’s a monthly subscription with everything included and no per-appointment commission. The plan is built around your clinic and its locations; you get the exact number in the demo.' },
           { q: 'Does Sara charge in Mexican pesos?', a: 'Yes. The deposit is collected with a payment link inside the chat, in your clinic’s currency.' },
-          { q: 'Do I have to change my calendar or software?', a: 'No. Sara reads and writes to the Google Calendar you already use. No migration, no new system to learn.' },
+          { q: 'Do I have to change my calendar or software?', a: 'Scheduling is her own and lives in the platform. Coming from AgendaPro, Zenoti or GlossGenius? We import your services, prices and patients.' },
           { q: 'Does it cover WhatsApp and Instagram at the same time?', a: 'Yes, both channels, around the clock, with your clinic’s information and tone. Anything outside what it knows gets handed to your team with full context.' },
         ],
       },
@@ -92,14 +92,14 @@ export const countries: Country[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI en Colombia: IA que responde WhatsApp y confirma citas',
-        metaDescription: 'Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en Colombia las 24 horas: responde, agenda en tu Google Calendar, cobra el anticipo y baja las ausencias con confirmación automática.',
+        metaDescription: 'Sara atiende el WhatsApp e Instagram de clínicas, médicos y wellness en Colombia las 24 horas: responde, agenda en su propia agenda, cobra el anticipo y baja las ausencias con confirmación automática.',
         eyebrow: 'Sara AI en Colombia',
         title: 'Menos ausencias, agenda llena, sin sumar&nbsp;recepción.',
-        lead: 'En Colombia la consulta entra por WhatsApp a cualquier hora, y la cita sin confirmar se convierte en silla vacía. Sara responde al momento, agenda en tu Google Calendar, cobra el anticipo y confirma cada cita sin que nadie levante el teléfono.',
+        lead: 'En Colombia la consulta entra por WhatsApp a cualquier hora, y la cita sin confirmar se convierte en silla vacía. Sara responde al momento, agenda en su propia agenda, cobra el anticipo y confirma cada cita sin que nadie levante el teléfono.',
         bullets: [
           { title: 'Confirma y recuerda sola', body: 'Recordatorio y confirmación automáticos por WhatsApp. La ausencia baja porque la cita llega recordada y pagada.' },
           { title: 'Cobra el anticipo al reservar', body: 'Link de pago en el mismo chat. El que aparta con dinero, llega.' },
-          { title: 'Tu agenda de siempre', body: 'Sara agenda en el Google Calendar que tu clínica ya usa. Sin migrar nada.' },
+          { title: 'Tu agenda, en la plataforma', body: 'La agenda vive en la plataforma de Sara, por profesional y sucursal.' },
         ],
         dialect: {
           title: 'Habla como tu&nbsp;paciente',
@@ -112,20 +112,20 @@ export const countries: Country[] = [
         faq: [
           { q: '¿Cómo baja Sara las ausencias?', a: 'Con tres capas: el anticipo cobrado al reservar, el recordatorio automático y la confirmación por WhatsApp. Y si alguien cancela, la lista de espera ofrece el hueco a otro paciente.' },
           { q: '¿Cuánto cuesta Sara en Colombia?', a: 'El plan se ajusta al país y a la cantidad de sedes, con todo incluido y sin comisión por cita. En la demo te damos el número exacto para tu clínica.' },
-          { q: '¿Tengo que cambiar mi agenda o mi software?', a: 'No. Sara lee y escribe en el Google Calendar que ya usas. No hay migración ni sistema nuevo que aprender.' },
+          { q: '¿Tengo que cambiar mi agenda o mi software?', a: 'La agenda es propia y vive en la plataforma de Sara. Si vienes de AgendaPro, Zenoti o GlossGenius, importamos tus servicios, precios y pacientes.' },
           { q: '¿Sirve para clínicas con varias sedes?', a: 'Sí. Sara maneja la disponibilidad por sede y agenda en el calendario que corresponde, con los precios y horarios de cada una.' },
         ],
       },
       en: {
         metaTitle: 'Sara AI in Colombia: AI that answers WhatsApp and confirms appointments',
-        metaDescription: 'Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Colombia around the clock: replies, books into your Google Calendar, collects the deposit and lowers no-shows with automatic confirmation.',
+        metaDescription: 'Sara answers WhatsApp and Instagram for clinics, doctors and wellness in Colombia around the clock: replies, books in her own scheduling, collects the deposit and lowers no-shows with automatic confirmation.',
         eyebrow: 'Sara AI in Colombia',
         title: 'Fewer no-shows, a full calendar, no extra&nbsp;staff.',
-        lead: 'In Colombia the enquiry arrives on WhatsApp at any hour, and an unconfirmed appointment becomes an empty chair. Sara answers on the spot, books into your Google Calendar, collects the deposit and confirms every appointment without anyone picking up the phone.',
+        lead: 'In Colombia the enquiry arrives on WhatsApp at any hour, and an unconfirmed appointment becomes an empty chair. Sara answers on the spot, books in her own scheduling, collects the deposit and confirms every appointment without anyone picking up the phone.',
         bullets: [
           { title: 'Confirms and reminds on its own', body: 'Automatic WhatsApp reminders and confirmation. No-shows drop because every appointment arrives reminded and paid.' },
           { title: 'Collects the deposit at booking', body: 'Payment link inside the chat. Patients who pay to reserve, show up.' },
-          { title: 'Your same calendar', body: 'Sara books into the Google Calendar your clinic already uses. No migration.' },
+          { title: 'Your agenda, in the platform', body: "Scheduling lives in Sara's platform, per provider and location." },
         ],
         dialect: {
           title: 'Speaks like your&nbsp;patient',
@@ -138,7 +138,7 @@ export const countries: Country[] = [
         faq: [
           { q: 'How does Sara lower no-shows?', a: 'Three layers: the deposit collected at booking, the automatic reminder, and WhatsApp confirmation. If someone cancels, the waitlist offers the slot to another patient.' },
           { q: 'How much does Sara cost in Colombia?', a: 'The plan adjusts to your country and number of locations, everything included, no per-appointment commission. You get the exact number for your clinic in the demo.' },
-          { q: 'Do I have to change my calendar or software?', a: 'No. Sara reads and writes to the Google Calendar you already use. No migration, no new system to learn.' },
+          { q: 'Do I have to change my calendar or software?', a: 'Scheduling is her own and lives in the platform. Coming from AgendaPro, Zenoti or GlossGenius? We import your services, prices and patients.' },
           { q: 'Does it work for clinics with several locations?', a: 'Yes. Sara handles availability per location and books into the right calendar, with each location’s prices and hours.' },
         ],
       },
@@ -150,14 +150,14 @@ export const countries: Country[] = [
     copy: {
       es: {
         metaTitle: 'Sara AI en Uruguay: la IA que ya atiende clínicas, médicos y wellness',
-        metaDescription: 'Sara ya trabaja en Uruguay: en ViaLaser agenda 7 de cada 10 citas por WhatsApp, Instagram y la web. Atiende con voseo, agenda en tu Google Calendar y cobra la seña.',
+        metaDescription: 'Sara ya trabaja en Uruguay: en ViaLaser agenda 7 de cada 10 citas por WhatsApp, Instagram y la web. Atiende con voseo, agenda en su propia agenda y cobra la seña.',
         eyebrow: 'Sara AI en Uruguay',
         title: 'En Uruguay, Sara ya está&nbsp;trabajando.',
-        lead: 'No es una promesa: ViaLaser tiene a Sara atendiendo su WhatsApp, Instagram y web en vivo, y 7 de cada 10 citas las agenda Sara. Atiende con voseo, agenda en el Google Calendar de la clínica y cobra la seña para que la cita quede confirmada.',
+        lead: 'No es una promesa: ViaLaser tiene a Sara atendiendo su WhatsApp, Instagram y web en vivo, y 7 de cada 10 citas las agenda Sara. Atiende con voseo, agenda en su propia agenda y cobra la seña para que la cita quede confirmada.',
         bullets: [
           { title: 'Vosea como un uruguayo', body: 'Sara adapta el registro al país: escribe con voseo natural, no con un español neutro de manual.' },
           { title: 'Cobra la seña al reservar', body: 'Link de pago en el mismo chat. La cabina queda ocupada y paga.' },
-          { title: 'Tu agenda de siempre', body: 'Sara agenda en el Google Calendar que tu clínica ya usa. Sin migrar nada.' },
+          { title: 'Tu agenda, en la plataforma', body: 'La agenda vive en la plataforma de Sara, por profesional y sucursal.' },
         ],
         dialect: {
           title: 'Habla como tu&nbsp;paciente',
@@ -175,19 +175,19 @@ export const countries: Country[] = [
           { q: '¿Sara ya funciona en alguna clínica de Uruguay?', a: 'Sí. ViaLaser tiene a Sara atendiendo en vivo su WhatsApp, Instagram y web: 7 de cada 10 citas las agenda Sara. Es el caso que publicamos con números reales.' },
           { q: '¿Sara escribe con voseo?', a: 'Sí. Adapta el registro al país de la clínica: en Uruguay vosea con naturalidad, con el vocabulario local.' },
           { q: '¿Cuánto cuesta Sara en Uruguay?', a: 'El plan se ajusta al país y a la cantidad de sucursales, con todo incluido y sin comisión por cita. En la demo te damos el número exacto para tu clínica.' },
-          { q: '¿Tengo que cambiar mi agenda o mi software?', a: 'No. Sara lee y escribe en el Google Calendar que ya usás. No hay migración ni sistema nuevo que aprender.' },
+          { q: '¿Tengo que cambiar mi agenda o mi software?', a: 'La agenda es propia y vive en la plataforma de Sara. Si venís de AgendaPro, Zenoti o GlossGenius, importamos tus servicios, precios y pacientes.' },
         ],
       },
       en: {
         metaTitle: 'Sara AI in Uruguay: the AI already working with clinics, doctors and wellness',
-        metaDescription: 'Sara already works in Uruguay: at ViaLaser it books 7 out of 10 appointments across WhatsApp, Instagram and the web. It writes in local voseo Spanish, books into your Google Calendar and collects the deposit.',
+        metaDescription: 'Sara already works in Uruguay: at ViaLaser it books 7 out of 10 appointments across WhatsApp, Instagram and the web. It writes in local voseo Spanish, books in her own scheduling and collects the deposit.',
         eyebrow: 'Sara AI in Uruguay',
         title: 'In Uruguay, Sara is already on the&nbsp;job.',
-        lead: 'Not a promise: ViaLaser has Sara answering its WhatsApp, Instagram and website live, and 7 out of 10 appointments are booked by Sara. It writes in local voseo Spanish, books into the clinic’s Google Calendar and collects the deposit so the appointment is confirmed.',
+        lead: 'Not a promise: ViaLaser has Sara answering its WhatsApp, Instagram and website live, and 7 out of 10 appointments are booked by Sara. It writes in local voseo Spanish, books in her own scheduling and collects the deposit so the appointment is confirmed.',
         bullets: [
           { title: 'Writes voseo like a local', body: 'Sara adapts its register to the country: natural Uruguayan Spanish, not textbook neutral.' },
           { title: 'Collects the deposit at booking', body: 'Payment link inside the chat. The slot is taken and paid.' },
-          { title: 'Your same calendar', body: 'Sara books into the Google Calendar your clinic already uses. No migration.' },
+          { title: 'Your agenda, in the platform', body: "Scheduling lives in Sara's platform, per provider and location." },
         ],
         dialect: {
           title: 'Speaks like your&nbsp;patient',
@@ -205,7 +205,7 @@ export const countries: Country[] = [
           { q: 'Is Sara already working in a clinic in Uruguay?', a: 'Yes. ViaLaser has Sara answering its WhatsApp, Instagram and website live: 7 out of 10 appointments are booked by Sara. It’s the case we publish with real numbers.' },
           { q: 'Does Sara write in voseo?', a: 'Yes. It adapts its register to the clinic’s country: in Uruguay it uses natural voseo with local vocabulary.' },
           { q: 'How much does Sara cost in Uruguay?', a: 'The plan adjusts to your country and number of locations, everything included, no per-appointment commission. You get the exact number for your clinic in the demo.' },
-          { q: 'Do I have to change my calendar or software?', a: 'No. Sara reads and writes to the Google Calendar you already use. No migration, no new system to learn.' },
+          { q: 'Do I have to change my calendar or software?', a: 'Scheduling is her own and lives in the platform. Coming from AgendaPro, Zenoti or GlossGenius? We import your services, prices and patients.' },
         ],
       },
     },

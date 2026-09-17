@@ -26,20 +26,22 @@ const showScan = SHOW_GRADER_CTA;
 // columna derecha en vez de una imagen. Si está, reemplaza al <img>.
 const hasVisual = Astro.slots.has('visual');
 const hasMedia = Boolean(image) || hasVisual;
+// Sin imagen ni visual (p. ej. páginas de comparación): centramos el hero.
+const centered = !hasMedia;
 ---
 
 <section class="border-b border-line">
   <div class={`mx-auto max-w-6xl px-5 pb-20 pt-14 ${hasMedia ? 'grid gap-14 md:grid-cols-[1.05fr_0.95fr] md:items-center' : ''}`}>
-    <div>
+    <div class:list={[centered && 'flex flex-col items-center text-center']}>
       <a href={localePath('/', lang)} class="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-salvia transition-colors hover:text-ink">
         <span aria-hidden="true">←</span> {t.back}
       </a>
-      <p class="mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark">
+      <p class:list={['mb-4 flex items-center gap-2.5 text-sm font-semibold uppercase tracking-[0.14em] text-pine-dark', centered && 'justify-center']}>
         <span class="dot h-2 w-2"></span>{eyebrow}
       </p>
       <h1 class="font-serif text-4xl font-black leading-[1.05] tracking-tight text-balance md:text-6xl" set:html={title} />
-      <p class="mt-6 max-w-xl text-lg text-salvia">{lead}</p>
-      <div class="mt-8 flex flex-wrap items-center gap-3">
+      <p class:list={['mt-6 text-lg text-salvia', centered ? 'max-w-2xl text-pretty' : 'max-w-xl']}>{lead}</p>
+      <div class:list={['mt-8 flex flex-wrap items-center gap-3', centered && 'justify-center']}>
         <a
           href={localePath('/free-trial', lang)}
           class="inline-flex items-center gap-2 rounded-full bg-pine px-6 py-3 text-base font-semibold text-cream transition-colors hover:bg-pine-dark"
