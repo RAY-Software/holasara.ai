@@ -80,7 +80,7 @@ const productGroupsRaw: RawGroup[] = [
       },
       {
         href: '/canales',
-        name: { es: 'WhatsApp e Instagram 24/7', en: 'WhatsApp & Instagram DMs' },
+        name: { es: 'WhatsApp e Instagram 24/7', en: 'SMS & Instagram DMs' },
         desc: { es: 'Responde donde te escriben, siempre.', en: 'Answers wherever patients message you, 24/7.' },
         icon: 'chat',
       },
@@ -259,7 +259,7 @@ const industryLinksRaw: RawLink[] = [
     name: { es: 'Estética y spa', en: 'Spa & wellness' },
     desc: {
       es: 'Reservas 24/7 por WhatsApp e Instagram.',
-      en: '24/7 bookings by text, WhatsApp and Instagram.',
+      en: '24/7 bookings by text and Instagram.',
     },
     icon: 'flower',
   },

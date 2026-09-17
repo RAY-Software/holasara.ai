@@ -1,5 +1,8 @@
 ---
-// Mock de conversación real de Sara, fiel a la UI del canal (WhatsApp / Instagram).
+// Mock de conversación real de Sara, fiel a la UI del canal (WhatsApp / Instagram / SMS).
+// En EN (mercado US) WhatsApp casi no se usa: el canal por defecto es el SMS/iMessage,
+// así que un chat pedido como channel="whatsapp" se renderiza como SMS cuando lang==='en'.
+// Instagram no cambia (también se usa en US).
 // Perspectiva: el teléfono del PACIENTE. Sara es el contacto (foto + "en línea"),
 // y es quien escribe a los clientes → sus mensajes entran a la izquierda (recibidos);
 // las respuestas del paciente salen a la derecha (enviados, con doble check).
@@ -23,7 +26,7 @@ interface Bubble {
 }
 import { defaultLocale, type Locale } from '../i18n/config';
 interface Props {
-  channel?: 'whatsapp' | 'instagram';
+  channel?: 'whatsapp' | 'instagram' | 'sms';
   name?: string;
   subtitle?: string;
   avatar?: string;
@@ -43,14 +46,38 @@ const {
   animate = false,
 } = Astro.props;
 
+// En US (EN) WhatsApp casi no se usa: el hilo se ve como SMS/iMessage.
+const ch = channel === 'whatsapp' && lang === 'en' ? 'sms' : channel;
+
 const ui =
   lang === 'en'
-    ? { online: 'online', active: 'Active now', compose: 'Message', composeIg: 'Message...', send: 'Send' }
-    : { online: 'en línea', active: 'Activa ahora', compose: 'Mensaje', composeIg: 'Mensaje...', send: 'Enviar' };
-const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
+    ? {
+        online: 'online',
+        active: 'Active now',
+        compose: 'Message',
+        composeIg: 'Message...',
+        composeSms: 'Text Message',
+        send: 'Send',
+        delivered: 'Delivered',
+      }
+    : {
+        online: 'en línea',
+        active: 'Activa ahora',
+        compose: 'Mensaje',
+        composeIg: 'Mensaje...',
+        composeSms: 'Mensaje de texto',
+        send: 'Enviar',
+        delivered: 'Entregado',
+      };
+const sub = subtitle ?? (ch === 'whatsapp' ? ui.online : ui.active);
+// SMS: hora centrada arriba (como iMessage). "Delivered" solo si el hilo termina
+// en un mensaje enviado (así queda debajo del globo, sobre el fondo blanco, como iOS).
+const smsTime = bubbles.find((b) => b.t)?.t;
+const deliveredIdx =
+  bubbles.length > 0 && bubbles[bubbles.length - 1].who === 'in' ? bubbles.length - 1 : -1;
 ---
 
-<figure class="chat" data-channel={channel} data-animate={animate ? '' : undefined}>
+<figure class="chat" data-channel={ch} data-animate={animate ? '' : undefined}>
   <div class="chat__header">
     <svg class="chat__back" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -58,7 +85,7 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
     <span class="chat__avatar">
       <img class="chat__photo" src={avatar} alt={name} width="38" height="38" loading="lazy" decoding="async" />
       {
-        channel === 'instagram' && (
+        ch === 'instagram' && (
           <span class="chat__badge" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
               <rect x="5" y="5" width="14" height="14" rx="4.2" stroke="#fff" stroke-width="2" />
@@ -74,7 +101,7 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
       <span class="chat__sub">{sub}</span>
     </span>
     {
-      channel === 'whatsapp' && (
+      ch === 'whatsapp' && (
         <span class="chat__icons">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M15 8l6-3v14l-6-3M3 6h12v12H3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
@@ -86,7 +113,16 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
       )
     }
     {
-      channel === 'instagram' && (
+      ch === 'sms' && (
+        <span class="chat__icons">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 8l6-3v14l-6-3M3 6h12v12H3z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" />
+          </svg>
+        </span>
+      )
+    }
+    {
+      ch === 'instagram' && (
         <span class="chat__icons">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.24 11 11 0 003.5.56 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.2.2 2.4.56 3.5a1 1 0 01-.24 1l-2.2 2.3z" stroke="currentColor" stroke-width="1.6" />
@@ -100,8 +136,10 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
   </div>
 
   <div class="chat__body">
+    {ch === 'sms' && smsTime && <div class="sms-time">{smsTime}</div>}
     {
-      bubbles.map((b) => (
+      bubbles.map((b, i) => (
+        <>
         <div class={`msg ${b.who === 'out' ? 'msg--left' : 'msg--right'}`}>
           <span class="msg__text">{b.text}</span>
           {b.link && <span class="msg__link">{b.link}</span>}
@@ -121,16 +159,20 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
               </span>
             </span>
           )}
-          <span class="msg__meta">
-            {b.t}
-            {b.who === 'in' && channel === 'whatsapp' && (
-              <svg class="tick" viewBox="0 0 18 12" fill="none" aria-hidden="true">
-                <path d="M1 6.6l3.1 3.1L10.4 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M6.4 9.7L12.7 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            )}
-          </span>
+          {ch !== 'sms' && (
+            <span class="msg__meta">
+              {b.t}
+              {b.who === 'in' && ch === 'whatsapp' && (
+                <svg class="tick" viewBox="0 0 18 12" fill="none" aria-hidden="true">
+                  <path d="M1 6.6l3.1 3.1L10.4 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M6.4 9.7L12.7 2.6" stroke="#53bdeb" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              )}
+            </span>
+          )}
         </div>
+        {ch === 'sms' && i === deliveredIdx && <div class="sms-delivered">{ui.delivered}</div>}
+        </>
       ))
     }
     {
@@ -147,7 +189,27 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
   </div>
 
   {
-    channel === 'whatsapp' && (
+    ch === 'sms' && (
+      <div class="compose">
+        <span class="compose__plus" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.6" />
+            <path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          </svg>
+        </span>
+        <div class="compose__field">
+          <span class="compose__ph">{ui.composeSms}</span>
+          <button class="compose__send" type="button" aria-label={ui.send}>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 19V6M6 11l6-6 6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    )
+  }
+  {
+    ch === 'whatsapp' && (
       <div class="compose">
         <div class="compose__field">
           <svg class="compose__emoji" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -173,7 +235,7 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
     )
   }
   {
-    channel === 'instagram' && (
+    ch === 'instagram' && (
       <div class="compose">
         <span class="compose__cam" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none">
@@ -515,6 +577,131 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
     color: #fff;
   }
 
+  /* ── SMS / iMessage (mercado US) ──────────── */
+  [data-channel='sms'] .chat__header {
+    position: relative;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.55rem 0.8rem 0.65rem;
+    background: rgba(247, 247, 247, 0.92);
+    color: #000;
+    border-bottom: 1px solid #dcdcdc;
+  }
+  [data-channel='sms'] .chat__back {
+    position: absolute;
+    left: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #0a7cff;
+    opacity: 1;
+  }
+  [data-channel='sms'] .chat__photo {
+    width: 44px;
+    height: 44px;
+  }
+  [data-channel='sms'] .chat__id {
+    align-items: center;
+    text-align: center;
+  }
+  [data-channel='sms'] .chat__name {
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+  [data-channel='sms'] .chat__sub {
+    display: none;
+  }
+  [data-channel='sms'] .chat__icons {
+    position: absolute;
+    right: 0.8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    color: #0a7cff;
+  }
+  [data-channel='sms'] .chat__body {
+    background: #fff;
+    gap: 0.28rem;
+  }
+  .sms-time {
+    align-self: center;
+    font-size: 0.66rem;
+    color: #8a8a8e;
+    margin: 0.1rem 0 0.35rem;
+    font-weight: 500;
+  }
+  [data-channel='sms'] .msg {
+    border-radius: 18px;
+    box-shadow: none;
+    padding: 0.44rem 0.72rem 0.46rem;
+  }
+  [data-channel='sms'] .msg--left {
+    align-self: flex-start;
+    background: #e9e9eb;
+    color: #000;
+    border-bottom-left-radius: 5px;
+  }
+  [data-channel='sms'] .msg--right {
+    align-self: flex-end;
+    background: #0a7cff;
+    color: #fff;
+    border-bottom-right-radius: 5px;
+  }
+  [data-channel='sms'] .msg__link {
+    color: #0a7cff;
+  }
+  [data-channel='sms'] .msg--right .msg__link {
+    color: #fff;
+  }
+  .sms-delivered {
+    align-self: flex-end;
+    color: #6b6b70;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 0.06rem 0.15rem 0.1rem 0;
+  }
+  /* Durante la animación no la muestres hasta que el hilo termine de revelarse. */
+  .chat[data-animate] .chat__body.is-anim .sms-delivered:not(.is-shown) {
+    display: none;
+  }
+  [data-channel='sms'] .compose {
+    background: #fff;
+    border-top: 1px solid #ececec;
+  }
+  [data-channel='sms'] .compose__plus {
+    width: 30px;
+    height: 30px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    color: #8a8a8e;
+  }
+  [data-channel='sms'] .compose__plus svg {
+    width: 26px;
+    height: 26px;
+  }
+  [data-channel='sms'] .compose__field {
+    border: 1px solid #d1d1d6;
+    padding: 0.3rem 0.3rem 0.3rem 0.75rem;
+  }
+  [data-channel='sms'] .compose__ph {
+    color: #8a8a8e;
+  }
+  [data-channel='sms'] .compose__send {
+    width: 28px;
+    height: 28px;
+    background: #0a7cff;
+    color: #fff;
+  }
+  [data-channel='sms'] .compose__send svg {
+    width: 16px;
+    height: 16px;
+  }
+  /* La burbuja "escribiendo…" hereda el gris de los recibidos. */
+  [data-channel='sms'] .msg.typing {
+    background: #e9e9eb;
+  }
+
   /* ── Instagram ────────────────────────────── */
   [data-channel='instagram'] .chat__header {
     background: #fff;
@@ -630,6 +817,8 @@ const sub = subtitle ?? (channel === 'whatsapp' ? ui.online : ui.active);
         const step = () => {
           if (i >= msgs.length) {
             typing.classList.remove('is-typing');
+            const delivered = body.querySelector('.sms-delivered');
+            if (delivered) delivered.classList.add('is-shown');
             fig.dispatchEvent(new CustomEvent('chat:done', { bubbles: true }));
             return;
           }
