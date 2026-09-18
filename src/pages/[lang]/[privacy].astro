@@ -5,6 +5,9 @@ const lang = toLocale(Astro.params.lang);
 // Entidad/legales alineados con RAY-Website (misma empresa): responsable
 // BotBit, Inc. (marca RAY), email info@rayapp.io, ley de EE. UU., cláusula de
 // Uso Limitado de las APIs de Google (Sara conecta Google Calendar).
+// Cláusula de datos de Meta Ads agregada 2026-09-18 para la App Review de
+// permisos de ads (ads_management/ads_read/business_management/etc.) —
+// requisito del checklist en docs/meta-app-review-ads.md del monorepo.
 // ⚠️ PENDIENTE de confirmar: estado/foro de EE. UU. para la cláusula de ley
 // aplicable (hoy queda a nivel "Estados Unidos"), domicilio fiscal, y que la
 // lista de terceros esté completa. Base honesta, NO reemplaza revisión legal.
@@ -16,7 +19,7 @@ const dict = {
     title: 'Política de privacidad',
     description:
       'Cómo Sara (BotBit, Inc.) trata los datos de las clínicas que usan el producto y de los pacientes que conversan con Sara.',
-    updated: '17 de agosto de 2026',
+    updated: '18 de septiembre de 2026',
     lead: 'Qué datos tratamos, para qué, con quién los compartimos y qué control tienes sobre ellos.',
     body: `
   <h2>Quiénes somos</h2>
@@ -69,6 +72,7 @@ const dict = {
   <ul>
     <li><strong>Google</strong>, para la integración con Google Calendar.</li>
     <li><strong>Meta / WhatsApp</strong> y nuestro proveedor de mensajería, para enviar y recibir los mensajes.</li>
+    <li><strong>Meta Ads</strong>, cuando la clínica conecta su propia cuenta publicitaria, para crear y leer el desempeño de las campañas que promocionan su contenido.</li>
     <li><strong>Proveedor de pagos</strong>, para procesar los anticipos y cobros.</li>
     <li><strong>Herramientas de analítica</strong>, para entender el uso del sitio y de nuestras campañas.</li>
   </ul>
@@ -88,6 +92,20 @@ const dict = {
     consentimiento. Tampoco usamos datos de las APIs de Google para desarrollar, mejorar o entrenar
     modelos generalizados de inteligencia artificial. Puedes revocar nuestro acceso en cualquier
     momento desde la configuración de seguridad de tu cuenta de Google.
+  </p>
+
+  <h2>Datos de Meta Ads</h2>
+  <p>
+    Si la clínica lo decide, puede conectar su propia cuenta de anuncios de Meta y su Página de
+    Facebook para que nuestra asistente de marketing “Mia” proponga promocionar contenido orgánico
+    de Instagram que ya funciona. Con esa conexión, accedemos únicamente a los datos necesarios para
+    esa función: listar las cuentas publicitarias y Páginas de la clínica, crear la estructura de la
+    campaña (pausada, hasta que la clínica la active) en su propia cuenta de anuncios, y leer el
+    gasto, el alcance y las conversaciones generadas por esa campaña para mostrarle el costo por
+    turno agendado. No creamos ni activamos campañas sin una acción explícita de la clínica en
+    nuestro panel, no usamos estos datos con fines distintos de mostrarle el desempeño de su propia
+    campaña, y no los compartimos con otras clínicas ni terceros salvo lo necesario para operar el
+    Servicio. La clínica puede desconectar su cuenta de Meta Ads en cualquier momento desde su panel.
   </p>
 
   <h2>Cookies y analítica</h2>
@@ -135,7 +153,7 @@ const dict = {
     title: 'Privacy policy',
     description:
       'How Sara (BotBit, Inc.) processes the data of the clinics that use the product and of the patients who chat with Sara.',
-    updated: 'August 17, 2026',
+    updated: 'September 18, 2026',
     lead: 'What data we process, what for, who we share it with and what control you have over it.',
     body: `
   <h2>Who we are</h2>
@@ -188,6 +206,7 @@ const dict = {
   <ul>
     <li><strong>Google</strong>, for the integration with Google Calendar.</li>
     <li><strong>Meta / WhatsApp</strong> and our messaging provider, to send and receive the messages.</li>
+    <li><strong>Meta Ads</strong>, when the clinic connects its own ad account, to create and read the performance of the campaigns that promote its content.</li>
     <li><strong>Payment provider</strong>, to process the deposits and payments.</li>
     <li><strong>Analytics tools</strong>, to understand the use of the website and of our campaigns.</li>
   </ul>
@@ -207,6 +226,20 @@ const dict = {
     consent. Nor do we use Google APIs data to develop, improve or train generalized
     artificial intelligence models. You can revoke our access at any
     time from the security settings of your Google account.
+  </p>
+
+  <h2>Meta Ads data</h2>
+  <p>
+    If the clinic chooses to, it can connect its own Meta ad account and Facebook Page so our
+    marketing assistant “Mia” can propose promoting organic Instagram content that is already
+    performing well. With that connection, we access only the data needed for that function: listing
+    the clinic’s ad accounts and Pages, creating the campaign structure (paused, until the clinic
+    activates it) in its own ad account, and reading the spend, reach and conversations generated by
+    that campaign to show the clinic its cost per booked appointment. We do not create or activate
+    campaigns without an explicit action by the clinic in our panel, we do not use this data for any
+    purpose other than showing the clinic its own campaign performance, and we do not share it with
+    other clinics or third parties beyond what is necessary to operate the Service. The clinic can
+    disconnect its Meta Ads account at any time from its panel.
   </p>
 
   <h2>Cookies and analytics</h2>
